@@ -68,6 +68,27 @@ namespace SearchExtensions
             return source.Where(completeExpression);
         }
 
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        {
+            if (!searchTerms.Any())
+            {
+                return source;
+            }
+
+            Expression orExpression = null;
+            foreach (var searchTerm in searchTerms)
+            {
+                //Create expression to represent x.[property].Contains(searchTerm)
+                var searchTermExpression = Expression.Constant(searchTerm);
+                var containsExpression = BuildContainsExpression(stringProperty, searchTermExpression);
+
+                orExpression = BuildOrExpression(orExpression, containsExpression);
+            }
+
+            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, stringProperty.Parameters);
+            return source.Where(completeExpression);
+        }
+
         private static Expression BuildOrExpression(Expression existingExpression, Expression expressionToAdd)
         {
             if (existingExpression == null)
