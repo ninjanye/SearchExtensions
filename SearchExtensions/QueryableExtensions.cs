@@ -77,7 +77,33 @@ namespace SearchExtensions
             return source.Where(completeExpression);
         }
 
+        /// <summary>
+        /// Search a property for multiple search terms 
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search terms to find</param>
+        /// <param name="stringProperty">properties to search against</param>
+        /// <returns>Collection of records matching any of the search terms</returns>
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        {
+            if (!searchTerms.Any())
+            {
+                return source;
+            }
 
+            Expression orExpression = null;
+            foreach (var searchTerm in searchTerms)
+            {
+                //Create expression to represent x.[property].Contains(searchTerm)
+                var searchTermExpression = Expression.Constant(searchTerm);
+                var containsExpression = BuildContainsExpression(stringProperty, searchTermExpression);
+
+                orExpression = BuildOrExpression(orExpression, containsExpression);
+            }
+
+            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, stringProperty.Parameters);
+            return source.Where(completeExpression);
+        }
 
         /// <summary>
         /// Search multiple properties for multiple search terms
@@ -125,34 +151,6 @@ namespace SearchExtensions
             }
 
             var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter);
-            return source.Where(completeExpression);
-        }
-
-        /// <summary>
-        /// Search a property for multiple search terms 
-        /// </summary>
-        /// <param name="source">Source data to query</param>
-        /// <param name="searchTerms">search terms to find</param>
-        /// <param name="stringProperty">properties to search against</param>
-        /// <returns>Collection of records matching any of the search terms</returns>
-        public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
-        {
-            if (!searchTerms.Any())
-            {
-                return source;
-            }
-
-            Expression orExpression = null;
-            foreach (var searchTerm in searchTerms)
-            {
-                //Create expression to represent x.[property].Contains(searchTerm)
-                var searchTermExpression = Expression.Constant(searchTerm);
-                var containsExpression = BuildContainsExpression(stringProperty, searchTermExpression);
-
-                orExpression = BuildOrExpression(orExpression, containsExpression);
-            }
-
-            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, stringProperty.Parameters);
             return source.Where(completeExpression);
         }
 
