@@ -31,7 +31,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="source">Source data to query</param>
         /// <param name="searchTerm">search term to look for</param>
         /// <param name="stringProperties">properties to search against</param>
-        /// <returns>Collection of records where any propery contains the search term</returns>
+        /// <returns>Collection of records where any property contains the search term</returns>
         public static IQueryable<T> Search<T>(this IQueryable<T> source, string searchTerm, params Expression<Func<T, string>>[] stringProperties)
         {
             if (stringProperties == null) throw new ArgumentNullException("stringProperties");
