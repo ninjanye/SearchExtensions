@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>http://github.com/ninjanye/SearchExtensions</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release of my SearchExtensions library.  This release is currently alpha</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>search extension methods linq</tags>
+  </metadata>
+</package>

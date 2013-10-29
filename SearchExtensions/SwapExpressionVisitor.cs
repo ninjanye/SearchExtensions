@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace SearchExtensions
+namespace NinjaNye.SearchExtensions
 {
     internal class SwapExpressionVisitor : ExpressionVisitor
     {

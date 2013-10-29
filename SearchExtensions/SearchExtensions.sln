@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchExtensions", "SearchExtensions.csproj", "{60B8E347-999F-4EE2-8172-9367D4F71860}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions", "NinjaNye.SearchExtensions.csproj", "{60B8E347-999F-4EE2-8172-9367D4F71860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
