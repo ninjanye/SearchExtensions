@@ -54,10 +54,7 @@ namespace NinjaNye.SearchExtensions
         public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
         {
             if (stringProperty == null) throw new ArgumentNullException("stringProperty");
-            if (searchTerms == null)
-            {
-                throw new ArgumentNullException("searchTerms");
-            }
+            if (searchTerms == null) throw new ArgumentNullException("searchTerms");
 
             return source.Search(searchTerms, new[] {stringProperty});
         }
