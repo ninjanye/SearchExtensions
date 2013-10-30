@@ -2,7 +2,9 @@ SearchExtensions
 ================
 
 Library of IQueryable extension methods to perform searching.  For more information on these methods, please visit:  
-http://jnye.co/posts/tagged/search
+http://jnye.co/posts/tagged/search 
+
+...or follow me: [@ninjanye](https://twitter.com/ninjanye) 
 
 ###How to: Performing OR searches
 
