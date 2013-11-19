@@ -1,6 +1,8 @@
 SearchExtensions
 ================
 
+###This project is avaliable for download as a nuget package at https://www.nuget.org/packages/NinjaNye.SearchExtensions/
+
 Library of IQueryable extension methods to perform searching.  For more information on these methods, please visit:  
 http://jnye.co/posts/tagged/search 
 
