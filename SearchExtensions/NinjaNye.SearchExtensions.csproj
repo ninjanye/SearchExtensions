@@ -40,8 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QueryableExtensions.cs" />
+    <Compile Include="Ensure.cs" />
+    <Compile Include="IRanked.cs" />
+    <Compile Include="SearchExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ranked.cs" />
+    <Compile Include="RankedSearchExtensions.cs" />
     <Compile Include="SwapExpressionVisitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
