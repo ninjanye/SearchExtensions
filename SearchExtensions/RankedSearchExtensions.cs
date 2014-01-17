@@ -85,6 +85,41 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
+        /// Search multiple properties for multiple search terms returning a ranked result
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search term to look for</param>
+        /// <param name="stringProperties">properties to search against</param>
+        /// <returns>Queryable of IRanked records where any property contains any of the search terms</returns>
+        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, string[] searchTerms, params Expression<Func<T, string>>[] stringProperties)
+        {
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+
+            var singleParameter = stringProperties[0].Parameters.Single();
+            Expression combinedHitExpression = null;
+            foreach (var stringProperty in stringProperties)
+            {
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        singleParameter);
+
+                foreach (var searchTerm in searchTerms)
+                {
+                    var hitCountExpression = CalculateHitCount(swappedParamExpression, searchTerm);
+                    combinedHitExpression = AddExpressions(combinedHitExpression, hitCountExpression);
+                }
+            }
+
+            var rankedInitExpression = ConstructRankedResult<T>(combinedHitExpression, singleParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter);
+            return source.Search(searchTerms, stringProperties)
+                         .Select(selectExpression);
+
+
+        }
+
+        /// <summary>
         /// Constructs a ranked result of type T
         /// </summary>
         /// <param name="hitCountExpression">Expression representing how to calculated search hits</param>
