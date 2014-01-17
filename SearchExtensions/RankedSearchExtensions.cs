@@ -59,6 +59,32 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
+        /// Search a property for multiple search terms returning a ranked result.  
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search terms to find</param>
+        /// <param name="stringProperty">properties to search against</param>
+        /// <returns>Queryable records where the property contains any of the search terms</returns>
+        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        {
+            Ensure.ArgumentNotNull(stringProperty, "stringProperty");
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+
+            Expression combinedHitExpression = null;
+            foreach (var searchTerm in searchTerms)
+            {
+                var hitCountExpression = CalculateHitCount(stringProperty, searchTerm);
+                combinedHitExpression = AddExpressions(combinedHitExpression, hitCountExpression);                
+            }
+
+            ParameterExpression parameterExpression = stringProperty.Parameters.Single();
+            var rankedInitExpression = ConstructRankedResult<T>(combinedHitExpression, parameterExpression);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, parameterExpression);
+            return source.Search(stringProperty, searchTerms)
+                         .Select(selectExpression);
+        }
+
+        /// <summary>
         /// Constructs a ranked result of type T
         /// </summary>
         /// <param name="hitCountExpression">Expression representing how to calculated search hits</param>
