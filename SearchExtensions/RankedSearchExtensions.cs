@@ -20,12 +20,7 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
 
-            var hitCountExpression = CalculateHitCount(stringProperty, searchTerm);
-            var parameterExpression = stringProperty.Parameters[0];
-            var rankedInitExpression = ConstructRankedResult<T>(hitCountExpression, parameterExpression);
-
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, parameterExpression);
-            return source.Search(stringProperty, searchTerm).Select(selectExpression);
+            return RankedSearch(source, new[] {searchTerm}, new[] {stringProperty});
         }
 
         /// <summary>
@@ -40,22 +35,7 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
 
-            var singleParameter = stringProperties[0].Parameters.Single();
-            Expression combinedHitExpression = null;
-            foreach (var stringProperty in stringProperties)
-            {
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        singleParameter);
-
-                var hitCountExpression = CalculateHitCount(swappedParamExpression, searchTerm);
-                combinedHitExpression = AddExpressions(combinedHitExpression, hitCountExpression);
-            }
-
-            var rankedInitExpression = ConstructRankedResult<T>(combinedHitExpression, singleParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter);
-            return source.Search(searchTerm, stringProperties)
-                         .Select(selectExpression);
+            return RankedSearch(source, new[] { searchTerm }, stringProperties);
         }
 
         /// <summary>
@@ -70,18 +50,7 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
 
-            Expression combinedHitExpression = null;
-            foreach (var searchTerm in searchTerms)
-            {
-                var hitCountExpression = CalculateHitCount(stringProperty, searchTerm);
-                combinedHitExpression = AddExpressions(combinedHitExpression, hitCountExpression);                
-            }
-
-            ParameterExpression parameterExpression = stringProperty.Parameters.Single();
-            var rankedInitExpression = ConstructRankedResult<T>(combinedHitExpression, parameterExpression);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, parameterExpression);
-            return source.Search(stringProperty, searchTerms)
-                         .Select(selectExpression);
+            return RankedSearch(source, searchTerms, new[] {stringProperty});
         }
 
         /// <summary>
