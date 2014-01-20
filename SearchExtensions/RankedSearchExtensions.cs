@@ -65,24 +65,33 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
 
+            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
+            if (!validSearchTerms.Any())
+            {
+                throw new ArgumentException("No valid search terms have been provided", "searchTerms");
+            }
+
             var singleParameter = stringProperties[0].Parameters.Single();
             Expression combinedHitExpression = null;
+            ConstantExpression emptyStringExpression = Expression.Constant("");
             foreach (var stringProperty in stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         singleParameter);
 
-                foreach (var searchTerm in searchTerms)
+                foreach (var searchTerm in validSearchTerms)
                 {
-                    var hitCountExpression = CalculateHitCount(swappedParamExpression, searchTerm);
+                    var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
+                    var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, singleParameter);
+                    var hitCountExpression = CalculateHitCount(nullSafeExpresion, searchTerm);
                     combinedHitExpression = AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
 
             var rankedInitExpression = ConstructRankedResult<T>(combinedHitExpression, singleParameter);
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter);
-            return source.Search(searchTerms, stringProperties)
+            return source.Search(validSearchTerms, stringProperties)
                          .Select(selectExpression);
 
 

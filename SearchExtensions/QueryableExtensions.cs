@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public static class SearchExtensions
+    public static class QueryableExtensions
     {
         /// <summary>
         /// Search a particular property for a particular search term
@@ -76,7 +76,8 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            if (searchTerms.All(String.IsNullOrEmpty))
+            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+            if (!validSearchTerms.Any())
             {
                 return source;
             }
@@ -84,7 +85,7 @@ namespace NinjaNye.SearchExtensions
             Expression orExpression = null;
             var singleParameter = stringProperties[0].Parameters.Single();
 
-            foreach (var searchTerm in searchTerms)
+            foreach (var searchTerm in validSearchTerms)
             {
                 if (string.IsNullOrEmpty(searchTerm))
                 {
@@ -92,45 +93,19 @@ namespace NinjaNye.SearchExtensions
                 }
 
                 ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-
                 foreach (var stringProperty in stringProperties)
                 {
                     var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty, 
                                                                             stringProperty.Parameters.Single(), 
                                                                             singleParameter);
 
-                    var containsExpression = BuildContainsExpression(swappedParamExpression, searchTermExpression);
-
-                    orExpression = JoinOrExpression(orExpression, containsExpression);
+                    var containsExpression = ExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
+                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, containsExpression);
                 }
             }
 
             var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter);
             return source.Where(completeExpression);
-        }
-
-        /// <summary>
-        /// Join two expressions using the conditional OR operation
-        /// </summary>
-        /// <param name="existingExpression">Expression being joined</param>
-        /// <param name="expressionToJoin">Expression to append</param>
-        /// <returns>New expression containing both expressions joined using the conditional OR operation</returns>
-        private static Expression JoinOrExpression(Expression existingExpression, Expression expressionToJoin)
-        {
-            if (existingExpression == null)
-            {
-                return expressionToJoin;
-            }
-
-            return Expression.OrElse(existingExpression, expressionToJoin);
-        }
-
-        /// <summary>
-        /// Build a 'contains' expression for a search term against a particular string property
-        /// </summary>
-        private static MethodCallExpression BuildContainsExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression)
-        {
-            return Expression.Call(stringProperty.Body, typeof(string).GetMethod("Contains"), searchTermExpression);
         }
     }
 }

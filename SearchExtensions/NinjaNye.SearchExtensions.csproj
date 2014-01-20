@@ -41,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ensure.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="ExpressionHelper.cs" />
     <Compile Include="IRanked.cs" />
-    <Compile Include="SearchExtensions.cs" />
+    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ranked.cs" />
     <Compile Include="RankedSearchExtensions.cs" />
