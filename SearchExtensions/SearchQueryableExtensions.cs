@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public static class QueryableExtensions
+    public static class SearchQueryableExtensions
     {
         /// <summary>
         /// Search a particular property for a particular search term
@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
 
-            if (searchTerms.Length == 0 || stringProperties.Length == 0)
+            if (!searchTerms.Any() || !stringProperties.Any())
             {
                 return source;
             }
@@ -87,11 +87,6 @@ namespace NinjaNye.SearchExtensions
 
             foreach (var searchTerm in validSearchTerms)
             {
-                if (string.IsNullOrEmpty(searchTerm))
-                {
-                    continue;
-                }
-
                 ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                 foreach (var stringProperty in stringProperties)
                 {

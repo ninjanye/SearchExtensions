@@ -5,8 +5,27 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public static class EnumerableExtensions
+    public static class SearchEnumerableExtensions
     {
+        /// <summary>
+        /// Search a particular property for a particular search term in memory.
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="stringProperty">String property to search</param>
+        /// <param name="searchTerm">search term to look for</param>
+        /// <returns>Enumerable records where the property contains the search term</returns>
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, string searchTerm)
+        {
+            Ensure.ArgumentNotNull(stringProperty, "stringProperty");
+
+            if (String.IsNullOrEmpty(searchTerm))
+            {
+                return source;
+            }
+
+            return source.Search(new[] { searchTerm }, new[] { stringProperty }, StringComparison.CurrentCulture);
+        }
+
         /// <summary>
         /// Search a particular property for a particular search term in memory.
         /// </summary>
@@ -25,6 +44,25 @@ namespace NinjaNye.SearchExtensions
             }
 
             return source.Search(new[] { searchTerm }, new[] { stringProperty }, stringComparison);
+        }
+
+        /// <summary>
+        /// Search multiple properties for a particular search term in memory.
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerm">search term to look for</param>
+        /// <param name="stringProperties">properties to search against</param>
+        /// <returns>Enumerable records where any property contains the search term</returns>
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, params Expression<Func<T, string>>[] stringProperties)
+        {
+            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+
+            if (String.IsNullOrEmpty(searchTerm))
+            {
+                return source;
+            }
+
+            return source.Search(new[] { searchTerm }, stringProperties, StringComparison.CurrentCulture);
         }
 
         /// <summary>
@@ -51,6 +89,21 @@ namespace NinjaNye.SearchExtensions
         /// Search a property for multiple search terms in memory.  
         /// </summary>
         /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search terms to find</param>
+        /// <param name="stringProperty">properties to search against</param>
+        /// <returns>Enumerable records where the property contains any of the search terms</returns>
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        {
+            Ensure.ArgumentNotNull(stringProperty, "stringProperty");
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+
+            return source.Search(searchTerms, new[] { stringProperty }, StringComparison.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Search a property for multiple search terms in memory.  
+        /// </summary>
+        /// <param name="source">Source data to query</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
@@ -61,6 +114,21 @@ namespace NinjaNye.SearchExtensions
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
 
             return source.Search(searchTerms, new[] { stringProperty }, stringComparison);
+        }
+
+        /// <summary>
+        /// Search multiple properties for multiple search terms in memory
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search term to look for</param>
+        /// <param name="stringProperties">properties to search against</param>
+        /// <returns>Enumerable records where any property contains any of the search terms</returns>
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties)
+        {
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+
+            return source.Search(searchTerms, stringProperties, StringComparison.CurrentCulture);
         }
 
         /// <summary>
