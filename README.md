@@ -104,25 +104,25 @@ This means you can now perform all of the above searches on in memory collection
 
 Search for a **single search term** within a **single property**
 
-    var result = queryableData.Search(x => x.Property1, "searchTerm", StringComparison.OrdinalIgnoreCase);
+    var result = enumerableData.Search(x => x.Property1, "searchTerm", StringComparison.OrdinalIgnoreCase);
     
 Search for a **single search term** within **multiple properties**
 
-    var result = queryableData.Search("searchTerm", 
-                                      StringComparison.OrdinalIgnoreCase, 
-                                      x => x.Property1, x => x.Proprerty2, x.Property3);
+    var result = enumerableData.Search("searchTerm", 
+                                       StringComparison.OrdinalIgnoreCase, 
+                                       x => x.Property1, x => x.Proprerty2, x.Property3);
     
 Search for **multiple search terms** within a **single property**
 
-    var result = queryableData.Search(x => x.Property1, 
-                                      StringComparison.OrdinalIgnoreCase, 
-                                      "searchTerm1", "searchTerm", "searchTerm2");
+    var result = enumerableData.Search(x => x.Property1, 
+                                       StringComparison.OrdinalIgnoreCase, 
+                                       "searchTerm1", "searchTerm", "searchTerm2");
     
 Search for **multiple search terms** within **multiple properties**
 
-    var result = queryableData.Search(new[]{"searchTerm1", "searchTerm2", "searchTerm2"}, 
-                                      new[]{x => x.Property1, x => x.Proprerty2, x.Property3,}
-                                      StringComparison.OrdinalIgnoreCase);
+    var result = enumerableData.Search(new[]{"searchTerm1", "searchTerm2", "searchTerm2"}, 
+                                       new[]{x => x.Property1, x => x.Proprerty2, x.Property3,}
+                                       StringComparison.OrdinalIgnoreCase);
 
 ---
 
