@@ -94,7 +94,7 @@ Using ranked search you can now easily order your search results by the most rel
 And that is it.  All the rest is done for you.
 
         
-##IEnumerable (in memory searches)
+##IEnumerable (in memory) Searches
 
 `NinjaNye.SearchExtensions` has now also been extended to support `IEnumerable` collections (not just `IQueryable`).
 
