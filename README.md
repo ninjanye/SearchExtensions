@@ -132,4 +132,4 @@ If you have any new feature requests, questions, or comments, please get in touc
 * Ability to perform AND search on IRanked results
 * Soundex support
 * Levenshtein support
-
+* IQueryable implementation improvements (remove null records)
