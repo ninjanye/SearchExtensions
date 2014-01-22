@@ -128,6 +128,8 @@ Search for **multiple search terms** within **multiple properties**
 
 If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
 
-## Current Future Features
+## Future Features
 * Ability to perform AND search on IRanked results
+* Soundex support
+* Levenshtein support
 
