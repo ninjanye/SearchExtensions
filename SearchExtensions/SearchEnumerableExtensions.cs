@@ -163,6 +163,7 @@ namespace NinjaNye.SearchExtensions
                 ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                 foreach (var stringProperty in stringProperties)
                 {
+
                     var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                             stringProperty.Parameters.Single(),
                                                                             singleParameter);
@@ -172,8 +173,8 @@ namespace NinjaNye.SearchExtensions
                 }
             }
 
-            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter);
-            return source.Where(x => completeExpression.Compile().Invoke(x));
+            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter).Compile();
+            return source.Where(completeExpression);
         }
     }
 }
