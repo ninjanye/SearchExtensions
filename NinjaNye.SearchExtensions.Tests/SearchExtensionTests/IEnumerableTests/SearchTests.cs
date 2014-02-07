@@ -7,18 +7,22 @@ using NUnit.Framework;
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     [TestFixture]
-    public class SearchTests
+    public class SearchEnumerableTests
     {
-        private readonly List<string> enumerableData = new List<string>();
+        private readonly List<TestData> testData = new List<TestData>();
 
         [TestFixtureSetUp]
         public void ClassSetup()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Guid guid = Guid.NewGuid();
-                enumerableData.Add(guid.ToString());
-            }
+            this.BuildTestData();
+        }
+
+        private void BuildTestData()
+        {
+            this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
+            this.testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
+            this.testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
+            this.testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
         }
 
         [Test]
@@ -27,10 +31,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = enumerableData.Search((string)null, s => s);
+            var result = testData.Search((string)null, x => x.Name);
 
             //Assert
-            Assert.AreEqual(enumerableData, result);
+            Assert.AreEqual(testData, result);
         }
 
         [Test]
@@ -40,34 +44,113 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            enumerableData.Search("test", (Expression<Func<string, string>>)null);
+            testData.Search("test", (Expression<Func<TestData, string>>)null);
 
             //Assert
             Assert.Fail("Expected an Argument Null expception to occur");
         }
 
         [Test]
-        public void Search_SearchAllProperties_SearchesAllProperties()
+        public void Search_SearchAParticularProperty_OnlyResultsWithAMatchAreReturned()
         {
             //Arrange
-            var data = new List<TestClass>();
-            data.Add(new TestClass{Name = "abcd", Description = "efgh"});
-            data.Add(new TestClass{Name = "ijkl", Description = "mnop"});
-            data.Add(new TestClass{Name = "qrst", Description = "uvwx"});
-            data.Add(new TestClass{Name = "yz", Description = "abcd"});
+            const string searchTerm = "cd";
             
             //Act
-            var result = data.AsQueryable().Search("b");
+            var result = testData.Search(searchTerm, x => x.Name).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
+        }
+
+        [Test]
+        public void Search_SearchAParticularPropertyWithMultipleTerms_OnlyResultsWithAMatchAreReturned()
+        {
+            //Arrange
+            const string searchTerm1 = "cd";
+            const string searchTerm2 = "jk";
+            
+            //Act
+            var result = testData.Search(new[]{searchTerm1, searchTerm2}, x => x.Name).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) || x.Name.Contains(searchTerm2)));
+        }
+
+        [Test]
+        public void Search_SearchForATermWithMultipleProperties_OnlyResultsWithAMatchAreReturned()
+        {
+            //Arrange
+            const string searchTerm = "cd";
+            
+            //Act
+            var result = testData.Search(searchTerm, x => x.Name, x => x.Description).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
+        }
+
+        [Test]
+        public void Search_SearchForMultipleTermsWithMultipleProperties_OnlyResultsWithAMatchAreReturned()
+        {
+            //Arrange
+            const string searchTerm1 = "cd";
+            const string searchTerm2 = "uv";
+
+            //Act
+            var result = testData.Search(new[] { searchTerm1, searchTerm2 }, x => x.Name, x => x.Description).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) 
+                                       || x.Name.Contains(searchTerm2)
+                                       || x.Description.Contains(searchTerm1) 
+                                       || x.Description.Contains(searchTerm2)));
+        }
+
+        [Test]
+        public void Search_SearchForAnUppercaseTermIgnoringCase_StringComparisonIsRespected()
+        {
+            //Arrange
+            const string searchTerm = "CD";
+
+            //Act
+            var result = testData.Search(searchTerm, x => x.Name, StringComparison.InvariantCultureIgnoreCase).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm.ToLower())));
+        }
+
+        [Test]
+        public void Search_SearchForAnUppercaseTermRespectingCase_OnlyMatchingResultsAreReturned()
+        {
+            //Arrange
+            const string searchTerm = "CD";
+            testData.Add(new TestData { Name = searchTerm });
+
+            //Act
+            var result = testData.Search(searchTerm, x => x.Name, StringComparison.Ordinal).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
+        }
+
+        [Test]
+        public void Search_SearchAllProperties_AllPropertiesSearched()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search("cd");
 
             //Assert
             Assert.AreEqual(2, result.Count());
-
         }
 
-        private class TestClass
+        private class TestData
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public int Number { get; set; }
         }
 
     }
