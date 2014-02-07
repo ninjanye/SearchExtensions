@@ -7,13 +7,30 @@ namespace NinjaNye.SearchExtensions
     public static class SearchQueryableExtensions
     {
         /// <summary>
+        /// Search ALL string properties for a particular search term
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerm">search term to look for</param>
+        /// <returns>Queryable records where the any string property contains the search term</returns>
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, string searchTerm)
+        {
+            if (String.IsNullOrEmpty(searchTerm))
+            {
+                return source;
+            }
+
+            var stringProperties = ExpressionHelper.GetStringProperties<T>();
+            return source.Search(new[] {searchTerm}, stringProperties);
+        }
+
+        /// <summary>
         /// Search a particular property for a particular search term
         /// </summary>
         /// <param name="source">Source data to query</param>
         /// <param name="stringProperty">String property to search</param>
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>Queryable records where the property contains the search term</returns>
-        public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, string searchTerm)
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
 
@@ -51,7 +68,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>Queryable records where the property contains any of the search terms</returns>
-        public static IQueryable<T> Search<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
@@ -85,21 +102,27 @@ namespace NinjaNye.SearchExtensions
             Expression orExpression = null;
             var singleParameter = stringProperties[0].Parameters.Single();
 
-            foreach (var searchTerm in validSearchTerms)
+            Expression notNullExpression = null;
+            foreach (var stringProperty in stringProperties)
             {
-                ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-                foreach (var stringProperty in stringProperties)
-                {
-                    var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty, 
-                                                                            stringProperty.Parameters.Single(), 
-                                                                            singleParameter);
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        singleParameter);
 
+                var propertyNotNullExpression = ExpressionHelper.BuildNotNullExpression(swappedParamExpression);
+                notNullExpression = ExpressionHelper.JoinOrExpression(notNullExpression, propertyNotNullExpression);
+
+                foreach (var searchTerm in validSearchTerms)
+                {
+                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                     var containsExpression = ExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, containsExpression);
                 }
+
             }
 
-            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter);
+            var jointExpression = ExpressionHelper.JoinAndAlsoExpression(notNullExpression, orExpression);
+            var completeExpression = Expression.Lambda<Func<T, bool>>(jointExpression, singleParameter);
             return source.Where(completeExpression);
         }
     }
