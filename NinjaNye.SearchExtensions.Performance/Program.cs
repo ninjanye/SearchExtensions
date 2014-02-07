@@ -16,7 +16,6 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine("====================================");
 
             const int recordCount = 1000000;
-            const string searchTerm = "ab";
             const StringComparison stringComparison = StringComparison.OrdinalIgnoreCase;
 
             Console.WriteLine("Building {0} records...", recordCount);
@@ -28,7 +27,8 @@ namespace NinjaNye.SearchExtensions.Performance
 
             Console.WriteLine("Begin search...");
             var stopwatch = Stopwatch.StartNew();
-            var result = enumerableData.Search(s => s, searchTerm, stringComparison).ToList();
+            string[] searchTerms = new[] {"abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx"};
+            var result = enumerableData.Search(searchTerms, s => s, stringComparison).ToList();
             stopwatch.Stop();
             Console.WriteLine("Search complete...");
             Console.WriteLine("Record count: {0}", recordCount);
@@ -39,10 +39,26 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine("Begin lamda...");
             stopwatch.Reset();
             stopwatch.Start();
-            var lamdaResult = enumerableData.Where(s => s.IndexOf(searchTerm, stringComparison) > -1).ToList();
+            var lamdaResult = enumerableData.Where(s => s.IndexOf("abc", stringComparison) > -1
+                                                     || s.IndexOf("def", stringComparison) > -1
+                                                     || s.IndexOf("ghi", stringComparison) > -1
+                                                     || s.IndexOf("jkl", stringComparison) > -1
+                                                     || s.IndexOf("mno", stringComparison) > -1
+                                                     || s.IndexOf("pqr", stringComparison) > -1
+                                                     || s.IndexOf("stu", stringComparison) > -1
+                                                     || s.IndexOf("vwx", stringComparison) > -1).ToList();
+            
             stopwatch.Stop();
             Console.WriteLine("Lamda complete...");
             Console.WriteLine("Results found: {0}", lamdaResult.Count);
+            Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            var containsResult = enumerableData.Where(s => searchTerms.Any(st => s.IndexOf(st) > -1)).ToList();
+            stopwatch.Stop();
+            Console.WriteLine("Contains complete...");
+            Console.WriteLine("Results found: {0}", containsResult.Count);
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
 
             Console.ReadLine();
