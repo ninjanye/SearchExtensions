@@ -14,7 +14,7 @@ http://jnye.co/posts/tagged/search
 
 Search for a **single search term** within a **single property**
 
-    var result = queryableData.Search(x => x.Property1, "searchTerm");
+    var result = queryableData.Search("searchTerm", x => x.Property1);
     
 Search for a **single search term** within **multiple properties**
 
@@ -22,7 +22,7 @@ Search for a **single search term** within **multiple properties**
     
 Search for **multiple search terms** within a **single property**
 
-    var result = queryableData.Search(x => x.Property1, "searchTerm1", "searchTerm", "searchTerm2");
+    var result = queryableData.Search(new[]{"searchTerm1", "searchTerm", "searchTerm2"}, x => x.Property1);
     
 Search for **multiple search terms** within **multiple properties**
 
@@ -35,8 +35,8 @@ Search for **multiple search terms** within **multiple properties**
 Search where a **single property** contains a **single search term**  
 AND a **another property** contains a **single search term**
 
-    var result = queryableData.Search(x => x.Property1, "searchTerm1")
-                              .Search(x => x.Property1, "searchTerm2");
+    var result = queryableData.Search("searchTerm1", x => x.Property1)
+                              .Search("searchTerm2", x => x.Property1);
     
 Search where a **single search term** exists within in Property1 OR Property2  
 AND **single search term** exists within in Property3 OR Property4
@@ -48,7 +48,7 @@ Search where a **single search term** exists in Property1 OR Property2
 AND any of the **multiple search terms** exist within a **single property**
 
     var result = queryableData.Search(searchTerm1, x => x.Property1, x => x.Property2)
-                              .Search(x => x.Property3, searchTerm1, searchTerm2);
+                              .Search(new[]{searchTerm1, searchTerm2}, x => x.Property3);
                                   
 ## Ranked Searches
 
@@ -68,7 +68,7 @@ This is returned using any of the `RankedSearch` extension methods:
 
 RankedSearch for a **single search term** within a **single property**
 
-    var result = queryableData.RankedSearch(x => x.Property1, "searchTerm");
+    var result = queryableData.RankedSearch("searchTerm", x => x.Property1);
     
 RankedSearch for a **single search term** within **multiple properties**
 
@@ -76,7 +76,7 @@ RankedSearch for a **single search term** within **multiple properties**
     
 RankedSearch for **multiple search terms** within a **single property**
 
-    var result = queryableData.RankedSearch(x => x.Property1, "searchTerm1", "searchTerm", "searchTerm2");
+    var result = queryableData.RankedSearch(new[]{"searchTerm1", "searchTerm", "searchTerm2"}, x => x.Property1);
     
 RankedSearch for **multiple search terms** within **multiple properties**
 
@@ -104,19 +104,19 @@ This means you can now perform all of the above searches on in memory collection
 
 Search for a **single search term** within a **single property**
 
-    var result = enumerableData.Search(x => x.Property1, "searchTerm", StringComparison.OrdinalIgnoreCase);
+    var result = enumerableData.Search("searchTerm", x => x.Property1, StringComparison.OrdinalIgnoreCase);
     
 Search for a **single search term** within **multiple properties**
 
     var result = enumerableData.Search("searchTerm", 
-                                       StringComparison.OrdinalIgnoreCase, 
-                                       x => x.Property1, x => x.Proprerty2, x.Property3);
+                                       new[]{x => x.Property1, x => x.Proprerty2, x.Property3},
+									   StringComparison.OrdinalIgnoreCase,);
     
 Search for **multiple search terms** within a **single property**
 
-    var result = enumerableData.Search(x => x.Property1, 
-                                       StringComparison.OrdinalIgnoreCase, 
-                                       "searchTerm1", "searchTerm", "searchTerm2");
+    var result = enumerableData.Search(new[]{"searchTerm1", "searchTerm", "searchTerm2"},
+									   x => x.Property1, 
+                                       StringComparison.OrdinalIgnoreCase);
     
 Search for **multiple search terms** within **multiple properties**
 
@@ -128,6 +128,9 @@ Search for **multiple search terms** within **multiple properties**
 
 If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
 
-## Current Future Features
+## Future Features
 * Ability to perform AND search on IRanked results
-
+* Soundex support
+* Levenshtein support
+* Fuzzy search
+* IQueryable implementation improvements (remove null records)
