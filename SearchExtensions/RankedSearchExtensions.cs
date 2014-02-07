@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>IQueryable, IRanked records where the 
         /// property contains the search term specified</returns>        
-        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, string searchTerm)
+        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
@@ -46,7 +46,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>Queryable records where the property contains any of the search terms</returns>
-        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        public static IQueryable<IRanked<T>> RankedSearch<T>(this IQueryable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
@@ -106,7 +106,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>IEnumerable, IRanked records where the 
         /// property contains the search term specified</returns>        
-        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, string searchTerm)
+        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
@@ -123,7 +123,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>IEnumerable, IRanked records where the 
         /// property contains the search term specified</returns>        
-        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, string searchTerm, StringComparison stringComparison)
+        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
@@ -154,7 +154,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>IEnumerable of IRanked records where any property contains the search term</returns>
-        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, StringComparison stringComparison, params Expression<Func<T, string>>[] stringProperties)
+        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
@@ -169,7 +169,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>IEnumerable records where the property contains any of the search terms</returns>
-        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
@@ -185,7 +185,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>IEnumerable records where the property contains any of the search terms</returns>
-        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty, StringComparison stringComparison, params string[] searchTerms)
+        public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
