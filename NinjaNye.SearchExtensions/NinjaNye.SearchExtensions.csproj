@@ -41,7 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ensure.cs" />
-    <Compile Include="RankedSearchExtensions.cs" />
+    <Compile Include="RankedSearchEnumerableExtensions.cs" />
+    <Compile Include="RankedSearchQueryableExtensions.cs" />
     <Compile Include="SearchEnumerableExtensions.cs" />
     <Compile Include="ExpressionHelper.cs" />
     <Compile Include="IRanked.cs" />
