@@ -83,7 +83,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="parameterExpression">property parameter</param>
         /// <returns>Expression equivalent to: new Ranked{ Hits = [hitCountExpression], Item = x }</returns>
         public static Expression ConstructRankedResult<T>(Expression hitCountExpression,
-                                                           ParameterExpression parameterExpression)
+                                                          ParameterExpression parameterExpression)
         {
             var rankedType = typeof(Ranked<T>);
             var rankedCtor = Expression.New(rankedType);
@@ -160,8 +160,7 @@ namespace NinjaNye.SearchExtensions
             var result = new List<Expression<Func<T, string>>>();
             foreach (var property in stringProperties)
             {
-                PropertyInfo localProperty = property;
-                Expression body = Expression.Property(parameter, localProperty);
+                Expression body = Expression.Property(parameter, property);
                 result.Add(Expression.Lambda<Func<T, string>>(body, parameter));
             }
             return result.ToArray();

@@ -48,7 +48,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SearchExtensions\NinjaNye.SearchExtensions.csproj">
+    <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj">
       <Project>{60b8e347-999f-4ee2-8172-9367d4f71860}</Project>
       <Name>NinjaNye.SearchExtensions</Name>
     </ProjectReference>
