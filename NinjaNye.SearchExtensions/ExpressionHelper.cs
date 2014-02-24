@@ -12,6 +12,7 @@ namespace NinjaNye.SearchExtensions
         static readonly ConstantExpression ZeroConstantExpression = Expression.Constant(0);
         static readonly ConstantExpression NullExpression = Expression.Constant(null);
         static readonly MethodInfo IndexOfMethod = typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
+        static readonly MethodInfo IndexOfMethodNoCulture = typeof(string).GetMethod("IndexOf", new[] { typeof(string) });
         static readonly PropertyInfo StringLengthProperty = typeof(string).GetProperty("Length");
         static readonly MethodInfo ReplaceMethod = typeof(string).GetMethod("Replace", new[] { typeof(string), typeof(string) });
         static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensions).GetMethod("Replace");
@@ -51,28 +52,50 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'contains' expression for a search term against a particular string property
         /// </summary>
-        public static MethodCallExpression BuildContainsExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression)
+        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression)
         {
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
             return Expression.Call(coalesceExpression, typeof(string).GetMethod("Contains"), searchTermExpression);
         }
 
+        /// <summary>
+        /// Build a 'contains' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, ConstantExpression searchTermExpression)
+        {
+            return Expression.Equal(property.Body, searchTermExpression);
+        }
 
         /// <summary>
         /// Build a 'not null' expression for a particular string property
         /// </summary>
-        public static Expression BuildNotNullExpression<T>(Expression<Func<T, string>> stringProperty)
+        public static Expression BuildNotNullExpression<T, TType>(Expression<Func<T, TType>> property)
         {
-            return Expression.NotEqual(stringProperty.Body, NullExpression);
+            return Expression.NotEqual(property.Body, NullExpression);
         }
 
         /// <summary>
         /// Build a 'indexof() >= 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildIndexOfExpression(Expression stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression)
+        public static BinaryExpression BuildIndexOfExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, bool nullCheck = true)
         {
-            var coalesceExpression = Expression.Coalesce(stringProperty, EmptyStringExpression);
-            var indexOfCallExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
+            return BuildIndexOfExpression(stringProperty, searchTermExpression, stringComparisonExpression, nullCheck);
+        }
+
+        /// <summary>
+        /// Build a 'indexof() >= 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildIndexOfExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        {
+            if (nullCheck)
+            {
+                var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
+                var nullCheckExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+                return Expression.GreaterThanOrEqual(nullCheckExpresion, ZeroConstantExpression);                
+            }
+
+            var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression, stringComparisonExpression);
             return Expression.GreaterThanOrEqual(indexOfCallExpresion, ZeroConstantExpression);
         }
 
@@ -147,21 +170,23 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Builds an array of expressions that map to every string property on an object
+        /// Builds an array of expressions that map to every TType property on an object
         /// </summary>
-        /// <typeparam name="T">Type of object to retrieve properties from</typeparam>
-        /// <returns>An array of expressions pointing to each string property</returns>
-        public static Expression<Func<T, string>>[] GetStringProperties<T>()
+        /// <typeparam name="TSource">Type of object to retrieve properties from</typeparam>
+        /// <typeparam name="TType">The type of property to locate</typeparam>
+        /// <returns>An array of expressions pointing to each TType property</returns>
+        public static Expression<Func<TSource, TType>>[] GetProperties<TSource, TType>()
         {
-            var parameter = Expression.Parameter(typeof(T));
-            var stringProperties = typeof(T).GetProperties().Where(property => property.CanRead
-                                                                            && property.PropertyType == typeof(String));
+            var parameter = Expression.Parameter(typeof(TSource));
+            var stringProperties = typeof(TSource).GetProperties()
+                                                  .Where(property => property.CanRead
+                                                                  && property.PropertyType == typeof(TType));
 
-            var result = new List<Expression<Func<T, string>>>();
+            var result = new List<Expression<Func<TSource, TType>>>();
             foreach (var property in stringProperties)
             {
                 Expression body = Expression.Property(parameter, property);
-                result.Add(Expression.Lambda<Func<T, string>>(body, parameter));
+                result.Add(Expression.Lambda<Func<TSource, TType>>(body, parameter));
             }
             return result.ToArray();
         }

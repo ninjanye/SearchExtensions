@@ -19,8 +19,22 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = ExpressionHelper.GetStringProperties<T>();
+            var stringProperties = ExpressionHelper.GetProperties<T, string>();
             return source.Search(new[] {searchTerm}, stringProperties);
+        }
+
+        /// <summary>
+        /// Search ALL string properties for a particular search term
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search term to look for</param>
+        /// <returns>Queryable records where the any string property contains the search term</returns>
+        public static IQueryable<T> Search<T>(this IQueryable<T> source, params string[] searchTerms)
+        {
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+
+            var stringProperties = ExpressionHelper.GetProperties<T, string>();
+            return source.Search(searchTerms, stringProperties);
         }
 
         /// <summary>
@@ -101,6 +115,7 @@ namespace NinjaNye.SearchExtensions
 
             Expression orExpression = null;
             var singleParameter = stringProperties[0].Parameters.Single();
+            bool isDbProvider = source.Provider.GetType().Name == "DbQueryProvider";
 
             Expression notNullExpression = null;
             foreach (var stringProperty in stringProperties)
@@ -115,10 +130,10 @@ namespace NinjaNye.SearchExtensions
                 foreach (var searchTerm in validSearchTerms)
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-                    var containsExpression = ExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, containsExpression);
+                    Expression comparisonExpression = isDbProvider ? ExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression)
+                                                                   : ExpressionHelper.BuildIndexOfExpression(swappedParamExpression, searchTermExpression, false);
+                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
-
             }
 
             var jointExpression = ExpressionHelper.JoinAndAlsoExpression(notNullExpression, orExpression);

@@ -20,8 +20,26 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = ExpressionHelper.GetStringProperties<T>();
+            var stringProperties = ExpressionHelper.GetProperties<T, string>();
             return source.Search(new[] { searchTerm }, stringProperties);
+        }
+
+        /// <summary>
+        /// Search ALL string properties for a particular search term in memory
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerm">search term to look for</param>
+        /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
+        /// <returns>Queryable records where the any string property contains the search term</returns>
+        public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, StringComparison stringComparison)
+        {
+            if (String.IsNullOrEmpty(searchTerm))
+            {
+                return source;
+            }
+
+            var stringProperties = ExpressionHelper.GetProperties<T, string>();
+            return source.Search(new[] { searchTerm }, stringProperties, stringComparison);
         }
 
         /// <summary>
@@ -55,7 +73,7 @@ namespace NinjaNye.SearchExtensions
 
             ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
             ConstantExpression stringComparisonExpression = Expression.Constant(stringComparison);
-            var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(stringProperty.Body, searchTermExpression, stringComparisonExpression);
+            var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(stringProperty, searchTermExpression, stringComparisonExpression);
             var completeExpression = Expression.Lambda<Func<T, bool>>(indexOfExpression, stringProperty.Parameters).Compile();
             return source.Where(completeExpression);
         }
@@ -183,7 +201,7 @@ namespace NinjaNye.SearchExtensions
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
 
-                    var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(swappedParamExpression.Body, searchTermExpression, stringComparisonExpression);
+                    var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }

@@ -7,14 +7,21 @@ using NUnit.Framework;
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     [TestFixture]
-    public class SearchEnumerableTests
+    public class StringSearch
     {
-        private readonly List<TestData> testData = new List<TestData>();
+        private List<TestData> testData = new List<TestData>();
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void ClassSetup()
         {
+            testData = new List<TestData>();
             this.BuildTestData();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            testData.Clear();
         }
 
         private void BuildTestData()
@@ -140,18 +147,42 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search("cd");
+            var result = this.testData.Search("cd");
 
             //Assert
             Assert.AreEqual(2, result.Count());
         }
 
-        private class TestData
+        [Test]
+        public void Search_SearchAllPropertiesIgnoreCase_MatchesMadeRegardlessOfCase()
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public int Number { get; set; }
+            //Arrange
+            const string searchTerm = "CD";
+            testData.Add(new TestData { Name = searchTerm, Description = "test"});
+            testData.Add(new TestData { Name = "test", Description = searchTerm });
+            
+            //Act
+            var result = testData.Search(searchTerm, StringComparison.OrdinalIgnoreCase).ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1
+                                       || x.Description.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1 ));
         }
 
+        [Test]
+        public void Search_PerformANDSearchAcrossTwoProperties_MatchesOnlyWhereBothAreTrue()
+        {
+            //Arrange
+            const string searchTerm1 = "ab";
+            const string searchTerm2 = "ef";
+            
+            //Act
+            var result = testData.Search(searchTerm1, x => x.Name)
+                                 .Search(searchTerm2, x => x.Description);
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) && x.Description.Contains(searchTerm2)));
+
+        }
     }
 }
