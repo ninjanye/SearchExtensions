@@ -209,5 +209,53 @@ namespace NinjaNye.SearchExtensions
             var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter).Compile();
             return source.Where(completeExpression);
         }
+
+
+
+        /// <summary>
+        /// Search multiple properties for multiple search terms in memory
+        /// </summary>
+        /// <param name="source">Source data to query</param>
+        /// <param name="searchTerms">search term to look for</param>
+        /// <param name="stringProperties">properties to search against</param>
+        /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
+        /// <returns>Enumerable records where any property contains any of the search terms</returns>
+        public static Expression SearchExpression<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison = StringComparison.CurrentCulture)
+        {
+            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
+            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+
+            if (!searchTerms.Any() || !stringProperties.Any())
+            {
+                return null;
+            }
+
+            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+            if (!validSearchTerms.Any())
+            {
+                return null;
+            }
+
+            Expression orExpression = null;
+            var singleParameter = stringProperties[0].Parameters.Single();
+            var stringComparisonExpression = Expression.Constant(stringComparison);
+
+            foreach (var stringProperty in stringProperties)
+            {
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        singleParameter);
+
+                foreach (var searchTerm in validSearchTerms)
+                {
+                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
+
+                    var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
+                }
+            }
+
+            return orExpression;
+        }
     }
 }

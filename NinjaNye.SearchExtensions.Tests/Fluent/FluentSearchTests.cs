@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using NinjaNye.SearchExtensions.Fluent;
 using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
@@ -175,6 +173,88 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Assert
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.Name.Contains("cd") || x.Description.Contains("cd")));
+        }
+
+        [Test]
+        public void Search_ContainingMultipleTerms_SearchAgainstMultipleTerms()
+        {
+            //Arrange
+
+            //Act
+            var result = testData.Search(x => x.Name).Containing("ab", "jk");
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.Contains("ab") || x.Name.Contains("jk")));
+        }
+
+        [Test]
+        public void Search_StartsWithMultipleTerms_SearchAgainstMultipleTerms()
+        {
+            //Arrange
+
+            //Act
+            var result = testData.Search(x => x.Name).StartsWith("ab", "ef");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.StartsWith("ab") || x.Name.StartsWith("ef")));
+
+        }
+
+        [Test]
+        public void Search_EndsWithMultipleTerms_SearchAgainstMultipleTerms()
+        {
+            //Arrange
+
+            //Act
+            var result = testData.Search(x => x.Name).EndsWith("cd", "gh");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.EndsWith("cd") || x.Name.EndsWith("gh")));
+        }
+
+        [Test]
+        public void Search_SearchManyPropertiesContainingManyTerms_AllResultsHaveASearchTermWithin()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name, x => x.Description).Containing("cd", "jk");
+
+            //Assert
+            Assert.AreEqual(4, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.Contains("cd") || x.Name.Contains("jk") 
+                                       || x.Description.Contains("cd") || x.Description.Contains("jk")));
+        }
+
+        [Test]
+        public void Search_SearchManyPropertiesStartingWithManyTerms_AllResultsHaveAPropertyStartingWithASpecifiedTerm()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name, x => x.Description).StartsWith("cd", "ef");
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.StartsWith("cd") || x.Name.StartsWith("ef")
+                                       || x.Description.StartsWith("cd") || x.Description.StartsWith("ef")));
+        }
+
+        [Test]
+        public void Search_SearchManyPropertiesEndingWithManyTerms_AllResultsHaveAPropertyEndingWithASpecifiedTerm()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name, x => x.Description).EndsWith("kl", "ef");
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.EndsWith("kl") || x.Name.EndsWith("ef")
+                                       || x.Description.EndsWith("kl") || x.Description.EndsWith("ef")));
         }
     }
 }
