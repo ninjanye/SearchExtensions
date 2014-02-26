@@ -73,7 +73,7 @@ namespace NinjaNye.SearchExtensions
 
             ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
             ConstantExpression stringComparisonExpression = Expression.Constant(stringComparison);
-            var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(stringProperty, searchTermExpression, stringComparisonExpression);
+            var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression);
             var completeExpression = Expression.Lambda<Func<T, bool>>(indexOfExpression, stringProperty.Parameters).Compile();
             return source.Where(completeExpression);
         }
@@ -201,7 +201,7 @@ namespace NinjaNye.SearchExtensions
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
 
-                    var indexOfExpression = ExpressionHelper.BuildIndexOfExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }

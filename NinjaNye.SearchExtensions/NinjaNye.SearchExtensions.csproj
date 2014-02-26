@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ensure.cs" />
+    <Compile Include="Fluent\FluentSearch.cs" />
     <Compile Include="RankedSearchEnumerableExtensions.cs" />
     <Compile Include="RankedSearchQueryableExtensions.cs" />
     <Compile Include="SearchEnumerableExtensions.cs" />
@@ -52,9 +53,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SwapExpressionVisitor.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fluent\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

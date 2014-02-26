@@ -131,7 +131,7 @@ namespace NinjaNye.SearchExtensions
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                     Expression comparisonExpression = isDbProvider ? ExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression)
-                                                                   : ExpressionHelper.BuildIndexOfExpression(swappedParamExpression, searchTermExpression, false);
+                                                                   : ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, false);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }

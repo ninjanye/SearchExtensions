@@ -77,16 +77,16 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'indexof() >= 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildIndexOfExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, bool nullCheck = true)
+        public static BinaryExpression BuildIndexOfGreaterThanMinusOneExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, bool nullCheck = true)
         {
             var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            return BuildIndexOfExpression(stringProperty, searchTermExpression, stringComparisonExpression, nullCheck);
+            return BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression, nullCheck);
         }
 
         /// <summary>
         /// Build a 'indexof() >= 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildIndexOfExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        public static BinaryExpression BuildIndexOfGreaterThanMinusOneExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
             if (nullCheck)
             {
@@ -97,6 +97,62 @@ namespace NinjaNye.SearchExtensions
 
             var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression, stringComparisonExpression);
             return Expression.GreaterThanOrEqual(indexOfCallExpresion, ZeroConstantExpression);
+        }
+
+        /// <summary>
+        /// Build a 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
+        {
+            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
+            return BuildStartsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
+        }
+
+        /// <summary>
+        /// Build an 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        {
+            var searchTermExpression = Expression.Constant(searchTerm);
+            if (nullCheck)
+            {
+                var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
+                var nullCheckExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+                return Expression.Equal(nullCheckExpresion, ZeroConstantExpression);
+            }
+
+            var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+            return Expression.Equal(indexOfCallExpresion, ZeroConstantExpression);            
+        }
+
+        /// <summary>
+        /// Build a 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
+        {
+            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
+            return BuildEndsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
+        }
+
+        /// <summary>
+        /// Build an 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        {
+            int expectedIndexOf = searchTerm.Length;
+            var lengthExpression = Expression.Constant(expectedIndexOf);
+            var searchTermExpression = Expression.Constant(searchTerm);
+            if (nullCheck)
+            {
+                var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
+                var nullCheckExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+                return Expression.Equal(nullCheckExpresion, lengthExpression);
+            }
+
+            var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression, stringComparisonExpression);
+            var lengthPropertyExpression = Expression.Property(stringProperty.Body, StringLengthProperty);
+            var expectedLengthExpression = Expression.Subtract(lengthPropertyExpression, lengthExpression);
+            return Expression.Equal(indexOfCallExpresion, expectedLengthExpression);
         }
 
         /// <summary>

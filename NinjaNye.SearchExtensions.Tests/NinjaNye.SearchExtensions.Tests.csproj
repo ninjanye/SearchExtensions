@@ -50,8 +50,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchExtensionTests\IEnumerableTests\PerformanceTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearch.cs" />
     <Compile Include="SearchExtensionTests\TestData.cs" />
   </ItemGroup>
