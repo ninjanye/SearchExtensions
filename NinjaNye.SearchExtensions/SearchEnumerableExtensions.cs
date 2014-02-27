@@ -220,7 +220,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringProperties">properties to search against</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <returns>Enumerable records where any property contains any of the search terms</returns>
-        public static Expression SearchExpression<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison = StringComparison.CurrentCulture)
+        internal static Expression SearchExpression<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison = StringComparison.CurrentCulture)
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Performance", "NinjaNye.SearchExtensions.Performance\NinjaNye.SearchExtensions.Performance.csproj", "{3BA8EC52-60C1-41E6-B154-53D40407115B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Tests.Integration", "NinjaNye.SearchExtensions.Tests.Integration\NinjaNye.SearchExtensions.Tests.Integration.csproj", "{F167ED45-5E0B-4085-A040-2784116A70FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{3BA8EC52-60C1-41E6-B154-53D40407115B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BA8EC52-60C1-41E6-B154-53D40407115B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BA8EC52-60C1-41E6-B154-53D40407115B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F167ED45-5E0B-4085-A040-2784116A70FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F167ED45-5E0B-4085-A040-2784116A70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F167ED45-5E0B-4085-A040-2784116A70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F167ED45-5E0B-4085-A040-2784116A70FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

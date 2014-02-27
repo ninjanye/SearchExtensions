@@ -12,11 +12,13 @@ namespace NinjaNye.SearchExtensions.Fluent
         private Expression completeExpression;
         private readonly Expression<Func<T, string>>[] stringProperties;
         private readonly ParameterExpression firstParameter;
+        private StringComparison comparisonType;
 
         public FluentString(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
         {
             this.source = source;
             this.stringProperties = stringProperties;
+            this.SetCulture(StringComparison.CurrentCulture);
             var firstProperty = stringProperties.FirstOrDefault();
             if (firstProperty != null)
             {
@@ -25,12 +27,22 @@ namespace NinjaNye.SearchExtensions.Fluent
         }
 
         /// <summary>
+        /// Set culture for string comparison
+        /// </summary>
+        public FluentString<T> SetCulture(StringComparison type)
+        {
+            this.comparisonType = type;
+            return this;
+        } 
+
+        /// <summary>
         /// Only items where any property contains search term
         /// </summary>
         /// <param name="terms">Term to search for</param>
         public FluentString<T> Containing(params string[] terms)
         {
-            this.BuildExpression(source.SearchExpression(terms, stringProperties));
+            var searchExpression = source.SearchExpression(terms, stringProperties, comparisonType);
+            this.BuildExpression(searchExpression);
             return this;
         }
 
@@ -47,9 +59,9 @@ namespace NinjaNye.SearchExtensions.Fluent
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
 
-                var startsWithExpression = ExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, false);
+                var startsWithExpression = ExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, comparisonType, false);
                 fullExpression = fullExpression == null ? startsWithExpression 
-                                     : Expression.OrElse(fullExpression, startsWithExpression);
+                                                        : Expression.OrElse(fullExpression, startsWithExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
@@ -67,9 +79,9 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var endsWithExpression = ExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, false);
+                var endsWithExpression = ExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, comparisonType, false);
                 fullExpression = fullExpression == null ? endsWithExpression
-                                     : Expression.OrElse(fullExpression, endsWithExpression);
+                                                        : Expression.OrElse(fullExpression, endsWithExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
@@ -79,7 +91,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         /// Only items where any property equals the specified term
         /// </summary>
         /// <param name="term">Term to search for</param>
-        public FluentString<T> IsEqual(string term)
+        public FluentString<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
             foreach (var stringProperty in this.stringProperties)
@@ -87,8 +99,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var termExpression = Expression.Constant(term);
-                var isEqualExpression = ExpressionHelper.BuildEqualsExpression(swappedParamExpression, termExpression);
+                var isEqualExpression = ExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, comparisonType);
                 fullExpression = fullExpression == null ? isEqualExpression
                                      : Expression.OrElse(fullExpression, isEqualExpression);
             }

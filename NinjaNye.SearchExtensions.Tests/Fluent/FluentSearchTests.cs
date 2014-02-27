@@ -27,6 +27,8 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             this.testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
             this.testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
             this.testData.Add(new TestData { Name = "efgh", Description = "ijkl", Number = 5 });
+            this.testData.Add(new TestData { Name = "UPPER", Description = "CASE", Number = 6 });
+            this.testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
         }
 
         [Test]
@@ -168,7 +170,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this.testData.SearchStrings().Containing("cd");
+            var result = this.testData.SearchAll().Containing("cd");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -255,6 +257,139 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             Assert.AreEqual(3, result.Count());
             Assert.IsTrue(result.All(x => x.Name.EndsWith("kl") || x.Name.EndsWith("ef")
                                        || x.Description.EndsWith("kl") || x.Description.EndsWith("ef")));
+        }
+
+        [Test]
+        public void Search_SearchContainingWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).SetCulture(StringComparison.Ordinal).Containing("AB", "jk");
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.Contains("jk")));
+            Assert.IsFalse(result.Any(x => x.Name.Contains("AB")));
+        }
+
+        [Test]
+        public void Search_SearchContainingWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).Containing("AB", "jk");
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.Name.Contains("jk") || x.Name.Contains("ab")));
+        }
+
+        [Test]
+        public void Search_SearchStartsWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).StartsWith("C");
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.StartsWith("C")));
+        }
+
+        [Test]
+        public void Search_SearchStartsWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith("C");
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Test]
+        public void Search_SearchEndsWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EndsWith("SE");
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.EndsWith("SE", StringComparison.Ordinal)));
+        }
+
+        [Test]
+        public void Search_SearchEndsWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EndsWith("SE");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.EndsWith("se", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Test]
+        public void Search_SearchIsEqualOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).IsEqual("CASE");
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.EndsWith("CASE", StringComparison.Ordinal)));
+        }
+
+        [Test]
+        public void Search_SearchIsEqualOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).IsEqual("CASE");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Description.Equals("case", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Test]
+        public void Search_SearchManyTermsAreEqual_ResultsMatchAnyTerm()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).IsEqual("abcd", "efgh");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
+        }
+
+        [Test]
+        public void Search_SearchManyTermsAreEqualIgnoringCase_ResultsMatchAnyTermInAnyCase()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name)
+                                 .SetCulture(StringComparison.OrdinalIgnoreCase)
+                                 .IsEqual("ABCD", "EFGH");
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
         }
     }
 }

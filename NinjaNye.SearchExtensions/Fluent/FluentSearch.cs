@@ -12,10 +12,10 @@ namespace NinjaNye.SearchExtensions.Fluent
             return new FluentString<T>(source, stringProperties);
         }
 
-        public static FluentString<T> SearchStrings<T>(this IEnumerable<T> source)
+        public static FluentString<TSource> SearchAll<TSource>(this IEnumerable<TSource> source)
         {
-            var properties = ExpressionHelper.GetProperties<T, string>();
-            return new FluentString<T>(source, properties);
-        } 
+            var properties = ExpressionHelper.GetProperties<TSource, string>();
+            return new FluentString<TSource>(source, properties);
+        }
     }
 }
