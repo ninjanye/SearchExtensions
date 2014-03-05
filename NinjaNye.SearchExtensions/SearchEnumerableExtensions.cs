@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Fluent;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -13,6 +14,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="source">Source data to query</param>
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>Queryable records where the any string property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm)
         {
             if (String.IsNullOrEmpty(searchTerm))
@@ -31,6 +33,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <returns>Queryable records where the any string property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, StringComparison stringComparison)
         {
             if (String.IsNullOrEmpty(searchTerm))
@@ -49,6 +52,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringProperty">String property to search</param>
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>Enumerable records where the property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty)
         {
             return source.Search(searchTerm, stringProperty, StringComparison.CurrentCulture);
@@ -62,6 +66,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <returns>Enumerable records where the property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -71,11 +76,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-            ConstantExpression stringComparisonExpression = Expression.Constant(stringComparison);
-            var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression);
-            var completeExpression = Expression.Lambda<Func<T, bool>>(indexOfExpression, stringProperty.Parameters).Compile();
-            return source.Where(completeExpression);
+            return source.Search(new[] {searchTerm}, new[] {stringProperty}, stringComparison);
         }
 
         /// <summary>
@@ -85,6 +86,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>Enumerable records where any property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, params Expression<Func<T, string>>[] stringProperties)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
@@ -105,6 +107,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>Enumerable records where any property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
@@ -124,6 +127,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>Enumerable records where the property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -140,6 +144,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>Enumerable records where the property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -155,6 +160,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search term to look for</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>Enumerable records where any property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string[] searchTerms, params Expression<Func<T, string>>[] stringProperties)
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
@@ -171,89 +177,12 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringProperties">properties to search against</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <returns>Enumerable records where any property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/fluent")]
         public static IEnumerable<T> Search<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
-
-            if (!searchTerms.Any() || !stringProperties.Any())
-            {
-                return source;
-            }
-
-            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
-            if (!validSearchTerms.Any())
-            {
-                return source;
-            }
-
-            Expression orExpression = null;
-            var singleParameter = stringProperties[0].Parameters.Single();
-            var stringComparisonExpression = Expression.Constant(stringComparison);
-
-            foreach (var stringProperty in stringProperties)
-            {
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        singleParameter);
-
-                foreach (var searchTerm in validSearchTerms)
-                {
-                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-
-                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
-                }
-            }
-
-            var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter).Compile();
-            return source.Where(completeExpression);
-        }
-
-        /// <summary>
-        /// Search multiple properties for multiple search terms in memory
-        /// </summary>
-        /// <param name="source">Source data to query</param>
-        /// <param name="searchTerms">search term to look for</param>
-        /// <param name="stringProperties">properties to search against</param>
-        /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
-        /// <returns>Enumerable records where any property contains any of the search terms</returns>
-        internal static Expression SearchExpression<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison = StringComparison.CurrentCulture)
-        {
-            Ensure.ArgumentNotNull(searchTerms, "searchTerms");
-            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
-
-            if (!searchTerms.Any() || !stringProperties.Any())
-            {
-                return null;
-            }
-
-            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
-            if (!validSearchTerms.Any())
-            {
-                return null;
-            }
-
-            Expression orExpression = null;
-            var singleParameter = stringProperties[0].Parameters.Single();
-            var stringComparisonExpression = Expression.Constant(stringComparison);
-
-            foreach (var stringProperty in stringProperties)
-            {
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        singleParameter);
-
-                foreach (var searchTerm in validSearchTerms)
-                {
-                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-
-                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
-                }
-            }
-
-            return orExpression;
+            return source.Search(stringProperties).SetCulture(stringComparison).Containing(searchTerms);
         }
     }
 }

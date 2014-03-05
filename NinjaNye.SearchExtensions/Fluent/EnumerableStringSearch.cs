@@ -41,8 +41,39 @@ namespace NinjaNye.SearchExtensions.Fluent
         /// <param name="terms">Term to search for</param>
         public EnumerableStringSearch<T> Containing(params string[] terms)
         {
-            var searchExpression = source.SearchExpression(terms, stringProperties, comparisonType);
-            this.BuildExpression(searchExpression);
+            Ensure.ArgumentNotNull(terms, "searchTerms");
+
+            if (!terms.Any() || !stringProperties.Any())
+            {
+                return null;
+            }
+
+            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+            if (!validSearchTerms.Any())
+            {
+                return null;
+            }
+
+            Expression orExpression = null;
+            var singleParameter = stringProperties[0].Parameters.Single();
+            var stringComparisonExpression = Expression.Constant(comparisonType);
+
+            foreach (var stringProperty in stringProperties)
+            {
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        singleParameter);
+
+                foreach (var searchTerm in validSearchTerms)
+                {
+                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
+
+                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
+                }
+            }
+
+            this.BuildExpression(orExpression);
             return this;
         }
 
