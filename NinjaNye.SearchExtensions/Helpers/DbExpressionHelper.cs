@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -53,42 +54,42 @@ namespace NinjaNye.SearchExtensions.Helpers
             return Expression.Equal(indexOfCallExpresion, ZeroConstantExpression);
         }
 
-        /// <summary>
-        /// Build an 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
-        {
-            int expectedIndexOf = searchTerm.Length;
-            var lengthExpression = Expression.Constant(expectedIndexOf);
-            var searchTermExpression = Expression.Constant(searchTerm);
-            if (nullCheck)
-            {
-                var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
-                var nullCheckExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression);
-                return Expression.Equal(nullCheckExpresion, lengthExpression);
-            }
+        ///// <summary>
+        ///// Build an 'indexof() == 0' expression for a search term against a particular string property
+        ///// </summary>
+        //public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
+        //{
+        //    int expectedIndexOf = searchTerm.Length;
+        //    var lengthExpression = Expression.Constant(expectedIndexOf);
+        //    var searchTermExpression = Expression.Constant(searchTerm);
+        //    if (nullCheck)
+        //    {
+        //        var coalesceExpression = Expression.Coalesce(stringProperty.Body, EmptyStringExpression);
+        //        var nullCheckExpresion = Expression.Call(coalesceExpression, IndexOfMethod, searchTermExpression);
+        //        return Expression.Equal(nullCheckExpresion, lengthExpression);
+        //    }
 
-            var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression);
-            var lengthPropertyExpression = Expression.Property(stringProperty.Body, StringLengthProperty);
-            var expectedLengthExpression = Expression.Subtract(lengthPropertyExpression, lengthExpression);
-            return Expression.Equal(indexOfCallExpresion, expectedLengthExpression);
-        }
+        //    var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression);
+        //    var lengthPropertyExpression = Expression.Property(stringProperty.Body, StringLengthProperty);
+        //    var expectedLengthExpression = Expression.Subtract(lengthPropertyExpression, lengthExpression);
+        //    return Expression.Equal(indexOfCallExpresion, expectedLengthExpression);
+        //}
 
-        /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, bool nullCheck = true)
-        {
-            BinaryExpression completeExpression = null;
-            foreach (var searchTerm in searchTerms)
-            {
-                var endsWithExpression = BuildEndsWithExpression(stringProperty, searchTerm, nullCheck);
-                completeExpression = completeExpression == null ? endsWithExpression
-                                         : Expression.OrElse(completeExpression, endsWithExpression);
-            }
+        ///// <summary>
+        ///// Build a 'indexof() == 0' expression for a search term against a particular string property
+        ///// </summary>
+        //public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, bool nullCheck = true)
+        //{
+        //    BinaryExpression completeExpression = null;
+        //    foreach (var searchTerm in searchTerms)
+        //    {
+        //        var endsWithExpression = BuildEndsWithExpression(stringProperty, searchTerm, nullCheck);
+        //        completeExpression = completeExpression == null ? endsWithExpression
+        //                                 : Expression.OrElse(completeExpression, endsWithExpression);
+        //    }
 
-            return completeExpression;
-        }
+        //    return completeExpression;
+        //}
 
         /// <summary>
         /// Build a 'equals' expression for a search term against a particular string property

@@ -21,7 +21,6 @@ Search methods available to IQueryable data are:
 * `Containing` - target property *contains* search term(s)
 * `IsEqual` - target property *equals* search term(s)
 * `StartsWith` - target property *starts with* search term(s)
-* `EndsWith` - target property *ends with* search term
 
 ###How to: Performing `Containing` searches
 
@@ -104,44 +103,21 @@ Search where any one of **multiple properties** starts with any one of **multipl
     var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
 							  .StartsWith("searchTerm1", "searchTerm2", "searchTerm3");
 
-###How to: Performing `EndsWith` searches
-		
-Search where a **single property** ends with a **single search term**
-
-    var result = queryableData.Search(x => x.Property1).EndsWith("searchTerm");
-    
-Search where any one of **multiple properties** ends with to a **single search term**
-
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
-							  .EndsWith("searchTerm");
-    
-Search where a **single property** ends with any one of **multiple search terms** 
-
-    var result = queryableData.Search(x => x.Property1).EndsWith("search", "term");
-    
-Search where any one of **multiple properties** ends with any one of **multiple search terms** 
-
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
-							  .EndsWith("searchTerm1", "searchTerm2", "searchTerm3");
-
+							  
 ###How to: Combining instructions
 With the latest version of `SearchExtensions` you can also combine search actions. For instance
 
-Search where a **single property** `starts with` a **single search term** 
-						   AND `ends with` a **single search term** 
-						   AND `containing` a **single search term**
+Search where a **single property** `starts with` a **single search term** AND `containing` a **single search term**
 
     var result = queryableData.Search(x => x.Property1)
 							  .StartsWith("abc")
-							  .EndsWith("xyz")
 							  .Containing("mno");
 							  
 The ability to pass **multiple search terms** to any of the action methods still remains:							  
 
     var result = queryableData.Search(x => x.Property1, x.Property2)   
 							  .StartsWith("abc", "ninja")     // that starts with "abc" OR "ninja"
-							  .EndsWith("xyz", "extensions")  // and ends with "xyz" OR "extensions"
-							  .Containing("mno", "search");   // and contains "mno" OR "search"
+							  .EndsWith("xyz", "extensions")  // and ends ins "mno" OR "search"
 
 ##IEnumerable (in memory) Searches
 
@@ -152,6 +128,8 @@ This means you can now perform all of the above searches on in memory collection
 ###How to: Performing IEnumerable searches
 
 These methods are identical to that of the `IQueryable` methods except the comparison functions have an additional overload that takes a string comparison.
+
+**IEnumerable extensions also has an additional method named `EndsWith`.**
 
     var result = enumerableData.Search(x => x.Property1)
 							   .SetCulture(StringComparison.OrdinalIgnoreCase) // Set culture for comparison

@@ -101,24 +101,25 @@ namespace NinjaNye.SearchExtensions.Fluent
             return this;
         }
 
-        /// <summary>
-        /// Only items where any property ends with the specified term
-        /// </summary>
-        /// <param name="terms">Term to search for</param>
-        public QueryableStringSearch<T> EndsWith(params string[] terms)
-        {
-            Expression fullExpression = null;
-            foreach (var stringProperty in this.stringProperties)
-            {
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        this.firstParameter);
-                var endsWithExpression = DbExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, nullCheck);
-                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, endsWithExpression);
-            }
-            this.AppendExpression(fullExpression);
-            return this;
-        }
+        //TODO: INVESTIGATE LINQ TO SQL SUPPORT
+        ///// <summary>
+        ///// Only items where any property ends with the specified term
+        ///// </summary>
+        ///// <param name="terms">Term to search for</param>
+        //public QueryableStringSearch<T> EndsWith(params string[] terms)
+        //{
+        //    Expression fullExpression = null;
+        //    foreach (var stringProperty in this.stringProperties)
+        //    {
+        //        var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+        //                                                                stringProperty.Parameters.Single(),
+        //                                                                this.firstParameter);
+        //        var endsWithExpression = DbExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, nullCheck);
+        //        fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, endsWithExpression);
+        //    }
+        //    this.AppendExpression(fullExpression);
+        //    return this;
+        //}
 
 
         /// <summary>
