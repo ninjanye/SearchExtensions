@@ -9,8 +9,8 @@
     <projectUrl>http://github.com/ninjanye/SearchExtensions</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Now including Ranked results and performance enhancements</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Now including a fluent API, ranked search results and performance enhancements</releaseNotes>
     <copyright>Copyright 2013</copyright>
-    <tags>search extension methods linq ranked</tags>
+    <tags>search extension methods linq ranked entityframework</tags>
   </metadata>
 </package>
