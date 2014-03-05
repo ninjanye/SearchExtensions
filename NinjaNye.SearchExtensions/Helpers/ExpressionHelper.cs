@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Helpers
 {
     internal static class ExpressionHelper
     {

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Helpers
 {
-    internal static class StringExtensions
+    internal static class StringExtensionHelper
     {
         public static string Replace(this string text, string oldValue, string newValue, StringComparison stringComparison)
         {

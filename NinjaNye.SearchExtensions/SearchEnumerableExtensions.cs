@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Fluent;
+using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -22,7 +24,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = EnumerableHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
             return source.Search(new[] { searchTerm }, stringProperties);
         }
 
@@ -41,7 +43,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = EnumerableHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
             return source.Search(new[] { searchTerm }, stringProperties, stringComparison);
         }
 

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Helpers
 {
     internal static class DbExpressionHelper
     {
@@ -23,7 +24,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, bool nullCheck = true)
+        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, bool nullCheck = true)
         {
             BinaryExpression completeExpression = null;
             foreach (var searchTerm in searchTerms)
@@ -76,7 +77,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, bool nullCheck = true)
+        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, bool nullCheck = true)
         {
             BinaryExpression completeExpression = null;
             foreach (var searchTerm in searchTerms)
@@ -92,7 +93,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'equals' expression for a search term against a particular string property
         /// </summary>
-        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, string[] terms)
+        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms)
         {
             Expression completeExpression = null;
             foreach (var term in terms)

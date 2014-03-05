@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions.Fluent
 {
@@ -21,13 +23,13 @@ namespace NinjaNye.SearchExtensions.Fluent
 
         public static EnumerableStringSearch<TSource> SearchAll<TSource>(this IEnumerable<TSource> source)
         {
-            var properties = EnumerableHelper.GetProperties<TSource, string>();
+            var properties = EnumerableExpressionHelper.GetProperties<TSource, string>();
             return new EnumerableStringSearch<TSource>(source, properties);
         }
 
         public static QueryableStringSearch<TSource> SearchAll<TSource>(this IQueryable<TSource> source)
         {
-            var properties = EnumerableHelper.GetProperties<TSource, string>();
+            var properties = EnumerableExpressionHelper.GetProperties<TSource, string>();
             return new QueryableStringSearch<TSource>(source, properties);
         }
     }

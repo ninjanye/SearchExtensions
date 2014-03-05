@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Helpers
 {
-    internal static class EnumerableHelper
+    internal static class EnumerableExpressionHelper
     {
         static readonly ConstantExpression EmptyStringExpression = Expression.Constant(string.Empty);
         static readonly ConstantExpression ZeroConstantExpression = Expression.Constant(0);
@@ -14,7 +14,7 @@ namespace NinjaNye.SearchExtensions
         static readonly MethodInfo IndexOfMethod = typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
         static readonly PropertyInfo StringLengthProperty = typeof(string).GetProperty("Length");
         static readonly MethodInfo ReplaceMethod = typeof(string).GetMethod("Replace", new[] { typeof(string), typeof(string) });
-        static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensions).GetMethod("Replace");
+        static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
 
         /// <summary>
         /// Build a 'contains' expression for a search term against a particular string property
@@ -27,7 +27,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'equals' expression for a search term against a particular string property
         /// </summary>
-        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, string[] terms, StringComparison comparisonType)
+        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms, StringComparison comparisonType)
         {
             var comparisonTypeExpression = Expression.Constant(comparisonType);
             Expression completeExpression = null;
@@ -69,32 +69,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
-        {
-            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            return BuildStartsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
-        }
-
-        /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, bool nullCheck = true)
-        {
-            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            BinaryExpression completeExpression = null;
-            foreach (var searchTerm in searchTerms)
-            {
-                var startsWithExpression = BuildStartsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
-                completeExpression = completeExpression == null ? startsWithExpression
-                                         : Expression.OrElse(completeExpression, startsWithExpression);
-            }
-            return completeExpression;
-        }
-
-        /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, StringComparison comparisonType, bool nullCheck = true)
+        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, StringComparison comparisonType, bool nullCheck = true)
         {
             var stringComparisonExpression = Expression.Constant(comparisonType);
             BinaryExpression completeExpression = null;
@@ -110,7 +85,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        private static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
             var searchTermExpression = Expression.Constant(searchTerm);
             if (nullCheck)
@@ -127,33 +102,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, bool nullCheck = true)
-        {
-            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            return BuildEndsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
-        }
-
-        /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, bool nullCheck = true)
-        {
-            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            BinaryExpression completeExpression = null;
-            foreach (var searchTerm in searchTerms)
-            {
-                var endsWithExpression = BuildEndsWithExpression(stringProperty, searchTerm, stringComparisonExpression, nullCheck);
-                completeExpression = completeExpression == null ? endsWithExpression
-                                         : Expression.OrElse(completeExpression, endsWithExpression);
-            }
-
-            return completeExpression;
-        }
-
-        /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string[] searchTerms, StringComparison comparisonType, bool nullCheck = true)
+        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, StringComparison comparisonType, bool nullCheck = true)
         {
             var stringComparisonExpression = Expression.Constant(comparisonType);
             BinaryExpression completeExpression = null;
@@ -170,7 +119,7 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        private static BinaryExpression BuildEndsWithExpression<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
             int expectedIndexOf = searchTerm.Length;
             var lengthExpression = Expression.Constant(expectedIndexOf);
@@ -217,7 +166,7 @@ namespace NinjaNye.SearchExtensions
             Expression searchTermExpression = Expression.Constant(searchTerm);
             Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
             MemberExpression lengthExpression = Expression.Property(stringProperty.Body, StringLengthProperty);
-            var replaceExpression = Expression.Call(stringProperty.Body, ReplaceMethod,
+            var replaceExpression = Expression.Call(stringProperty.Body, ReplaceMethod, 
                                                     searchTermExpression, EmptyStringExpression);
             var replacedLengthExpression = Expression.Property(replaceExpression, StringLengthProperty);
             var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);

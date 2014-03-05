@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Fluent;
+using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Validation;
+using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -150,14 +154,14 @@ namespace NinjaNye.SearchExtensions
                 {
                     var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
                     var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, singleParameter);
-                    var hitCountExpression = EnumerableHelper.CalculateHitCount(nullSafeExpresion, searchTerm, stringComparison);
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, stringComparison);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
 
-            var rankedInitExpression = EnumerableHelper.ConstructRankedResult<T>(combinedHitExpression, singleParameter);
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, singleParameter);
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter); 
-            return source.Search(searchTerms, stringProperties, stringComparison)
+            return source.Search(stringProperties).SetCulture(stringComparison).Containing(searchTerms)
                          .Select(x => selectExpression.Compile().Invoke(x));
         }
     }

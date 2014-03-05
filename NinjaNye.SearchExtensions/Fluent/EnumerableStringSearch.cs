@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Validation;
+using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions.Fluent
 {
@@ -68,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
 
-                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    var indexOfExpression = EnumerableExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }
@@ -90,7 +93,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
 
-                var startsWithExpression = EnumerableHelper.BuildStartsWithExpression(swappedParamExpression, terms, comparisonType, false);
+                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, comparisonType, false);
                 fullExpression = fullExpression == null ? startsWithExpression 
                                                         : Expression.OrElse(fullExpression, startsWithExpression);
             }
@@ -110,7 +113,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var endsWithExpression = EnumerableHelper.BuildEndsWithExpression(swappedParamExpression, terms, comparisonType, false);
+                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, comparisonType, false);
                 fullExpression = fullExpression == null ? endsWithExpression
                                                         : Expression.OrElse(fullExpression, endsWithExpression);
             }
@@ -121,7 +124,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         /// <summary>
         /// Only items where any property equals the specified term
         /// </summary>
-        /// <param name="term">Term to search for</param>
+        /// <param name="terms">Terms to search for</param>
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
@@ -130,7 +133,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var isEqualExpression = EnumerableHelper.BuildEqualsExpression(swappedParamExpression, terms, comparisonType);
+                var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, comparisonType);
                 fullExpression = fullExpression == null ? isEqualExpression
                                      : Expression.OrElse(fullExpression, isEqualExpression);
             }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Validation;
+using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -20,7 +23,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = EnumerableHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
             return source.Search(new[] {searchTerm}, stringProperties);
         }
 
@@ -35,7 +38,7 @@ namespace NinjaNye.SearchExtensions
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
 
-            var stringProperties = EnumerableHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
             return source.Search(searchTerms, stringProperties);
         }
 
@@ -121,7 +124,6 @@ namespace NinjaNye.SearchExtensions
 
             Expression orExpression = null;
             var singleParameter = stringProperties[0].Parameters.Single();
-            bool isDbProvider = source.Provider.GetType().Name == "DbQueryProvider";
 
             Expression notNullExpression = null;
             foreach (var stringProperty in stringProperties)
@@ -136,8 +138,7 @@ namespace NinjaNye.SearchExtensions
                 foreach (var searchTerm in validSearchTerms)
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-                    Expression comparisonExpression = isDbProvider ? EnumerableHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression)
-                                                                   : EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, false);
+                    Expression comparisonExpression = EnumerableExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }

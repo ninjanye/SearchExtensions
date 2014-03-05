@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Visitors
 {
     internal class SwapExpressionVisitor : ExpressionVisitor
     {

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Validation
 {
     internal static class Ensure
     {
