@@ -20,7 +20,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = ExpressionHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableHelper.GetProperties<T, string>();
             return source.Search(new[] { searchTerm }, stringProperties);
         }
 
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions
                 return source;
             }
 
-            var stringProperties = ExpressionHelper.GetProperties<T, string>();
+            var stringProperties = EnumerableHelper.GetProperties<T, string>();
             return source.Search(new[] { searchTerm }, stringProperties, stringComparison);
         }
 
@@ -73,7 +73,7 @@ namespace NinjaNye.SearchExtensions
 
             ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
             ConstantExpression stringComparisonExpression = Expression.Constant(stringComparison);
-            var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression);
+            var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression);
             var completeExpression = Expression.Lambda<Func<T, bool>>(indexOfExpression, stringProperty.Parameters).Compile();
             return source.Where(completeExpression);
         }
@@ -201,7 +201,7 @@ namespace NinjaNye.SearchExtensions
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
 
-                    var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }
@@ -209,8 +209,6 @@ namespace NinjaNye.SearchExtensions
             var completeExpression = Expression.Lambda<Func<T, bool>>(orExpression, singleParameter).Compile();
             return source.Where(completeExpression);
         }
-
-
 
         /// <summary>
         /// Search multiple properties for multiple search terms in memory
@@ -250,7 +248,7 @@ namespace NinjaNye.SearchExtensions
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
 
-                    var indexOfExpression = ExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    var indexOfExpression = EnumerableHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }

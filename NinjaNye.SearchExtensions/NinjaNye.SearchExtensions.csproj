@@ -40,9 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbExpressionBuilder.cs" />
     <Compile Include="Ensure.cs" />
+    <Compile Include="EnumerableHelper.cs" />
     <Compile Include="Fluent\FluentSearch.cs" />
-    <Compile Include="Fluent\FluentString.cs" />
+    <Compile Include="Fluent\EnumerableStringSearch.cs" />
+    <Compile Include="Fluent\QueryableStringSearch.cs" />
     <Compile Include="RankedSearchEnumerableExtensions.cs" />
     <Compile Include="RankedSearchQueryableExtensions.cs" />
     <Compile Include="SearchEnumerableExtensions.cs" />

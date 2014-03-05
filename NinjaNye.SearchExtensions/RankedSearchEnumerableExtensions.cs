@@ -150,12 +150,12 @@ namespace NinjaNye.SearchExtensions
                 {
                     var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
                     var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, singleParameter);
-                    var hitCountExpression = ExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, stringComparison);
+                    var hitCountExpression = EnumerableHelper.CalculateHitCount(nullSafeExpresion, searchTerm, stringComparison);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
 
-            var rankedInitExpression = ExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, singleParameter);
+            var rankedInitExpression = EnumerableHelper.ConstructRankedResult<T>(combinedHitExpression, singleParameter);
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter); 
             return source.Search(searchTerms, stringProperties, stringComparison)
                          .Select(x => selectExpression.Compile().Invoke(x));
