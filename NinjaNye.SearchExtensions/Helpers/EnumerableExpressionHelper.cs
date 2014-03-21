@@ -44,15 +44,6 @@ namespace NinjaNye.SearchExtensions.Helpers
         /// <summary>
         /// Build a 'indexof() >= 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression BuildIndexOfGreaterThanMinusOneExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, bool nullCheck = true)
-        {
-            var stringComparisonExpression = Expression.Constant(StringComparison.OrdinalIgnoreCase);
-            return BuildIndexOfGreaterThanMinusOneExpression(stringProperty, searchTermExpression, stringComparisonExpression, nullCheck);
-        }
-
-        /// <summary>
-        /// Build a 'indexof() >= 0' expression for a search term against a particular string property
-        /// </summary>
         public static BinaryExpression BuildIndexOfGreaterThanMinusOneExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
             if (nullCheck)
@@ -212,6 +203,5 @@ namespace NinjaNye.SearchExtensions.Helpers
             }
             return result.ToArray();
         }
-
     }
 }

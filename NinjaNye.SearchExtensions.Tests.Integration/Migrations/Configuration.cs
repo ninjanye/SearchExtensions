@@ -22,7 +22,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
               new TestModel { Id = new Guid("827D880B-1782-462C-A861-94CC0E180328"), StringOne = "efgh", StringTwo = "ijkl" },
               new TestModel { Id = new Guid("A8A0D984-5F12-4BD2-8E72-9C53D0EA73E0"), StringOne = "UPPER", StringTwo = "CASE" },
               new TestModel { Id = new Guid("3CDF0B28-FFF1-4C0E-B468-E69EF8AAF215"), StringOne = "lower", StringTwo = "case" },
-              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = "ghcdgh", StringTwo = "2 occurences" }
+              new TestModel { Id = new Guid("E1DAA440-7EE1-4415-9256-C834351A6329"), StringOne = "ghcdgh", StringTwo = "2 occurences" },
+              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = null, StringTwo = "null check" }
             );            
         }
     }

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.Designer.cs">

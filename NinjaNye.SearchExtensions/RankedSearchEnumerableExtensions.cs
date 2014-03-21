@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Fluent;
-using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Validation;
-using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -19,6 +16,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>IEnumerable, IRanked records where the 
         /// property contains the search term specified</returns>        
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -36,6 +34,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <returns>IEnumerable, IRanked records where the 
         /// property contains the search term specified</returns>        
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -51,6 +50,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerm">search term to look for</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>IEnumerable of IRanked records where any property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, params Expression<Func<T, string>>[] stringProperties)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
@@ -67,6 +67,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>IEnumerable of IRanked records where any property contains the search term</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string searchTerm, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
@@ -82,6 +83,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search terms to find</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>IEnumerable records where the property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -98,6 +100,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <param name="stringProperty">properties to search against</param>
         /// <returns>IEnumerable records where the property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>> stringProperty, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(stringProperty, "stringProperty");
@@ -113,6 +116,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="searchTerms">search term to look for</param>
         /// <param name="stringProperties">properties to search against</param>
         /// <returns>IEnumerable of IRanked records where any property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, params Expression<Func<T, string>>[] stringProperties)
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
@@ -130,39 +134,16 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringProperties">properties to search against</param>
         /// <param name="stringComparison">Enumeration value that specifies how the strings will be compared.</param>
         /// <returns>IEnumerable of IRanked records where any property contains any of the search terms</returns>
+        [Obsolete("This method has been superseded by the fluent api. Please use the Fluent API http://jnye.co/ranked")]
         public static IEnumerable<IRanked<T>> RankedSearch<T>(this IEnumerable<T> source, string[] searchTerms, Expression<Func<T, string>>[] stringProperties, StringComparison stringComparison)
         {
             Ensure.ArgumentNotNull(searchTerms, "searchTerms");
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
 
-            var validSearchTerms = searchTerms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
-            if (!validSearchTerms.Any())
-            {
-                throw new ArgumentException("No valid search terms have been provided", "searchTerms");
-            }
-
-            var singleParameter = stringProperties[0].Parameters.Single();
-            Expression combinedHitExpression = null;
-            ConstantExpression emptyStringExpression = Expression.Constant("");
-            foreach (var stringProperty in stringProperties)
-            {
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        singleParameter);
-
-                foreach (var searchTerm in validSearchTerms)
-                {
-                    var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
-                    var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, singleParameter);
-                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, stringComparison);
-                    combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
-                }
-            }
-
-            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, singleParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, singleParameter); 
-            return source.Search(stringProperties).SetCulture(stringComparison).Containing(searchTerms)
-                         .Select(x => selectExpression.Compile().Invoke(x));
+            return source.Search(stringProperties)
+                         .SetCulture(stringComparison)
+                         .Containing(searchTerms)
+                         .ToRanked();
         }
     }
 }

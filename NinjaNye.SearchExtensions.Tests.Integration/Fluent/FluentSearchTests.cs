@@ -13,11 +13,6 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
     {
         readonly TestContext context = new TestContext();
 
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Search_SearchWithoutActionHasNoAffectOnTheResults_ResultsAreUnchanged()
         {
@@ -241,6 +236,20 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Assert
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.StringOne == "abcd" || x.StringOne == "efgh"));
+        }
+
+        [Test]
+        public void Search_PerformNullCheck_NullCheckIsPerformed()
+        {
+            //Arrange
+            
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne)
+//                                                .CheckForNull()
+                                                .StartsWith("ab");
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
         }
 
         public void Dispose()

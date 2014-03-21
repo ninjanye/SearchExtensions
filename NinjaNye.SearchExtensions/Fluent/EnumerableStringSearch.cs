@@ -15,6 +15,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         private Expression completeExpression;
         private readonly Expression<Func<T, string>>[] stringProperties;
         private readonly ParameterExpression firstParameter;
+        private readonly IList<string> searchTerms = new List<string>();
         private StringComparison comparisonType;
 
         public EnumerableStringSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
@@ -55,6 +56,11 @@ namespace NinjaNye.SearchExtensions.Fluent
             if (!validSearchTerms.Any())
             {
                 return null;
+            }
+
+            foreach (var validSearchTerm in validSearchTerms)
+            {
+                searchTerms.Add(validSearchTerm);
             }
 
             Expression orExpression = null;
@@ -140,6 +146,30 @@ namespace NinjaNye.SearchExtensions.Fluent
             this.BuildExpression(fullExpression);
             return this;
         }
+
+        public IEnumerable<IRanked<T>> ToRanked()
+        {
+            Expression combinedHitExpression = null;
+            ConstantExpression emptyStringExpression = Expression.Constant("");
+            foreach (var stringProperty in stringProperties)
+            {
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        firstParameter);
+
+                foreach (var searchTerm in searchTerms)
+                {
+                    var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
+                    var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, firstParameter);
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, comparisonType);
+                    combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
+                }
+            }
+
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, firstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, firstParameter).Compile();
+            return this.Select(selectExpression.Invoke);
+        } 
 
         public IEnumerator<T> GetEnumerator()
         {

@@ -16,6 +16,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         private IQueryable<T> source;
         private readonly Expression<Func<T, string>>[] stringProperties;
         private readonly ParameterExpression firstParameter;
+        private readonly IList<string> searchTerms = new List<string>();
         private bool nullCheck;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
@@ -50,33 +51,43 @@ namespace NinjaNye.SearchExtensions.Fluent
                 return null;
             }
 
+            foreach (var validSearchTerm in validSearchTerms)
+            {
+                searchTerms.Add(validSearchTerm);
+            }
+
             Expression orExpression = null;
             var singleParameter = stringProperties[0].Parameters.Single();
 
-            Expression notNullExpression = null;
             foreach (var stringProperty in stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         singleParameter);
 
+                Expression propertyNotNullExpression = null;
                 if (nullCheck)
                 {
-                    var propertyNotNullExpression = ExpressionHelper.BuildNotNullExpression(swappedParamExpression);
-                    notNullExpression = ExpressionHelper.JoinOrExpression(notNullExpression, propertyNotNullExpression);                    
+                    propertyNotNullExpression = ExpressionHelper.BuildNotNullExpression(swappedParamExpression);                    
                 }
 
                 foreach (var searchTerm in validSearchTerms)
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                     Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
+                    if (nullCheck)
+                    {
+                        var nullCheckedExpression = ExpressionHelper.JoinAndAlsoExpression(propertyNotNullExpression, comparisonExpression);
+                        orExpression = ExpressionHelper.JoinOrExpression(orExpression, nullCheckedExpression);
+                    }
+                    else
+                    {
+                        orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);                        
+                    }
                 }
             }
 
-            var jointExpression = ExpressionHelper.JoinAndAlsoExpression(notNullExpression, orExpression);
-
-            this.AppendExpression(jointExpression);
+            this.AppendExpression(orExpression);
             return this;
         }
 
@@ -93,34 +104,12 @@ namespace NinjaNye.SearchExtensions.Fluent
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
 
-                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, nullCheck);
-                fullExpression = fullExpression == null ? startsWithExpression
-                                                        : Expression.OrElse(fullExpression, startsWithExpression);
+                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms);
+                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, startsWithExpression);
             }
             this.AppendExpression(fullExpression);
             return this;
         }
-
-        //TODO: INVESTIGATE LINQ TO SQL SUPPORT
-        ///// <summary>
-        ///// Only items where any property ends with the specified term
-        ///// </summary>
-        ///// <param name="terms">Term to search for</param>
-        //public QueryableStringSearch<T> EndsWith(params string[] terms)
-        //{
-        //    Expression fullExpression = null;
-        //    foreach (var stringProperty in this.stringProperties)
-        //    {
-        //        var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-        //                                                                stringProperty.Parameters.Single(),
-        //                                                                this.firstParameter);
-        //        var endsWithExpression = DbExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, nullCheck);
-        //        fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, endsWithExpression);
-        //    }
-        //    this.AppendExpression(fullExpression);
-        //    return this;
-        //}
-
 
         /// <summary>
         /// Only items where any property equals the specified term
@@ -145,6 +134,31 @@ namespace NinjaNye.SearchExtensions.Fluent
         {
             this.nullCheck = checkNull;
             return this;
+        }
+ 
+        public IQueryable<IRanked<T>> ToRanked()
+        {
+            Expression combinedHitExpression = null;
+            ConstantExpression emptyStringExpression = Expression.Constant("");            
+            foreach (var stringProperty in stringProperties)
+            {
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        firstParameter);
+
+                var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
+                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, firstParameter);
+
+                foreach (var searchTerm in searchTerms)
+                {
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
+                    combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
+                }
+            }
+
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, firstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, firstParameter);
+            return this.Select(selectExpression);
         } 
 
         private void AppendExpression(Expression expressionToJoin)
