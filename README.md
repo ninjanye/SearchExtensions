@@ -148,11 +148,11 @@ It is also possible to set the comparison multiple times
 							   .Containing("mno"); //Uses CurrentCulture
 							  
 							  
-## Ranked Searches
+## [Ranked Searches](http://jnye.co/Posts/2031/searchextensions-ranked-searches-now-supported-by-the-fluent-api)
 
-Ranked Searches have yet to be migrated to use a fluent api, however that is something that is on its way.
+*Ranked Searches have now been migrated to use the fluent api!*
 
-In the mean time, ranked searches are created using the old search syntax. As well as returning the matched items, they also return a hit count for each item in the form of an IRanked<T> result.  This enables you to order by hit count to retrieve the most relevant search results.
+As well as returning the matched items, a Ranked Search also returns a hit count for each item in the form of an IRanked<T> result.  This enables you to order by hit count to retrieve the most relevant search results.
     
 ###`IRanked<T>` result
 
@@ -164,41 +164,62 @@ An IRanked<T> result is simply defined as follows:
         T Item { get; }
     }
     
-This is returned using any of the `RankedSearch` extension methods:
+This is returned using the `ToRanked()` method:
 
 RankedSearch for a **single search term** within a **single property**
 
-    var result = queryableData.RankedSearch("searchTerm", x => x.Property1);
+    var result = queryableData.Search(x => x.Property1)
+                              .Containing("searchTerm")
+                              .ToRanked();
     
 RankedSearch for a **single search term** within **multiple properties**
 
-    var result = queryableData.RankedSearch("searchTerm", x => x.Property1, x => x.Property2, x.Property3);
+    var result = queryableData.Search(x => x.Property1, x => x.Property2, x => x.Property3)
+                              .Containing("searchTerm")
+                              .ToRanked();
     
 RankedSearch for **multiple search terms** within a **single property**
 
-    var result = queryableData.RankedSearch(new[]{"searchTerm1", "searchTerm", "searchTerm2"}, x => x.Property1);
+    var result = queryableData.Search(x => x.Property1)
+                              .Containing("searchTerm1", "searchTerm2", "searchTerm3")
+                              .ToRanked();
     
 RankedSearch for **multiple search terms** within **multiple properties**
 
-    var result = queryableData.RankedSearch(new[]{"searchTerm1", "searchTerm2", "searchTerm2"}, 
-                                            x => x.Property1, x => x.Proprerty2, x.Property3);
+    var result = queryableData.Search(x => x.Property1, x => x.Property2)
+                              .Containing("searchTerm1", "searchTerm2", "searchTerm3")
+                              .ToRanked();
                                             
 ### Retrieve most relevant search results
 
 Using ranked search you can now easily order your search results by the most relevant.  This following example assumes we have a list of `User` which has `FirstName`, `LastName` and `MiddleName` string properties. In this example we want to match on those with "John" in their name and retrieve the top 10 results.
 
-    var result = context.Users.RankedSearch("John", x => x.FirstName, x => x.LastName, x.MiddleName)
+    var result = context.Users.Search(x => x.FirstName, x => x.LastName, x.MiddleName)
+                              .Containing("John")
+                              .ToRanked()
                               .OrderByDescending(r => r.Hits) // Order by Hits property of IRanked<User>
                               .Take(10);
-                              
-And that is it.  All the rest is done for you.
 
+### Mixing it up
+
+We can also mix it up with the other fluent API methods
+
+    var result = context.Users.Search(x => x.FirstName, x => x.LastName, x.MiddleName)
+                              .StartsWith("john")
+                              .Containing("nye")
+                              .ToRanked()
+                              .OrderByDescending(r => r.Hits) // Order by Hits property of IRanked<User>
+                              .Take(10);
+
+### A word of note
+
+Be aware that the `ToRanked()` method uses the search terms of the `Containing()` method combined with the properties to search to build its hit count.  The fluent `ToRanked()` method also means the old `RankedSearch` method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.
+                              
 ---
 
-If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
+And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
 
 ## Future Features
-* Fluent API for ranked searches
 * Ability to perform AND search on IRanked results
 * Soundex support
 * Levenshtein support
