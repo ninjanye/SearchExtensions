@@ -17,19 +17,13 @@ namespace NinjaNye.SearchExtensions.Performance
             const StringComparison stringComparison = StringComparison.CurrentCulture;
             var stopwatch = new Stopwatch();
 
-
             Console.WriteLine("Building {0} records...", recordCount);
-            var enumerableData = new List<string>();
-            for (int i = 0; i < recordCount; i++)
-            {
-                enumerableData.Add(Guid.NewGuid().ToString());
-            }
+            var enumerableData = BuildData(recordCount);
             var searchTerms = new[] { "abc", "def", "ghi", "JKL", "mno", "pqr", "stu", "vwx" };
 
             Console.WriteLine("Begin search...");
             stopwatch.Start();
             var result = enumerableData.Search(s => s)
-                                       .SetCulture(stringComparison)
                                        .Containing(searchTerms)
                                        .ToList();
 
@@ -42,6 +36,8 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine("==================================");
             Console.WriteLine();
             Console.WriteLine("Begin lamda...");
+            Console.WriteLine("Building {0} records...", recordCount);
+            enumerableData = BuildData(recordCount);
             stopwatch.Reset();
             stopwatch.Start();
             var lamdaResult = enumerableData.Where(s => s.IndexOf("abc", stringComparison) > -1
@@ -62,6 +58,8 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine();
 
             Console.WriteLine("Begin .Any() search...");
+            Console.WriteLine("Building {0} records...", recordCount);
+            enumerableData = BuildData(recordCount);
             stopwatch.Reset();
             stopwatch.Start();
             var containsResult = enumerableData.Where(s => searchTerms.Any(st => s.IndexOf(st) > -1)).ToList();
@@ -74,9 +72,13 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine();
 
             Console.WriteLine("Begin fluent search...");
+            Console.WriteLine("Building {0} records...", recordCount);
+            enumerableData = BuildData(recordCount);
             stopwatch.Reset();
             stopwatch.Start();
-            var fluentResult = enumerableData.Search(s => s).Containing(searchTerms).ToList();
+            var fluentResult = enumerableData.Search(s => s)
+                                             .Containing(searchTerms)
+                                             .ToList();
             stopwatch.Stop();
             Console.WriteLine("Record count: {0}", recordCount);
             Console.WriteLine("Results found: {0}", fluentResult.Count);
@@ -85,6 +87,16 @@ namespace NinjaNye.SearchExtensions.Performance
             Console.WriteLine();
             Console.WriteLine("==================================");
             Console.ReadLine();
+        }
+
+        private static List<string> BuildData(int recordCount)
+        {
+            var enumerableData = new List<string>();
+            for (int i = 0; i < recordCount; i++)
+            {
+                enumerableData.Add(Guid.NewGuid().ToString());
+            }
+            return enumerableData;
         }
     }
 }

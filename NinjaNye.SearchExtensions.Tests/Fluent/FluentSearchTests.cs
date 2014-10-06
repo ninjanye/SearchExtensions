@@ -151,25 +151,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void SearchMultiple_PassNull_ExceptionThrown()
-        {
-            //Arrange
-            
-            //Act
-            this.testData.Search(null as Expression<Func<TestData, string>>[]).Containing("cd");
-
-            //Assert
-            Assert.Fail("ArgumentNullException should be thrown");
-        }
-
-        [Test]
         public void SearchAll_NoPropertiesDefined_AllPropertiesAreSearched()
         {
             //Arrange
             
             //Act
-            var result = this.testData.SearchAll().Containing("cd");
+            var result = this.testData.Search().Containing("cd");
 
             //Assert
             Assert.AreEqual(2, result.Count());

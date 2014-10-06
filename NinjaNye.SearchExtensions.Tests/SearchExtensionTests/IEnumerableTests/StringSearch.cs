@@ -45,19 +45,6 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Search_SearchPropertyNotSupplied_ThrowsArgumentNullException()
-        {
-            //Arrange
-            
-            //Act
-            testData.Search((Expression<Func<TestData, string>>)null);
-
-            //Assert
-            Assert.Fail("Expected an Argument Null expception to occur");
-        }
-
-        [Test]
         public void Search_SearchAParticularProperty_OnlyResultsWithAMatchAreReturned()
         {
             //Arrange
@@ -152,13 +139,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void Search_SearchAllProperties_AllPropertiesSearched()
+        public void Search_SearchWithoutProperties_AllPropertiesSearched()
         {
             //Arrange
             const string searchTerm = "cd";
             
             //Act
-            var result = this.testData.SearchAll().Containing(searchTerm);
+            var result = this.testData.Search().Containing(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -173,7 +160,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             testData.Add(new TestData { Name = "test", Description = searchTerm });
             
             //Act
-            var result = testData.SearchAll()
+            var result = testData.Search()
                                  .SetCulture(StringComparison.OrdinalIgnoreCase)
                                  .Containing(searchTerm)
                                  .ToList();
