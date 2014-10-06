@@ -40,18 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fluent\FluentSearch.cs" />
-    <Compile Include="Fluent\EnumerableStringSearch.cs" />
-    <Compile Include="Fluent\QueryableStringSearch.cs" />
+    <Compile Include="FluentSearch.cs" />
+    <Compile Include="EnumerableStringSearch.cs" />
+    <Compile Include="QueryableStringSearch.cs" />
     <Compile Include="Helpers\DbExpressionHelper.cs" />
     <Compile Include="Helpers\EnumerableExpressionHelper.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="RankedSearchEnumerableExtensions.cs" />
-    <Compile Include="RankedSearchQueryableExtensions.cs" />
-    <Compile Include="SearchEnumerableExtensions.cs" />
     <Compile Include="IRanked.cs" />
-    <Compile Include="SearchQueryableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ranked.cs" />
     <Compile Include="Validation\Ensure.cs" />

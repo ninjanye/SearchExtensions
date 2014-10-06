@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using NinjaNye.SearchExtensions.Fluent;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent

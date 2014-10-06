@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using NinjaNye.SearchExtensions.Fluent;
 using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
 
 namespace NinjaNye.SearchExtensions.Tests.Fluent

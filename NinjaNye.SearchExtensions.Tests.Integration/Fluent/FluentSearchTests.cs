@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NUnit.Framework;
-using NinjaNye.SearchExtensions.Fluent;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent

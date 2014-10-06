@@ -7,7 +7,7 @@ using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Validation;
 using NinjaNye.SearchExtensions.Visitors;
 
-namespace NinjaNye.SearchExtensions.Fluent
+namespace NinjaNye.SearchExtensions
 {
     public class QueryableStringSearch<T> : IQueryable<T>
     {
@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         {
             Ensure.ArgumentNotNull(terms, "terms");
 
-            if (!terms.Any() || !stringProperties.Any())
+            if (!terms.Any() || !this.stringProperties.Any())
             {
                 return null;
             }
@@ -53,20 +53,20 @@ namespace NinjaNye.SearchExtensions.Fluent
 
             foreach (var validSearchTerm in validSearchTerms)
             {
-                searchTerms.Add(validSearchTerm);
+                this.searchTerms.Add(validSearchTerm);
             }
 
             Expression orExpression = null;
-            var singleParameter = stringProperties[0].Parameters.Single();
+            var singleParameter = this.stringProperties[0].Parameters.Single();
 
-            foreach (var stringProperty in stringProperties)
+            foreach (var stringProperty in this.stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         singleParameter);
 
                 Expression propertyNotNullExpression = null;
-                if (nullCheck)
+                if (this.nullCheck)
                 {
                     propertyNotNullExpression = ExpressionHelper.BuildNotNullExpression(swappedParamExpression);                    
                 }
@@ -75,7 +75,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                     Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
-                    if (nullCheck)
+                    if (this.nullCheck)
                     {
                         var nullCheckedExpression = ExpressionHelper.JoinAndAlsoExpression(propertyNotNullExpression, comparisonExpression);
                         orExpression = ExpressionHelper.JoinOrExpression(orExpression, nullCheckedExpression);
@@ -140,41 +140,41 @@ namespace NinjaNye.SearchExtensions.Fluent
         {
             Expression combinedHitExpression = null;
             ConstantExpression emptyStringExpression = Expression.Constant("");            
-            foreach (var stringProperty in stringProperties)
+            foreach (var stringProperty in this.stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
-                                                                        firstParameter);
+                                                                        this.firstParameter);
 
                 var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
-                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, firstParameter);
+                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.firstParameter);
 
-                foreach (var searchTerm in searchTerms)
+                foreach (var searchTerm in this.searchTerms)
                 {
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
 
-            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, firstParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, firstParameter);
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.firstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.firstParameter);
             return this.Select(selectExpression);
         } 
 
         private void AppendExpression(Expression expressionToJoin)
         {
-            expressionUpdated = false;
-            completeExpression = ExpressionHelper.JoinAndAlsoExpression(completeExpression, expressionToJoin);
+            this.expressionUpdated = false;
+            this.completeExpression = ExpressionHelper.JoinAndAlsoExpression(this.completeExpression, expressionToJoin);
         }
 
         private void UpdateSource()
         {
-            if (this.completeExpression == null || expressionUpdated)
+            if (this.completeExpression == null || this.expressionUpdated)
             {
                 return;
             }
 
-            expressionUpdated = true;
+            this.expressionUpdated = true;
             var finalExpression = Expression.Lambda<Func<T, bool>>(this.completeExpression, this.firstParameter);
             this.source = this.source.Where(finalExpression);
         }
@@ -195,7 +195,7 @@ namespace NinjaNye.SearchExtensions.Fluent
             get
             {
                 this.UpdateSource();
-                return source.Expression;
+                return this.source.Expression;
             }
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using NinjaNye.SearchExtensions.Fluent;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
@@ -20,16 +19,20 @@ namespace NinjaNye.SearchExtensions.Performance
 
 
             Console.WriteLine("Building {0} records...", recordCount);
-            List<string> enumerableData = new List<string>();
+            var enumerableData = new List<string>();
             for (int i = 0; i < recordCount; i++)
             {
                 enumerableData.Add(Guid.NewGuid().ToString());
             }
-            string[] searchTerms = new[] { "abc", "def", "ghi", "JKL", "mno", "pqr", "stu", "vwx" };
+            var searchTerms = new[] { "abc", "def", "ghi", "JKL", "mno", "pqr", "stu", "vwx" };
 
             Console.WriteLine("Begin search...");
             stopwatch.Start();
-            var result = enumerableData.Search(searchTerms, s => s, stringComparison).ToList();
+            var result = enumerableData.Search(s => s)
+                                       .SetCulture(stringComparison)
+                                       .Containing(searchTerms)
+                                       .ToList();
+
             stopwatch.Stop();
             Console.WriteLine("Record count: {0}", recordCount);
             Console.WriteLine("Results found: {0}", result.Count);

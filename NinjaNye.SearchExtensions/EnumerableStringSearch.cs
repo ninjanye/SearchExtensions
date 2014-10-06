@@ -7,7 +7,7 @@ using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Validation;
 using NinjaNye.SearchExtensions.Visitors;
 
-namespace NinjaNye.SearchExtensions.Fluent
+namespace NinjaNye.SearchExtensions
 {
     public class EnumerableStringSearch<T> : IEnumerable<T>
     {
@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions.Fluent
         {
             Ensure.ArgumentNotNull(terms, "searchTerms");
 
-            if (!terms.Any() || !stringProperties.Any())
+            if (!terms.Any() || !this.stringProperties.Any())
             {
                 return null;
             }
@@ -60,14 +60,14 @@ namespace NinjaNye.SearchExtensions.Fluent
 
             foreach (var validSearchTerm in validSearchTerms)
             {
-                searchTerms.Add(validSearchTerm);
+                this.searchTerms.Add(validSearchTerm);
             }
 
             Expression orExpression = null;
-            var singleParameter = stringProperties[0].Parameters.Single();
-            var stringComparisonExpression = Expression.Constant(comparisonType);
+            var singleParameter = this.stringProperties[0].Parameters.Single();
+            var stringComparisonExpression = Expression.Constant(this.comparisonType);
 
-            foreach (var stringProperty in stringProperties)
+            foreach (var stringProperty in this.stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
@@ -99,7 +99,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
 
-                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, comparisonType, false);
+                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? startsWithExpression 
                                                         : Expression.OrElse(fullExpression, startsWithExpression);
             }
@@ -119,7 +119,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, comparisonType, false);
+                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? endsWithExpression
                                                         : Expression.OrElse(fullExpression, endsWithExpression);
             }
@@ -139,7 +139,7 @@ namespace NinjaNye.SearchExtensions.Fluent
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         this.firstParameter);
-                var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, comparisonType);
+                var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, this.comparisonType);
                 fullExpression = fullExpression == null ? isEqualExpression
                                      : Expression.OrElse(fullExpression, isEqualExpression);
             }
@@ -151,23 +151,23 @@ namespace NinjaNye.SearchExtensions.Fluent
         {
             Expression combinedHitExpression = null;
             ConstantExpression emptyStringExpression = Expression.Constant("");
-            foreach (var stringProperty in stringProperties)
+            foreach (var stringProperty in this.stringProperties)
             {
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
-                                                                        firstParameter);
+                                                                        this.firstParameter);
 
-                foreach (var searchTerm in searchTerms)
+                foreach (var searchTerm in this.searchTerms)
                 {
                     var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
-                    var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, firstParameter);
-                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, comparisonType);
+                    var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.firstParameter);
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, this.comparisonType);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
 
-            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, firstParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, firstParameter).Compile();
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.firstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.firstParameter).Compile();
             return this.Select(selectExpression.Invoke);
         } 
 

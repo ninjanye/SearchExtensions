@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search((string)null, x => x.Name);
+            var result = testData.Search(x => x.Name);
 
             //Assert
             Assert.AreEqual(testData, result);
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            testData.Search("test", (Expression<Func<TestData, string>>)null);
+            testData.Search((Expression<Func<TestData, string>>)null);
 
             //Assert
             Assert.Fail("Expected an Argument Null expception to occur");
@@ -64,7 +64,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "cd";
             
             //Act
-            var result = testData.Search(searchTerm, x => x.Name).ToList();
+            var result = testData.Search(x => x.Name).Containing(searchTerm).ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
@@ -78,7 +78,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "jk";
             
             //Act
-            var result = testData.Search(new[]{searchTerm1, searchTerm2}, x => x.Name).ToList();
+            var result = testData.Search(x => x.Name).Containing(searchTerm1, searchTerm2).ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) || x.Name.Contains(searchTerm2)));
@@ -91,7 +91,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "cd";
             
             //Act
-            var result = testData.Search(searchTerm, x => x.Name, x => x.Description).ToList();
+            var result = testData.Search(x => x.Name, x => x.Description)
+                                 .Containing(searchTerm)
+                                 .ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
@@ -105,7 +107,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "uv";
 
             //Act
-            var result = testData.Search(new[] { searchTerm1, searchTerm2 }, x => x.Name, x => x.Description).ToList();
+            var result = testData.Search(x => x.Name, x => x.Description)
+                                 .Containing(searchTerm1, searchTerm2)
+                                 .ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) 
@@ -121,7 +125,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "CD";
 
             //Act
-            var result = testData.Search(searchTerm, x => x.Name, StringComparison.InvariantCultureIgnoreCase).ToList();
+            var result = testData.Search(x => x.Name)
+                                 .SetCulture(StringComparison.InvariantCultureIgnoreCase)
+                                 .Containing(searchTerm)
+                                 .ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm.ToLower())));
@@ -135,7 +142,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             testData.Add(new TestData { Name = searchTerm });
 
             //Act
-            var result = testData.Search(searchTerm, x => x.Name, StringComparison.Ordinal).ToList();
+            var result = testData.Search(x => x.Name)
+                                 .SetCulture(StringComparison.Ordinal)
+                                 .Containing(searchTerm)
+                                 .ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
@@ -145,9 +155,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void Search_SearchAllProperties_AllPropertiesSearched()
         {
             //Arrange
+            const string searchTerm = "cd";
             
             //Act
-            var result = this.testData.Search("cd");
+            var result = this.testData.SearchAll().Containing(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -162,7 +173,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             testData.Add(new TestData { Name = "test", Description = searchTerm });
             
             //Act
-            var result = testData.Search(searchTerm, StringComparison.OrdinalIgnoreCase).ToList();
+            var result = testData.SearchAll()
+                                 .SetCulture(StringComparison.OrdinalIgnoreCase)
+                                 .Containing(searchTerm)
+                                 .ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1
@@ -177,8 +191,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "ef";
             
             //Act
-            var result = testData.Search(searchTerm1, x => x.Name)
-                                 .Search(searchTerm2, x => x.Description);
+            var result = testData.Search(x => x.Name).Containing(searchTerm1)
+                                 .Search(x => x.Description).Containing(searchTerm2);
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) && x.Description.Contains(searchTerm2)));

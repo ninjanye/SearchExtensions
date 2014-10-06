@@ -5,13 +5,17 @@ using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Validation;
 
-namespace NinjaNye.SearchExtensions.Fluent
+namespace NinjaNye.SearchExtensions
 {
     public static class FluentSearch
     {
         public static EnumerableStringSearch<T> Search<T>(this IEnumerable<T> source, params Expression<Func<T, string>>[] stringProperties)
         {
             Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+            if (stringProperties.All(sp => sp == null))
+            {
+                throw new ArgumentNullException("stringProperties");                            
+            }
             return new EnumerableStringSearch<T>(source, stringProperties);
         }
 
