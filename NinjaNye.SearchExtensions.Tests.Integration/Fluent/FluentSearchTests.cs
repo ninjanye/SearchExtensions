@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using NUnit.Framework;
-using NinjaNye.SearchExtensions.Tests.Integration.Models;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
@@ -224,19 +221,18 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             Assert.IsTrue(result.All(x => x.StringOne == "abcd" || x.StringOne == "efgh"));
         }
 
-        [Test]
-        public void Search_PerformNullCheck_NullCheckIsPerformed()
-        {
-            //Arrange
+        //[Test]
+        //public void Search_PerformNullCheck_NullCheckIsPerformed()
+        //{
+        //    //Arrange
             
-            //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
-//                                                .CheckForNull()
-                                                .StartsWith("ab");
+        //    //Act
+        //    var result = this.context.TestModels.Search(x => x.StringOne)
+        //                                        .CheckForNull();
 
-            //Assert
-            Assert.AreEqual(1, result.Count());
-        }
+        //    //Assert
+        //    Assert.AreEqual(2, result.Count());
+        //}
 
         public void Dispose()
         {

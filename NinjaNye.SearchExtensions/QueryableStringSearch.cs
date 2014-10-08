@@ -134,12 +134,6 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
-        public QueryableStringSearch<T> CheckForNull(bool checkNull = true)
-        {
-            this.nullCheck = checkNull;
-            return this;
-        }
- 
         public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;

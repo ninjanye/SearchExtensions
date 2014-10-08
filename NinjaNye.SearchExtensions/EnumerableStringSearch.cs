@@ -104,7 +104,7 @@ namespace NinjaNye.SearchExtensions
 
                 var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? startsWithExpression
-                                     : Expression.OrElse(fullExpression, startsWithExpression);
+                                                        : Expression.OrElse(fullExpression, startsWithExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
@@ -125,7 +125,7 @@ namespace NinjaNye.SearchExtensions
                                                                         this.firstParameter);
                 var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? endsWithExpression
-                                     : Expression.OrElse(fullExpression, endsWithExpression);
+                                                        : Expression.OrElse(fullExpression, endsWithExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
@@ -146,7 +146,7 @@ namespace NinjaNye.SearchExtensions
                                                                         this.firstParameter);
                 var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, this.comparisonType);
                 fullExpression = fullExpression == null ? isEqualExpression
-                                     : Expression.OrElse(fullExpression, isEqualExpression);
+                                                        : Expression.OrElse(fullExpression, isEqualExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
