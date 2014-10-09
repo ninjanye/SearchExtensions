@@ -17,7 +17,6 @@ namespace NinjaNye.SearchExtensions
         private readonly Expression<Func<T, string>>[] stringProperties;
         private readonly ParameterExpression firstParameter;
         private readonly IList<string> searchTerms = new List<string>();
-        private bool nullCheck;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
         {
@@ -33,9 +32,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property contains search term
+        /// Retrieve items where any of the defined properties 
+        /// contains any of the defined search terms
         /// </summary>
-        /// <param name="terms">Term to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "terms");
@@ -66,26 +66,12 @@ namespace NinjaNye.SearchExtensions
                                                                         stringProperty.Parameters.Single(),
                                                                         singleParameter);
 
-                Expression propertyNotNullExpression = null;
-                if (this.nullCheck)
-                {
-                    propertyNotNullExpression = ExpressionHelper.BuildNotNullExpression(swappedParamExpression);
-                }
-
                 for (int j = 0; j < validSearchTerms.Count; j++)
                 {
                     var searchTerm = validSearchTerms[j];
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
                     Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
-                    if (this.nullCheck)
-                    {
-                        var nullCheckedExpression = ExpressionHelper.JoinAndAlsoExpression(propertyNotNullExpression, comparisonExpression);
-                        orExpression = ExpressionHelper.JoinOrExpression(orExpression, nullCheckedExpression);
-                    }
-                    else
-                    {
-                        orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
-                    }
+                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }
 
@@ -94,9 +80,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property starts with the specified term
+        /// Retrieve items where any of the defined properties 
+        /// starts with any of the defined search terms
         /// </summary>
-        /// <param name="terms">Term to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression fullExpression = null;
@@ -115,9 +102,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property equals the specified term
+        /// Retrieve items where any of the defined properties 
+        /// are equal to any of the defined search terms
         /// </summary>
-        /// <param name="terms">Terms to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
@@ -134,6 +122,13 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        /// <summary>
+        /// Rank the filtered items based on the matched occurences
+        /// </summary>
+        /// <returns>
+        /// Enumerable of ranked items.  Each item will contain 
+        /// the amount of hits found across the defined properties
+        /// </returns>
         public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;

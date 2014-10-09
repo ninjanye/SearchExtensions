@@ -40,9 +40,10 @@ namespace NinjaNye.SearchExtensions
         } 
 
         /// <summary>
-        /// Only items where any property contains search term
+        /// Retrieve items where any of the defined properties 
+        /// contains any of the defined search terms
         /// </summary>
-        /// <param name="terms">Term to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "searchTerms");
@@ -89,9 +90,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property starts with the specified term
+        /// Retrieve items where any of the defined properties starts 
+        /// with any of the defined search terms
         /// </summary>
-        /// <param name="terms">Term to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression fullExpression = null;
@@ -111,9 +113,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property ends with the specified term
+        /// Retrieve items where any of the defined properties 
+        /// ends with any of the defined search terms
         /// </summary>
-        /// <param name="terms">Term to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> EndsWith(params string[] terms)
         {
             Expression fullExpression = null;
@@ -132,9 +135,10 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Only items where any property equals the specified term
+        /// Retrieve items where any of the defined properties 
+        /// is equal to any of the defined search terms
         /// </summary>
-        /// <param name="terms">Terms to search for</param>
+        /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
@@ -152,6 +156,13 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        /// <summary>
+        /// Rank the filtered items based on the matched occurences
+        /// </summary>
+        /// <returns>
+        /// Enumerable of ranked items.  Each item will contain 
+        /// the amount of hits found across the defined properties
+        /// </returns>
         public IEnumerable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;
