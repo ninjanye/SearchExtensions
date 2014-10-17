@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = this.context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
 
             //Assert
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(4, result.Count());
             var first = result.OrderByDescending(r => r.Hits).ToList();
             Assert.AreEqual(2, first[0].Hits);
             Assert.AreEqual(1, first[1].Hits);
@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                                 .ToRanked();
 
             //Assert
-            Assert.AreEqual(6, result.Count());
+            Assert.AreEqual(11, result.Count());
             var ordered = result.OrderByDescending(r => r.Hits).ToList();
             Assert.AreEqual(4, ordered[0].Hits);
         }

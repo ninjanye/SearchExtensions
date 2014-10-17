@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,26 +8,13 @@ using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class QueryableStringSearch<T> : IQueryable<T>
+    public class QueryableStringSearch<T> : QueryableStringSearchBase<T>
     {
-        private bool expressionUpdated;
-        private Expression completeExpression;
-        private IQueryable<T> source;
-        private readonly Expression<Func<T, string>>[] stringProperties;
-        private readonly ParameterExpression firstParameter;
-        private readonly IList<string> searchTerms = new List<string>();
+        private readonly IList<string> containingSearchTerms = new List<string>();
 
-        public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
+        public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
+            : base(source, stringProperties)
         {
-            this.source = source;
-            this.ElementType = source.ElementType;
-            this.Provider = source.Provider;
-            this.stringProperties = stringProperties;
-            var firstProperty = stringProperties.FirstOrDefault();
-            if (firstProperty != null)
-            {
-                this.firstParameter = firstProperty.Parameters.FirstOrDefault();
-            }
         }
 
         /// <summary>
@@ -53,7 +39,7 @@ namespace NinjaNye.SearchExtensions
 
             foreach (var validSearchTerm in validSearchTerms)
             {
-                this.searchTerms.Add(validSearchTerm);
+                this.containingSearchTerms.Add(validSearchTerm);
             }
 
             Expression orExpression = null;
@@ -143,9 +129,9 @@ namespace NinjaNye.SearchExtensions
                 var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
                 var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.firstParameter);
 
-                for (int j = 0; j < this.searchTerms.Count; j++)
+                for (int j = 0; j < this.containingSearchTerms.Count; j++)
                 {
-                    var searchTerm = this.searchTerms[j];
+                    var searchTerm = this.containingSearchTerms[j];
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
@@ -154,47 +140,6 @@ namespace NinjaNye.SearchExtensions
             var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.firstParameter);
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.firstParameter);
             return this.Select(selectExpression);
-        } 
-
-        private void AppendExpression(Expression expressionToJoin)
-        {
-            this.expressionUpdated = false;
-            this.completeExpression = ExpressionHelper.JoinAndAlsoExpression(this.completeExpression, expressionToJoin);
         }
-
-        private void UpdateSource()
-        {
-            if (this.completeExpression == null || this.expressionUpdated)
-            {
-                return;
-            }
-
-            this.expressionUpdated = true;
-            var finalExpression = Expression.Lambda<Func<T, bool>>(this.completeExpression, this.firstParameter);
-            this.source = this.source.Where(finalExpression);
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            this.UpdateSource();
-            return this.source.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        public Expression Expression
-        {
-            get
-            {
-                this.UpdateSource();
-                return this.source.Expression;
-            }
-        }
-
-        public Type ElementType { get; private set; }
-        public IQueryProvider Provider { get; private set; }
     }
 }

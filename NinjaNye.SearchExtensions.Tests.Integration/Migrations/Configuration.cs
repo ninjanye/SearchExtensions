@@ -23,6 +23,16 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
               new TestModel { Id = new Guid("A8A0D984-5F12-4BD2-8E72-9C53D0EA73E0"), StringOne = "UPPER", StringTwo = "CASE" },
               new TestModel { Id = new Guid("3CDF0B28-FFF1-4C0E-B468-E69EF8AAF215"), StringOne = "lower", StringTwo = "case" },
               new TestModel { Id = new Guid("E1DAA440-7EE1-4415-9256-C834351A6329"), StringOne = "ghcdgh", StringTwo = "2 occurences" },
+              new TestModel { Id = new Guid("1675C709-FCF1-4FAD-B664-DC4E199ABC9D"), StringOne = "mouth", StringTwo = "test" },
+              new TestModel { Id = new Guid("53684C55-03D5-4A15-9EBA-9DE1A167D99F"), StringOne = "moth", StringTwo = "another" },
+              new TestModel { Id = new Guid("278AFE99-F50C-4BA1-B96D-D745299667FD"), StringOne = "plate", StringTwo = "tree" },
+              new TestModel { Id = new Guid("7C376836-ACA2-4070-8D22-E8DA98116FBD"), StringOne = "place", StringTwo = "flame" },
+              new TestModel { Id = new Guid("BFCEE7CF-12AA-4B09-89EB-5DE127BF9433"), StringOne = "Ashcraft", StringTwo = "white" },
+              new TestModel { Id = new Guid("1D875D01-9B03-4F65-8BD6-024C1C5CF515"), StringOne = "ashcroft", StringTwo = "trout" },
+              new TestModel { Id = new Guid("CFFF2CC4-FAAB-4D8D-B01A-89B3155799DB"), StringOne = "price", StringTwo = "bloomage" },
+              new TestModel { Id = new Guid("F05FF05E-BF52-49CB-A2B2-FF347FE9A4BE"), StringOne = "prize", StringTwo = "flower" },
+              new TestModel { Id = new Guid("2B4A8BBD-27D1-437A-A685-F85F1A1DEFF8"), StringOne = "grace", StringTwo = "growth" },
+              new TestModel { Id = new Guid("04001511-FB91-44BB-99D8-79A8560BE34C"), StringOne = "graze", StringTwo = "stunt" },
               new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = null, StringTwo = "null check" }
             );            
         }

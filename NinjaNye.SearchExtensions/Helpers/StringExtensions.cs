@@ -1,4 +1,5 @@
 using System;
+using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Helpers
 {

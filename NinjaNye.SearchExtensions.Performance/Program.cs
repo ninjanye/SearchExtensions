@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
@@ -9,13 +10,36 @@ namespace NinjaNye.SearchExtensions.Performance
     {
         static void Main(string[] args)
         {
+            var words = new[]
+                {
+                    "john", "jim", "robert", "ralph", "bob", "bill", "stephen", "justin", "adam", "callum"                };
+
+            Console.WriteLine("Processing {0} words", words.Length);
+            var stopwatch = new Stopwatch();
+            Console.WriteLine("Begin soundex...");
+            stopwatch.Start();
+            var soundexCodes = words.Select(SoundexProcessor.ToSoundex);
+            stopwatch.Stop();
+            Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
+            var codes = soundexCodes.GroupBy(x => x).ToList();
+            Console.WriteLine("Codes found: {0}", codes.Count);
+            foreach (var code in codes)
+            {
+                Console.WriteLine(code.Key);                
+            }
+            Console.WriteLine("Soundex complete...");
+
+            
+
+
+
             Console.WriteLine("====================================");
             Console.WriteLine(" SearchExtensions performance tests ");
             Console.WriteLine("====================================");
 
             const int recordCount = 1000000;
             const StringComparison stringComparison = StringComparison.CurrentCulture;
-            var stopwatch = new Stopwatch();
+//            var stopwatch = new Stopwatch();
 
             Console.WriteLine("Building {0} records...", recordCount);
             var enumerableData = BuildData(recordCount);
