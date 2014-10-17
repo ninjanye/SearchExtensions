@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions
         {
             Ensure.ArgumentNotNull(terms, "terms");
 
-            if (!terms.Any() || !this.stringProperties.Any())
+            if (!terms.Any() || !this.StringProperties.Any())
             {
                 return null;
             }
@@ -43,11 +43,11 @@ namespace NinjaNye.SearchExtensions
             }
 
             Expression orExpression = null;
-            var singleParameter = this.stringProperties[0].Parameters.Single();
+            var singleParameter = this.StringProperties[0].Parameters.Single();
 
-            for (int i = 0; i < this.stringProperties.Length; i++)
+            for (int i = 0; i < this.StringProperties.Length; i++)
             {
-                var stringProperty = this.stringProperties[i];
+                var stringProperty = this.StringProperties[i];
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
                                                                         singleParameter);
@@ -73,12 +73,12 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.stringProperties.Length; i++)
+            for (int i = 0; i < this.StringProperties.Length; i++)
             {
-                var stringProperty = this.stringProperties[i];
+                var stringProperty = this.StringProperties[i];
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
-                                                                        this.firstParameter);
+                                                                        this.FirstParameter);
 
                 var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms);
                 fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, startsWithExpression);
@@ -95,17 +95,32 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.stringProperties.Length; i++)
+            for (int i = 0; i < this.StringProperties.Length; i++)
             {
-                var stringProperty = this.stringProperties[i];
+                var stringProperty = this.StringProperties[i];
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
-                                                                        this.firstParameter);
+                                                                        this.FirstParameter);
                 var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms);
                 fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, isEqualExpression);
             }
             this.AppendExpression(fullExpression);
             return this;
+        }
+
+        /// <summary>
+        /// Returns Enumerable of records that match the Soundex code for
+        /// any of the given terms across any of the defined properties
+        /// </summary>
+        /// <param name="terms">terms to search for</param>
+        /// <returns>Enumerable of records where Soundex matches</returns>
+        public IEnumerable<T> Soundex(params string[] terms)
+        {
+            var firstCharacters = terms.Select(t => t.GetFirstCharacter())
+                                       .Distinct()
+                                       .ToArray();
+            return this.StartsWith(firstCharacters).AsEnumerable()
+                       .Search(StringProperties).Soundex(terms);
         }
 
         /// <summary>
@@ -119,15 +134,15 @@ namespace NinjaNye.SearchExtensions
         {
             Expression combinedHitExpression = null;
             ConstantExpression emptyStringExpression = Expression.Constant("");
-            for (int i = 0; i < this.stringProperties.Length; i++)
+            for (int i = 0; i < this.StringProperties.Length; i++)
             {
-                var stringProperty = this.stringProperties[i];
+                var stringProperty = this.StringProperties[i];
                 var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
                                                                         stringProperty.Parameters.Single(),
-                                                                        this.firstParameter);
+                                                                        this.FirstParameter);
 
                 var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
-                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.firstParameter);
+                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
 
                 for (int j = 0; j < this.containingSearchTerms.Count; j++)
                 {
@@ -137,8 +152,8 @@ namespace NinjaNye.SearchExtensions
                 }
             }
 
-            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.firstParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.firstParameter);
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.FirstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.FirstParameter);
             return this.Select(selectExpression);
         }
     }

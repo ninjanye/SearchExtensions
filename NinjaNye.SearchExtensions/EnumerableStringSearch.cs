@@ -146,6 +146,16 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
+        /// Return records that match the Soundex code for any of the given terms
+        /// </summary>
+        /// <param name="terms">terms to search for</param>
+        /// <returns>Enumerable of records where Soundex matches</returns>
+        public IEnumerable<T> Soundex(params string[] terms)
+        {
+            return new EnumerableSoundexSearch<T>(Source, StringProperties).American(terms);
+        }
+
+        /// <summary>
         /// Rank the filtered items based on the matched occurences
         /// </summary>
         /// <returns>

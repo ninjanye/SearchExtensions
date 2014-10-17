@@ -8,7 +8,7 @@ using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class EnumerableSoundexSearch<T> : EnumerableSearchBase<T>
+    internal class EnumerableSoundexSearch<T> : EnumerableSearchBase<T>
     {
         public EnumerableSoundexSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)

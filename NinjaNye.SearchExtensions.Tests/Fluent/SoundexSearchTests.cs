@@ -34,7 +34,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = testData.SoundexSearch(x => x.Name).American("Robert");
+            var result = testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
             CollectionAssert.Contains(result, testData[0]);
@@ -46,7 +46,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = testData.SoundexSearch(x => x.Name).American("Robert");
+            var result = testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
             CollectionAssert.DoesNotContain(result, testData[5]);
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var expected = testData.Where(td => soundexCodes.Contains(td.Name.ToSoundex()));            
             
             //Act
-            var result = testData.SoundexSearch(x => x.Name).American("Robert", "Mitt");
+            var result = testData.Search(x => x.Name).Soundex("Robert", "Mitt");
 
             //Assert
             CollectionAssert.AreEqual(expected, result);

@@ -8,14 +8,14 @@ namespace NinjaNye.SearchExtensions
 {
     public abstract class EnumerableSearchBase<T> : IEnumerable<T>
     {
-        private IEnumerable<T> source;
-        protected Expression CompleteExpression;
+        protected IEnumerable<T> Source;
+        private Expression completeExpression;
         protected readonly Expression<Func<T, string>>[] StringProperties;
         protected readonly ParameterExpression FirstParameter;
 
         protected EnumerableSearchBase(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
         {
-            this.source = source;
+            this.Source = source;
             this.StringProperties = stringProperties;
             var firstProperty = stringProperties.FirstOrDefault();
             if (firstProperty != null)
@@ -29,24 +29,24 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         protected virtual void BuildExpression(Expression expressionToJoin)
         {
-            if (this.CompleteExpression == null)
+            if (this.completeExpression == null)
             {
-                this.CompleteExpression = expressionToJoin;
+                this.completeExpression = expressionToJoin;
             }
             else
             {
-                this.CompleteExpression = Expression.AndAlso(this.CompleteExpression, expressionToJoin);
+                this.completeExpression = Expression.AndAlso(this.completeExpression, expressionToJoin);
             }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            if (this.CompleteExpression != null)
+            if (this.completeExpression != null)
             {
-                var finalExpression = Expression.Lambda<Func<T, bool>>(this.CompleteExpression, this.FirstParameter).Compile();
-                this.source = this.source.Where(finalExpression);
+                var finalExpression = Expression.Lambda<Func<T, bool>>(this.completeExpression, this.FirstParameter).Compile();
+                this.Source = this.Source.Where(finalExpression);
             }
-            return this.source.GetEnumerator();
+            return this.Source.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
