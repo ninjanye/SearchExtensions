@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SearchExtensions : Library of IQueryable and IEnumerable extension methods to perform searching">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SearchExtensions</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ninjanye/SearchExtensions">View on GitHub</a>
+
+          <h1 id="project_title">SearchExtensions</h1>
+          <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ninjanye/SearchExtensions/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ninjanye/SearchExtensions/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="searchextensions" class="anchor" href="#searchextensions"><span class="octicon octicon-link"></span></a>SearchExtensions</h1>
+
+<h3>
+<a name="this-project-is-avaliable-for-download-as-a-nuget-package-at-httpswwwnugetorgpackagesninjanyesearchextensions" class="anchor" href="#this-project-is-avaliable-for-download-as-a-nuget-package-at-httpswwwnugetorgpackagesninjanyesearchextensions"><span class="octicon octicon-link"></span></a>This project is avaliable for download as a nuget package at <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">https://www.nuget.org/packages/NinjaNye.SearchExtensions/</a>
+</h3>
+
+<p>SearchExtensions is a library of IQueryable and IEnumerable extension methods to perform searching.  For more information on these methods, please visit my blog:
+<a href="http://jnye.co/posts/tagged/search">http://jnye.co/posts/tagged/search</a></p>
+
+<blockquote>
+<p>You can get in touch with me by adding a comment on my blog (<a href="http://jnye.co">http://jnye.co</a>) or you can <strong>follow me on twitter (<a href="https://twitter.com/ninjanye">@ninjanye</a>)</strong></p>
+</blockquote>
+
+<h2>
+<a name="new-release-10" class="anchor" href="#new-release-10"><span class="octicon octicon-link"></span></a><a href="http://jnye.co/release1"><code>NEW</code> Release 1.0</a>
+</h2>
+
+<p>The changes made to the latest release of Search extensions are:  </p>
+
+<ul>
+<li>Bump version to <strong>Release 1.0</strong>
+</li>
+<li>Remove the previously marked <code>[Obsolete]</code> methods</li>
+<li>Promote the fluent <code>Search</code> methods out of the fluent namespace</li>
+<li>Remove the specific <code>SearchAll()</code> method in favour of utilising <code>.Search()</code>
+</li>
+<li>Performance improvements</li>
+<li>Minor code cleanup</li>
+</ul>
+
+<h2>
+<a name="new-fluent-search-api" class="anchor" href="#new-fluent-search-api"><span class="octicon octicon-link"></span></a><a href="http://jnye.co/fluent"><code>NEW</code> Fluent Search API</a>
+</h2>
+
+<p>As of version 0.5, SearchExtensions has been upgraded to have a fluent API enabling a more control over your queries as well as making them easy to read and construct.</p>
+
+<h2>
+<a name="iqueryable-searching" class="anchor" href="#iqueryable-searching"><span class="octicon octicon-link"></span></a>IQueryable Searching</h2>
+
+<p>The IQueryable extension methods build expression trees based on your command chain and then sends this request to the data provider when required.  This means that your data provider is restricting the records that are brought into memory instead of having all records brought into, and filtered, in memory.</p>
+
+<h3>
+<a name="methods" class="anchor" href="#methods"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p>Search methods available to IQueryable data are:</p>
+
+<ul>
+<li>
+<code>Containing</code> - target property <em>contains</em> search term or terms</li>
+<li>
+<code>IsEqual</code> - target property <em>equals</em> search term or terms</li>
+<li>
+<code>StartsWith</code> - target property <em>starts with</em> search term or terms</li>
+</ul>
+
+<h3>
+<a name="how-to-performing-containing-searches" class="anchor" href="#how-to-performing-containing-searches"><span class="octicon octicon-link"></span></a>How to: Performing <code>Containing</code> searches</h3>
+
+<p>Search for a <strong>single search term</strong> within a <strong>single property</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm");
+</code></pre>
+
+<p>Search for a <strong>single search term</strong> within <strong>multiple properties</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+                          .Containing("searchTerm");
+</code></pre>
+
+<p>Search for <strong>multiple search terms</strong> within a <strong>single property</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("search", "term");
+</code></pre>
+
+<p>Search for <strong>multiple search terms</strong> within <strong>multiple properties</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+                          .Containing("searchTerm1", "searchTerm2", "searchTerm3");
+</code></pre>
+
+<h3>
+<a name="how-to-performing-containing-and-searches" class="anchor" href="#how-to-performing-containing-and-searches"><span class="octicon octicon-link"></span></a>How to: Performing <code>Containing</code> AND searches</h3>
+
+<p>Search where a <strong>single property</strong> contains a <strong>single search term</strong><br>
+AND a <strong>another property</strong> contains a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm1")
+                          .Search(x =&gt; x.Property1)
+                          .Containing("searchTerm2");
+</code></pre>
+
+<p>Search where a <strong>single search term</strong> exists within in Property1 OR Property2<br>
+AND <strong>single search term</strong> exists within in Property3 OR Property4</p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .Containing("searchTerm")
+                          .Search(x =&gt; x.Property3, x =&gt; x.Property4)
+                          .Containing("searchTerm");
+</code></pre>
+
+<p>Search where a <strong>single search term</strong> exists in Property1 OR Property2<br>
+AND any of the <strong>multiple search terms</strong> exist within a <strong>single property</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .Containing("searchTerm")
+                          .Search(x =&gt; x.Property3)
+                          .Containing("another", "term");
+</code></pre>
+
+<h3>
+<a name="how-to-performing-isequal-searches" class="anchor" href="#how-to-performing-isequal-searches"><span class="octicon octicon-link"></span></a>How to: Performing <code>IsEqual</code> searches</h3>
+
+<p>Search where a <strong>single property</strong> equals a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .IsEqual("searchTerm");
+</code></pre>
+
+<p>Search where any one of <strong>multiple properties</strong> is equal to a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+                          .IsEqual("searchTerm");
+</code></pre>
+
+<p>Search where a <strong>single property</strong> is equal to any one of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .IsEqual("search", "term");
+</code></pre>
+
+<p>Search where any one of <strong>multiple properties</strong> is equal to any one of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+                          .IsEqual("searchTerm1", "searchTerm2", "searchTerm3");
+</code></pre>
+
+<h3>
+<a name="how-to-performing-startswith-searches" class="anchor" href="#how-to-performing-startswith-searches"><span class="octicon octicon-link"></span></a>How to: Performing <code>StartsWith</code> searches</h3>
+
+<p>Search where a <strong>single property</strong> starts with a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .StartsWith("searchTerm");
+</code></pre>
+
+<p>Search where any one of <strong>multiple properties</strong> starts with to a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
+                          .StartsWith("searchTerm");
+</code></pre>
+
+<p>Search where a <strong>single property</strong> starts with any one of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .StartsWith("search", "term");
+</code></pre>
+
+<p>Search where any one of <strong>multiple properties</strong> starts with any one of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+                          .StartsWith("searchTerm1", "searchTerm2", "searchTerm3");
+</code></pre>
+
+<h3>
+<a name="how-to-combining-instructions" class="anchor" href="#how-to-combining-instructions"><span class="octicon octicon-link"></span></a>How to: Combining instructions</h3>
+
+<p>With the latest version of SearchExtensions you can also combine search actions. For instance</p>
+
+<p>Search where a <strong>single property</strong> <code>starts with</code> a <strong>single search term</strong> AND <code>containing</code> a <strong>single search term</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .StartsWith("abc")
+                          .Containing("mno");
+</code></pre>
+
+<p>The ability to pass <strong>multiple search terms</strong> to any of the action methods still remains:</p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .StartsWith("abc", "ninja")       // that starts with "abc" OR "ninja"
+                          .Containing("xyz", "extensions")  // and contains "mno" OR "search"
+</code></pre>
+
+<h2>
+<a name="ienumerable-in-memory-searches" class="anchor" href="#ienumerable-in-memory-searches"><span class="octicon octicon-link"></span></a>IEnumerable (in memory) Searches</h2>
+
+<p>SearchExtensions has also been extended to support <code>IEnumerable</code> collections.</p>
+
+<p>This means you can now perform all of the above searches on in memory collections should you need to.</p>
+
+<h3>
+<a name="methods-1" class="anchor" href="#methods-1"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p>Currently <code>IEnumerable</code> searching has more features available to it than <code>IQueryable</code>, namely <code>EndsWith</code> and 'SetCulture'</p>
+
+<ul>
+<li>
+<code>SetCulture</code> - Sets the string comparison culture with which to perform searches</li>
+<li>
+<code>Containing</code> - target property <em>contains</em> search term or terms</li>
+<li>
+<code>IsEqual</code> - target property <em>equals</em> search term or terms</li>
+<li>
+<code>StartsWith</code> - target property <em>starts with</em> search term or terms</li>
+<li>
+<code>EndsWith</code> - target property <em>ends with</em> search term or terms</li>
+</ul>
+
+<p>The important thing to remember when performing an in memory search is to set the culture to the type of string comparison you wish to perform. <strong>If <code>SetCulture</code> is not specified, <code>StringComparison.CurrentCulture</code> is used.</strong></p>
+
+<h3>
+<a name="how-to-performing-ienumerable-searches" class="anchor" href="#how-to-performing-ienumerable-searches"><span class="octicon octicon-link"></span></a>How to: Performing IEnumerable searches</h3>
+
+<p>These methods are identical to that of the <code>IQueryable</code> methods.</p>
+
+<pre><code>var result = enumerableData.Search(x =&gt; x.Property1)
+                           .SetCulture(StringComparison.OrdinalIgnoreCase) // Set culture for comparison
+                           .StartsWith("abc")
+                           .EndsWith("xyz")
+                           .Containing("mno");
+</code></pre>
+
+<p>It is also possible to switch the <code>StringComparison</code> culture context multiple times</p>
+
+<pre><code>var result = enumerableData.Search(x =&gt; x.Property1)
+                           .SetCulture(StringComparison.OrdinalIgnoreCase)
+                           .StartsWith("abc")  // Uses OrdinalIgnoreCase
+                           .SetCulture(StringComparison.Ordinal)
+                           .EndsWith("xyz")    // Uses Ordinal
+                           .SetCulture(StringComparison.CurrentCulture)
+                           .Containing("mno"); //Uses CurrentCulture
+</code></pre>
+
+<h2>
+<a name="ranked-searches" class="anchor" href="#ranked-searches"><span class="octicon octicon-link"></span></a><a href="http://jnye.co/Posts/2031/searchextensions-ranked-searches-now-supported-by-the-fluent-api">Ranked Searches</a>
+</h2>
+
+<p>Another feature of the fluent api across both <code>IQueryable</code> and <code>IEnumerable</code> collections is the <code>ToRanked()</code> method.  </p>
+
+<p>As well as returning the matched items, a Ranked Search also returns a hit count for each item in the form of an IRanked result.  This enables you to order by hit count to retrieve the most relevant search results.</p>
+
+<h3>
+<a name="irankedt-result" class="anchor" href="#irankedt-result"><span class="octicon octicon-link"></span></a>
+<code>IRanked&lt;T&gt;</code> result</h3>
+
+<p>An IRanked result is simply defined as follows:</p>
+
+<pre><code>public interface IRanked&lt;out T&gt;
+{
+    int Hits { get; }
+    T Item { get; }
+}
+</code></pre>
+
+<p>This is returned using the <code>ToRanked()</code> method:</p>
+
+<p>RankedSearch for a <strong>single search term</strong> within a <strong>single property</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm")
+                          .ToRanked();
+</code></pre>
+
+<p>RankedSearch for a <strong>single search term</strong> within <strong>multiple properties</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
+                          .Containing("searchTerm")
+                          .ToRanked();
+</code></pre>
+
+<p>RankedSearch for <strong>multiple search terms</strong> within a <strong>single property</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm1", "searchTerm2", "searchTerm3")
+                          .ToRanked();
+</code></pre>
+
+<p>RankedSearch for <strong>multiple search terms</strong> within <strong>multiple properties</strong></p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .Containing("searchTerm1", "searchTerm2", "searchTerm3")
+                          .ToRanked();
+</code></pre>
+
+<h3>
+<a name="retrieve-most-relevant-search-results" class="anchor" href="#retrieve-most-relevant-search-results"><span class="octicon octicon-link"></span></a>Retrieve most relevant search results</h3>
+
+<p>Using ranked search you can now easily order your search results by the most relevant.  This following example assumes we have a list of <code>User</code> which has <code>FirstName</code>, <code>LastName</code> and <code>MiddleName</code> string properties. In this example we want to match on those with "John" in their name and retrieve the top 10 results.</p>
+
+<pre><code>var result = context.Users.Search(x =&gt; x.FirstName, x =&gt; x.LastName, x.MiddleName)
+                          .Containing("John")
+                          .ToRanked()
+                          .OrderByDescending(r =&gt; r.Hits) // Order by Hits property of IRanked&lt;User&gt;
+                          .Take(10);
+</code></pre>
+
+<h3>
+<a name="mixing-it-up" class="anchor" href="#mixing-it-up"><span class="octicon octicon-link"></span></a>Mixing it up</h3>
+
+<p>We can also mix it up with the other fluent API methods</p>
+
+<pre><code>var result = context.Users.Search(x =&gt; x.FirstName, x =&gt; x.LastName, x =&gt; x.MiddleName)
+                          .StartsWith("john")
+                          .Containing("nye")
+                          .ToRanked()
+                          .OrderByDescending(r =&gt; r.Hits) // Order by Hits property of IRanked&lt;User&gt;
+                          .Take(10);
+</code></pre>
+
+<h3>
+<a name="a-word-of-note" class="anchor" href="#a-word-of-note"><span class="octicon octicon-link"></span></a>A word of note</h3>
+
+<p>Be aware that the <code>ToRanked()</code> method uses the search terms of the <code>Containing()</code> method combined with the properties to search to build its hit count.  The fluent <code>ToRanked()</code> method also means the old <code>RankedSearch</code> method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.</p>
+
+<hr>
+
+<p>And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my <a href="http://jnye.co">website</a>, <a href="https://twitter.com/ninjanye">twitter</a> or these github pages.</p>
+
+<h2>
+<a name="future-features" class="anchor" href="#future-features"><span class="octicon octicon-link"></span></a>Future Features</h2>
+
+<ul>
+<li>Ability to perform AND search on IRanked results</li>
+<li>Soundex support</li>
+<li>Levenshtein support</li>
+<li>Fuzzy search support</li>
+<li>IQueryable implementation improvements (remove null records)</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SearchExtensions maintained by <a href="https://github.com/ninjanye">ninjanye</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
