@@ -46,6 +46,12 @@
 </blockquote>
 
 <h2>
+<a name="new-release-11" class="anchor" href="#new-release-11"><span class="octicon octicon-link"></span></a><a href="http://jnye.co/soundex"><code>NEW</code> Release 1.1</a>
+</h2>
+
+<p>The latest release includes <a href="http://en.wikipedia.org/wiki/Soundex">Soundex</a> support to <code>IEnumerable</code> collections.</p>
+
+<h2>
 <a name="new-release-10" class="anchor" href="#new-release-10"><span class="octicon octicon-link"></span></a><a href="http://jnye.co/release1"><code>NEW</code> Release 1.0</a>
 </h2>
 
@@ -98,7 +104,9 @@
 
 <p>Search for a <strong>single search term</strong> within <strong>multiple properties</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
                           .Containing("searchTerm");
 </code></pre>
 
@@ -110,8 +118,12 @@
 
 <p>Search for <strong>multiple search terms</strong> within <strong>multiple properties</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
-                          .Containing("searchTerm1", "searchTerm2", "searchTerm3");
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .Containing("searchTerm1",
+                                      "searchTerm2",
+                                      "searchTerm3");
 </code></pre>
 
 <h3>
@@ -155,7 +167,9 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 
 <p>Search where any one of <strong>multiple properties</strong> is equal to a <strong>single search term</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
                           .IsEqual("searchTerm");
 </code></pre>
 
@@ -167,8 +181,12 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 
 <p>Search where any one of <strong>multiple properties</strong> is equal to any one of <strong>multiple search terms</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
-                          .IsEqual("searchTerm1", "searchTerm2", "searchTerm3");
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .IsEqual("searchTerm1",
+                                   "searchTerm2",
+                                   "searchTerm3");
 </code></pre>
 
 <h3>
@@ -182,7 +200,9 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 
 <p>Search where any one of <strong>multiple properties</strong> starts with to a <strong>single search term</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
                           .StartsWith("searchTerm");
 </code></pre>
 
@@ -194,8 +214,12 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 
 <p>Search where any one of <strong>multiple properties</strong> starts with any one of <strong>multiple search terms</strong></p>
 
-<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2, x.Property3)
-                          .StartsWith("searchTerm1", "searchTerm2", "searchTerm3");
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .StartsWith("searchTerm1",
+                                      "searchTerm2",
+                                      "searchTerm3");
 </code></pre>
 
 <h3>
@@ -213,8 +237,10 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 <p>The ability to pass <strong>multiple search terms</strong> to any of the action methods still remains:</p>
 
 <pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
-                          .StartsWith("abc", "ninja")       // that starts with "abc" OR "ninja"
-                          .Containing("xyz", "extensions")  // and contains "mno" OR "search"
+                          // that starts with "abc" OR "ninja"
+                          .StartsWith("abc", "ninja")
+                          // and contains "xyz" OR "extensions"
+                          .Containing("xyz", "extensions")  
 </code></pre>
 
 <h2>
@@ -348,16 +374,55 @@ AND any of the <strong>multiple search terms</strong> exist within a <strong>sin
 
 <p>Be aware that the <code>ToRanked()</code> method uses the search terms of the <code>Containing()</code> method combined with the properties to search to build its hit count.  The fluent <code>ToRanked()</code> method also means the old <code>RankedSearch</code> method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.</p>
 
+<h2>
+<a name="soundex-support" class="anchor" href="#soundex-support"><span class="octicon octicon-link"></span></a>Soundex support</h2>
+
+<p>As of release 1.1, <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">NinjaNye.SearchExtensions</a> supports converting and searching for words that sound like a given word.  </p>
+
+<h3>
+<a name="how-to-performing-soundex-searches" class="anchor" href="#how-to-performing-soundex-searches"><span class="octicon octicon-link"></span></a>How to: Performing <code>Soundex</code> searches</h3>
+
+<p>Returning  records that 'sound like' "test" using the <a href="http://en.wikipedia.org/wiki/Soundex">Soundex algorythm</a>:</p>
+
+<p>Search where a <strong>single property</strong> sounds like a <strong>single search term</strong></p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1).Soundex("test")
+</code></pre>
+
+<p>Search where a any of <strong>multiple properties</strong> sounds like a <strong>single search term</strong></p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+                 .Soundex("test")
+</code></pre>
+
+<p>Search where a <strong>single property</strong> sounds like any one of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1).Soundex("test", "another")
+</code></pre>
+
+<p>Search where a any of <strong>multiple properties</strong> sounds like any of <strong>multiple search terms</strong></p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+                 .Soundex("test", "another")
+</code></pre>
+
+<blockquote>
+<p>The above methods can also be applied to <code>IQueryable</code> data.  For <code>IQueryable</code> we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the in memory collection.</p>
+</blockquote>
+
+<p>For more information about the Soundex search functionality, soundex search performance, and how it has been integrated with <code>IQueryable</code>, please visit <a href="http://jnye.co/soundex">http://jnye.co/soundex</a></p>
+
 <hr>
 
+<blockquote>
 <p>And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my <a href="http://jnye.co">website</a>, <a href="https://twitter.com/ninjanye">twitter</a> or these github pages.</p>
+</blockquote>
 
 <h2>
 <a name="future-features" class="anchor" href="#future-features"><span class="octicon octicon-link"></span></a>Future Features</h2>
 
 <ul>
 <li>Ability to perform AND search on IRanked results</li>
-<li>Soundex support</li>
 <li>Levenshtein support</li>
 <li>Fuzzy search support</li>
 <li>IQueryable implementation improvements (remove null records)</li>
