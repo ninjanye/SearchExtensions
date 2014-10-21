@@ -122,7 +122,8 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             stopwatch.Start();
 
             //Act
-            var result = words.Search(x => x).Soundex("historians", "often", "articulate", "great", "battles", "elegantly", "without", "pause", "for", "thought").ToList();
+            var result = words.Search(x => x).Soundex("historians", "often", "articulate", "great", "battles",
+                                                      "elegantly", "without", "pause", "for", "thought").ToList();
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count);

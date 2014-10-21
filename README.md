@@ -8,6 +8,10 @@ http://jnye.co/posts/tagged/search
 
 > You can get in touch with me by adding a comment on my blog ([http://jnye.co](http://jnye.co)) or you can **follow me on twitter ([@ninjanye](https://twitter.com/ninjanye))**
 
+## [`NEW` Release 1.1](http://jnye.co/soundex)
+The latest release includes [Soundex](http://en.wikipedia.org/wiki/Soundex) support to `IEnumerable` collections.
+
+
 ## [`NEW` Release 1.0](http://jnye.co/release1)
 The changes made to the latest release of Search extensions are:  
 
@@ -39,7 +43,9 @@ Search for a **single search term** within a **single property**
 
 Search for a **single search term** within **multiple properties**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
 							  .Containing("searchTerm");
 
 Search for **multiple search terms** within a **single property**
@@ -49,8 +55,12 @@ Search for **multiple search terms** within a **single property**
 
 Search for **multiple search terms** within **multiple properties**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
-							  .Containing("searchTerm1", "searchTerm2", "searchTerm3");
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
+							  .Containing("searchTerm1",
+                                          "searchTerm2",
+                                          "searchTerm3");
 
 ###How to: Performing `Containing` AND searches
 
@@ -87,7 +97,9 @@ Search where a **single property** equals a **single search term**
 
 Search where any one of **multiple properties** is equal to a **single search term**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
 							  .IsEqual("searchTerm");
 
 Search where a **single property** is equal to any one of **multiple search terms**
@@ -97,8 +109,12 @@ Search where a **single property** is equal to any one of **multiple search term
 
 Search where any one of **multiple properties** is equal to any one of **multiple search terms**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
-							  .IsEqual("searchTerm1", "searchTerm2", "searchTerm3");
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
+							  .IsEqual("searchTerm1",
+                                       "searchTerm2",
+                                       "searchTerm3");
 
 ###How to: Performing `StartsWith` searches
 
@@ -109,7 +125,9 @@ Search where a **single property** starts with a **single search term**
 
 Search where any one of **multiple properties** starts with to a **single search term**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x => x.Property3)
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
 							  .StartsWith("searchTerm");
 
 Search where a **single property** starts with any one of **multiple search terms**
@@ -119,8 +137,12 @@ Search where a **single property** starts with any one of **multiple search term
 
 Search where any one of **multiple properties** starts with any one of **multiple search terms**
 
-    var result = queryableData.Search(x => x.Property1, x => x.Property2, x.Property3)
-							  .StartsWith("searchTerm1", "searchTerm2", "searchTerm3");
+    var result = queryableData.Search(x => x.Property1,
+                                      x => x.Property2,
+                                      x => x.Property3)
+							  .StartsWith("searchTerm1",
+                                          "searchTerm2",
+                                          "searchTerm3");
 
 
 ###How to: Combining instructions
@@ -135,8 +157,10 @@ Search where a **single property** `starts with` a **single search term** AND `c
 The ability to pass **multiple search terms** to any of the action methods still remains:
 
     var result = queryableData.Search(x => x.Property1, x => x.Property2)
-							  .StartsWith("abc", "ninja")       // that starts with "abc" OR "ninja"
-							  .Containing("xyz", "extensions")  // and contains "mno" OR "search"
+                              // that starts with "abc" OR "ninja"
+							  .StartsWith("abc", "ninja")
+                              // and contains "xyz" OR "extensions"
+							  .Containing("xyz", "extensions")  
 
 ##IEnumerable (in memory) Searches
 
@@ -243,13 +267,41 @@ We can also mix it up with the other fluent API methods
 
 Be aware that the `ToRanked()` method uses the search terms of the `Containing()` method combined with the properties to search to build its hit count.  The fluent `ToRanked()` method also means the old `RankedSearch` method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.
 
+## Soundex support
+As of release 1.1, [NinjaNye.SearchExtensions](https://www.nuget.org/packages/NinjaNye.SearchExtensions/) supports converting and searching for words that sound like a given word.  
+
+###How to: Performing `Soundex` searches  
+
+Returning  records that 'sound like' "test" using the [Soundex algorythm](http://en.wikipedia.org/wiki/Soundex):
+
+Search where a **single property** sounds like a **single search term**
+
+    var result = data.Search(x => x.Property1).Soundex("test")
+
+Search where a any of **multiple properties** sounds like a **single search term**
+
+    var result = data.Search(x => x.Property1, x => x.PropertyTwo)
+                     .Soundex("test")
+
+Search where a **single property** sounds like any one of **multiple search terms**
+
+    var result = data.Search(x => x.Property1).Soundex("test", "another")
+
+Search where a any of **multiple properties** sounds like any of **multiple search terms**
+
+    var result = data.Search(x => x.Property1, x => x.PropertyTwo)
+                     .Soundex("test", "another")
+
+> The above methods can also be applied to `IQueryable` data.  For `IQueryable` we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the in memory collection.
+
+For more information about the Soundex search functionality, soundex search performance, and how it has been integrated with `IQueryable`, please visit [http://jnye.co/soundex](http://jnye.co/soundex)
+
 ---
 
-And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
+> And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
 
 ## Future Features
 * Ability to perform AND search on IRanked results
-* Soundex support
 * Levenshtein support
 * Fuzzy search support
 * IQueryable implementation improvements (remove null records)
