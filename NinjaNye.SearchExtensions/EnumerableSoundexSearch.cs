@@ -39,5 +39,30 @@ namespace NinjaNye.SearchExtensions
             this.BuildExpression(fullExpression);
             return this;
         }
+
+        /// <summary>
+        /// Perform a reverse soundex search for a particular collection of terms 
+        /// based on the American Soundex algorythm with the words reversed 
+        /// as defined on http://en.wikipedia.org/wiki/Soundex
+        /// </summary>
+        /// <param name="terms">Term or terms results should sound similar to</param>
+        /// <returns>Returns only the items that match the soundex codes for the terms supplied</returns>
+        public IEnumerable<T> Reverse(params string[] terms)
+        {
+            Expression fullExpression = null;
+            var soundexCodes = terms.Select(t => t.ToReverseSoundex()).ToList();
+            for (int i = 0; i < this.StringProperties.Length; i++)
+            {
+                var stringProperty = this.StringProperties[i];
+                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
+                                                                        stringProperty.Parameters.Single(),
+                                                                        this.FirstParameter);
+                var soundsLikeExpression = EnumerableExpressionHelper.BuildReverseSoundexLikeExpression(swappedParamExpression, soundexCodes);
+                fullExpression = fullExpression == null ? soundsLikeExpression
+                                     : Expression.OrElse(fullExpression, soundsLikeExpression);
+            }
+            this.BuildExpression(fullExpression);
+            return this;
+        }
     }
 }

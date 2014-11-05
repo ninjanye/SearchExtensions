@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -17,7 +15,9 @@ namespace NinjaNye.SearchExtensions.Helpers
         static readonly MethodInfo IndexOfMethod = typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
         static readonly PropertyInfo StringLengthProperty = typeof(string).GetProperty("Length");
         static readonly MethodInfo ReplaceMethod = typeof(string).GetMethod("Replace", new[] { typeof(string), typeof(string) });
+        static readonly MethodInfo ContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
         static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");
+        static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetMethod("ToReverseSoundex");
         static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
 
         /// <summary>
@@ -131,9 +131,6 @@ namespace NinjaNye.SearchExtensions.Helpers
             var expectedLengthExpression = Expression.Subtract(lengthPropertyExpression, lengthExpression);
             return Expression.Equal(indexOfCallExpresion, expectedLengthExpression);
         }
-
-
-        static readonly MethodInfo ContainsMethod = typeof(List<string>).GetMethod("Contains", new[]{typeof(string)});
         
         /// <summary>
         /// Build an 'soundexCodes.Contains(soundex(value))' expression for a search term against a particular string property
@@ -141,6 +138,18 @@ namespace NinjaNye.SearchExtensions.Helpers
         public static Expression BuildSoundsLikeExpression<T>(Expression<Func<T, string>> stringProperty, IList<string> soundexCodes)
         {
             var soundexCallExpresion = Expression.Call(SoundexMethod, stringProperty.Body);
+            var soundexCodesExpression = Expression.Constant(soundexCodes);
+            var containsExpression = Expression.Call(soundexCodesExpression, ContainsMethod, soundexCallExpresion);
+            var trueExpression = Expression.Constant(true);
+            return Expression.Equal(containsExpression, trueExpression);
+        }
+
+        /// <summary>
+        /// Build an 'soundexCodes.Contains(reverseSoundex(value))' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression BuildReverseSoundexLikeExpression<T>(Expression<Func<T, string>> stringProperty, IList<string> soundexCodes)
+        {
+            var soundexCallExpresion = Expression.Call(ReverseSoundexMethod, stringProperty.Body);
             var soundexCodesExpression = Expression.Constant(soundexCodes);
             var containsExpression = Expression.Call(soundexCodesExpression, ContainsMethod, soundexCallExpresion);
             var trueExpression = Expression.Constant(true);

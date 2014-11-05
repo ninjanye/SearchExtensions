@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
+    <Compile Include="Fluent\ReverseSoundexSearchTests.cs" />
     <Compile Include="Fluent\SoundexSearchTests.cs" />
     <Compile Include="Helpers\StringExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
