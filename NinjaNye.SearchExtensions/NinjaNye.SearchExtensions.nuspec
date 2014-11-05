@@ -9,8 +9,8 @@
     <projectUrl>http://github.com/ninjanye/SearchExtensions</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.1 now includes optimised Soundex support</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.2 includes new Reverse Soundex functionality</releaseNotes>
     <copyright>Copyright 2013</copyright>
-    <tags>search extension methods linq ranked entityframework</tags>
+    <tags>search extension methods linq ranked entityframework soundex</tags>
   </metadata>
 </package>

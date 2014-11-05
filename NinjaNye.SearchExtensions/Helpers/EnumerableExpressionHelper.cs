@@ -141,20 +141,10 @@ namespace NinjaNye.SearchExtensions.Helpers
         public static Expression BuildSoundsLikeExpression<T>(Expression<Func<T, string>> stringProperty, IList<string> soundexCodes)
         {
             var soundexCallExpresion = Expression.Call(SoundexMethod, stringProperty.Body);
-            Expression finalExpression = null;
             var soundexCodesExpression = Expression.Constant(soundexCodes);
             var containsExpression = Expression.Call(soundexCodesExpression, ContainsMethod, soundexCallExpresion);
             var trueExpression = Expression.Constant(true);
             return Expression.Equal(containsExpression, trueExpression);
-
-
-            //foreach (var soundexCode in soundexCodes)
-            //{
-            //    var soundexExpression = Expression.Constant(soundexCode);
-            //    var expression = Expression.Equal(soundexCallExpresion, soundexExpression);
-            //    finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, expression);
-            //}
-            //return finalExpression;
         }
 
 

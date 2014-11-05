@@ -10,22 +10,23 @@ namespace NinjaNye.SearchExtensions.Performance
     {
         static void Main(string[] args)
         {
-            var words = new[]
-                {
-                    "john", "jim", "robert", "ralph", "bob", "bill", "stephen", "justin", "adam", "callum"                };
+            var words = new[]{ "twitter", "nitter", "flitter", "critter" };
 
             Console.WriteLine("Processing {0} words", words.Length);
             var stopwatch = new Stopwatch();
             Console.WriteLine("Begin soundex...");
             stopwatch.Start();
             var soundexCodes = words.Select(SoundexProcessor.ToSoundex);
+            var reverseSoundexCodes = words.Select(SoundexProcessor.ToReverseSoundex);
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
-            var codes = soundexCodes.GroupBy(x => x).ToList();
-            Console.WriteLine("Codes found: {0}", codes.Count);
-            foreach (var code in codes)
+            foreach (var code in soundexCodes)
             {
-                Console.WriteLine(code.Key);                
+                Console.WriteLine(code);                
+            }
+            foreach (var code in reverseSoundexCodes)
+            {
+                Console.WriteLine(code);                
             }
             Console.WriteLine("Soundex complete...");
 

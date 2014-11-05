@@ -17,7 +17,6 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         [SetUp]
         public void Setup()
         {
-            this.BuildWords(1000000);
         }
 
         private void BuildWords(int wordCount)
@@ -59,6 +58,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         public void ToSoundex_OneMillionRecords_UnderOneSecond()
         {
             //Arrange
+            this.BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
             var stopwatch = new Stopwatch();
             Console.WriteLine("Begin soundex...");
@@ -74,9 +74,29 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         }
 
         [Test]
+        public void ToReverseSoundex_OneMillionRecords_UnderOneSecond()
+        {
+            //Arrange
+            this.BuildWords(1000000);
+            Console.WriteLine("Processing {0} words", words.Count);
+            var stopwatch = new Stopwatch();
+            Console.WriteLine("Begin soundex...");
+            stopwatch.Start();
+             
+            //Act
+            var result = words.Select(SoundexProcessor.ToReverseSoundex).ToList();
+            stopwatch.Stop();
+            Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
+            Console.WriteLine("Results retrieved: {0}", result.Count()); 
+            //Assert
+            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 700);
+        }
+
+        [Test]
         public void SearchSoundex_OneMillionWordsComparedToOneWord_UnderOneSecond()
         {
             //Arrange
+            this.BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
             
             var stopwatch = new Stopwatch();
@@ -96,6 +116,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         public void SearchSoundex_OneMillionWordsComparedToTwoWords_UnderOneSecond()
         {
             //Arrange
+            this.BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
 
             var stopwatch = new Stopwatch();
@@ -115,6 +136,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         public void SearchSoundex_OneMillionWordsComparedToTenWords_UnderOneSecond()
         {
             //Arrange
+            this.BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
 
             var stopwatch = new Stopwatch();
@@ -129,6 +151,37 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Console.WriteLine("Results retrieved: {0}", result.Count);
             //Assert
             Assert.True(stopwatch.Elapsed.Milliseconds < 1000);
+        }
+
+        [Test]
+        public void ReverseSoundex_ReverseWordSoundexVsReverseSoundex_ReverseSoundexIsQuicker()
+        {
+            //Arrange
+            this.BuildWords(1000);
+            Console.WriteLine("Processing {0} words", words.Count);
+
+            var stopwatch = new Stopwatch();
+            Console.WriteLine("Begin reverse soundex search...");
+            stopwatch.Start();
+            var reverseWordResult = words.Select(w => w.Reverse().ToString().ToSoundex()).ToList();
+
+            //Act
+
+            stopwatch.Stop();
+            var reverseSoundexTimeTaken = stopwatch.Elapsed;
+            Console.WriteLine("Time taken: {0}", reverseSoundexTimeTaken);
+            Console.WriteLine("Results retrieved: {0}", reverseWordResult.Count);
+
+            Console.WriteLine("Begin reverse word ToSoundex search...");
+            stopwatch.Restart();
+            var reverseSoundexResult = words.Select(w => w.ToReverseSoundex()).ToList();
+            stopwatch.Stop();
+            var reverseWordTimeTaken = stopwatch.Elapsed;
+            Console.WriteLine("Time taken: {0}", reverseWordTimeTaken);
+            Console.WriteLine("Results retrieved: {0}", reverseSoundexResult.Count);
+            
+            //Assert
+            Assert.True(reverseWordTimeTaken < reverseSoundexTimeTaken);
         }
 
     }

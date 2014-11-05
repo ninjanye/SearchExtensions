@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Soundex
 
         /// <summary>
         /// Retrieve the Soundex value for a given string
-        /// Soundex used is American Soundex as defined 
+        /// Soundex used is American Soundex as defined
         /// on http://en.wikipedia.org/wiki/Soundex  
         /// </summary>
         /// <param name="value">string to transform into soundex code</param>
@@ -88,11 +88,53 @@ namespace NinjaNye.SearchExtensions.Soundex
                     {
                         return sb.ToString();
                     }
-                }
 
-                if (!IsHOrW(character))
+                    if (!IsHOrW(character))
+                    {
+                        previousSoundex = soundex;
+                    }
+                }
+            }
+
+            ValidateLength(sb);
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Retrieve the Soundex value for a given string.
+        /// Soundex used is Reverse Soundex which produces 
+        /// a soundex code on the reverse of the supplied string
+        /// </summary>
+        /// <param name="value">string to transform into reverse soundex code</param>
+        /// <returns>Reverse Soundex code for the given string</returns>
+        public static string ToReverseSoundex(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+
+            char lastCharacter = value[value.Length-1];
+            char upperCharacter = char.ToUpper(lastCharacter);
+            var sb = new StringBuilder(4);
+            sb.Append(upperCharacter);
+            string previousSoundex = GetSoundexValue(lastCharacter);
+            for (int i = value.Length - 2; i >= 0; i--)
+            {
+                char character = value[i];
+                string soundex = GetSoundexValue(character);
+                if (!soundex.Equals(previousSoundex))
                 {
-                    previousSoundex = soundex;
+                    sb.Append(soundex);
+                    if (sb.Length == maxSoundexLength)
+                    {
+                        return sb.ToString();
+                    }
+
+                    if (!IsHOrW(character))
+                    {
+                        previousSoundex = soundex;
+                    }
                 }
             }
 
