@@ -50,14 +50,17 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BuildStringTestsBase.cs" />
     <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\ReverseSoundexSearchTests.cs" />
     <Compile Include="Fluent\SoundexSearchTests.cs" />
     <Compile Include="Helpers\StringExtensionTests.cs" />
+    <Compile Include="LevenshteinTests\LevenshteinDistanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearch.cs" />
     <Compile Include="SearchExtensionTests\TestData.cs" />
+    <Compile Include="SoundexTests\ReverseSoundexPerformanceTests.cs" />
     <Compile Include="SoundexTests\ToReverseSoundexTests.cs" />
     <Compile Include="SoundexTests\ToSoundexPerformanceTests.cs" />
     <Compile Include="SoundexTests\ToSoundexTests.cs" />
