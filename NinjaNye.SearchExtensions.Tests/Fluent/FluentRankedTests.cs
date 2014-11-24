@@ -27,6 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             this.testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
             this.testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
             this.testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
+            this.testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
         }
 
         [Test]
@@ -50,9 +51,9 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = this.testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
 
             //Assert
-            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(3, result.Count);
             var first = result.OrderByDescending(r => r.Hits).ToList();
-            Assert.AreEqual(1, first[0].Hits);
+            Assert.AreEqual(3, first[0].Hits);
             Assert.AreEqual(1, first[1].Hits);
         }
 
@@ -68,7 +69,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
                              .ToList();
 
             //Assert
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(4, result.Count);
             var ordered = result.OrderByDescending(r => r.Hits).ToList();
             Assert.AreEqual(1, ordered[0].Hits);
         }
@@ -86,7 +87,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
                                       .ToList();
 
             //Assert
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(4, result.Count);
             Assert.IsTrue(result.All(r => r.Hits == 1));
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using NinjaNye.SearchExtensions.Levenshtein;
 using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Helpers
@@ -18,6 +19,7 @@ namespace NinjaNye.SearchExtensions.Helpers
         static readonly MethodInfo ContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
         static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");
         static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetMethod("ToReverseSoundex");
+        static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetMethod("LevenshteinDistance");
         static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
 
         /// <summary>
@@ -176,6 +178,24 @@ namespace NinjaNye.SearchExtensions.Helpers
         }
 
         /// <summary>
+        /// Constructs a ranked result of type T
+        /// </summary>
+        /// <param name="distanceExpression">Expression representing how to calculated distance</param>
+        /// <param name="parameterExpression">property parameter</param>
+        /// <returns>Expression equivalent to: new LevenshteinDistance{ Distance = [hitCountExpression], Item = x }</returns>
+        public static Expression ConstructLevenshteinResult<T>(Expression distanceExpression,
+                                                               ParameterExpression parameterExpression)
+        {
+            var distanceType = typeof(LevenshteinDistance<T>);
+            var distanceCtor = Expression.New(distanceType);
+            PropertyInfo distanceProperty = distanceType.GetProperty("Distance");
+            PropertyInfo itemProperty = distanceType.GetProperty("Item");
+            var distanceValueAssignment = Expression.Bind(distanceProperty, distanceExpression);
+            var itemValueAssignment = Expression.Bind(itemProperty, parameterExpression);
+            return Expression.MemberInit(distanceCtor, distanceValueAssignment, itemValueAssignment);
+        }
+
+        /// <summary>
         /// Calculates how many search hits occured for a given property
         /// </summary>
         /// <param name="stringProperty">string property to analyse</param>
@@ -212,6 +232,26 @@ namespace NinjaNye.SearchExtensions.Helpers
         }
 
         /// <summary>
+        /// Calculates the Levenshtein distance between a given property and a search term
+        /// </summary>
+        /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
+        public static Expression CalculateLevenshteinDistance<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
+        {
+            Expression searchTermExpression = Expression.Constant(searchTerm);
+            return Expression.Call(LevensteinDistanceMethod, stringProperty.Body, searchTermExpression);
+        }
+
+        /// <summary>
+        /// Calculates the Levenshtein distance between a given property and a search term
+        /// </summary>
+        /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
+        public static Expression CalculateLevenshteinDistance<T>(Expression<Func<T, string>> sourceProperty, Expression<Func<T, string>> targetProperty)
+        {
+            return Expression.Call(LevensteinDistanceMethod, sourceProperty.Body, targetProperty.Body);
+        }
+
+
+        /// <summary>
         /// Builds an array of expressions that map to every TType property on an object
         /// </summary>
         /// <typeparam name="TSource">Type of object to retrieve properties from</typeparam>
@@ -222,7 +262,7 @@ namespace NinjaNye.SearchExtensions.Helpers
             var parameter = Expression.Parameter(typeof(TSource));
             var stringProperties = typeof(TSource).GetProperties()
                                                   .Where(property => property.CanRead
-                                                                     && property.PropertyType == typeof(TType));
+                                                                  && property.PropertyType == typeof(TType));
 
             var result = new List<Expression<Func<TSource, TType>>>();
             foreach (var property in stringProperties)

@@ -56,8 +56,10 @@
     <Compile Include="Fluent\ReverseSoundexSearchTests.cs" />
     <Compile Include="Fluent\SoundexSearchTests.cs" />
     <Compile Include="Helpers\StringExtensionTests.cs" />
+    <Compile Include="LevenshteinTests\LevenshteinDistancePerformanceTests.cs" />
     <Compile Include="LevenshteinTests\LevenshteinDistanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\LevenshteinSearch.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearch.cs" />
     <Compile Include="SearchExtensionTests\TestData.cs" />
     <Compile Include="SoundexTests\ReverseSoundexPerformanceTests.cs" />

@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count()); 
             //Assert
-            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 700);
+            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
         [Test]

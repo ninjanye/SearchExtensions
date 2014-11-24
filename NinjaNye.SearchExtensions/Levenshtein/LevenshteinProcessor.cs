@@ -1,10 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace NinjaNye.SearchExtensions.Levenshtein
 {
     public static class LevenshteinProcessor
     {
+        /// <summary>
+        /// Compute the Levenshtein Distance between two strings.
+        /// </summary>
+        /// <param name="source">Source string to compare</param>
+        /// <param name="comparedTo">String to compare to source</param>
+        /// <returns>Calculated Levenshtein Distance</returns>
         public static int LevenshteinDistance(string source, string comparedTo)
         {
             bool nullSource = source == null;
@@ -29,70 +34,10 @@ namespace NinjaNye.SearchExtensions.Levenshtein
                 return 0;
             }
 
-            //return ComputeDistance(source, comparedTo);
-            return ComputeDistanceMemoryEfficient(source, comparedTo);
+            return ComputeDistance(source, comparedTo);
         }
 
         private static int ComputeDistance(string source, string comparedTo)
-        {
-            int sourceLength = source.Length;
-            int comparedToLength = comparedTo.Length;
-            if (sourceLength == 0)
-            {
-                return comparedToLength;
-            }
-
-            if (comparedToLength == 0)
-            {
-                return sourceLength;
-            }
-
-            source = source.ToLower().PadLeft(sourceLength + 1);
-            comparedTo = comparedTo.ToLower();
-            var debug = new int[comparedToLength + 1,sourceLength + 1];
-            for (int row = 0; row < sourceLength + 1; row++)
-            {
-                debug[0, row] = row;
-            }
-
-            for (int column = 1; column <= comparedToLength; column++)
-            {
-                for (int row = 0; row <= sourceLength; row++)
-                {
-                    int cost = 0;
-                    bool hasRelated = true;
-                    int previousColumn = column - 1;
-                    if (row == 0)
-                    {
-                        cost = 1;
-                        hasRelated = false;
-                    }
-                    else if (source[row] != comparedTo[previousColumn])
-                    {
-                        cost = 1;
-                    }
-
-                    int leftIncrement = debug[previousColumn, row] + 1;
-                    int minimumCost;
-                    if (hasRelated)
-                    {
-                        var previousRow = row - 1;
-                        int diagonalIncrement = debug[previousColumn, previousRow] + cost;
-                        int topIncrement = debug[column, previousRow] + 1;
-                        minimumCost = Math.Min(Math.Min(diagonalIncrement, topIncrement), leftIncrement);
-                    }
-                    else
-                    {
-                        minimumCost = leftIncrement;
-                    }
-
-                    debug[column, row] = minimumCost;
-                }
-            }
-            return debug[comparedToLength, sourceLength];
-        }
-
-        private static int ComputeDistanceMemoryEfficient(string source, string comparedTo)
         {
             int sourceLength = source.Length;
             int comparedToLength = comparedTo.Length;

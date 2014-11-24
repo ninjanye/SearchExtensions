@@ -1,5 +1,5 @@
 using System;
-using NinjaNye.SearchExtensions.Soundex;
+using System.Globalization;
 
 namespace NinjaNye.SearchExtensions.Helpers
 {
@@ -23,7 +23,7 @@ namespace NinjaNye.SearchExtensions.Helpers
                 return null;
             }
 
-            return text.TrimStart()[0].ToString();
+            return text.TrimStart()[0].ToString(CultureInfo.InvariantCulture);
         }
     }
 }

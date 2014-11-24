@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions.Helpers
 {
     internal static class DbExpressionHelper
     {
         static readonly MethodInfo IndexOfMethod = typeof(string).GetMethod("IndexOf", new[] { typeof(string) });
-        static readonly ConstantExpression EmptyStringExpression = Expression.Constant(string.Empty);
         static readonly ConstantExpression ZeroConstantExpression = Expression.Constant(0);
         static readonly MethodInfo ContainsMethod = typeof(string).GetMethod("Contains");
 
@@ -17,6 +17,7 @@ namespace NinjaNye.SearchExtensions.Helpers
         /// </summary>
         public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression)
         {
+            Ensure.ArgumentNotNull(searchTermExpression, "searchTermExpression");
             return Expression.Call(stringProperty.Body, ContainsMethod, searchTermExpression);
         }
 

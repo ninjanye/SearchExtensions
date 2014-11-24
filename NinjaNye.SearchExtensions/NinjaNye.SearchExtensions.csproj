@@ -36,10 +36,15 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableLevenshteinCompare.cs" />
+    <Compile Include="EnumerableLevenshteinSearch.cs" />
     <Compile Include="EnumerableSearchBase.cs" />
     <Compile Include="EnumerableSoundexSearch.cs" />
+    <Compile Include="FluentLevenshteinSearch.cs" />
     <Compile Include="FluentSearch.cs" />
     <Compile Include="EnumerableStringSearch.cs" />
+    <Compile Include="ILevenshteinDistance.cs" />
+    <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
     <Compile Include="QueryableStringSearch.cs" />
     <Compile Include="Helpers\DbExpressionHelper.cs" />

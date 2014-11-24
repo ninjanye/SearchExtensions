@@ -6,14 +6,32 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public abstract class EnumerableSearchBase<T> : IEnumerable<T>
+    public abstract class EnumerableSearchBase<T> : EnumerableSearchBase<T, T>
     {
-        protected IEnumerable<T> Source;
-        private Expression completeExpression;
-        protected readonly Expression<Func<T, string>>[] StringProperties;
+        protected EnumerableSearchBase(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
+            : base(source, stringProperties)
+        {
+        }
+
+        public override IEnumerator<T> GetEnumerator()
+        {
+            if (this.CompleteExpression != null)
+            {
+                var finalExpression = Expression.Lambda<Func<T, bool>>(this.CompleteExpression, this.FirstParameter).Compile();
+                this.Source = this.Source.Where(finalExpression);
+            }
+            return this.Source.GetEnumerator();
+        }
+    }
+
+    public abstract class EnumerableSearchBase<TInput, TOutput> : IEnumerable<TOutput>
+    {
+        protected IEnumerable<TInput> Source;
+        protected Expression CompleteExpression;
+        protected readonly Expression<Func<TInput, string>>[] StringProperties;
         protected readonly ParameterExpression FirstParameter;
 
-        protected EnumerableSearchBase(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
+        protected EnumerableSearchBase(IEnumerable<TInput> source, Expression<Func<TInput, string>>[] stringProperties)
         {
             this.Source = source;
             this.StringProperties = stringProperties;
@@ -29,25 +47,17 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         protected virtual void BuildExpression(Expression expressionToJoin)
         {
-            if (this.completeExpression == null)
+            if (this.CompleteExpression == null)
             {
-                this.completeExpression = expressionToJoin;
+                this.CompleteExpression = expressionToJoin;
             }
             else
             {
-                this.completeExpression = Expression.AndAlso(this.completeExpression, expressionToJoin);
+                this.CompleteExpression = Expression.AndAlso(this.CompleteExpression, expressionToJoin);
             }
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            if (this.completeExpression != null)
-            {
-                var finalExpression = Expression.Lambda<Func<T, bool>>(this.completeExpression, this.FirstParameter).Compile();
-                this.Source = this.Source.Where(finalExpression);
-            }
-            return this.Source.GetEnumerator();
-        }
+        public abstract IEnumerator<TOutput> GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
         {
