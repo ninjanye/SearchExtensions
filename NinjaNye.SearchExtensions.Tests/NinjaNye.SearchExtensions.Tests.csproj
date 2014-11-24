@@ -67,9 +67,7 @@
     <Compile Include="SoundexTests\ToSoundexPerformanceTests.cs" />
     <Compile Include="SoundexTests\ToSoundexTests.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SearchExtensionTests\IQueryableTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj">
       <Project>{60b8e347-999f-4ee2-8172-9367d4f71860}</Project>
