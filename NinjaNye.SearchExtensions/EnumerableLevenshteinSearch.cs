@@ -19,7 +19,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         /// <param name="stringProperty">The property to perform the Levenshtein distance against</param>
         /// <returns></returns>
-        public EnumerableLevenshteinCompare<ILevenshteinDistance<T>> ComparedTo(Expression<Func<T, string>> stringProperty)
+        public IEnumerable<ILevenshteinDistance<T>> ComparedTo(Expression<Func<T, string>> stringProperty)
         {
             var sourceProperty = this.StringProperties[0];
             var targetProperty = SwapExpressionVisitor.Swap(stringProperty,
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         /// <param name="term">The term to perform the Levenshtein distance against</param>
         /// <returns></returns>
-        public EnumerableLevenshteinCompare<ILevenshteinDistance<T>> ComparedTo(string term)
+        public IEnumerable<ILevenshteinDistance<T>> ComparedTo(string term)
         {
             var stringProperty = this.StringProperties[0];
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(stringProperty, term);

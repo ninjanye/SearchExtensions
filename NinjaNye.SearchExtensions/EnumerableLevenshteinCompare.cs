@@ -10,6 +10,5 @@ namespace NinjaNye.SearchExtensions
             : base(source, new Expression<Func<T, string>>[0])
         {
         }
-
     }
 }
