@@ -6,11 +6,11 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <projectUrl>http://github.com/ninjanye/SearchExtensions</projectUrl>
+    <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.2 includes new Reverse Soundex functionality</releaseNotes>
-    <copyright>Copyright 2013</copyright>
-    <tags>search extension methods linq ranked entityframework soundex</tags>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.3 includes new Levenshtein Distance functionality</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>search extension methods linq ranked entityframework soundex levenshtein</tags>
   </metadata>
 </package>
