@@ -33,7 +33,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
               new TestModel { Id = new Guid("F05FF05E-BF52-49CB-A2B2-FF347FE9A4BE"), StringOne = "prize", StringTwo = "flower" },
               new TestModel { Id = new Guid("2B4A8BBD-27D1-437A-A685-F85F1A1DEFF8"), StringOne = "grace", StringTwo = "growth" },
               new TestModel { Id = new Guid("04001511-FB91-44BB-99D8-79A8560BE34C"), StringOne = "graze", StringTwo = "stunt" },
-              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = null, StringTwo = "null check" }
+              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = null, StringTwo = "null check" },
+              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = "search", StringTwo = "test" },
+              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = "search test", StringTwo = "test" },
+              new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = "windmill", StringTwo = "search" },
+              new TestModel { Id = new Guid("86313D62-4847-419D-A0BF-44E80857B880"), StringOne = "search test", StringTwo = "windmill" }
             );            
         }
     }

@@ -56,7 +56,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         }
 
         [Test]
-        public void Search_AfterCallingContainsCantChainStartsWith_OnlyResultsThatContainTextAndStartWithTextAreReturned()
+        public void Search_AfterCallingContainsChainStartsWith_OnlyResultsThatContainTextAndStartWithTextAreReturned()
         {
             //Arrange
             

@@ -59,6 +59,7 @@
     <Compile Include="LevenshteinTests\LevenshteinDistancePerformanceTests.cs" />
     <Compile Include="LevenshteinTests\LevenshteinDistanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingAllTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\LevenshteinSearch.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearch.cs" />
     <Compile Include="SearchExtensionTests\TestData.cs" />

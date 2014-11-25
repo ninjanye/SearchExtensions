@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                                 .ToRanked();
 
             //Assert
-            Assert.AreEqual(11, result.Count());
+            Assert.AreEqual(12, result.Count());
             var ordered = result.OrderByDescending(r => r.Hits).ToList();
             Assert.AreEqual(4, ordered[0].Hits);
         }

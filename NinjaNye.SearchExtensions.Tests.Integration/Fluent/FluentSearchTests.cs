@@ -221,18 +221,64 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             Assert.IsTrue(result.All(x => x.StringOne == "abcd" || x.StringOne == "efgh"));
         }
 
-        //[Test]
-        //public void Search_PerformNullCheck_NullCheckIsPerformed()
-        //{
-        //    //Arrange
-            
-        //    //Act
-        //    var result = this.context.TestModels.Search(x => x.StringOne)
-        //                                        .CheckForNull();
+        [Test]
+        public void SearchContainingAll_NoTermsSupplied_ReturnsAllData()
+        {
+            //Arrange
 
-        //    //Assert
-        //    Assert.AreEqual(2, result.Count());
-        //}
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).ContainingAll();
+
+            //Assert
+            CollectionAssert.AreEqual(this.context.TestModels, result.ToList());
+        }
+
+        [Test]
+        public void SearchContainingAll_OneTermSupplied_ReturnsOnlyRecordsContainingSearchTerm()
+        {
+            //Arrange
+            const string searchTerm = "test";
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm);
+
+            //Assert
+            Assert.IsTrue(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm) >= 0));
+        }
+
+        [Test]
+        public void SearchContainingAll_TwoTermsSupplied_ReturnsRecordsContainingBothSearchTerms()
+        {
+            //Arrange
+            const string searchTerm1 = "test";
+            const string searchTerm2 = "search";
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm1, searchTerm2);
+
+            //Assert
+            Assert.IsTrue(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm1) >= 0 && t.StringOne.IndexOf(searchTerm2) >= 0));
+        }
+
+        [Test]
+        public void SearchContainingAll_TwoPropertiesAndTwoTermsSupplied_ReturnsDataWhereAllTermsAreMatched()
+        {
+            //Arrange
+            const string searchTerm1 = "test";
+            const string searchTerm2 = "search";
+            const string searchTerm3 = "windmill";
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+                                 .ContainingAll(searchTerm1, searchTerm2, searchTerm3);
+
+            //Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(t => (t.StringOne.IndexOf(searchTerm1) >= 0 || t.StringTwo.IndexOf(searchTerm1) >= 0)
+                                       && (t.StringOne.IndexOf(searchTerm2) >= 0 || t.StringTwo.IndexOf(searchTerm2) >= 0)
+                                       && (t.StringOne.IndexOf(searchTerm3) >= 0 || t.StringTwo.IndexOf(searchTerm3) >= 0)
+                                    ));
+        }
 
         public void Dispose()
         {

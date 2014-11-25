@@ -18,8 +18,8 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Retrieve items where any of the defined properties 
-        /// contains any of the defined search terms
+        /// Retrieve items where any of the defined terms are contained 
+        /// within any of the defined properties
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> Containing(params string[] terms)
@@ -63,6 +63,22 @@ namespace NinjaNye.SearchExtensions
 
             this.AppendExpression(orExpression);
             return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where *all* of the defined terms are contained 
+        /// within any of the defined properties
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        public QueryableStringSearch<T> ContainingAll(params string[] terms)
+        {
+            var result = this;
+            for (int i = 0; i < terms.Length; i++)
+            {
+                result = result.Containing(terms[i]);
+            }
+
+            return result;
         }
 
         /// <summary>
