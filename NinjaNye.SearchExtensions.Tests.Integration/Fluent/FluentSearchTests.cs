@@ -270,13 +270,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
             //Act
             var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
-                                 .ContainingAll(searchTerm1, searchTerm2, searchTerm3);
+                                 .ContainingAll(searchTerm1, searchTerm2, searchTerm3).ToList();
 
             //Assert
             Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(t => (t.StringOne.IndexOf(searchTerm1) >= 0 || t.StringTwo.IndexOf(searchTerm1) >= 0)
-                                       && (t.StringOne.IndexOf(searchTerm2) >= 0 || t.StringTwo.IndexOf(searchTerm2) >= 0)
-                                       && (t.StringOne.IndexOf(searchTerm3) >= 0 || t.StringTwo.IndexOf(searchTerm3) >= 0)
+            Assert.IsTrue(result.All(t => (t.StringOne.Contains(searchTerm1) || t.StringTwo.Contains(searchTerm1))
+                                       && (t.StringOne.Contains(searchTerm2) || t.StringTwo.Contains(searchTerm2))
+                                       && (t.StringOne.Contains(searchTerm3) || t.StringTwo.Contains(searchTerm3))
                                     ));
         }
 

@@ -9,7 +9,7 @@
     <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.3 includes new Levenshtein Distance functionality</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.3 includes new Levenshtein Distance functionality plus extended string search capability</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>search extension methods linq ranked entityframework soundex levenshtein</tags>
   </metadata>
