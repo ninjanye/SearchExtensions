@@ -269,19 +269,33 @@ Full-Width Styles
   margin: 0 auto;
 }
 
-#forkme_banner {
+header.inner a.banner{
   display: block;
   position: absolute;
   top:0;
-  right: 10px;
   z-index: 10;
   padding: 10px 50px 10px 10px;
   color: #fff;
-  background: url('../images/blacktocat.png') #0090ff no-repeat 95% 50%;
   font-weight: 700;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+}
+
+#forkme_banner {
+  right: 10px;
+  background: url('../images/blacktocat.png') #0090ff no-repeat 95% 50%;
+}
+
+#blog_banner {
+  right: 177px;
+  background: url('../images/profilephoto.jpg') orange no-repeat 95% 50%;
+}
+
+#nav_banner {
+  right: 302px;
+  padding: 10px 10px 10px 10px;
+  background-color: #0090ff;
 }
 
 #header_wrap {
@@ -419,5 +433,46 @@ Small Device Styles
     max-width: 480px;
     font-size: 11px;
   }
+}
 
+/*******************************************************************************
+Custom styles
+*******************************************************************************/
+
+.nuget-badge code {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background-color: #202020;
+    border: 4px solid silver;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px #6e6e6e;
+    color: #e2e2e2;
+    display: block;
+    font: 1em 'andale mono','lucida console',monospace;
+    line-height: 1.5em;
+    overflow: auto;
+    padding: 15px;
+}
+
+#menu {
+  position: absolute;
+  width: 210px;
+  z-index: 10;
+  bottom: -40px;
+  height: 52px;
+}
+
+a.menu {
+  padding: 10px;
+  background-color: #0090ff;
+  color: #fff;
+}
+
+a.menu:hover {
+  background-color: orange;
+}
+
+
+a.menu.selected {
+  background-color: orange;
 }
