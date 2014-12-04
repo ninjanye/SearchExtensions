@@ -4,59 +4,7 @@ namespace NinjaNye.SearchExtensions.Soundex
 {
     public static class SoundexProcessor
     {
-        #region Constants Definition
-
         private const int maxSoundexLength = 4;
-        private const string oneString = "1";
-        private const string twoString = "2";
-        private const string threeString = "3";
-        private const string fourString = "4";
-        private const string fiveString = "5";
-        private const string sixString = "6";
-        private const char characterZero = '0';
-        private const char characterB = 'B';
-        private const char characterF = 'F';
-        private const char characterP = 'P';
-        private const char characterV = 'V';
-        private const char characterC = 'C';
-        private const char characterG = 'G';
-        private const char characterJ = 'J';
-        private const char characterK = 'K';
-        private const char characterQ = 'Q';
-        private const char characterS = 'S';
-        private const char characterX = 'X';
-        private const char characterZ = 'Z';
-        private const char characterD = 'D';
-        private const char characterT = 'T';
-        private const char characterL = 'L';
-        private const char characterM = 'M';
-        private const char characterN = 'N';
-        private const char characterR = 'R';
-        private const char characterH = 'H';
-        private const char characterW = 'W';
-
-        private const char lowerCharacterB = 'b';
-        private const char lowerCharacterF = 'f';
-        private const char lowerCharacterP = 'p';
-        private const char lowerCharacterV = 'v';
-        private const char lowerCharacterC = 'c';
-        private const char lowerCharacterG = 'g';
-        private const char lowerCharacterJ = 'j';
-        private const char lowerCharacterK = 'k';
-        private const char lowerCharacterQ = 'q';
-        private const char lowerCharacterS = 's';
-        private const char lowerCharacterX = 'x';
-        private const char lowerCharacterZ = 'z';
-        private const char lowerCharacterD = 'd';
-        private const char lowerCharacterT = 't';
-        private const char lowerCharacterL = 'l';
-        private const char lowerCharacterM = 'm';
-        private const char lowerCharacterN = 'n';
-        private const char lowerCharacterR = 'r';
-        private const char lowerCharacterH = 'h';
-        private const char lowerCharacterW = 'w';
-
-        #endregion
 
         /// <summary>
         /// Retrieve the Soundex value for a given string
@@ -144,8 +92,8 @@ namespace NinjaNye.SearchExtensions.Soundex
 
         private static bool IsHOrW(char character)
         {
-            return character.Equals(lowerCharacterH) || character.Equals(lowerCharacterW)
-                   || character.Equals(characterH) || character.Equals(characterW);
+            return character.Equals('h') || character.Equals('w')
+                   || character.Equals('H') || character.Equals('W');
         }
 
         private static string GetSoundexValue(char character)
@@ -154,19 +102,19 @@ namespace NinjaNye.SearchExtensions.Soundex
             {
                 switch (character)
                 {
-                    case characterB: case characterF: case characterP: case characterV:
-                        return oneString;
-                    case characterC: case characterG: case characterJ: case characterK:
-                    case characterQ: case characterS: case characterX: case characterZ:
-                        return twoString;
-                    case characterD: case characterT:
-                        return threeString;
-                    case characterL:
-                        return fourString;
-                    case characterM: case characterN:
-                        return fiveString;
-                    case characterR: 
-                        return sixString;
+                    case 'B': case 'F': case 'P': case 'V':
+                        return "1";
+                    case 'C': case 'G': case 'J': case 'K':
+                    case 'Q': case 'S': case 'X': case 'Z':
+                        return "2";
+                    case 'D': case 'T':
+                        return "3";
+                    case 'L':
+                        return "4";
+                    case 'M': case 'N':
+                        return "5";
+                    case 'R': 
+                        return "6";
                     default:
                         return string.Empty;
                 }
@@ -174,19 +122,19 @@ namespace NinjaNye.SearchExtensions.Soundex
 
             switch (character)
             {
-                case lowerCharacterB: case lowerCharacterF: case lowerCharacterP: case lowerCharacterV:
-                    return oneString;
-                case lowerCharacterC: case lowerCharacterG: case lowerCharacterJ: case lowerCharacterK:
-                case lowerCharacterQ: case lowerCharacterS: case lowerCharacterX: case lowerCharacterZ:
-                    return twoString;
-                case lowerCharacterD: case lowerCharacterT:
-                    return threeString;
-                case lowerCharacterL:
-                    return fourString;
-                case lowerCharacterM: case lowerCharacterN:
-                    return fiveString;
-                case lowerCharacterR:
-                    return sixString;
+                case 'b': case 'f': case 'p': case 'v':
+                    return "1";
+                case 'c': case 'g': case 'j': case 'k':
+                case 'q': case 's': case 'x': case 'z':
+                    return "2";
+                case 'd': case 't':
+                    return "3";
+                case 'l':
+                    return "4";
+                case 'm': case 'n':
+                    return "5";
+                case 'r':
+                    return "6";
                 default:
                     return string.Empty;
             }
@@ -200,7 +148,7 @@ namespace NinjaNye.SearchExtensions.Soundex
                 int zerosToAdd = maxSoundexLength - soundexLength;
                 for (int i = 0; i < zerosToAdd; i++)
                 {
-                    stringBuilder.Append(characterZero);
+                    stringBuilder.Append('0');
                 }
             }
         }
