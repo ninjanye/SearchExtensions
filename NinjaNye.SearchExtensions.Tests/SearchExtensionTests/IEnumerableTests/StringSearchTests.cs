@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     [TestFixture]
-    public class StringSearch
+    public class StringSearchTests
     {
         private List<TestData> testData = new List<TestData>();
 
