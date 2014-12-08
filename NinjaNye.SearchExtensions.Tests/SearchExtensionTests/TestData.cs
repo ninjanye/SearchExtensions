@@ -4,6 +4,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Status { get; set; }
         public int Number { get; set; }
         public int Integer { get; set; }
     }

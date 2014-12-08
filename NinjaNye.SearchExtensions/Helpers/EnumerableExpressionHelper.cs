@@ -31,6 +31,19 @@ namespace NinjaNye.SearchExtensions.Helpers
         }
 
         /// <summary>
+        /// Build a 'contains' expression for a searching a property that 
+        /// contains the value of another string property
+        /// </summary>
+        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> propertyToSearch, Expression<Func<T, string>> propertyToSearchFor)
+        {
+            var isNotNullExpression = ExpressionHelper.BuildNotNullExpression(propertyToSearch);
+            var searchForIsNotNullExpression = ExpressionHelper.BuildNotNullExpression(propertyToSearchFor);
+            var containsExpression = Expression.Call(propertyToSearch.Body, typeof(string).GetMethod("Contains"), propertyToSearchFor.Body);
+            var fullNotNullExpression = Expression.AndAlso(isNotNullExpression, searchForIsNotNullExpression);
+            return Expression.AndAlso(fullNotNullExpression, containsExpression);
+        }
+
+        /// <summary>
         /// Build a 'equals' expression for a search term against a particular string property
         /// </summary>
         public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms, StringComparison comparisonType)
