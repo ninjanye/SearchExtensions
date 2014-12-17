@@ -17,12 +17,12 @@ namespace NinjaNye.SearchExtensions
         protected SearchBase(TSource source, Expression<Func<TType, string>>[] stringProperties)
         {
             this.Source = source;
-            this.StringProperties = stringProperties;
             var firstProperty = stringProperties.FirstOrDefault();
             if (firstProperty != null)
             {
                 this.FirstParameter = firstProperty.Parameters[0];
             }
+            this.StringProperties = stringProperties.Select(AlignParameter).ToArray();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions
         /// Align the lambda parameter to that of the first string property
         /// </summary>
         protected Expression<TProperty> AlignParameter<TProperty>(Expression<TProperty> lambda)
-        {
+        {            
             return SwapExpressionVisitor.Swap(lambda, lambda.Parameters.Single(), this.FirstParameter);
         }
     }

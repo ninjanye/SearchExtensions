@@ -42,15 +42,13 @@ namespace NinjaNye.SearchExtensions
             }
 
             Expression orExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var swappedParamExpression = this.AlignParameter(this.StringProperties[i]);
-
                 for (int j = 0; j < validSearchTerms.Count; j++)
                 {
                     var searchTerm = validSearchTerms[j];
                     ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-                    Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(swappedParamExpression, searchTermExpression);
+                    Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(propertyToSearch, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }
@@ -70,9 +68,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var searchTermProperty = AlignParameter(terms[0]);
-                var searchProperty = AlignParameter(propertyToSearch);
-
-                Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(searchProperty, searchTermProperty);
+                Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(propertyToSearch, searchTermProperty);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, comparisonExpression);
             }
             this.BuildExpression(finalExpression);
@@ -103,12 +99,9 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-
-                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms);
+                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(propertyToSearch, terms);
                 fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, startsWithExpression);
             }
             this.BuildExpression(fullExpression);
@@ -123,11 +116,9 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-                var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms);
+                var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, terms);
                 fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, isEqualExpression);
             }
             this.BuildExpression(fullExpression);
@@ -160,12 +151,9 @@ namespace NinjaNye.SearchExtensions
         {
             Expression combinedHitExpression = null;
             ConstantExpression emptyStringExpression = Expression.Constant("");
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-
-                var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
+                var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, emptyStringExpression);
                 var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
 
                 for (int j = 0; j < this.containingSearchTerms.Count; j++)

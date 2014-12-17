@@ -56,17 +56,12 @@ namespace NinjaNye.SearchExtensions
             Expression orExpression = null;
             var stringComparisonExpression = Expression.Constant(this.comparisonType);
 
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-
-                for (int j = 0; j < validSearchTerms.Count; j++)
+                foreach (var validSearchTerm in validSearchTerms)
                 {
-                    var searchTerm = validSearchTerms[j];
-                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-
-                    var indexOfExpression = EnumerableExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(swappedParamExpression, searchTermExpression, stringComparisonExpression);
+                    ConstantExpression searchTermExpression = Expression.Constant(validSearchTerm);
+                    var indexOfExpression = EnumerableExpressionHelper.BuildIndexOfGreaterThanMinusOneExpression(propertyToSearch, searchTermExpression, stringComparisonExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
                 }
             }
@@ -86,10 +81,8 @@ namespace NinjaNye.SearchExtensions
             foreach (var stringProperty in stringProperties)
             {
                 var containsProperty = AlignParameter(stringProperty);
-                foreach (var sourceProperty in StringProperties)
+                foreach (var propertyToSearch in StringProperties)
                 {
-                    var propertyToSearch = AlignParameter(sourceProperty);
-
                     var containsExpression = EnumerableExpressionHelper.BuildContainsExpression(propertyToSearch, containsProperty);
                     finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, containsExpression);
                 }
@@ -123,12 +116,9 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-
-                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
+                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(propertyToSearch, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? startsWithExpression
                                                         : Expression.OrElse(fullExpression, startsWithExpression);
             }
@@ -144,11 +134,9 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStringSearch<T> EndsWith(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(swappedParamExpression, terms, this.comparisonType, false);
+                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(propertyToSearch, terms, this.comparisonType, false);
                 fullExpression = fullExpression == null ? endsWithExpression
                                                         : Expression.OrElse(fullExpression, endsWithExpression);
             }
@@ -164,11 +152,9 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = null;
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-                var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(swappedParamExpression, terms, this.comparisonType);
+                var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(propertyToSearch, terms, this.comparisonType);
                 fullExpression = fullExpression == null ? isEqualExpression
                                                         : Expression.OrElse(fullExpression, isEqualExpression);
             }
@@ -207,15 +193,12 @@ namespace NinjaNye.SearchExtensions
         {
             Expression combinedHitExpression = null;
             ConstantExpression emptyStringExpression = Expression.Constant("");
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-
                 for (int j = 0; j < this.containingSearchTerms.Count; j++)
                 {
                     var searchTerm = this.containingSearchTerms[j];
-                    var nullSafeProperty = Expression.Coalesce(swappedParamExpression.Body, emptyStringExpression);
+                    var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, emptyStringExpression);
                     var nullSafeExpresion = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, this.comparisonType);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);

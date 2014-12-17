@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Helpers
         }
 
         /// <summary>
-        /// Join two expressions using the conditional OR operation
+        /// Join two expressions using the conditional AND operation
         /// </summary>
         /// <param name="existingExpression">Expression being joined</param>
         /// <param name="expressionToJoin">Expression to append</param>

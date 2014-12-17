@@ -26,11 +26,9 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToSoundex()).ToList();
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = AlignParameter(stringProperty);
-                var soundsLikeExpression = EnumerableExpressionHelper.BuildSoundsLikeExpression(swappedParamExpression, soundexCodes);
+                var soundsLikeExpression = EnumerableExpressionHelper.BuildSoundsLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                                         : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
@@ -49,13 +47,11 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToReverseSoundex()).ToList();
-            for (int i = 0; i < this.StringProperties.Length; i++)
+            foreach (var propertyToSearch in StringProperties)
             {
-                var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = this.AlignParameter(stringProperty);
-                var soundsLikeExpression = EnumerableExpressionHelper.BuildReverseSoundexLikeExpression(swappedParamExpression, soundexCodes);
+                var soundsLikeExpression = EnumerableExpressionHelper.BuildReverseSoundexLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
-                                     : Expression.OrElse(fullExpression, soundsLikeExpression);
+                                                        : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
