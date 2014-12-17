@@ -24,37 +24,11 @@ namespace NinjaNye.SearchExtensions
         }
     }
 
-    public abstract class EnumerableSearchBase<TInput, TOutput> : IEnumerable<TOutput>
+    public abstract class EnumerableSearchBase<TInput, TOutput> : SearchBase<IEnumerable<TInput>, TInput>, IEnumerable<TOutput>
     {
-        protected IEnumerable<TInput> Source;
-        protected Expression CompleteExpression;
-        protected readonly Expression<Func<TInput, string>>[] StringProperties;
-        protected readonly ParameterExpression FirstParameter;
-
         protected EnumerableSearchBase(IEnumerable<TInput> source, Expression<Func<TInput, string>>[] stringProperties)
+            : base(source, stringProperties)
         {
-            this.Source = source;
-            this.StringProperties = stringProperties;
-            var firstProperty = stringProperties.FirstOrDefault();
-            if (firstProperty != null)
-            {
-                this.FirstParameter = firstProperty.Parameters[0];
-            }
-        }
-
-        /// <summary>
-        /// Appends expressionToJoin to CompleteExpression using an Expression.AndAlso join
-        /// </summary>
-        protected virtual void BuildExpression(Expression expressionToJoin)
-        {
-            if (this.CompleteExpression == null)
-            {
-                this.CompleteExpression = expressionToJoin;
-            }
-            else
-            {
-                this.CompleteExpression = Expression.AndAlso(this.CompleteExpression, expressionToJoin);
-            }
         }
 
         public abstract IEnumerator<TOutput> GetEnumerator();

@@ -22,9 +22,7 @@ namespace NinjaNye.SearchExtensions
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(Expression<Func<T, string>> stringProperty)
         {
             var sourceProperty = this.StringProperties[0];
-            var targetProperty = SwapExpressionVisitor.Swap(stringProperty,
-                                                            stringProperty.Parameters.Single(),
-                                                            this.FirstParameter);
+            var targetProperty = this.AlignParameter(stringProperty);
 
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(sourceProperty, targetProperty);
             var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, this.FirstParameter);

@@ -3,29 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Helpers;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class QueryableStringSearchBase<T> : IQueryable<T>
+    public class QueryableStringSearchBase<T> : SearchBase<IQueryable<T>, T>, IQueryable<T>
     {
         private bool expressionUpdated;
-        private Expression completeExpression;
-        protected IQueryable<T> Source;
-        protected readonly Expression<Func<T, string>>[] StringProperties;
-        protected readonly ParameterExpression FirstParameter;
 
         protected QueryableStringSearchBase(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
+            : base(source, stringProperties)
         {
-            this.Source = source;
             this.ElementType = source.ElementType;
             this.Provider = source.Provider;
-            this.StringProperties = stringProperties;
-            var firstProperty = stringProperties.FirstOrDefault();
-            if (firstProperty != null)
-            {
-                this.FirstParameter = firstProperty.Parameters.FirstOrDefault();
-            }
         }
 
         public Expression Expression
@@ -37,24 +26,24 @@ namespace NinjaNye.SearchExtensions
             }
         }
 
-        public Type ElementType { get; protected set; }
-        public IQueryProvider Provider { get; protected set; }
+        public Type ElementType { get; private set; }
+        public IQueryProvider Provider { get; private set; }
 
-        protected void AppendExpression(Expression expressionToJoin)
+        protected override void BuildExpression(Expression expressionToJoin)
         {
             this.expressionUpdated = false;
-            this.completeExpression = ExpressionHelper.JoinAndAlsoExpression(this.completeExpression, expressionToJoin);
+            base.BuildExpression(expressionToJoin);
         }
 
         private void UpdateSource()
         {
-            if (this.completeExpression == null || this.expressionUpdated)
+            if (this.CompleteExpression == null || this.expressionUpdated)
             {
                 return;
             }
 
             this.expressionUpdated = true;
-            var finalExpression = Expression.Lambda<Func<T, bool>>(this.completeExpression, this.FirstParameter);
+            var finalExpression = Expression.Lambda<Func<T, bool>>(this.CompleteExpression, this.FirstParameter);
             this.Source = this.Source.Where(finalExpression);
         }
 

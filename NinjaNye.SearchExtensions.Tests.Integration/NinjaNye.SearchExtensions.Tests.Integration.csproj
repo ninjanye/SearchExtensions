@@ -50,12 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fluent\FluentLevenshteinTests.cs" />
+    <Compile Include="Fluent\FluentPropertySearchTests.cs" />
     <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.Designer.cs">
       <DependentUpon>201403041552067_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412100830076_AddStringThree.cs" />
+    <Compile Include="Migrations\201412100830076_AddStringThree.Designer.cs">
+      <DependentUpon>201412100830076_AddStringThree.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TestModel.cs" />
@@ -69,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201403041552067_InitialMigration.resx">
       <DependentUpon>201403041552067_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412100830076_AddStringThree.resx">
+      <DependentUpon>201412100830076_AddStringThree.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

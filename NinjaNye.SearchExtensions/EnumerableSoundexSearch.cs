@@ -29,12 +29,10 @@ namespace NinjaNye.SearchExtensions
             for (int i = 0; i < this.StringProperties.Length; i++)
             {
                 var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        this.FirstParameter);
+                var swappedParamExpression = AlignParameter(stringProperty);
                 var soundsLikeExpression = EnumerableExpressionHelper.BuildSoundsLikeExpression(swappedParamExpression, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
-                                     : Expression.OrElse(fullExpression, soundsLikeExpression);
+                                                        : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
@@ -54,9 +52,7 @@ namespace NinjaNye.SearchExtensions
             for (int i = 0; i < this.StringProperties.Length; i++)
             {
                 var stringProperty = this.StringProperties[i];
-                var swappedParamExpression = SwapExpressionVisitor.Swap(stringProperty,
-                                                                        stringProperty.Parameters.Single(),
-                                                                        this.FirstParameter);
+                var swappedParamExpression = this.AlignParameter(stringProperty);
                 var soundsLikeExpression = EnumerableExpressionHelper.BuildReverseSoundexLikeExpression(swappedParamExpression, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                      : Expression.OrElse(fullExpression, soundsLikeExpression);

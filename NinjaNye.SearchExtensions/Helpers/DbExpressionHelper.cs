@@ -21,6 +21,11 @@ namespace NinjaNye.SearchExtensions.Helpers
             return Expression.Call(stringProperty.Body, ContainsMethod, searchTermExpression);
         }
 
+        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> propertyToSearch, Expression<Func<T, string>> propertyToSearchFor)
+        {
+            return Expression.Call(propertyToSearch.Body, ContainsMethod, propertyToSearchFor.Body);
+        }
+
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
@@ -59,6 +64,5 @@ namespace NinjaNye.SearchExtensions.Helpers
             }
             return completeExpression;
         }
-
     }
 }

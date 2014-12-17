@@ -40,14 +40,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         public void ToRanked_SearchMultipleColumns_RankIsCombined()
         {
             //Arrange
-            
+
             //Act
             var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                                                 .Containing("c")
                                                 .ToRanked();
 
             //Assert
-            Assert.AreEqual(12, result.Count());
             var ordered = result.OrderByDescending(r => r.Hits).ToList();
             Assert.AreEqual(4, ordered[0].Hits);
         }
