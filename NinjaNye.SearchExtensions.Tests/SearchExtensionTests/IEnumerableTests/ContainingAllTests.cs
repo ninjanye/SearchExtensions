@@ -35,18 +35,6 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void ContainingAll_NoTermsSupplied_ReturnsAllData()
-        {
-            //Arrange
-            
-            //Act
-            var result = testData.Search(x => x.Name).ContainingAll().ToList();
-
-            //Assert
-            Assert.AreEqual(testData, result);
-        }
-
-        [Test]
         public void ContainingAll_OneTermSupplied_ReturnsRecordNumber2()
         {
             //Arrange

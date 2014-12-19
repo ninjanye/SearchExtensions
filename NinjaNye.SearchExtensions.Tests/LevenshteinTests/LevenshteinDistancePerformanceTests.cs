@@ -9,6 +9,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
     [TestFixture]
     public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
     {
+        #if DEBUG
+        // Performance test will always fail in debug mode
+        [Ignore]
+    	#endif
         [Test]
         public void ToLevenshteinDistance_CompareOneMillionStringsOfLength7_ExecutesInLessThanOneSecond()
         {

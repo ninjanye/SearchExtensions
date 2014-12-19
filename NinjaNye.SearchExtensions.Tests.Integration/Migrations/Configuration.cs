@@ -38,7 +38,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
               new TestModel { Id = new Guid("CF53A4D4-BD9B-468C-8205-E47B9841872E"), StringOne = "search test", StringTwo = "test" },
               new TestModel { Id = new Guid("D42FEA7E-C1BA-4875-9E5F-2686E9B079F3"), StringOne = "windmill", StringTwo = "search" },
               new TestModel { Id = new Guid("86313D62-4847-419D-A0BF-44E80857B880"), StringOne = "search test", StringTwo = "windmill" },
-              new TestModel { Id = new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"), StringOne = "search test", StringTwo = "stringThree", StringThree = "three"}
+              new TestModel { Id = new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"), StringOne = "search test", StringTwo = "stringThree", StringThree = "three"},
+              new TestModel { Id = new Guid("15598E88-CD58-42E7-A96B-22CB220D5BB2"), StringOne = "search test record match", StringTwo = "search", StringThree = "match"}
             );            
         }
     }

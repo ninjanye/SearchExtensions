@@ -44,10 +44,9 @@ namespace NinjaNye.SearchExtensions
             Expression orExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
-                for (int j = 0; j < validSearchTerms.Count; j++)
+                foreach (var validSearchTerm in validSearchTerms)
                 {
-                    var searchTerm = validSearchTerms[j];
-                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
+                    ConstantExpression searchTermExpression = Expression.Constant(validSearchTerm);
                     Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(propertyToSearch, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
@@ -83,11 +82,26 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> ContainingAll(params string[] terms)
         {
             var result = this;
-            for (int i = 0; i < terms.Length; i++)
+            foreach (var term in terms)
             {
-                result = result.Containing(terms[i]);
+                result = result.Containing(term);
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// Retrieve items where *all* of the defined terms are contained 
+        /// within any of the defined properties
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Term or terms to search for</param>
+        public QueryableStringSearch<T> ContainingAll(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var result = this;
+            foreach (var propertyToSearchFor in propertiesToSearchFor)
+            {
+                result = result.Containing(propertyToSearchFor);   
+            }
             return result;
         }
 
