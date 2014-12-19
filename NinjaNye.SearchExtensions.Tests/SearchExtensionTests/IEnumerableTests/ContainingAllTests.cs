@@ -27,10 +27,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
         private void BuildTestData()
         {
-            this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
-            this.testData.Add(new TestData { Name = "a test", Description = "ijkl", Number = 2 });
-            this.testData.Add(new TestData { Name = "search test", Description = "mnop", Number = 3 });
-            this.testData.Add(new TestData { Name = "search", Description = "test three", Number = 4 });
+            this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "ijkl", Number = 1 });
+            this.testData.Add(new TestData { Name = "a test", Description = "ijkl", Status = "mnop", Number = 2 });
+            this.testData.Add(new TestData { Name = "search test", Description = "mnop", Status = "qrst", Number = 3 });
+            this.testData.Add(new TestData { Name = "search", Description = "test three", Status = "search", Number = 4 });
+            this.testData.Add(new TestData { Name = "search test property match", Description = "test", Status = "match", Number = 5 });
         }
 
         [Test]
@@ -81,6 +82,55 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Assert
             Assert.AreEqual(1, result.Count());
             Assert.IsTrue(result.Any(r => r.Number == 4));
+        }
+
+        [Test]
+        public void ContainingAll_CompareAgainstOneProperty_DoesNotThrowAnException()
+        {
+            //Arrange
+            
+            //Act
+
+            //Assert
+            Assert.DoesNotThrow(() => testData.Search(x => x.Name).ContainingAll(x => x.Description));
+        }
+
+        [Test]
+        public void ContainingAll_CompareAgainstOneProperty_DoesNotReturnNull()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).ContainingAll(x => x.Description);
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void ContainingAll_CompareAgainstOneProperty_ResultNameContainsDescription()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).ContainingAll(x => x.Description).ToList();
+
+            //Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description)));
+        }
+
+        [Test]
+        public void ContainingAll_CompareAgainstTwoProperties_ResultNameContainsDescriptionAndStatus()
+        {
+            //Arrange
+            
+            //Act
+            var result = testData.Search(x => x.Name).ContainingAll(x => x.Description, x => x.Status).ToList();
+
+            //Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
         }
     }
 }

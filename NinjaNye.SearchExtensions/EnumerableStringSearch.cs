@@ -73,11 +73,11 @@ namespace NinjaNye.SearchExtensions
         /// Retrieve items where any of the defined terms are contained 
         /// within any of the defined properties
         /// </summary>
-        /// <param name="stringProperties">Property or properties to search against</param>
-        public EnumerableStringSearch<T> Containing(params Expression<Func<T, string>>[] stringProperties)
+        /// <param name="propertiesToSearchFor">Property or properties to search against</param>
+        public EnumerableStringSearch<T> Containing(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             Expression finalExpression = null;
-            foreach (var stringProperty in stringProperties)
+            foreach (var stringProperty in propertiesToSearchFor)
             {
                 var containsProperty = AlignParameter(stringProperty);
                 foreach (var propertyToSearch in StringProperties)
@@ -104,6 +104,21 @@ namespace NinjaNye.SearchExtensions
                 result = result.Containing(terms[i]);
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// Retrieve items where all of the defined terms are contained 
+        /// within any of the defined properties
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Properties containg text to search for</param>
+        public EnumerableStringSearch<T> ContainingAll(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var result = this;
+            for (int i = 0; i < propertiesToSearchFor.Length; i++)
+            {
+                result = result.Containing(propertiesToSearchFor[i]);
+            }
             return result;
         }
 
