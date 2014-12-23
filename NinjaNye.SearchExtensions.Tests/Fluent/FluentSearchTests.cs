@@ -28,6 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             this.testData.Add(new TestData { Name = "efgh", Description = "ijkl", Number = 5 });
             this.testData.Add(new TestData { Name = "UPPER", Description = "CASE", Number = 6 });
             this.testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
+            this.testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
         }
 
         [Test]
@@ -82,19 +83,6 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         }
 
         [Test]
-        public void Search_AllowEndsWithMethod_AllResultsEndWithSearchTerm()
-        {
-            //Arrange
-            
-            //Act
-            var result = testData.Search(x => x.Name).EndsWith("st");
-
-            //Assert
-            Assert.AreEqual(1, result.Count());
-            Assert.IsTrue(result.All(x => x.Name.EndsWith("st")));
-        }
-
-        [Test]
         public void Search_AllowEndsWithAndContainsMethod_AllResultsEndWithSearchTermAndContainSearch()
         {
             //Arrange
@@ -120,20 +108,6 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Assert
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
-        }
-
-        [Test]
-        public void SearchMultiple_ResultEndsWithAcrossTwoProperties_ResultEndsWithTermInEitherProperty()
-        {
-            //Arrange
-            const string searchTerm = "gh";
-            
-            //Act
-            var result = testData.Search(x => x.Name, x => x.Description).EndsWith(searchTerm);
-
-            //Assert
-            Assert.AreEqual(2, result.Count());
-            Assert.IsTrue(result.All(x => x.Name.EndsWith(searchTerm) || x.Description.EndsWith(searchTerm)));
         }
 
         [Test]
@@ -188,19 +162,6 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.Name.StartsWith("ab") || x.Name.StartsWith("ef")));
 
-        }
-
-        [Test]
-        public void Search_EndsWithMultipleTerms_SearchAgainstMultipleTerms()
-        {
-            //Arrange
-
-            //Act
-            var result = testData.Search(x => x.Name).EndsWith("cd", "gh");
-
-            //Assert
-            Assert.AreEqual(2, result.Count());
-            Assert.IsTrue(result.All(x => x.Name.EndsWith("cd") || x.Name.EndsWith("gh")));
         }
 
         [Test]

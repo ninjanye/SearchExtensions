@@ -25,5 +25,12 @@ namespace NinjaNye.SearchExtensions.Helpers
 
             return text.TrimStart()[0].ToString(CultureInfo.InvariantCulture);
         }
+
+        public static string QuickReverse(this string value)
+        {
+            var charArray = value.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
     }
 }

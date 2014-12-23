@@ -115,9 +115,9 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStringSearch<T> ContainingAll(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             var result = this;
-            for (int i = 0; i < propertiesToSearchFor.Length; i++)
+            foreach (var propertyToSearch in propertiesToSearchFor)
             {
-                result = result.Containing(propertiesToSearchFor[i]);
+                result = result.Containing(propertyToSearch);
             }
             return result;
         }
@@ -133,10 +133,27 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(propertyToSearch, terms, this.comparisonType, false);
-                fullExpression = fullExpression == null ? startsWithExpression
-                                                        : Expression.OrElse(fullExpression, startsWithExpression);
+                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, startsWithExpression);
             }
             this.BuildExpression(fullExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties starts 
+        /// with any of the defined properties
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Term or terms to search for</param>
+        public EnumerableStringSearch<T> StartsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToList();
+            Expression completeExpression = null;
+            foreach (var stringProperty in StringProperties)
+            {
+                var startsWithExpression = EnumerableExpressionHelper.BuildStartsWithExpression(stringProperty, propertiesToSearch, this.comparisonType);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
+            }
+            this.BuildExpression(completeExpression);
             return this;
         }
 
@@ -151,10 +168,27 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(propertyToSearch, terms, this.comparisonType, false);
-                fullExpression = fullExpression == null ? endsWithExpression
-                                                        : Expression.OrElse(fullExpression, endsWithExpression);
+                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, endsWithExpression);
             }
             this.BuildExpression(fullExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// ends with any of the defined search terms
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Properties containing terms to search for</param>
+        public EnumerableStringSearch<T> EndsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
+            Expression finalExpression = null;
+            foreach (var stringProperty in StringProperties)
+            {
+                var endsWithExpression = EnumerableExpressionHelper.BuildEndsWithExpression(stringProperty, propertiesToSearch, comparisonType);
+                finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, endsWithExpression);
+            }
+            this.BuildExpression(finalExpression);
             return this;
         }
 
@@ -169,8 +203,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var isEqualExpression = EnumerableExpressionHelper.BuildEqualsExpression(propertyToSearch, terms, this.comparisonType);
-                fullExpression = fullExpression == null ? isEqualExpression
-                                                        : Expression.OrElse(fullExpression, isEqualExpression);
+                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, isEqualExpression);
             }
             this.BuildExpression(fullExpression);
             return this;
