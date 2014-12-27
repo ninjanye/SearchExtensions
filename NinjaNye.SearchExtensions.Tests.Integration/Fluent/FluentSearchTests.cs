@@ -35,6 +35,19 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Test]
+        public void Search_ContainingNoValidSearchTerms_ReturnsAllRecords()
+        {
+            //Arrange
+            int expectedCount = this.context.TestModels.Count();
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).Containing("").ToList();
+
+            //Assert
+            Assert.AreEqual(expectedCount, result.Count);
+        }
+
+        [Test]
         public void Search_ContainsThenStartsWith_OnlyResultsThatContainTextAndStartWithTextAreReturned()
         {
             //Arrange

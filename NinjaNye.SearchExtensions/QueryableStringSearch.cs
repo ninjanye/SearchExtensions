@@ -24,17 +24,7 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "terms");
-
-            if (!terms.Any() || !this.StringProperties.Any())
-            {
-                return null;
-            }
-
             var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
-            if (!validSearchTerms.Any())
-            {
-                return null;
-            }
 
             foreach (var validSearchTerm in validSearchTerms)
             {
@@ -112,13 +102,32 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
-            Expression fullExpression = null;
+            Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
                 var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(propertyToSearch, terms);
-                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, startsWithExpression);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
-            this.BuildExpression(fullExpression);
+            this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// starts with any of the defined terms
+        /// </summary>
+        /// <param name="propertiesToSearchFor">properties defining the terms to search for</param>
+        public QueryableStringSearch<T> StartsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
+            Expression completeExpression = null;
+            foreach (var stringProperty in StringProperties)
+            {
+                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(stringProperty, propertiesToSearch);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
+            }
+
+            this.BuildExpression(completeExpression);
             return this;
         }
 
@@ -129,13 +138,13 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> IsEqual(params string[] terms)
         {
-            Expression fullExpression = null;
+            Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
                 var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, terms);
-                fullExpression = ExpressionHelper.JoinOrExpression(fullExpression, isEqualExpression);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
-            this.BuildExpression(fullExpression);
+            this.BuildExpression(completeExpression);
             return this;
         }
 

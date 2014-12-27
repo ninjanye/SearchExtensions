@@ -15,16 +15,23 @@ namespace NinjaNye.SearchExtensions.Helpers
         /// <summary>
         /// Build a 'contains' expression for a search term against a particular string property
         /// </summary>
-        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression)
+        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> propertyToSearch, ConstantExpression searchTermExpression)
         {
             Ensure.ArgumentNotNull(searchTermExpression, "searchTermExpression");
-            return Expression.Call(stringProperty.Body, ContainsMethod, searchTermExpression);
+            return Expression.Call(propertyToSearch.Body, ContainsMethod, searchTermExpression);
         }
 
+        /// <summary>
+        /// Build a 'contains' expression to search a string property contained within another string property
+        /// </summary>
+        /// <param name="propertyToSearch">Property on which to perform search</param>
+        /// <param name="propertyToSearchFor">Property containing the value to search for</param>
+        /// <returns></returns>
         public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> propertyToSearch, Expression<Func<T, string>> propertyToSearchFor)
         {
             return Expression.Call(propertyToSearch.Body, ContainsMethod, propertyToSearchFor.Body);
         }
+
 
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
@@ -47,6 +54,29 @@ namespace NinjaNye.SearchExtensions.Helpers
         {
             var searchTermExpression = Expression.Constant(searchTerm);
             var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, searchTermExpression);
+            return Expression.Equal(indexOfCallExpresion, ZeroConstantExpression);
+        }
+
+        /// <summary>
+        /// Build an 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            Expression completeExpression = null;
+            foreach (var propertyToSearchFor in propertiesToSearchFor)
+            {
+                var startsWithExpression = BuildStartsWithExpression(stringProperty, propertyToSearchFor);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static BinaryExpression BuildStartsWithExpression<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor)
+        {
+            var indexOfCallExpresion = Expression.Call(stringProperty.Body, IndexOfMethod, propertyToSearchFor.Body);
             return Expression.Equal(indexOfCallExpresion, ZeroConstantExpression);
         }
 

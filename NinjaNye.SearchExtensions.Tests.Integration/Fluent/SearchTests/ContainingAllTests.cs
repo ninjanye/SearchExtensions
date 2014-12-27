@@ -5,21 +5,9 @@ using NUnit.Framework;
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
     [TestFixture]
-    public class ContainingAllTests : IDisposable
+    internal class ContainingAllTests : IDisposable
     {
-        readonly TestContext context = new TestContext();
-
-        [Test]
-        public void SearchContainingAll_NoTermsSupplied_ReturnsAllData()
-        {
-            //Arrange
-
-            //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).ContainingAll();
-
-            //Assert
-            CollectionAssert.AreEqual(this.context.TestModels, result.ToList());
-        }
+        private readonly TestContext context = new TestContext();
 
         [Test]
         public void SearchContainingAll_OneTermSupplied_ReturnsOnlyRecordsContainingSearchTerm()
