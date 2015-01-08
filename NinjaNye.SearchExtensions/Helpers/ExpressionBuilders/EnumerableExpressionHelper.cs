@@ -3,67 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable;
 
-namespace NinjaNye.SearchExtensions.Helpers
+namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 {
     internal static class EnumerableExpressionHelper
     {
-        /// <summary>
-        /// Build a 'contains' expression for a searching a property that 
-        /// contains the value of another string property
-        /// </summary>
-        public static Expression BuildContainsExpression<T>(Expression<Func<T, string>> propertyToSearch, Expression<Func<T, string>> propertyToSearchFor)
-        {
-            var isNotNullExpression = ExpressionHelper.BuildNotNullExpression(propertyToSearch);
-            var searchForIsNotNullExpression = ExpressionHelper.BuildNotNullExpression(propertyToSearchFor);
-            var containsExpression = Expression.Call(propertyToSearch.Body, ExpressionMethods.StringContainsMethod, propertyToSearchFor.Body);
-            var fullNotNullExpression = Expression.AndAlso(isNotNullExpression, searchForIsNotNullExpression);
-            return Expression.AndAlso(fullNotNullExpression, containsExpression);
-        }
-
-        /// <summary>
-        /// Build a 'indexof() >= 0' expression for a search term against a particular string property
-        /// </summary>
-        public static BinaryExpression BuildIndexOfGreaterThanMinusOneExpression<T>(Expression<Func<T, string>> stringProperty, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
-        {
-            if (nullCheck)
-            {
-                var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
-                var nullCheckExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression, stringComparisonExpression);
-                return Expression.GreaterThanOrEqual(nullCheckExpresion, ExpressionMethods.ZeroConstantExpression);                
-            }
-
-            var indexOfCallExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethod, searchTermExpression, stringComparisonExpression);
-            return Expression.GreaterThanOrEqual(indexOfCallExpresion, ExpressionMethods.ZeroConstantExpression);
-        }
-
-        /// <summary>
-        /// Build an 'soundexCodes.Contains(soundex(value))' expression for a search term against a particular string property
-        /// </summary>
-        public static Expression BuildSoundsLikeExpression<T>(Expression<Func<T, string>> stringProperty, IList<string> soundexCodes)
-        {
-            var soundexCallExpresion = Expression.Call(ExpressionMethods.SoundexMethod, stringProperty.Body);
-            var soundexCodesExpression = Expression.Constant(soundexCodes);
-            var containsExpression = Expression.Call(soundexCodesExpression, ExpressionMethods.StringListContainsMethod, soundexCallExpresion);
-            var trueExpression = Expression.Constant(true);
-            return Expression.Equal(containsExpression, trueExpression);
-        }
-
-        /// <summary>
-        /// Build an 'soundexCodes.Contains(reverseSoundex(value))' expression for a search term against a particular string property
-        /// </summary>
-        public static Expression BuildReverseSoundexLikeExpression<T>(Expression<Func<T, string>> stringProperty, IList<string> soundexCodes)
-        {
-            var soundexCallExpresion = Expression.Call(ExpressionMethods.ReverseSoundexMethod, stringProperty.Body);
-            var soundexCodesExpression = Expression.Constant(soundexCodes);
-            var containsExpression = Expression.Call(soundexCodesExpression, ExpressionMethods.StringListContainsMethod, soundexCallExpresion);
-            var trueExpression = Expression.Constant(true);
-            return Expression.Equal(containsExpression, trueExpression);
-        }
-
-
         /// <summary>
         /// Constructs a ranked result of type T
         /// </summary>

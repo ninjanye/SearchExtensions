@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 
-namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable
+namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 {
     internal static class EndsWithExpressionBuilder
     {
-        private static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
-
         /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
+        /// Build an 'EndsWith' expression for a collection of search terms against a particular string property
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, StringComparison comparisonType, bool nullCheck = true)
         {
@@ -26,17 +23,17 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable
         }
 
         /// <summary>
-        /// Build an 'EndsWith([searchTerm])' expression for a search term against a particular string property
+        /// Build an 'EndsWith' expression for a search term against a particular string property
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression)
         {
             var searchTermExpression = Expression.Constant(searchTerm);
-            var endsWithExpresion = Expression.Call(stringProperty.Body, EndsWithMethod, searchTermExpression, stringComparisonExpression);
+            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, searchTermExpression, stringComparisonExpression);
             return Expression.IsTrue(endsWithExpresion);
         }
 
         /// <summary>
-        /// Build a 'indexof() == 0' expression for a search term against a particular string property
+        /// Build an 'EndsWith' expression for a collection of properties against a particular string property
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>>[] propertiesToSearchFor, StringComparison comparisonType, bool nullCheck = true)
         {
@@ -52,11 +49,11 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable
         }
 
         /// <summary>
-        /// Build an 'EndsWith([searchTerm])' expression for a search term against a particular string property
+        /// Build an 'EndsWith' expression for a string property against multiple properties
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
-            var endsWithExpresion = Expression.Call(stringProperty.Body, EndsWithMethod, propertyToSearchFor.Body, stringComparisonExpression);
+            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, propertyToSearchFor.Body, stringComparisonExpression);
             Expression finalExpression = null;
             if (nullCheck)
             {
@@ -69,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable
         }
 
         /// <summary>
-        /// Build an 'EndsWith([property])' expression comparing multiple string properties against other string properties
+        /// Build an 'EndsWith' expression comparing multiple string properties against other string properties
         /// </summary>
         public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, Expression<Func<T, string>>[] propertiesToSearchFor, StringComparison stringComparison)
         {

@@ -1,6 +1,5 @@
 using System;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 {

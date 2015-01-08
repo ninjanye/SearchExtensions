@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions
                 foreach (var validSearchTerm in validSearchTerms)
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(validSearchTerm);
-                    Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(propertyToSearch, searchTermExpression);
+                    Expression comparisonExpression = ContainsExpressionBuilder.Queryable.Build(propertyToSearch, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }
@@ -58,7 +58,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var searchTermProperty = AlignParameter(terms[0]);
-                Expression comparisonExpression = DbExpressionHelper.BuildContainsExpression(propertyToSearch, searchTermProperty);
+                Expression comparisonExpression = ContainsExpressionBuilder.Queryable.Build(propertyToSearch, searchTermProperty);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, comparisonExpression);
             }
             this.BuildExpression(finalExpression);
@@ -106,7 +106,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
-                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(propertyToSearch, terms);
+                var startsWithExpression = StartsWithExpressionBuilder.Queryable.Build(propertyToSearch, terms);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
             this.BuildExpression(completeExpression);
@@ -124,7 +124,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var stringProperty in StringProperties)
             {
-                var startsWithExpression = DbExpressionHelper.BuildStartsWithExpression(stringProperty, propertiesToSearch);
+                var startsWithExpression = StartsWithExpressionBuilder.Queryable.Build(stringProperty, propertiesToSearch);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
 
@@ -142,7 +142,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
-                var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, terms);
+                var isEqualExpression = EqualsExpressionBuilder.Queryable.Build(propertyToSearch, terms);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
             this.BuildExpression(completeExpression);
@@ -160,7 +160,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var alignedProperties = propertiesToSearchFor.Select(AlignParameter).ToArray();
-                var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, alignedProperties);
+                var isEqualExpression = EqualsExpressionBuilder.Queryable.Build(propertyToSearch, alignedProperties);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions
@@ -27,7 +28,7 @@ namespace NinjaNye.SearchExtensions
             var soundexCodes = terms.Select(t => t.ToSoundex()).ToList();
             foreach (var propertyToSearch in StringProperties)
             {
-                var soundsLikeExpression = EnumerableExpressionHelper.BuildSoundsLikeExpression(propertyToSearch, soundexCodes);
+                var soundsLikeExpression = SoundexExpressionBuilder.BuildSoundsLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                                         : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
@@ -48,7 +49,7 @@ namespace NinjaNye.SearchExtensions
             var soundexCodes = terms.Select(t => t.ToReverseSoundex()).ToList();
             foreach (var propertyToSearch in StringProperties)
             {
-                var soundsLikeExpression = EnumerableExpressionHelper.BuildReverseSoundexLikeExpression(propertyToSearch, soundexCodes);
+                var soundsLikeExpression = SoundexExpressionBuilder.BuildReverseSoundexLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                                         : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
