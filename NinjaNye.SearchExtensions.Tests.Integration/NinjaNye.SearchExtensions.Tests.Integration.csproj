@@ -55,6 +55,7 @@
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
     <Compile Include="Fluent\SearchTests\ContainingAllTests.cs" />
+    <Compile Include="Fluent\SearchTests\IsEqualTests.cs" />
     <Compile Include="Fluent\SearchTests\StartsWithTests.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.cs" />
     <Compile Include="Migrations\201403041552067_InitialMigration.Designer.cs">

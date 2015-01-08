@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions

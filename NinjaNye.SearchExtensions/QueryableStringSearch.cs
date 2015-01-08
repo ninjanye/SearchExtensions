@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions
@@ -144,6 +145,25 @@ namespace NinjaNye.SearchExtensions
                 var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, terms);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
+            this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined search properties 
+        /// are equal to any of the properties supplied
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Properties to match against</param>
+        public QueryableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            Expression completeExpression = null;
+            foreach (var propertyToSearch in StringProperties)
+            {
+                var alignedProperties = propertiesToSearchFor.Select(AlignParameter).ToArray();
+                var isEqualExpression = DbExpressionHelper.BuildEqualsExpression(propertyToSearch, alignedProperties);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+
             this.BuildExpression(completeExpression);
             return this;
         }

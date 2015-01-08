@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions.Helpers
@@ -81,7 +82,7 @@ namespace NinjaNye.SearchExtensions.Helpers
         }
 
         /// <summary>
-        /// Build a 'equals' expression for a search term against a particular string property
+        /// Build an 'equals' expression for a search term against a particular string property
         /// </summary>
         public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms)
         {
@@ -92,6 +93,22 @@ namespace NinjaNye.SearchExtensions.Helpers
                 var equalsExpression = Expression.Equal(property.Body, searchTermExpression);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
             }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'equals' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression BuildEqualsExpression<TSource, TType>(Expression<Func<TSource, TType>> source, 
+                                                                       IEnumerable<Expression<Func<TSource, TType>>> comparedTo)
+        {
+            Expression completeExpression = null;
+            foreach (var propertyToSearchFor in comparedTo)
+            {
+                var isEqualExpression = Expression.Equal(source.Body, propertyToSearchFor.Body);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+
             return completeExpression;
         }
     }

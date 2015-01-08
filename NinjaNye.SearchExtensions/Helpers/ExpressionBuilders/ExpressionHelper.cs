@@ -1,12 +1,11 @@
 using System;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.Enumerable;
 
-namespace NinjaNye.SearchExtensions.Helpers
+namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 {
     internal static class ExpressionHelper
     {
-        static readonly ConstantExpression NullExpression = Expression.Constant(null);
-
         /// <summary>
         /// Join two expressions using the add operation
         /// </summary>
@@ -60,7 +59,7 @@ namespace NinjaNye.SearchExtensions.Helpers
         /// </summary>
         public static Expression BuildNotNullExpression<T, TType>(Expression<Func<T, TType>> property)
         {
-            return Expression.NotEqual(property.Body, NullExpression);
+            return Expression.NotEqual(property.Body, ExpressionMethods.NullExpression);
         }
     }
 }
