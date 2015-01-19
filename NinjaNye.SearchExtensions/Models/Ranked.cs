@@ -1,4 +1,4 @@
-﻿namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Models
 {
     internal class Ranked<T> : IRanked<T>
     {

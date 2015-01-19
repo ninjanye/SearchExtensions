@@ -1,4 +1,4 @@
-﻿namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Levenshtein
 {
     public interface ILevenshteinDistance<out T>
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NinjaNye.SearchExtensions.Tests
 {
@@ -18,6 +19,7 @@ namespace NinjaNye.SearchExtensions.Tests
                 string randomWord = this.BuildRandomWord(minSize, maxSize);
                 result.Add(randomWord);
             }
+            Console.WriteLine("Built words: {0}", wordCount);
             return result;
         }
 

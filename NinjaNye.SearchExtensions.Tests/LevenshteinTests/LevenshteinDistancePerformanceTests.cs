@@ -18,7 +18,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
         {
             //Arrange
             var words = this.BuildWords(1000000, 7, 7);
-            string randomWord = this.BuildRandomWord(7,7);
+            var randomWord = this.BuildRandomWord(7,7);
             var stopwatch = new Stopwatch();
             //Act
             stopwatch.Start();

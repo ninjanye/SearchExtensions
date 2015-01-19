@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
+namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressionBuilder
 {
-    internal static class EndsWithExpressionBuilder
+    internal static class EnumerableEndsWithExpressionBuilder
     {
         /// <summary>
         /// Build an 'EndsWith' expression for a collection of search terms against a particular string property

@@ -4,11 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpressionBuilder;
+using NinjaNye.SearchExtensions.Models;
 using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class QueryableStringSearch<T> : QueryableStringSearchBase<T>
+    public sealed class QueryableStringSearch<T> : QueryableStringSearchBase<T>
     {
         private readonly IList<string> containingSearchTerms = new List<string>();
 
@@ -38,7 +42,7 @@ namespace NinjaNye.SearchExtensions
                 foreach (var validSearchTerm in validSearchTerms)
                 {
                     ConstantExpression searchTermExpression = Expression.Constant(validSearchTerm);
-                    Expression comparisonExpression = ContainsExpressionBuilder.Queryable.Build(propertyToSearch, searchTermExpression);
+                    Expression comparisonExpression =  QueryableContainsExpressionBuilder.Build(propertyToSearch, searchTermExpression);
                     orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
                 }
             }
@@ -58,7 +62,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var searchTermProperty = AlignParameter(terms[0]);
-                Expression comparisonExpression = ContainsExpressionBuilder.Queryable.Build(propertyToSearch, searchTermProperty);
+                Expression comparisonExpression = QueryableContainsExpressionBuilder.Build(propertyToSearch, searchTermProperty);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, comparisonExpression);
             }
             this.BuildExpression(finalExpression);
@@ -106,7 +110,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
-                var startsWithExpression = StartsWithExpressionBuilder.Queryable.Build(propertyToSearch, terms);
+                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertyToSearch, terms);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
             this.BuildExpression(completeExpression);
@@ -124,7 +128,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var stringProperty in StringProperties)
             {
-                var startsWithExpression = StartsWithExpressionBuilder.Queryable.Build(stringProperty, propertiesToSearch);
+                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(stringProperty, propertiesToSearch);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
 
@@ -142,7 +146,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var propertyToSearch in StringProperties)
             {
-                var isEqualExpression = EqualsExpressionBuilder.Queryable.Build(propertyToSearch, terms);
+                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, terms);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
             this.BuildExpression(completeExpression);
@@ -160,7 +164,7 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in StringProperties)
             {
                 var alignedProperties = propertiesToSearchFor.Select(AlignParameter).ToArray();
-                var isEqualExpression = EqualsExpressionBuilder.Queryable.Build(propertyToSearch, alignedProperties);
+                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, alignedProperties);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
 
@@ -193,12 +197,9 @@ namespace NinjaNye.SearchExtensions
         public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;
-            ConstantExpression emptyStringExpression = Expression.Constant("");
             foreach (var propertyToSearch in StringProperties)
             {
-                var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, emptyStringExpression);
-                var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
-
+                var nullSafeExpression = this.BuildNullSafeExpression(propertyToSearch);
                 for (int j = 0; j < this.containingSearchTerms.Count; j++)
                 {
                     var searchTerm = this.containingSearchTerms[j];
@@ -210,6 +211,13 @@ namespace NinjaNye.SearchExtensions
             var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, this.FirstParameter);
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, this.FirstParameter);
             return this.Select(selectExpression);
+        }
+
+        private Expression<Func<T, string>> BuildNullSafeExpression(Expression<Func<T, string>> propertyToSearch)
+        {
+            var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, ExpressionMethods.EmptyStringExpression);
+            var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
+            return nullSafeExpression;
         }
     }
 }

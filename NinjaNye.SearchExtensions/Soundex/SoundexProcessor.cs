@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace NinjaNye.SearchExtensions.Soundex
 {
@@ -20,15 +21,14 @@ namespace NinjaNye.SearchExtensions.Soundex
                 return string.Empty;
             }
 
-            char firstCharacter = value[0];
-            char upperCharacter = char.ToUpper(firstCharacter);
+            char upperCharacter = char.ToUpper(value[0]);
             var sb = new StringBuilder(4);
             sb.Append(upperCharacter);
-            string previousSoundex = GetSoundexValue(firstCharacter);
+            string previousSoundex = upperCharacter.GetSoundex();
             for (int i = 1; i < value.Length; i++)
             {
                 var character = value[i];
-                string soundex = GetSoundexValue(character);
+                string soundex = character.GetSoundex();
                 if (!soundex.Equals(previousSoundex))
                 {
                     sb.Append(soundex);
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions.Soundex
                         return sb.ToString();
                     }
 
-                    if (!IsHOrW(character))
+                    if (!character.IsHOrW())
                     {
                         previousSoundex = soundex;
                     }
@@ -62,15 +62,14 @@ namespace NinjaNye.SearchExtensions.Soundex
                 return string.Empty;
             }
 
-            char lastCharacter = value[value.Length-1];
-            char upperCharacter = char.ToUpper(lastCharacter);
+            char upperCharacter = char.ToUpper(value.Last());
             var sb = new StringBuilder(4);
             sb.Append(upperCharacter);
-            string previousSoundex = GetSoundexValue(lastCharacter);
+            string previousSoundex = upperCharacter.GetSoundex();
             for (int i = value.Length - 2; i >= 0; i--)
             {
                 char character = value[i];
-                string soundex = GetSoundexValue(character);
+                string soundex = character.GetSoundex();
                 if (!soundex.Equals(previousSoundex))
                 {
                     sb.Append(soundex);
@@ -90,36 +89,20 @@ namespace NinjaNye.SearchExtensions.Soundex
             return sb.ToString();
         }
 
-        private static bool IsHOrW(char character)
+        private static bool IsHOrW(this char character)
         {
             return character.Equals('h') || character.Equals('w')
                    || character.Equals('H') || character.Equals('W');
         }
 
-        private static string GetSoundexValue(char character)
+        private static string GetSoundex(this char character)
         {
-            if (char.IsUpper(character))
-            {
-                switch (character)
-                {
-                    case 'B': case 'F': case 'P': case 'V':
-                        return "1";
-                    case 'C': case 'G': case 'J': case 'K':
-                    case 'Q': case 'S': case 'X': case 'Z':
-                        return "2";
-                    case 'D': case 'T':
-                        return "3";
-                    case 'L':
-                        return "4";
-                    case 'M': case 'N':
-                        return "5";
-                    case 'R': 
-                        return "6";
-                    default:
-                        return string.Empty;
-                }
-            }
+            return char.IsUpper(character) ? GetSoundexValueForUpper(character) 
+                                           : GetSoundexValueForLower(character);
+        }
 
+        private static string GetSoundexValueForLower(char character)
+        {
             switch (character)
             {
                 case 'b': case 'f': case 'p': case 'v':
@@ -140,7 +123,29 @@ namespace NinjaNye.SearchExtensions.Soundex
             }
         }
 
-        private static void ValidateLength(StringBuilder stringBuilder)
+        private static string GetSoundexValueForUpper(char character)
+        {
+            switch (character)
+            {
+                case 'B': case 'F': case 'P': case 'V':
+                    return "1";
+                case 'C': case 'G': case 'J': case 'K':
+                case 'Q': case 'S': case 'X': case 'Z':
+                    return "2";
+                case 'D': case 'T':
+                    return "3";
+                case 'L':
+                    return "4";
+                case 'M': case 'N':
+                    return "5";
+                case 'R':
+                    return "6";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private static void ValidateLength(this StringBuilder stringBuilder)
         {
             int soundexLength = stringBuilder.Length;
             if (soundexLength < maxSoundexLength)

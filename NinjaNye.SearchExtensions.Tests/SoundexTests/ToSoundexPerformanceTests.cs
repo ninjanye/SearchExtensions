@@ -43,9 +43,9 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             var result = words.Search(x => x).Soundex("test").ToList();
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
-            Console.WriteLine("Results retrieved: {0}", result.Count); 
+            Console.WriteLine("Results retrieved: {0}", result.Count);
             //Assert
-            Assert.True(stopwatch.Elapsed.Milliseconds < 1000);
+            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count);
             //Assert
-            Assert.True(stopwatch.Elapsed.Milliseconds < 1000);
+            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count);
             //Assert
-            Assert.True(stopwatch.Elapsed.Milliseconds < 1000);
+            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
     }
 }

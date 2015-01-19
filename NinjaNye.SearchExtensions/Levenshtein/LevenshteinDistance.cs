@@ -1,4 +1,4 @@
-﻿namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Levenshtein
 {
     internal class LevenshteinDistance<T> : ILevenshteinDistance<T>
     {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using NinjaNye.SearchExtensions.Levenshtein;
+using NinjaNye.SearchExtensions.Models;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 {

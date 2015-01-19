@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions.Visitors
 {
-    internal class SwapExpressionVisitor : ExpressionVisitor
+    internal sealed class SwapExpressionVisitor : ExpressionVisitor
     {
         private readonly Expression from, to;
         private SwapExpressionVisitor(Expression from, Expression to)

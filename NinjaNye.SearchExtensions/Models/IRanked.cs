@@ -1,4 +1,4 @@
-﻿namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Models
 {
     public interface IRanked<out T>
     {

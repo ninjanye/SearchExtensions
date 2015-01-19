@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
@@ -152,7 +153,21 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == Levenshtein.LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+        }
+
+        [Test]
+        public void Levenshtein_GetLevenshteinDistanceAgainstMultipleDefinedProperties_DistanceIsLevenshteinDistance()
+        {
+            //Arrange
+
+            //Act
+            var result = testData.LevenshteinDistanceOf(x => x.Name)
+                                 .ComparedTo(x => x.Description)
+                                 .ToList();
+
+            //Assert
+            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
         }
     }
 }
