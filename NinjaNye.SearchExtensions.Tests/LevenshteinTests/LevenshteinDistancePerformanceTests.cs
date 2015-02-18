@@ -6,19 +6,20 @@ using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {
+#if DEBUG
+    // Performance test will always fail in debug mode
+    [Ignore]
+#endif
     [TestFixture]
     public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
     {
-        #if DEBUG
-        // Performance test will always fail in debug mode
-        [Ignore]
-    	#endif
-        [Test]
-        public void ToLevenshteinDistance_CompareOneMillionStringsOfLength7_ExecutesInLessThanOneSecond()
+        [TestCase(6)]
+        [TestCase(7)]
+        public void ToLevenshteinDistance_CompareOneMillionStringsOfLengthX_ExecutesInLessThanOneSecond(int length)
         {
             //Arrange
-            var words = this.BuildWords(1000000, 7, 7);
-            var randomWord = this.BuildRandomWord(7,7);
+            var words = this.BuildWords(1000000, length, length);
+            var randomWord = this.BuildRandomWord(length,length);
             var stopwatch = new Stopwatch();
             //Act
             stopwatch.Start();
