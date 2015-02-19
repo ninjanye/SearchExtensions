@@ -6,22 +6,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
 {
     internal static class EnumerableEqualsExpressionBuilder
     {
-        /// <summary>
-        /// Build an 'equals' expression for a search term against a particular string property
-        /// </summary>
-        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms, StringComparison comparisonType)
-        {
-            var comparisonTypeExpression = Expression.Constant(comparisonType);
-            Expression completeExpression = null;
-            foreach (var term in terms)
-            {
-                var searchTermExpression = Expression.Constant(term);
-                var equalsExpression = Expression.Call(property.Body, ExpressionMethods.EqualsMethod, searchTermExpression, comparisonTypeExpression);
-                completeExpression = completeExpression == null ? equalsExpression
-                                         : ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
-            }
-            return completeExpression;
-        }
 
         /// <summary>
         /// Build an 'equals' expression for a search term against a particular string property
@@ -38,16 +22,48 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
         }
 
         /// <summary>
-        /// Build an 'equals' expression for one string property against another string property
+        /// Build an 'equals' expression for a search term against a particular string property
         /// </summary>
-        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> propertyToSearch, IEnumerable<Expression<Func<TSource, TType>>> propertiesToSearchFor, StringComparison comparisonType)
+        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms, StringComparison comparisonType)
+        {
+            var comparisonTypeExpression = Expression.Constant(comparisonType);
+            Expression completeExpression = null;
+            foreach (var term in terms)
+            {
+                var searchTermExpression = Expression.Constant(term);
+                var equalsExpression = Expression.Call(property.Body, ExpressionMethods.EqualsMethod, searchTermExpression, comparisonTypeExpression);
+                completeExpression = completeExpression == null ? equalsExpression
+                    : ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
+            }
+            return completeExpression;
+        }
+
+
+        /// <summary>
+        /// Build an 'equals' expression for a value against a particular property
+        /// </summary>
+        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType[] values)
         {
             Expression completeExpression = null;
-            Expression comparisonTypeExpression = Expression.Constant(comparisonType);
-            foreach (var propertyToSearchFor in propertiesToSearchFor)
+            foreach (var propertyToSearch in properties)
             {
-                var isEqualExpression = Expression.Call(propertyToSearch.Body, ExpressionMethods.EqualsMethod, propertyToSearchFor.Body, comparisonTypeExpression);
+                var isEqualExpression = Build(propertyToSearch, values);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'equals' expression for a search term against a particular string property
+        /// </summary>
+        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<TType> values)
+        {
+            Expression completeExpression = null;
+            foreach (var value in values)
+            {
+                var valueExpression = Expression.Constant(value);
+                var equalsExpression = Expression.Equal(property.Body, valueExpression);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
             }
             return completeExpression;
         }
@@ -61,6 +77,21 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
             foreach (var propertyToSearch in propertiesToSearch)
             {
                 var isEqualExpression = Build(propertyToSearch, propertiesToSearchFor, comparisonType);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'equals' expression for one string property against another string property
+        /// </summary>
+        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> propertyToSearch, IEnumerable<Expression<Func<TSource, TType>>> propertiesToSearchFor, StringComparison comparisonType)
+        {
+            Expression completeExpression = null;
+            Expression comparisonTypeExpression = Expression.Constant(comparisonType);
+            foreach (var propertyToSearchFor in propertiesToSearchFor)
+            {
+                var isEqualExpression = Expression.Call(propertyToSearch.Body, ExpressionMethods.EqualsMethod, propertyToSearchFor.Body, comparisonTypeExpression);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
             return completeExpression;

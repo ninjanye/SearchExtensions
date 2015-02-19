@@ -6,6 +6,9 @@ using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Tests.SoundexTests
 {
+#if DEBUG
+    [Ignore("Performance tests only to be run in Release mode")]
+#endif
     [TestFixture]
     public class ToSoundexPerformanceTests : BuildStringTestsBase
     {

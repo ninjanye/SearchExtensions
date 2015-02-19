@@ -6,36 +6,27 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public abstract class EnumerableSearchBase<T> : EnumerableSearchBase<T, T>
+    public abstract class EnumerableSearchBase<TSource, TProperty> : SearchBase<IEnumerable<TSource>, TSource, TProperty>, IEnumerable<TSource>
     {
-        protected EnumerableSearchBase(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
-            : base(source, stringProperties)
+        protected EnumerableSearchBase(IEnumerable<TSource> source, Expression<Func<TSource, TProperty>>[] properties)
+            : base(source, properties)
         {
         }
 
-        public override IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<TSource> GetEnumerator()
         {
             if (this.CompleteExpression != null)
             {
-                var finalExpression = Expression.Lambda<Func<T, bool>>(this.CompleteExpression, this.FirstParameter).Compile();
+                var finalExpression = Expression.Lambda<Func<TSource, bool>>(this.CompleteExpression, this.FirstParameter).Compile();
                 this.Source = this.Source.Where(finalExpression);
             }
             return this.Source.GetEnumerator();
         }
-    }
-
-    public abstract class EnumerableSearchBase<TInput, TOutput> : SearchBase<IEnumerable<TInput>, TInput>, IEnumerable<TOutput>
-    {
-        protected EnumerableSearchBase(IEnumerable<TInput> source, Expression<Func<TInput, string>>[] stringProperties)
-            : base(source, stringProperties)
-        {
-        }
-
-        public abstract IEnumerator<TOutput> GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
     }
+
 }

@@ -6,8 +6,22 @@ using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 
 namespace NinjaNye.SearchExtensions
 {
-    public static class FluentSearch
+    public static class FluentStringSearch
     {
+        /// <summary>
+        /// Search an Enumerable list of objects
+        /// </summary>
+        /// <typeparam name="T">Type of object to be searched</typeparam>
+        /// <param name="stringProperties">
+        /// String properties to search. If ommitted, a search 
+        /// on all string properties will be performed
+        /// </param>
+        public static EnumerableStringSearch<T> Search<T>(this IEnumerable<T> source)
+        {
+            var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
+            return new EnumerableStringSearch<T>(source, stringProperties);
+        }
+
         /// <summary>
         /// Search an Enumerable list of objects
         /// </summary>

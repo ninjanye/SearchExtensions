@@ -7,22 +7,22 @@ using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
-    public abstract class SearchBase<TSource, TType> where TSource : IEnumerable<TType>
+    public abstract class SearchBase<TSource, TType, TPropertyType> where TSource : IEnumerable<TType>
     {
         protected TSource Source;
         protected Expression CompleteExpression;
-        protected readonly Expression<Func<TType, string>>[] StringProperties;
+        protected readonly Expression<Func<TType, TPropertyType>>[] Properties;
         protected readonly ParameterExpression FirstParameter;
 
-        protected SearchBase(TSource source, Expression<Func<TType, string>>[] stringProperties)
+        protected SearchBase(TSource source, Expression<Func<TType, TPropertyType>>[] properties)
         {
             this.Source = source;
-            var firstProperty = stringProperties.FirstOrDefault();
+            var firstProperty = properties.FirstOrDefault();
             if (firstProperty != null)
             {
                 this.FirstParameter = firstProperty.Parameters[0];
             }
-            this.StringProperties = stringProperties.Select(AlignParameter).ToArray();
+            this.Properties = properties.Select(AlignParameter).ToArray();
         }
 
         /// <summary>
@@ -41,4 +41,5 @@ namespace NinjaNye.SearchExtensions
             return SwapExpressionVisitor.Swap(lambda, lambda.Parameters.Single(), this.FirstParameter);
         }
     }
+
 }

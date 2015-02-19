@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class QueryableStringSearchBase<T> : SearchBase<IQueryable<T>, T>, IQueryable<T>
+    public class QueryableStringSearchBase<T> : SearchBase<IQueryable<T>, T, string>, IQueryable<T>
     {
         private bool expressionUpdated;
 

@@ -36,12 +36,14 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableIntegerSearch.cs" />
     <Compile Include="EnumerableLevenshteinCompare.cs" />
     <Compile Include="EnumerableLevenshteinSearch.cs" />
     <Compile Include="EnumerableSearchBase.cs" />
     <Compile Include="EnumerableSoundexSearch.cs" />
+    <Compile Include="FluentIntegerSearch.cs" />
     <Compile Include="FluentLevenshteinSearch.cs" />
-    <Compile Include="FluentSearch.cs" />
+    <Compile Include="FluentStringSearch.cs" />
     <Compile Include="EnumerableStringSearch.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\QueryableContainsExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\EnumerableContainsExpressionBuilder.cs" />

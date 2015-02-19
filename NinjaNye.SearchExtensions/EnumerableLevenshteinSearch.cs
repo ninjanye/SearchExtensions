@@ -7,7 +7,7 @@ using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class EnumerableLevenshteinSearch<T> : EnumerableSearchBase<T>
+    public class EnumerableLevenshteinSearch<T> : EnumerableSearchBase<T, string>
     {
         public EnumerableLevenshteinSearch(IEnumerable<T> source, Expression<Func<T, string>> stringProperty)
             : base(source, new[]{stringProperty})
@@ -21,7 +21,7 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(Expression<Func<T, string>> stringProperty)
         {
-            var sourceProperty = this.StringProperties[0];
+            var sourceProperty = this.Properties[0];
             var targetProperty = this.AlignParameter(stringProperty);
 
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(sourceProperty, targetProperty);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(string term)
         {
-            var stringProperty = this.StringProperties[0];
+            var stringProperty = this.Properties[0];
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(stringProperty, term);
             var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, this.FirstParameter);
             var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, this.FirstParameter).Compile();

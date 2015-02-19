@@ -8,7 +8,7 @@ using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions
 {
-    internal class EnumerableSoundexSearch<T> : EnumerableSearchBase<T>
+    internal class EnumerableSoundexSearch<T> : EnumerableSearchBase<T, string>
     {
         public EnumerableSoundexSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToSoundex()).ToList();
-            foreach (var propertyToSearch in StringProperties)
+            foreach (var propertyToSearch in this.Properties)
             {
                 var soundsLikeExpression = SoundexExpressionBuilder.BuildSoundsLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToReverseSoundex()).ToList();
-            foreach (var propertyToSearch in StringProperties)
+            foreach (var propertyToSearch in this.Properties)
             {
                 var soundsLikeExpression = SoundexExpressionBuilder.BuildReverseSoundexLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
