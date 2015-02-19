@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
         }
 
         /// <summary>
-        /// Build a 'greater than' expression for a value against supplied property
+        /// Build a 'greater than' expression for a value against supplied properties
         /// </summary>
         public static Expression GreaterThanExpression<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType value)
         {
@@ -45,6 +45,21 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
             foreach (var property in properties)
             {
                 var isEqualExpression = Expression.GreaterThan(property.Body, valueExpression);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build a 'less than' expression for a value against supplied properties
+        /// </summary>
+        public static Expression LessThanExpression<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType value)
+        {
+            Expression completeExpression = null;
+            var valueExpression = Expression.Constant(value);
+            foreach (var property in properties)
+            {
+                var isEqualExpression = Expression.LessThan(property.Body, valueExpression);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
             return completeExpression;
