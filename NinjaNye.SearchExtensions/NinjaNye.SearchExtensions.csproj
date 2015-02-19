@@ -50,6 +50,7 @@
     <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\EnumerableEndsWithExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EnumerableExpressionHelper.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\EnumerableEqualsExpressionBuilder.cs" />
+    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\ExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\QueryableEqualsExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ExpressionHelper.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ExpressionMethods.cs" />

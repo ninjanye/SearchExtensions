@@ -15,8 +15,15 @@ namespace NinjaNye.SearchExtensions
 
         public EnumerableIntegerSearch<T> IsEqual(params int[] values)
         {
-            Expression equalsExpression = EnumerableEqualsExpressionBuilder.Build(Properties, values);
+            var equalsExpression = ExpressionBuilder.EqualsExpression(Properties, values);
             this.BuildExpression(equalsExpression);
+            return this;
+        }
+
+        public EnumerableIntegerSearch<T> GreaterThan(int value)
+        {
+            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(Properties, value);
+            BuildExpression(greaterThanExpression);
             return this;
         } 
     }

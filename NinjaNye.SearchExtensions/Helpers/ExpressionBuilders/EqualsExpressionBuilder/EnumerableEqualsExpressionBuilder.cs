@@ -38,36 +38,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
             return completeExpression;
         }
 
-
-        /// <summary>
-        /// Build an 'equals' expression for a value against a particular property
-        /// </summary>
-        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType[] values)
-        {
-            Expression completeExpression = null;
-            foreach (var propertyToSearch in properties)
-            {
-                var isEqualExpression = Build(propertyToSearch, values);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
-            }
-            return completeExpression;
-        }
-
-        /// <summary>
-        /// Build an 'equals' expression for a search term against a particular string property
-        /// </summary>
-        private static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<TType> values)
-        {
-            Expression completeExpression = null;
-            foreach (var value in values)
-            {
-                var valueExpression = Expression.Constant(value);
-                var equalsExpression = Expression.Equal(property.Body, valueExpression);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
-            }
-            return completeExpression;
-        }
-
         /// <summary>
         /// Build an 'equals' expression for one string property against another string property
         /// </summary>

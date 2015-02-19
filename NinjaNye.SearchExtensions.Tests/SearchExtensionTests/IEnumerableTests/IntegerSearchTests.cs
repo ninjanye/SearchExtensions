@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void Search_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
+        public void IsEqual_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
         {
             //Arrange
             
@@ -56,7 +56,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void Search_SearchTwoValues_ReturnsMatchingDataOnly()
+        public void IsEqual_SearchTwoValues_ReturnsMatchingDataOnly()
         {
             //Arrange
             
@@ -69,7 +69,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void Search_SearchTwoProperties_ReturnsMatchingDataOnly()
+        public void IsEqual_SearchTwoProperties_ReturnsMatchingDataOnly()
         {
             //Arrange
             
@@ -79,6 +79,33 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             ////Assert
             Assert.IsTrue(result.Any());
             Assert.IsTrue(result.All(x => x.Number == 5 || x.Age == 5));
-        }        
+        }
+
+        [Test]
+        public void GreaterThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+        {
+            //Arrange
+
+            //Act
+            var result = this.testData.Search(x => x.Number).GreaterThan(2);
+
+            ////Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => x.Number > 2));
+        }
+
+        [Test]
+        public void GreaterThan_SearchTwoProperties_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+        {
+            //Arrange
+
+            //Act
+            var result = this.testData.Search(x => x.Number, x => x.Age).GreaterThan(2);
+
+            ////Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => x.Number > 2 || x.Age > 2));
+        }
+
     }
 }
