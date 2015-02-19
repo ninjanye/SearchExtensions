@@ -36,8 +36,15 @@ namespace NinjaNye.SearchExtensions
 
         public EnumerableIntegerSearch<T> LessThanOrEqual(int value)
         {
-            var greaterThanExpression = ExpressionBuilder.LessThanOrEqualExpression(Properties, value);
-            BuildExpression(greaterThanExpression);
+            var lessThanOrEqualExpression = ExpressionBuilder.LessThanOrEqualExpression(Properties, value);
+            BuildExpression(lessThanOrEqualExpression);
+            return this;
+        }
+
+        public EnumerableIntegerSearch<T> GreaterThanOrEqual(int value)
+        {
+            var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(Properties, value);
+            BuildExpression(greaterThanOrEqualExpression);
             return this;
         } 
     }

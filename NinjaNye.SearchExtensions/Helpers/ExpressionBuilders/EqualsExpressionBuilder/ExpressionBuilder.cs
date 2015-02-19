@@ -44,6 +44,14 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
             return DynamicExpression(properties, value, Expression.LessThanOrEqual);
         }
 
+        /// <summary>
+        /// Build a 'less than' expression for a value against supplied properties
+        /// </summary>
+        public static Expression GreaterThanOrEqualExpression<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType value)
+        {
+            return DynamicExpression(properties, value, Expression.GreaterThanOrEqual);
+        }
+
         private static Expression DynamicExpression<TSource, TType>(Expression<Func<TSource, TType>>[] properties, TType value, Func<Expression, ConstantExpression, Expression> buildComparisonExpression)
         {
             Expression completeExpression = null;
