@@ -185,5 +185,35 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.IsTrue(result.All(x => x.Number >= 2 || x.Age >= 2));
         }
 
+        [Test]
+        public void GreaterThanOrLessThan_SearchOnePropertyBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = this.testData.Search(x => x.Number)
+                                      .GreaterThan(2)
+                                      .LessThan(4);
+
+            //Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => x.Number > 2 && x.Number < 4));
+        }
+
+        [Test]
+        public void Between_SearchTwoPropertiesBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+        {
+            //Arrange
+            
+            //Act
+            var result = this.testData.Search(x => x.Number, x => x.Age)
+                                      .Between(2, 6);
+
+            //Assert
+            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.All(x => (x.Number > 2 && x.Number < 6)
+                                       || (x.Age > 2 && x.Age < 6)));
+        }
+
     }
 }

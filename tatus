@@ -1,0 +1,612 @@
+[33mcommit de0c88adb44be378d7f086729367b8e4f2977c6f[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 19 22:23:08 2015 +0000
+
+    Added Enumerable GreaterThanOrEqual support for integers
+
+[33mcommit b3b5e6268b5e501a29de5f9733d5f27d40644dad[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 19 22:11:34 2015 +0000
+
+    Add Enumerable LessThanOrEqual search support
+
+[33mcommit fb2154f1b3ca3ffb4a19fd99df21cdd3386a3919[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 19 21:44:52 2015 +0000
+
+    Add Enumerable LessThan support for integers
+
+[33mcommit 4825375e1b1b0a724e25828692c3cf7257270ef9[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 19 21:39:21 2015 +0000
+
+    Enable Enumerable GreaterThan search on integers
+
+[33mcommit 93ae7e6f3418ecdcb224e4509e6f898416f187b2[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 19 21:18:39 2015 +0000
+
+    Refactor code to reduce unecessary base classes and implement Integer
+    Equals search extension
+
+[33mcommit 19fa3895cb9a903a7a222a41ebf02cb69aaf3036[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Feb 18 19:11:22 2015 +0000
+
+    Update performance tests to use TestData attribute
+
+[33mcommit 553c5ee22ab795f632a52c83f85a3b9335c50786[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Jan 20 08:38:08 2015 +0000
+
+    Remove performace file
+
+[33mcommit 7951a1a9e9844982f69920094bb393136c66c506[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Jan 19 08:44:07 2015 +0000
+
+    Refactorings based on NDepend report
+
+[33mcommit f3d1c8194a3a603eeab99074fbee619a35dec69c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 8 23:57:00 2015 +0000
+
+    Update nuget release notes
+
+[33mcommit 2bcad39af29ed00ccf162756daf250482b25c779[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 8 23:51:30 2015 +0000
+
+    Update version number
+
+[33mcommit f0a9357cc346e8ad20fc0583f2da33d7c90c850b[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 8 23:37:06 2015 +0000
+
+    Further refactoring to create expression builders per action
+
+[33mcommit e92ef748939780727a0dc43134016c0dc3b8f111[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 8 22:07:54 2015 +0000
+
+    Add property search support for IsEqual() plus refactoring
+
+[33mcommit 4e805bf5335ea542d347b191f5cd59cc006af793[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Sat Dec 27 21:10:19 2014 +0000
+
+    StartsWith Queryable implementation
+
+[33mcommit 320bc4b05e02e1496faaeebf0b76e98efd6d8364[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Dec 23 08:33:08 2014 +0000
+
+    Allow property search on .StartsWith and .EndsWith enumerable methods
+
+[33mcommit 48d462b5a9939646b5464ca537f9ae45b7141241[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Dec 19 14:07:16 2014 +0000
+
+    Add property search support to IQueryable ContainingAll()
+
+[33mcommit 0b2fc1c65437bab93a3ef9c1d179c2a58309e9d6[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Dec 19 09:31:36 2014 +0000
+
+    Property search support added to ContainingAll enumerable search method
+
+[33mcommit 01cf2edd8d931a3e1097250fc659743b21001772[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Dec 19 09:08:55 2014 +0000
+
+    Remove unused using statements
+
+[33mcommit 41e5dd38b85973218f0783fd6a2bdf2523a93753[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Dec 17 18:42:29 2014 +0000
+
+    Refactor AlignParameter usage
+
+[33mcommit a8661dfc42f87b0b54bb642dff8592247c275737[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Dec 17 18:16:24 2014 +0000
+
+    Refactor code to common SearchBase class and update usages
+
+[33mcommit 5b2391452c1529ed5f6fb5cdf08b81b3e343ecce[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Dec 8 09:45:21 2014 +0000
+
+    Add contains search against properties for enumerable collections
+
+[33mcommit 2e95956efa086daf141186b113c805e56c66f90c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Dec 5 09:09:42 2014 +0000
+
+    Rename SearchString to SearchStringTests
+
+[33mcommit 27215927a5b547f645d933c47ce0fa5283afeace[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Dec 4 23:06:01 2014 +0000
+
+    Remove char contants
+
+[33mcommit 25e5905de7e0c7a1a712532695199d67eafce7f0[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Dec 3 12:31:59 2014 +0000
+
+    Update null check
+
+[33mcommit 47a9d24ae321602ed9b03a70a827217c34db3e0b[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Nov 25 09:32:58 2014 +0000
+
+    update release notes
+
+[33mcommit 8a9aa286735c302cb23ddc9b845460a9455f3ebe[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Nov 25 09:25:47 2014 +0000
+
+    Add containing all feature
+
+[33mcommit 443230efb20752125904ad70a2d4599b91c4853a[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 24 14:10:09 2014 +0000
+
+    UPdate assembly version and release notes
+
+[33mcommit 78aadaa116c15790461f884f587991990e596448[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 24 09:22:07 2014 +0000
+
+    Test Levenshtein Distance against database context
+
+[33mcommit 74068181686d1873e53eaccf47165d5a3ed6afd4[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 24 08:48:56 2014 +0000
+
+    Update test project file to relect changes
+
+[33mcommit 8331c37621e2744c0718a6c4d2ece4cfe1fc0aae[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 24 08:46:48 2014 +0000
+
+    Update return type of Levenshtein Search to interface
+
+[33mcommit 9508686569b09e30828be00da16692fee0184a4d[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 24 08:36:51 2014 +0000
+
+    Integrate Levenshtein Distance into Fluent API
+
+[33mcommit 9868ecf2d72f18b2ca68cc0030f8a526b104545a[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Nov 17 18:16:34 2014 +0000
+
+    Add Levenshtein processor
+
+[33mcommit 4421427b4f9d9cbd74919f7d5e9330d229782483[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Nov 5 13:29:00 2014 +0000
+
+    Integrate ReverseSoundex to Enumerable Extensions
+
+[33mcommit 14f6662b2393a9562e4c3e8feb8e6b760043a6e2[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Nov 5 09:10:30 2014 +0000
+
+    Add Reverse Soundex support
+
+[33mcommit 2426d95fcce55a4581f6e2f676bc9cbfc50f997b[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Oct 27 08:19:20 2014 +0000
+
+    Update version of new package
+
+[33mcommit c8282734978621b6e357a87e29156935510a313b[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Oct 21 14:13:23 2014 +0100
+
+    Update readme
+
+[33mcommit df85f9434493c40fc10f24423c1861d25e1becba[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Oct 17 18:53:15 2014 +0100
+
+    Add SOundex to queryable search
+
+[33mcommit 2be5190f8144230aaac04d794470ceb0eaafb011[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Oct 17 09:19:11 2014 +0100
+
+    Implement American Soundex Search functionality
+
+[33mcommit 7845bcf999c24b381eb3e522114e20e26f1156d3[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Oct 9 10:06:52 2014 +0100
+
+    add more descriptive method summaries
+
+[33mcommit 4e2dcebe485d6cfe7b956cc81d51260e18822f1e[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 8 08:48:23 2014 +0100
+
+    Update assembly version, README.md documentation and nuget information
+
+[33mcommit aff6e49ad785d66a0f4e22350d916366d9c24465[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Oct 6 19:55:27 2014 +0100
+
+    Performance: convert foreach to for loops
+
+[33mcommit c67051824042f9874d3f8fbb53b9f1ace84e0aad[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Oct 6 19:49:22 2014 +0100
+
+    Empty `Search()` call searches all string properties
+    `SearchAll()` now redundant and removed
+
+[33mcommit 216b15e3e1fa81f1b5c90baf0944dbfd3d538acd[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Oct 6 19:26:06 2014 +0100
+
+    Promote fluent API to main namespace
+
+[33mcommit f249d5faac09d6341f662f819dede65e8081ea15[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Mar 21 16:56:02 2014 +0000
+
+    Update README to reflect inclusion of the ranked methods into the fluent api
+
+[33mcommit 5ce26fed8a96dd8b548c1d04ff600319ca225c19[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Mar 21 13:46:15 2014 +0000
+
+    Increment sub version for fluent ranked support
+
+[33mcommit 8c4c4c353e47b851cc8c1527b75c33a6a779b8f8[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Mar 21 13:44:50 2014 +0000
+
+    Fluent ranked implementation
+
+[33mcommit 80c1604434f9444c60428032eb5cdbab250736b2[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 15:37:02 2014 +0000
+
+    Remove endswith iqueryable extension
+
+[33mcommit d82438e1ab734d03a58edb3e23c9aa6dcb8dc7b9[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 13:50:13 2014 +0000
+
+    Update package
+
+[33mcommit a9b588052ee782114b0d2448c27aaba36839009a[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 13:49:41 2014 +0000
+
+    Update readme
+
+[33mcommit bc5338be3aba0439b79a268f2ded0e6dc5247465[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 08:42:57 2014 +0000
+
+    Code tidy
+
+[33mcommit 25752f565b8336dc77c33f574179635c8145219f[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 01:12:16 2014 +0000
+
+    Update version
+
+[33mcommit 60e98558e6c2dc842cc0235f4e65485008050eea[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 01:11:37 2014 +0000
+
+    Update code to use fluent api and flag obsolete methods
+
+[33mcommit ed4bcc1fa03928cf774d083d5d62c4b2c4b39c71[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Mar 5 01:01:48 2014 +0000
+
+    Fluent search api implementation for IQueryable
+
+[33mcommit 390cd15bec77b78720381e1a2e145402d6e8c8ae[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 27 20:09:44 2014 +0000
+
+    Build fluent string search functionality
+
+[33mcommit 4c8d5b7b627cf32fa5b324dc721c19dc27fb3079[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Feb 26 10:38:03 2014 +0000
+
+    Implement FluentApi for string searches on enumerable data
+
+[33mcommit cb94a69002ab08f79f8c64187d263401392b788c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Feb 26 00:13:09 2014 +0000
+
+    Implement fluent string searching
+
+[33mcommit eedd3691030331e02c7d00d4abaafb6b683f93f9[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Feb 24 20:59:59 2014 +0000
+
+    Refactor and update tests
+
+[33mcommit 0805164d1e2e5c60282842cd6cc6e51f2ac53bb1[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Feb 13 13:41:43 2014 +0000
+
+    Add license file
+
+[33mcommit 6642fa4e0d8469d1036c17572c7050d5355c7e61[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Feb 11 09:03:43 2014 +0000
+
+    Move enumerable and queryable ranked search implementations into separate files
+
+[33mcommit 125809253f770c0da92ccab548b1a310c908f604[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Feb 11 08:44:08 2014 +0000
+
+    Move solution file outside of project folder.... :-s
+
+[33mcommit cffdc904a031d2ca4554f1785b04e4b14a2a5087[m
+Merge: 550f1e0 54967b1
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 09:59:41 2014 +0000
+
+    conflict merge of README
+
+[33mcommit 550f1e028b8cfb837c78cde704ce728f6d82c826[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 09:58:37 2014 +0000
+
+    Update README to incorporate new method signatures
+
+[33mcommit fc1062153413b87c0749b0bcfcb38a227594631d[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 09:58:15 2014 +0000
+
+    Update method signatures to conform to new standard
+
+[33mcommit c4859e0e7a81d336394dbf24b0493ad5eab4edb1[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 09:48:25 2014 +0000
+
+    Update nuspec release notes
+
+[33mcommit b49622d9535f31c5d49647d4c4d474c1d3843f2c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 09:43:43 2014 +0000
+
+    Add enumerable tests
+
+[33mcommit f0195cc462d89b25468bd9ec4ce6b4a60d11b424[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 08:57:22 2014 +0000
+
+    Re-order parameters for uniformed interaction
+
+[33mcommit d0b65761850b3b4f6a9b1f9ab76acac4a308b372[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 08:37:01 2014 +0000
+
+    Ad Search test
+
+[33mcommit 0d228dc166f2ae9f86fb3668dc2056b190d32eac[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 08:34:31 2014 +0000
+
+    Update release notes
+
+[33mcommit d9bc60a44c226fddf7cfbef89b884620eae98368[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 08:33:19 2014 +0000
+
+    Add ability to get all string properties of an object
+
+[33mcommit 347d0ee265b051bbe0083e18c6274679c9868589[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Feb 7 08:32:44 2014 +0000
+
+    Add indexof any comparison
+
+[33mcommit 54967b11d267a6556dcc56aefa844ef820a826be[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Jan 22 11:09:19 2014 +0000
+
+    Update futures
+
+[33mcommit 041f1d5968ef043147e9da2507333333ee0f2c1c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Jan 22 10:56:27 2014 +0000
+
+    Update futures
+
+[33mcommit 7781dec3b926b3079165446ea378935e0ff0a3c1[m
+Merge: 111dbea c38aa1c
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Jan 22 09:58:08 2014 +0000
+
+    Merge branch 'master' of github.com:ninjanye/SearchExtensions
+
+[33mcommit 111dbeac44110d22aa1f136dfaa7897cc907fb12[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Jan 22 09:57:34 2014 +0000
+
+    Add performance test and performance console project
+
+[33mcommit c38aa1c487f8ccab97a4f10e917ff34c76a596f6[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Jan 21 18:56:14 2014 +0000
+
+    Enumerable type fix
+
+[33mcommit 79e9811afe0da31d9ac72d7b51a30fecf80975d5[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Jan 21 18:53:49 2014 +0000
+
+    Title update
+
+[33mcommit 2e5efeba1b107be17d033b1a002723c6414f643e[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Jan 21 18:48:19 2014 +0000
+
+    RankedSearch and IEnumerable search edits
+    
+    Add instructions on performing a RankedSearch and performing searches against IEnumerable
+
+[33mcommit de6931a9ebbcaea4254fa51197f37e7068d30f1e[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Jan 21 13:11:50 2014 +0000
+
+    Update release version
+
+[33mcommit 7e6b6c1ba61578f1d79cc39d785a47c01d262b10[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Jan 20 23:38:51 2014 +0000
+
+    Implement IEnumerable ranking including string comparison features
+
+[33mcommit 929753c6c3b4d8a10d5f820a1a2f07dbd6245ead[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Jan 20 21:19:14 2014 +0000
+
+    Refactor code plus support for IEnumerable searches
+
+[33mcommit 14dded61e327b7bd22569f881616d8bece7fc644[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Jan 17 10:26:20 2014 +0000
+
+    Update nuget package version
+
+[33mcommit 35d8542d85ef4679fcdc3d7adba8b4c76b045abb[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Jan 17 09:02:52 2014 +0000
+
+    Refactor methods to avoid duplication
+
+[33mcommit e80132f0961fe5a99fede1ae3ebe7afaac33d691[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Jan 17 08:58:20 2014 +0000
+
+    Add combined support for multiple properties and multiple terms
+
+[33mcommit c830cede7f5614725875035f36a7718759cbe95a[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Jan 17 08:57:36 2014 +0000
+
+    Add multiple search term support
+
+[33mcommit 5f5eedca28dd12a09976a723dc7e969c1a806db1[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Fri Jan 17 08:56:49 2014 +0000
+
+    Add multiple property support
+
+[33mcommit 6469ffd37ac1aa14be0e3225e1962bbb2ca96b1c[m
+Merge: 4569710 e082338
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 16 23:13:24 2014 +0000
+
+    Merge branch 'master' of github.com:ninjanye/SearchExtensions
+
+[33mcommit 456971023d92964ceb38675dde59edb26f437609[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Thu Jan 16 23:12:38 2014 +0000
+
+    Create ranked search result
+
+[33mcommit e082338a97b9bc05d8038075029b089e9bea86f8[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Nov 19 11:11:16 2013 +0000
+
+    Update README.md
+
+[33mcommit 5bb477c5fc6b8f447e8aed2bc95c9cd10c5d02c8[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 30 14:07:23 2013 +0000
+
+    update package release notes
+
+[33mcommit 641da8bc9850f7c1912980b4200a21a8a9dd236c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 30 13:52:56 2013 +0000
+
+    Update README.md
+
+[33mcommit ba93e082daffcbf301ebc7ca8e02bcbca9373ece[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 30 12:52:31 2013 +0000
+
+    Update README.md
+
+[33mcommit 57884d129c09f83c7face8fd167f26b4f88b34ff[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 30 12:49:04 2013 +0000
+
+    Update README.md
+
+[33mcommit 62a527e65752bff654720458f9743e8e293cd224[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Wed Oct 30 12:27:48 2013 +0000
+
+    Update README.md
+
+[33mcommit 79d4efd6132e3debf53e9982c2ad105f0df63699[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Oct 29 09:04:54 2013 +0000
+
+    ignore nuget package
+
+[33mcommit 5cda47b8d3d4da2094187d322b3fd688e89f6920[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Oct 29 09:04:14 2013 +0000
+
+    remove nuget package
+
+[33mcommit 20422168115cc7c5f72dddc7719236f2f31a8683[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Oct 29 09:02:37 2013 +0000
+
+    typo fix
+
+[33mcommit 568ce9285cca6a59f21475044e4063b3f1092a46[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Tue Oct 29 09:00:22 2013 +0000
+
+    Build nuget release plus refactor
+
+[33mcommit 63f8016899809b0103078acc68e84f1ebabcc54d[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Sun Oct 27 14:54:56 2013 +0000
+
+    Reorder methods
+
+[33mcommit 9fb38db6efe00898326ed5bd2d0f54b78a8c730c[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Sun Oct 27 14:51:11 2013 +0000
+
+    Add comments plus ability to search multiple properties for multiple search terms
+
+[33mcommit 4f8f3192be70b5a1913a788a1b7e73ed862cf1f2[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Sun Apr 28 22:52:40 2013 +0100
+
+    Update to include multiple search terms extension method
+
+[33mcommit 6bbf7fc151f3db3869a50c2c27193f80bc1a4f3f[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Apr 1 21:46:18 2013 +0100
+
+    Initial commit
+
+[33mcommit 8e135ac395558b366a03bb082a31fadcfb323066[m
+Author: John Nye <ninjanye@gmail.com>
+Date:   Mon Apr 1 12:29:34 2013 -0700
+
+    Initial commit

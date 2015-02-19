@@ -46,6 +46,13 @@ namespace NinjaNye.SearchExtensions
             var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(Properties, value);
             BuildExpression(greaterThanOrEqualExpression);
             return this;
+        }
+
+        public EnumerableIntegerSearch<T> Between(int minValue, int maxValue)
+        {
+            var betweenExpression = ExpressionBuilder.BetweenExpression(Properties, minValue, maxValue);
+            BuildExpression(betweenExpression);
+            return this;
         } 
     }
 }
