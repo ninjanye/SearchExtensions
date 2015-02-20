@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class EnumerableIntegerSearch<T> : EnumerableSearchBase<T, int>
+    public class QueryableIntegerSearch<T> : QueryableSearchBase<T, int>
     {
-        public EnumerableIntegerSearch(IEnumerable<T> source, Expression<Func<T, int>>[] properties) 
+        public QueryableIntegerSearch(IQueryable<T> source, Expression<Func<T, int>>[] properties)
             : base(source, properties)
         {
         }
@@ -17,9 +17,9 @@ namespace NinjaNye.SearchExtensions
         /// equal any of the supplied values
         /// </summary>
         /// <param name="values">Values to search for</param>
-        public EnumerableIntegerSearch<T> IsEqual(params int[] values)
+        public QueryableIntegerSearch<T> IsEqual(params int[] values)
         {
-            var equalsExpression = ExpressionBuilder.EqualsExpression(Properties, values);
+            var equalsExpression = ExpressionBuilder.EqualsExpression(this.Properties, values);
             this.BuildExpression(equalsExpression);
             return this;
         }
@@ -29,10 +29,10 @@ namespace NinjaNye.SearchExtensions
         /// are greater than any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
-        public EnumerableIntegerSearch<T> GreaterThan(int value)
+        public QueryableIntegerSearch<T> GreaterThan(int value)
         {
-            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(Properties, value);
-            BuildExpression(greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this.Properties, value);
+            this.BuildExpression(greaterThanExpression);
             return this;
         }
 
@@ -41,10 +41,10 @@ namespace NinjaNye.SearchExtensions
         /// are less than any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
-        public EnumerableIntegerSearch<T> LessThan(int value)
+        public QueryableIntegerSearch<T> LessThan(int value)
         {
-            var greaterThanExpression = ExpressionBuilder.LessThanExpression(Properties, value);
-            BuildExpression(greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.LessThanExpression(this.Properties, value);
+            this.BuildExpression(greaterThanExpression);
             return this;
         }
 
@@ -53,10 +53,10 @@ namespace NinjaNye.SearchExtensions
         /// are less than or equal to any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
-        public EnumerableIntegerSearch<T> LessThanOrEqual(int value)
+        public QueryableIntegerSearch<T> LessThanOrEqual(int value)
         {
-            var lessThanOrEqualExpression = ExpressionBuilder.LessThanOrEqualExpression(Properties, value);
-            BuildExpression(lessThanOrEqualExpression);
+            var lessThanOrEqualExpression = ExpressionBuilder.LessThanOrEqualExpression(this.Properties, value);
+            this.BuildExpression(lessThanOrEqualExpression);
             return this;
         }
 
@@ -65,10 +65,10 @@ namespace NinjaNye.SearchExtensions
         /// are greater than or equal to any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
-        public EnumerableIntegerSearch<T> GreaterThanOrEqual(int value)
+        public QueryableIntegerSearch<T> GreaterThanOrEqual(int value)
         {
-            var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(Properties, value);
-            BuildExpression(greaterThanOrEqualExpression);
+            var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this.Properties, value);
+            this.BuildExpression(greaterThanOrEqualExpression);
             return this;
         }
 
@@ -77,11 +77,11 @@ namespace NinjaNye.SearchExtensions
         /// are greater than <paramref name="minValue">minValue</paramref> 
         /// AND less than <paramref name="maxValue">maxValue</paramref> 
         /// </summary>
-        public EnumerableIntegerSearch<T> Between(int minValue, int maxValue)
+        public QueryableIntegerSearch<T> Between(int minValue, int maxValue)
         {
-            var betweenExpression = ExpressionBuilder.BetweenExpression(Properties, minValue, maxValue);
-            BuildExpression(betweenExpression);
+            var betweenExpression = ExpressionBuilder.BetweenExpression(this.Properties, minValue, maxValue);
+            this.BuildExpression(betweenExpression);
             return this;
-        } 
+        }
     }
 }

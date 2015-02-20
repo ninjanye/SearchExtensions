@@ -6,12 +6,13 @@ using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class QueryableStringSearchBase<T> : SearchBase<IQueryable<T>, T, string>, IQueryable<T>
+    public class QueryableSearchBase<TSource, TProperty> 
+        : SearchBase<IQueryable<TSource>, TSource, TProperty>, IQueryable<TSource>
     {
         private bool expressionUpdated;
 
-        protected QueryableStringSearchBase(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
-            : base(source, stringProperties)
+        protected QueryableSearchBase(IQueryable<TSource> source, Expression<Func<TSource, TProperty>>[] properties)
+            : base(source, properties)
         {
             this.ElementType = source.ElementType;
             this.Provider = source.Provider;
@@ -43,11 +44,11 @@ namespace NinjaNye.SearchExtensions
             }
 
             this.expressionUpdated = true;
-            var finalExpression = Expression.Lambda<Func<T, bool>>(this.CompleteExpression, this.FirstParameter);
+            var finalExpression = Expression.Lambda<Func<TSource, bool>>(this.CompleteExpression, this.FirstParameter);
             this.Source = this.Source.Where(finalExpression);
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TSource> GetEnumerator()
         {
             this.UpdateSource();
             return this.Source.GetEnumerator();

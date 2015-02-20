@@ -54,6 +54,7 @@
     <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\IsEqualTests.cs" />
     <Compile Include="Fluent\SearchTests\ContainingAllTests.cs" />
     <Compile Include="Fluent\SearchTests\IsEqualTests.cs" />
     <Compile Include="Fluent\SearchTests\StartsWithTests.cs" />
@@ -64,6 +65,10 @@
     <Compile Include="Migrations\201412100830076_AddStringThree.cs" />
     <Compile Include="Migrations\201412100830076_AddStringThree.Designer.cs">
       <DependentUpon>201412100830076_AddStringThree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502200834387_AddIntegerProperties.cs" />
+    <Compile Include="Migrations\201502200834387_AddIntegerProperties.Designer.cs">
+      <DependentUpon>201502200834387_AddIntegerProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TestModel.cs" />
@@ -80,6 +85,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201412100830076_AddStringThree.resx">
       <DependentUpon>201412100830076_AddStringThree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502200834387_AddIntegerProperties.resx">
+      <DependentUpon>201502200834387_AddIntegerProperties.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

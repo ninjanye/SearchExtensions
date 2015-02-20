@@ -48,14 +48,28 @@ namespace NinjaNye.SearchExtensions
         /// String properties to search. If ommitted, a search 
         /// on all string properties will be performed
         /// </param>
-        public static QueryableStringSearch<T> Search<T>(this IQueryable<T> source, params Expression<Func<T, string>>[] stringProperties)
+        public static QueryableSearch<T> Search<T>(this IQueryable<T> source)
+        {
+            var properties = EnumerableExpressionHelper.GetProperties<T, string>();
+            return new QueryableSearch<T>(source, properties);
+        }
+
+        /// <summary>
+        /// Search a Queryable collection
+        /// </summary>
+        /// <typeparam name="T">Type of object to be searched</typeparam>
+        /// <param name="stringProperties">
+        /// String properties to search. If ommitted, a search 
+        /// on all string properties will be performed
+        /// </param>
+        public static QueryableSearch<T> Search<T>(this IQueryable<T> source, params Expression<Func<T, string>>[] stringProperties)
         {
             if (stringProperties == null || stringProperties.All(sp => sp == null))
             {
                 stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
             }
 
-            return new QueryableStringSearch<T>(source, stringProperties);
+            return new QueryableSearch<T>(source, stringProperties);
         }
 
     }

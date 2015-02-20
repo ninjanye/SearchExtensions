@@ -62,10 +62,11 @@
     <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
     <Compile Include="Models\IRanked.cs" />
     <Compile Include="Models\Ranked.cs" />
-    <Compile Include="QueryableStringSearch.cs" />
+    <Compile Include="QueryableIntegerSearch.cs" />
+    <Compile Include="QueryableSearch.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryableStringSearchBase.cs" />
+    <Compile Include="QueryableSearchBase.cs" />
     <Compile Include="SearchBase.cs" />
     <Compile Include="Soundex\SoundexProcessor.cs" />
     <Compile Include="Validation\Ensure.cs" />
