@@ -54,7 +54,12 @@
     <Compile Include="Fluent\FluentRankedTests.cs" />
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\BetweenTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\IsEqualTests.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\LessThanOrEqualTests - Copy.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\LessThanOrEqualTests.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\LessThanTests.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\GreaterThanTests.cs" />
     <Compile Include="Fluent\SearchTests\ContainingAllTests.cs" />
     <Compile Include="Fluent\SearchTests\IsEqualTests.cs" />
     <Compile Include="Fluent\SearchTests\StartsWithTests.cs" />

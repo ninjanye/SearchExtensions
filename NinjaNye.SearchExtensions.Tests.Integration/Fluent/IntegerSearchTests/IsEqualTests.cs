@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
         {
             //Arrange
             
-            //Act
+            //Act 
             var result = this.context.TestModels.Search(x => x.IntegerOne).IsEqual(50);
 
             //Assert

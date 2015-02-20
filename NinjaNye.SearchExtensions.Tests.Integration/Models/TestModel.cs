@@ -2,7 +2,7 @@
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Models
 {
-    internal class TestModel
+    public class TestModel
     {
         public Guid Id { get; set; }
         public string StringOne { get; set; }

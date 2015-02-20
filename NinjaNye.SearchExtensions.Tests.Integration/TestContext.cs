@@ -4,7 +4,7 @@ using NinjaNye.SearchExtensions.Tests.Integration.Models;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration
 {
-    internal class TestContext : DbContext
+    public class TestContext : DbContext
     {
         public TestContext()
             : base("TestConnection")
