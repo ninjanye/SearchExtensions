@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
@@ -11,27 +12,26 @@ namespace NinjaNye.SearchExtensions
         /// <summary>
         /// Search an Enumerable list of objects
         /// </summary>
-        /// <typeparam name="T">Type of object to be searched</typeparam>
+        /// <typeparam name="TSource">Type of object to be searched</typeparam>
+        /// <typeparam name="TProperty">Type of property to be searched</typeparam>
         /// <param name="properties">
-        /// Integer properties to search. If ommitted, a search 
-        /// on all integer properties will be performed
-        /// </param>
-        public static EnumerableIntegerSearch<T> Search<T>(this IEnumerable<T> source, params Expression<Func<T, int>>[] properties)
+        /// Properties to search.</param>
+        public static EnumerableStructSearch<TSource, TProperty> Search<TSource, TProperty>(this IEnumerable<TSource> source, params Expression<Func<TSource, TProperty>>[] properties)
+            where TProperty : struct 
         {
-            return new EnumerableIntegerSearch<T>(source, properties);
+            return new EnumerableStructSearch<TSource, TProperty>(source, properties);
         }
 
         /// <summary>
         /// Search a Queryable list of objects
         /// </summary>
-        /// <typeparam name="T">Type of object to be searched</typeparam>
-        /// <param name="properties">
-        /// Integer properties to search. If ommitted, a search 
-        /// on all integer properties will be performed
-        /// </param>
-        public static QueryableIntegerSearch<T> Search<T>(this IQueryable<T> source, params Expression<Func<T, int>>[] properties)
+        /// <typeparam name="TSource">Type of object to be searched</typeparam>
+        /// <typeparam name="TProperty">Type of property to be searched</typeparam>
+        /// <param name="properties">Properties to search.</param>
+        public static QueryableStructSearch<TSource, TProperty> Search<TSource, TProperty>(this IQueryable<TSource> source, params Expression<Func<TSource, TProperty>>[] properties) 
+            where TProperty : struct
         {
-            return new QueryableIntegerSearch<T>(source, properties);
+            return new QueryableStructSearch<TSource, TProperty>(source, properties);
         }        
     }
 }

@@ -56,7 +56,7 @@
     <Compile Include="Fluent\FluentSoundexTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\BetweenTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\IsEqualTests.cs" />
-    <Compile Include="Fluent\IntegerSearchTests\LessThanOrEqualTests - Copy.cs" />
+    <Compile Include="Fluent\IntegerSearchTests\GreaterThanOrEqualTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\LessThanOrEqualTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\LessThanTests.cs" />
     <Compile Include="Fluent\IntegerSearchTests\GreaterThanTests.cs" />

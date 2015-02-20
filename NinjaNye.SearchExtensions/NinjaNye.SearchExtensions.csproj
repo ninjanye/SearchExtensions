@@ -36,7 +36,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumerableIntegerSearch.cs" />
+    <Compile Include="EnumerableStructSearch.cs" />
     <Compile Include="EnumerableLevenshteinCompare.cs" />
     <Compile Include="EnumerableLevenshteinSearch.cs" />
     <Compile Include="EnumerableSearchBase.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
     <Compile Include="Models\IRanked.cs" />
     <Compile Include="Models\Ranked.cs" />
-    <Compile Include="QueryableIntegerSearch.cs" />
+    <Compile Include="QueryableStructSearch.cs" />
     <Compile Include="QueryableSearch.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
