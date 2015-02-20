@@ -179,7 +179,7 @@ namespace NinjaNye.SearchExtensions
 
         /// <summary>
         /// Retrieve items where any of the defined properties 
-        /// is equal to any of the defined search terms
+        /// are equal to any of the defined search terms
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
