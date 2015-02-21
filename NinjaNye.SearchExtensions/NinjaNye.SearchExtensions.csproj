@@ -41,7 +41,7 @@
     <Compile Include="EnumerableLevenshteinSearch.cs" />
     <Compile Include="EnumerableSearchBase.cs" />
     <Compile Include="EnumerableSoundexSearch.cs" />
-    <Compile Include="FluentIntegerSearch.cs" />
+    <Compile Include="FluentSearch.cs" />
     <Compile Include="FluentLevenshteinSearch.cs" />
     <Compile Include="FluentStringSearch.cs" />
     <Compile Include="EnumerableStringSearch.cs" />

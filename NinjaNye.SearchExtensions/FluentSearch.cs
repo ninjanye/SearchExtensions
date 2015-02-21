@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 
 namespace NinjaNye.SearchExtensions
 {
-    public static class FluentIntegerSearch
+    public static class FluentSearch
     {
         /// <summary>
         /// Search an Enumerable list of objects

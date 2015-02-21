@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NinjaNye.SearchExtensions")]
-[assembly: AssemblyDescription("A collection of extension methods to IQueryable and IEnumerable that enable easy searching and ranking")]
+[assembly: AssemblyDescription("A collection of extension methods to IQueryable and IEnumerable that enable easy searching and ranking.  Searches can be performed against multiple properties and support a wide range of types")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("John Nye")]
 [assembly: AssemblyProduct("NinjaNye.SearchExtensions")]
@@ -33,5 +33,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.*")]
-[assembly: AssemblyFileVersion("1.4")]
+[assembly: AssemblyVersion("1.5.*")]
+[assembly: AssemblyFileVersion("1.5")]
