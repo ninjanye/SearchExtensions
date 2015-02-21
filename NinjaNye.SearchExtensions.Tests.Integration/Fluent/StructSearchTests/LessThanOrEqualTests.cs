@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
+namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
     [TestFixture]
     internal class LessThanOrEqualTests : IDisposable
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqual(10));
+            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(10));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Arrange
             
             //Act 
-            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqual(50);
+            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(50);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqual(3);
+            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(3);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             
             //Act
             var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
-                                                .LessThanOrEqual(101);
+                                                .LessThanOrEqualTo(101);
 
             //Assert
             Assert.IsTrue(result.All(x => x.IntegerOne <= 101 || x.IntegerThree <= 101));

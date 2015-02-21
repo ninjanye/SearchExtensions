@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = this.context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
-            Assert.IsInstanceOf<QueryableSearch<TestModel>>(result);
+            Assert.IsInstanceOf<QueryableStringSearch<TestModel>>(result);
         }
 
         [Test]

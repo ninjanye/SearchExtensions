@@ -66,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).IsEqual("abcd").ToList();
+            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("abcd").ToList();
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -201,7 +201,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringTwo).IsEqual("CASE").ToList();
+            var result = this.context.TestModels.Search(x => x.StringTwo).EqualTo("CASE").ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -214,7 +214,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).IsEqual("abcd", "efgh").ToList();
+            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("abcd", "efgh").ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -227,7 +227,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).IsEqual("ABCD", "EFGH");
+            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("ABCD", "EFGH");
 
             //Assert
             Assert.AreEqual(2, result.Count());

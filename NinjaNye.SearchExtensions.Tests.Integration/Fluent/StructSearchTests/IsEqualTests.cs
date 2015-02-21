@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
+namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
     [TestFixture]
     internal class IsEqualTests : IDisposable
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).IsEqual(1));
+            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).EqualTo(1));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Arrange
             
             //Act 
-            var result = this.context.TestModels.Search(x => x.IntegerOne).IsEqual(50);
+            var result = this.context.TestModels.Search(x => x.IntegerOne).EqualTo(50);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne).IsEqual(101);
+            var result = this.context.TestModels.Search(x => x.IntegerOne).EqualTo(101);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             
             //Act
             var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
-                                                .IsEqual(3);
+                                                .EqualTo(3);
 
             //Assert
             Assert.IsTrue(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3));
@@ -65,7 +65,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
             
             //Act
             var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
-                                                .IsEqual(3, 101);
+                                                .EqualTo(3, 101);
 
             //Assert
             Assert.IsTrue(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3 

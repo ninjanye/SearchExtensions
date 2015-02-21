@@ -12,11 +12,11 @@ using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions
 {
-    public sealed class QueryableSearch<T> : QueryableSearchBase<T, string>
+    public sealed class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
         private readonly IList<string> containingSearchTerms = new List<string>();
 
-        public QueryableSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
+        public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)
         {
         }
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions
         /// within any of the defined properties
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
-        public QueryableSearch<T> Containing(params string[] terms)
+        public QueryableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "terms");
             var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
@@ -56,7 +56,7 @@ namespace NinjaNye.SearchExtensions
         /// within any of the defined properties
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
-        public QueryableSearch<T> Containing(params Expression<Func<T, string>>[] terms)
+        public QueryableStringSearch<T> Containing(params Expression<Func<T, string>>[] terms)
         {
             Expression finalExpression = null;
             foreach (var propertyToSearch in this.Properties)
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions
         /// within any of the defined properties
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
-        public QueryableSearch<T> ContainingAll(params string[] terms)
+        public QueryableStringSearch<T> ContainingAll(params string[] terms)
         {
             var result = this;
             foreach (var term in terms)
@@ -90,7 +90,7 @@ namespace NinjaNye.SearchExtensions
         /// within any of the defined properties
         /// </summary>
         /// <param name="propertiesToSearchFor">Term or terms to search for</param>
-        public QueryableSearch<T> ContainingAll(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        public QueryableStringSearch<T> ContainingAll(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             var result = this;
             foreach (var propertyToSearchFor in propertiesToSearchFor)
@@ -105,7 +105,7 @@ namespace NinjaNye.SearchExtensions
         /// starts with any of the defined search terms
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
-        public QueryableSearch<T> StartsWith(params string[] terms)
+        public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)
@@ -122,7 +122,7 @@ namespace NinjaNye.SearchExtensions
         /// starts with any of the defined terms
         /// </summary>
         /// <param name="propertiesToSearchFor">properties defining the terms to search for</param>
-        public QueryableSearch<T> StartsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        public QueryableStringSearch<T> StartsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
             Expression completeExpression = null;
@@ -141,7 +141,7 @@ namespace NinjaNye.SearchExtensions
         /// are equal to any of the defined search terms
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
-        public QueryableSearch<T> IsEqual(params string[] terms)
+        public QueryableStringSearch<T> EqualTo(params string[] terms)
         {
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)
@@ -158,7 +158,45 @@ namespace NinjaNye.SearchExtensions
         /// are equal to any of the properties supplied
         /// </summary>
         /// <param name="propertiesToSearchFor">Properties to match against</param>
-        public QueryableSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        public QueryableStringSearch<T> EqualTo(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            Expression completeExpression = null;
+            foreach (var propertyToSearch in this.Properties)
+            {
+                var alignedProperties = propertiesToSearchFor.Select(AlignParameter).ToArray();
+                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, alignedProperties);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+
+            this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// are equal to any of the defined search terms
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
+        public QueryableStringSearch<T> IsEqual(params string[] terms)
+        {
+            Expression completeExpression = null;
+            foreach (var propertyToSearch in this.Properties)
+            {
+                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, terms);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
+            }
+            this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined search properties 
+        /// are equal to any of the properties supplied
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Properties to match against</param>
+        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
+        public QueryableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)

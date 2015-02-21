@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.IntegerSearchTests
+namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
     [TestFixture]
     internal class GreaterThanTests : IDisposable

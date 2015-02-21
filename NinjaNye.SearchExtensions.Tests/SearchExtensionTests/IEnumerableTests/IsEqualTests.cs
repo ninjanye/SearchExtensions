@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.testData.Search(x => x.Name).IsEqual(x => x.Description));
+            Assert.DoesNotThrow(() => this.testData.Search(x => x.Name).EqualTo(x => x.Description));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).IsEqual(x => x.Description);
+            var result = testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
             Assert.IsNotNull(result);
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).IsEqual(x => x.Description);
+            var result = testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name, x => x.Description).IsEqual(x => x.Status);
+            var result = testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.Description == x.Status));
@@ -86,7 +86,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).IsEqual(x => x.Description, x => x.Status);
+            var result = testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.Name == x.Status));
@@ -99,7 +99,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             
             //Act
             var result = testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase)
-                                                     .IsEqual(x => x.Description);
+                                                     .EqualTo(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.Name == "TEst" && x.Description == "teST"));

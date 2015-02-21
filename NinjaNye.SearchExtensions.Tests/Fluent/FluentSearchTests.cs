@@ -75,7 +75,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = testData.Search(x => x.Name).IsEqual("abcd");
+            var result = testData.Search(x => x.Name).EqualTo("abcd");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -291,7 +291,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).IsEqual("CASE");
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EqualTo("CASE");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -304,7 +304,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).IsEqual("CASE");
+            var result = testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EqualTo("CASE");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -317,7 +317,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).IsEqual("abcd", "efgh");
+            var result = testData.Search(x => x.Name).EqualTo("abcd", "efgh");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -332,7 +332,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Act
             var result = testData.Search(x => x.Name)
                                  .SetCulture(StringComparison.OrdinalIgnoreCase)
-                                 .IsEqual("ABCD", "EFGH");
+                                 .EqualTo("ABCD", "EFGH");
 
             //Assert
             Assert.AreEqual(2, result.Count());

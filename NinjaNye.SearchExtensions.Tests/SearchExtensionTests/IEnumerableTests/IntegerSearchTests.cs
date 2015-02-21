@@ -48,7 +48,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this.testData.Search(x => x.Number).IsEqual(2);
+            var result = this.testData.Search(x => x.Number).EqualTo(2);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this.testData.Search(x => x.Number).IsEqual(2, 4);
+            var result = this.testData.Search(x => x.Number).EqualTo(2, 4);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this.testData.Search(x => x.Number, x => x.Age).IsEqual(5);
+            var result = this.testData.Search(x => x.Number, x => x.Age).EqualTo(5);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -139,7 +139,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Number).LessThanOrEqual(2);
+            var result = this.testData.Search(x => x.Number).LessThanOrEqualTo(2);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -152,7 +152,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Number, x => x.Age).LessThanOrEqual(2);
+            var result = this.testData.Search(x => x.Number, x => x.Age).LessThanOrEqualTo(2);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -165,7 +165,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Number).GreaterThanOrEqual(2);
+            var result = this.testData.Search(x => x.Number).GreaterThanOrEqualTo(2);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -178,7 +178,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Number, x => x.Age).GreaterThanOrEqual(2);
+            var result = this.testData.Search(x => x.Number, x => x.Age).GreaterThanOrEqualTo(2);
 
             ////Assert
             Assert.IsTrue(result.Any());

@@ -182,6 +182,32 @@ namespace NinjaNye.SearchExtensions
         /// are equal to any of the defined search terms
         /// </summary>
         /// <param name="terms">Term or terms to search for</param>
+        public EnumerableStringSearch<T> EqualTo(params string[] terms)
+        {
+            Expression fullExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, terms, comparisonType);
+            this.BuildExpression(fullExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// are equal to any of the defined properties to search for
+        /// </summary>
+        /// <param name="propertiesToSearchFor">Properties to search for</param>
+        public EnumerableStringSearch<T> EqualTo(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            propertiesToSearchFor = propertiesToSearchFor.Select(AlignParameter).ToArray();
+            Expression completeExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, propertiesToSearchFor, comparisonType);
+            this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// are equal to any of the defined search terms
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
         {
             Expression fullExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, terms, comparisonType);
@@ -194,6 +220,7 @@ namespace NinjaNye.SearchExtensions
         /// are equal to any of the defined properties to search for
         /// </summary>
         /// <param name="propertiesToSearchFor">Properties to search for</param>
+        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
         public EnumerableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             propertiesToSearchFor = propertiesToSearchFor.Select(AlignParameter).ToArray();
