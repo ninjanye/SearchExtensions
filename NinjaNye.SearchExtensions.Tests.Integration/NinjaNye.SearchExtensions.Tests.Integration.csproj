@@ -55,6 +55,7 @@
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
     <Compile Include="Fluent\StructSearchTests\BetweenTests.cs" />
+    <Compile Include="Fluent\StructSearchTests\DateTimeSearchTests.cs" />
     <Compile Include="Fluent\StructSearchTests\IsEqualTests.cs" />
     <Compile Include="Fluent\StructSearchTests\GreaterThanOrEqualTests.cs" />
     <Compile Include="Fluent\StructSearchTests\LessThanOrEqualTests.cs" />
@@ -75,6 +76,10 @@
     <Compile Include="Migrations\201502200834387_AddIntegerProperties.Designer.cs">
       <DependentUpon>201502200834387_AddIntegerProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502211124202_AddDateTimeColumns.cs" />
+    <Compile Include="Migrations\201502211124202_AddDateTimeColumns.Designer.cs">
+      <DependentUpon>201502211124202_AddDateTimeColumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502200834387_AddIntegerProperties.resx">
       <DependentUpon>201502200834387_AddIntegerProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502211124202_AddDateTimeColumns.resx">
+      <DependentUpon>201502211124202_AddDateTimeColumns.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

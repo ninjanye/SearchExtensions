@@ -47,7 +47,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
               new TestModel { Id = new Guid("BC0AC977-A5DC-4F3F-B355-8E30C6C0048B"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 103},
               new TestModel { Id = new Guid("465253C0-CA3A-4787-87DF-1F76F9FD166B"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200},
               new TestModel { Id = new Guid("94A911C4-23BB-4CB5-A0CF-AFB077F37AB9"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301},
-              new TestModel { Id = new Guid("0A6A88AE-5D68-4A94-B34E-843D9945E82D"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1}
+              new TestModel { Id = new Guid("0A6A88AE-5D68-4A94-B34E-843D9945E82D"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1},
+              new TestModel { Id = new Guid("DA60DD08-F3A6-4709-9560-AAFDAA91F3EB"), Start = new DateTime(2000, 1, 1), End = new DateTime(2010, 1, 1)},
+              new TestModel { Id = new Guid("D38974C3-72B5-44E6-B54E-CFF41552DE90"), Start = new DateTime(2010, 1, 1), End = new DateTime(2020, 1, 1)},
+              new TestModel { Id = new Guid("C24AD0A7-5B57-40D1-B5CC-FE8F0082FA78"), Start = new DateTime(2020, 1, 1), End = new DateTime(2030, 1, 1)},
+              new TestModel { Id = new Guid("35BC5401-AF48-4757-A01D-1A5E85D926ED"), Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1)},
+              new TestModel { Id = new Guid("8AC7CFF4-0BF6-4883-95FB-6729369E606D"), Start = new DateTime(2040, 1, 1), End = new DateTime(2050, 1, 1)}
             );            
         }
     }

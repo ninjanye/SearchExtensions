@@ -1,3 +1,5 @@
+using System;
+
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
 {
     internal class TestData
@@ -7,5 +9,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
         public string Status { get; set; }
         public int Number { get; set; }
         public int Age { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
     }
 }
