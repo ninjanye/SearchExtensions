@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SearchExtensions : Library of IQueryable and IEnumerable extension methods to perform searching">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SearchExtensions - String Searching</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+      <header class="inner">
+        <a id="forkme_banner" class="banner" href="https://github.com/ninjanye/SearchExtensions">View on GitHub</a>
+        <a id="blog_banner" class="banner" href="http://jnye.co">Visit blog</a>
+
+        <h1 id="project_title">SearchExtensions</h1>
+        <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
+        <section id="menu">
+          <a href="index.html" class="menu">Home</a>
+          <a href="simplesearch.html" class="menu">Simple Search</a>
+          <a href="stringsearch.html" class="menu selected">String Search</a>
+          <a href="soundex.html" class="menu">Soundex</a>
+          <a href="levenshtein.html" class="menu">Levenshtein</a>
+          <a href="releasehistory.html" class="menu">Release History</a>
+        </section>
+      </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+          This project is avaliable for download as a
+          <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">
+            nuget package
+          </a>
+          <p class="nuget-badge">
+            <code>PM> Install-Package NinjaNye.SearchExtensions</code>
+          </p>
+        </h3>
+
+        <h2>String Searching</h2>
+        <p>
+          String searching allows you to search any number of
+          <code>string</code> properties.  Searches can be made against any
+          number of search terms or against any number of string properties.
+        </p>
+
+        <h3>Methods</h3>
+        <p>
+          The following methods are available to both
+          <code>IQueryable</code> data and <code>IEnumerable</code> data. Each
+          method will return records where any of the supplied properties are
+          matched by the rules below:
+
+        </p>
+        <ul>
+          <li>
+            <code><a href="#containing-search">Containing</a></code> - target
+            property <em>contains any</em> of the search terms provided.
+          </li>
+          <li>
+            <code><a href="#containing-all-search">ContainingAll</a></code> -
+            target property <em>contains all</em> of the search terms provided.
+          </li>
+          <li>
+            <code><a href="#equal-to-search">EqualTo</a></code> - target
+            property <em>equals any</em> of the search terms provided.
+          </li>
+          <li>
+            <code><a href="#starts-with-search">StartsWith</a></code> - target
+            property <em>starts with any</em> of the search terms provided.
+          </li>
+          <li>
+            <code><a href="#to-ranked-search">ToRanked</a></code> - transforms
+            the results of a <code>Containing</code> search into a ranked result.
+          </li>
+        </ul>
+
+        <p>
+          <code>IEnumerable</code> data collections have the following
+          additional methods available use:
+        </p>
+
+        <ul>
+          <li>
+            <code><a href="#set-culture">SetCulture</a></code> - Sets the string
+            comparison culture with which to perform searches
+          </li>
+          <li>
+            <code><a href="#ends-with-search">EndsWith</a></code> - target
+            property <em>ends with any</em> of the search terms provided.
+          </li>
+        </ul>
+
+
+        <h3 id="containing-search">
+          Performing <code>Containing</code> searches
+        </h3>
+        <p>
+          Search for a <strong>single search term</strong> within a
+          <strong>single property</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm");
+</code></pre>
+
+        <p>
+          Search for a <strong>single search term</strong> within
+          <strong>multiple properties</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .Containing("searchTerm");
+</code></pre>
+
+        <p>
+          Search for <strong>multiple search terms</strong> within a
+          <strong>single property</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("search", "term");
+</code></pre>
+
+        <p>
+          Search for <strong>multiple search terms</strong> within
+          <strong>multiple properties</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .Containing("searchTerm1",
+                                      "searchTerm2",
+                                      "searchTerm3");
+</code></pre>
+
+        <h3>Performing <code>Containing</code> AND searches</h3>
+        <p>
+          Search where a <strong>single property</strong> contains a
+          <strong>single search term</strong><br>
+          AND contains another <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .Containing("searchTerm1")
+                          .Containing("searchTerm2");
+</code></pre>
+
+        <p>
+          Search where a <strong>single search term</strong> exists within in
+          Property1 OR Property2<br>
+          AND <strong>single search term</strong> exists within in Property3 OR
+          Property4
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .Containing("searchTerm")
+                          .Search(x =&gt; x.Property3, x =&gt; x.Property4)
+                          .Containing("searchTerm");
+</code></pre>
+
+        <p>
+          Search where a <strong>single search term</strong> exists in Property1
+          OR Property2<br>
+          AND any of the <strong>multiple search terms</strong> exist within a
+          <strong>Property3</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                          .Containing("searchTerm")
+                          .Search(x =&gt; x.Property3)
+                          .Containing("another", "term");
+</code></pre>
+
+        <h3 id="containing-all-search">
+          Performing <code>ContainingAll</code> searches
+        </h3>
+
+        <p>
+          Search where <strong>all search terms</strong> are within a
+          <strong>single property</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .ContainingAll("search", "term");
+</code></pre>
+
+        <p>
+          Search where <strong>all search terms</strong> exist across
+          <strong>multiple properties</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .ContainingAll("search", "term");
+</code></pre>
+
+        <h3 id="equal-to-search">Performing <code>EqualTo</code> searches</h3>
+        <p>
+          Search where a <strong>single property</strong> equals a
+          <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .EqualTo("searchTerm");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> is equal
+          to a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .EqualTo("searchTerm");
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> is equal to any one of
+          <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .EqualTo("search", "term");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> is equal
+          to any one of <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .EqualTo("searchTerm1",
+                                   "searchTerm2",
+                                   "searchTerm3");
+</code></pre>
+
+        <h3 id="starts-with-search">
+          Performing <code>StartsWith</code> searches
+        </h3>
+        <p>
+          Search where a <strong>single property</strong> starts with a
+          <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .StartsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> starts
+          with to a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .StartsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> starts with any one of
+          <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                          .StartsWith("search", "term");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> starts
+          with any one of <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                                  x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                          .StartsWith("searchTerm1",
+                                      "searchTerm2",
+                                      "searchTerm3");
+</code></pre>
+
+        <h2 id="ranked-search">Ranked Searches</h2>
+        <p>
+          As well as returning the matched items, a Ranked Search also returns a
+          hit count for each item in the form of an IRanked result. This enables
+          you to order by hit count to retrieve the most relevant search results.
+        </p>
+
+        <h3 id="ranked-result"><code>IRanked&lt;T&gt;</code> result</h3>
+        <p>An IRanked result is simply defined as follows:</p>
+
+<pre><code>public interface IRanked&lt;out T&gt;
+{
+int Hits { get; }
+T Item { get; }
+}
+</code></pre>
+
+        <p>This is returned using the <code>ToRanked()</code> method:</p>
+        <p>
+          RankedSearch for a <strong>single search term</strong> within a
+          <strong>single property</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                  .Containing("searchTerm")
+                  .ToRanked();
+</code></pre>
+
+        <p>
+          RankedSearch for a <strong>single search term</strong> within
+          <strong>multiple properties</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1,
+                          x =&gt; x.Property2,
+                          x =&gt; x.Property3)
+                  .Containing("searchTerm")
+                  .ToRanked();
+</code></pre>
+
+        <p>
+          RankedSearch for <strong>multiple search terms</strong> within a
+          <strong>single property</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                  .Containing("searchTerm1",
+                              "searchTerm2",
+                              "searchTerm3")
+                  .ToRanked();
+</code></pre>
+
+        <p>
+          RankedSearch for <strong>multiple search terms</strong> within
+          <strong>multiple properties</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                  .Containing("searchTerm1",
+                              "searchTerm2",
+                              "searchTerm3")
+                  .ToRanked();
+</code></pre>
+
+        <h3>Retrieve most relevant search results</h3>
+        <p>
+          Using ranked search you can now easily order your search results by
+          the most relevant.  This following example assumes we have a list of
+          <code>User</code> which has <code>FirstName</code>,
+          <code>LastName</code> and <code>MiddleName</code> string properties.
+          In this example we want to match on those with "John" in their name
+          and retrieve the top 10 results.
+        </p>
+
+<pre><code>var result = context.Users.Search(x =&gt; x.FirstName,
+                          x =&gt; x.LastName,
+                          x =&gt; x.MiddleName)
+                  .Containing("John")
+                  .ToRanked()
+                  // Order by Hits property of IRanked&lt;User&gt;
+                  .OrderByDescending(r =&gt; r.Hits)
+                  .Take(10);
+</code></pre>
+
+        <h3>Mixing it up</h3>
+        <p>We can also mix it up with the other fluent API methods</p>
+
+<pre><code>var result = context.Users.Search(x =&gt; x.FirstName,
+                          x =&gt; x.LastName,
+                          x =&gt; x.MiddleName)
+                  .StartsWith("john")
+                  .Containing("smith")
+                  .ToRanked()
+                  // Order by Hits property of IRanked&lt;User&gt;
+                  .OrderByDescending(r =&gt; r.Hits)
+                  .Take(10);
+</code></pre>
+
+        <p>
+          <code>ToRanked()</code> method uses the search terms of the
+          <code>Containing()</code> method combined with the properties
+          to search to build its hit count.
+        </p>
+
+        <blockquote>
+          The above methods can all be performed on both <code>IQueryable</code>
+          collections and <code>IEnumerable</code> collections.
+        </blockquote>
+
+        <h3 id="set-culture">Performing IEnumerable searches</h3>
+        <blockquote>
+          The following methods can only be performed
+          <code>IEnumerable</code> collections.  This means that the data will
+          be brought into memory and filtered in memory.
+        </blockquote>
+
+        <p>
+          The important thing to remember when performing an in memory search is
+          to set the culture to the type of string comparison you wish to
+          perform.
+          <strong>
+            If <code>SetCulture</code> is not specified,
+            <code>StringComparison.CurrentCulture</code> is used.
+          </strong>
+        </p>
+
+<pre><code>var result = enumerableData.Search(x =&gt; x.Property1)
+                           // Set culture for comparison
+                           .SetCulture(StringComparison.OrdinalIgnoreCase)
+                           .StartsWith("abc")
+                           .EndsWith("xyz")
+                           .Containing("mno");
+</code></pre>
+
+        <p>
+          It is also possible to switch the <code>StringComparison</code>
+          culture context multiple times
+        </p>
+
+<pre><code>var result = enumerableData.Search(x =&gt; x.Property1)
+                           .SetCulture(StringComparison.OrdinalIgnoreCase)
+                           .StartsWith("abc")  // Uses OrdinalIgnoreCase
+                           .SetCulture(StringComparison.Ordinal)
+                           .EndsWith("xyz")    // Uses Ordinal
+                           .SetCulture(StringComparison.CurrentCulture)
+                           .Containing("mno"); //Uses CurrentCulture
+</code></pre>
+
+        <h3 id="ends-with-search">
+          Performing <code>EndsWith</code> searches
+        </h3>
+        <p>
+          Search where a <strong>single property</strong> ends with a
+          <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1)
+                 .EndsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> ends
+          with a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
+                 .EndsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> ends with any one of
+          <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1)
+                 .EndsWith("search", "term", "test");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> starts
+          with any one of <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
+                 .EndsWith("searchTerm1", "searchTerm2", "searchTerm3");
+</code></pre>
+
+        <h2 id="combining-searches">Combining instructions</h2>
+        <p>
+          With SearchExtensions you can also combine search actions. For
+          instance:
+        </p>
+
+        <p>
+          Search where a <strong>single property</strong>
+          <code>starts with</code> a <strong>single search term</strong>
+          AND <code>containing</code> a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                  .StartsWith("abc")
+                  .Containing("mno");
+</code></pre>
+
+        <p>
+          The ability to pass <strong>multiple search terms</strong> to any of
+          the action methods still remains
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2)
+                  .StartsWith("abc", "ninja")
+                  .Containing("xyz", "extensions")
+</code></pre>
+
+        <p></p>
+        <blockquote>
+          Note: Combining <code>IEnumerable</code> methods on
+          <code>IQueryable</code> data will cause the data to be brought in to
+          memory at the point at which the first enumerable action is taken.
+        </blockquote>
+
+      </div>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SearchExtensions maintained by
+          <a href="https://github.com/ninjanye">ninjanye</a>
+        </p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
