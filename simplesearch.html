@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SearchExtensions : Library of IQueryable and IEnumerable extension methods to perform searching">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SearchExtensions - Simple Searching</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+      <header class="inner">
+        <a id="forkme_banner" class="banner" href="https://github.com/ninjanye/SearchExtensions">View on GitHub</a>
+        <a id="blog_banner" class="banner" href="http://jnye.co">Visit blog</a>
+
+        <h1 id="project_title">SearchExtensions</h1>
+        <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
+        <section id="menu">
+          <a href="index.html" class="menu">Home</a>
+          <a href="simplesearch.html" class="menu selected">Simple Search</a>
+          <a href="stringsearch.html" class="menu">String Search</a>
+          <a href="soundex.html" class="menu">Soundex</a>
+          <a href="levenshtein.html" class="menu">Levenshtein</a>
+          <a href="releasehistory.html" class="menu">Release History</a>
+        </section>
+      </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+          This project is avaliable for download as a
+          <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">
+            nuget package
+          </a>
+          <p class="nuget-badge">
+            <code>PM> Install-Package NinjaNye.SearchExtensions</code>
+          </p>
+        </h3>
+
+        <p>
+          Simple search allows you to search against more than just
+          <code>strings</code>.  New types that are now supported include
+          (but not limited to) <code>int</code>, <code>DateTime</code> and
+          <code>decimal</code>.
+        </p>
+
+        <h2 id="Searching">Searching</h2>
+        <h3>Methods</h3>
+        <p>
+          All simple search methods are available to both
+          <code>IQueryable</code> data and <code>IEnumerable</code> data:
+        </p>
+        <ul>
+          <li><code>.EqualTo()</code></li>
+          <li><code>.LessThan()</code></li>
+          <li><code>.LessThanOrEqualTo()</code></li>
+          <li><code>.GreaterThan()</code></li>
+          <li><code>.GreaterThanOrEqualTo()</code></li>
+          <li><code>.Between()</code></li>
+        </ul>
+        <hr/>
+        <h3><code>.EqualTo()</code> method</h3>
+        <p>
+          This method is the same as the <code>.EqualTo()</code> string search
+          method and returns records where any of the supplied properties equals
+          any of the supplied search terms
+        </p>
+
+<pre><code>var result = testContext.TestModels.Search(x =&gt; x.IntegerOne,
+                                           x =&gt; x.IntegerTwo)
+                                   .EqualTo(1, 5, 8, 12);
+</code></pre>
+
+        <p>
+          The above implementation will return any records where <em>either</em>
+          <code>IntegerOne</code> or <code>IntegerTwo</code> equal 1, 5, 8 or
+          12.
+        </p>
+        <h3>
+          <code>.LessThan()</code> and <code>.LessThanOrEqualTo()</code> method
+        </h3>
+        <p>
+          This method allows you to return records where <em>any</em> of the
+          supplied properties are less than the supplied value
+        </p>
+<pre><code>var date = new DateTime(2013, 5, 13)
+var result = testContext.TestModels.Search(x =&gt; x.DateOne, x =&gt; DateTwo,
+                                           x =&gt; x.DateThree)
+                                   .LessThan(date);
+</code></pre>
+
+        <p>
+          The above implementation will return any records where <em>either</em>
+          <code>DateOne</code> or <code>DateTwo</code> are less than the
+          supplied date.
+        </p>
+
+        <h3>
+          <code>.GreaterThan()</code> and <code>.GreaterThanOrEqual()</code>
+          methods
+        </h3>
+        <p>
+          This method allows you to return records where <em>any</em> of the
+          supplied properties are greater than the supplied value
+        </p>
+<pre><code>var date = new DateTime(2013, 5, 13)
+var result = testContext.TestModels.Search(x =&gt; x.DateOne, x =&gt; DateTwo,
+                                           x =&gt; x.DateThree)
+                                   .GreaterThan(date);
+</code></pre>
+
+        <p>
+          The above implementation will return any records where <em>either</em>
+          <code>DateOne</code>, <code>DateTwo</code> or <code>DateThree</code>
+          are greater than the supplied date.
+        </p>
+
+        <h3><code>.Between()</code> method</h3>
+        <p>
+          This method allows you to return records where <em>any</em> of the
+          supplied properties are greater than and less than the supplied values
+        </p>
+<pre><code>var result = testContext.TestModels.Search(x =&gt; x.DecOne, x =&gt; DecTwo,
+                                           x =&gt; x.DecThree)
+                                   .Between(9.99, 29.99);
+</code></pre>
+
+        <p>
+          The above implementation will return any records where <em>either</em>
+          <code>DecOne</code>, <code>DecTwo</code> or <code>DecThree</code> are
+          between 9.99 and 29.99.  Implementing this without SearchExtension
+          would require something like the following:
+        </p>
+<pre><code>var result = testContext.TestModels
+                        .Where(x =&gt; (x.DecOne &gt; 9.99 &amp;&amp; x.DecOne &lt; 29.99)
+                                 || (x.DecTwo &gt; 9.99 &amp;&amp; x.DecTwo &lt; 29.99)
+                                 || (x.DecThree &gt; 9.99 &amp;&amp; x.DecThree &lt; 29.99))
+</code></pre>
+
+        <h3>Combining instructions</h3>
+        <p>
+          As with all of the search extensions these methods can all be combined
+          to easily create complex queries.  When used against
+          <code>IQueryable</code> these extension methods with translate these
+          commands to the datasource if possible meaning the datasource provides
+          the filtering instead of in memory.
+        </p>
+<pre><code>testContext.Products.Search(x =&gt; x.Title, x =&gt; x.SubTitle)
+                    .Containing(&quot;demo&quot;, &quot;example&quot;, &quot;search&quot;)
+                    .Search(x =&gt; x.Doller, x =&gt; x.Euro, x =&gt; x.GBP)
+                    .Between(9.99, 29.99)
+                    .Search(x =&gt; x.StartDate)
+                    .LessThanOrEqualTo(DateTime.Today);
+</code></pre>
+
+        <hr />
+        <blockquote>
+          <p>
+            If you would like to know more about this or any other feature,
+            please get in touch by <strong>adding a comment below</strong>,
+            <strong> contact me on twitter (
+              <a href="https://twitter.com/ninjanye">@ninjanye</a>)</strong>
+            or you can raise an issue on the
+            <a href="https://github.com/ninjanye/SearchExtensions">
+              github project page
+            </a>
+          </p>
+        </blockquote>
+      </div>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SearchExtensions maintained by
+          <a href="https://github.com/ninjanye">ninjanye</a>
+        </p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>

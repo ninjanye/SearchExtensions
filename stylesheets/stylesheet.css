@@ -81,6 +81,10 @@ h3 {
   font-size: 24px;
 }
 
+h3 code{
+  font-size: 21px;
+}
+
 h4 {
   font-size: 21px;
 }
@@ -157,7 +161,7 @@ p img {
   border: none;
 }
 
-pre, code {
+pre, code, pre code {
   width: 100%;
   color: #222;
   background-color: #fff;
@@ -181,6 +185,8 @@ code {
   padding: 3px;
   margin: 0 3px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
+  color: #c7254e;
+  background-color: #f9f2f4
 }
 
 pre code {
@@ -289,7 +295,7 @@ header.inner a.banner{
 
 #blog_banner {
   right: 177px;
-  background: url('../images/profilephoto.png') orange no-repeat 95% 50%;
+  background: url('../images/ProfilePhoto.png') orange no-repeat 95% 50%;
 }
 
 #nav_banner {
@@ -325,16 +331,6 @@ header.inner a.banner{
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
-}
-
-#downloads {
-  position: absolute;
-  width: 210px;
-  z-index: 10;
-  bottom: -40px;
-  right: 0;
-  height: 70px;
-  background: url('../images/icon_download.png') no-repeat 0% 90%;
 }
 
 .zip_download_link {
@@ -431,7 +427,7 @@ Small Device Styles
   code, pre {
     min-width: 320px;
     max-width: 480px;
-    font-size: 11px;
+    font-size: 19px;
   }
 }
 
@@ -456,7 +452,6 @@ Custom styles
 
 #menu {
   position: absolute;
-  width: 210px;
   z-index: 10;
   bottom: -40px;
   height: 52px;

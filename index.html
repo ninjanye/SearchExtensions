@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -12,8 +11,6 @@
   </head>
 
   <body>
-
-
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
       <header class="inner">
@@ -24,15 +21,11 @@
         <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
         <section id="menu">
           <a href="index.html" class="menu selected">Home</a>
+          <a href="simplesearch.html" class="menu">Simple Search</a>
+          <a href="stringsearch.html" class="menu">String Search</a>
+          <a href="soundex.html" class="menu">Soundex</a>
+          <a href="levenshtein.html" class="menu">Levenshtein</a>
           <a href="releasehistory.html" class="menu">Release History</a>
-        </section>
-        <section id="downloads">
-          <a class="zip_download_link" href="https://github.com/ninjanye/SearchExtensions/zipball/master">
-            Download this project as a .zip file
-          </a>
-          <a class="tar_download_link" href="https://github.com/ninjanye/SearchExtensions/tarball/master">
-            Download this project as a tar.gz file
-          </a>
         </section>
       </header>
     </div>
@@ -49,6 +42,41 @@
             <code>PM> Install-Package NinjaNye.SearchExtensions</code>
           </p>
         </h3>
+
+        <p>
+          Search Extensions provides a collection of extension methods to
+          <code>IQueryable</code> and <code>IEnumerable</code> that
+          enable easy searching and ranking.  Searches can be performed against
+          multiple properties and support a wide range of types
+        </p>
+
+        <h3>Examples</h3>
+        <p>
+          For examples and more detailed explanations, please see the following
+          sections:
+
+          <ul>
+            <li>
+              <a href="simplesearch.html">Simple Searching</a> -
+              Provides the ability to search multiple primitive properties
+            </li>
+            <li>
+              <a href="stringsearch.html">String Searching</a> -
+              Provies fast, advanced string searching between multiple
+              properties and against multiple search terms.
+            </li>
+            <li>
+              <a href="soundex.html">Soundex Search</a> -
+              Provides the ability to search multiple properties for values that
+              match the soundex value of another string
+            </li>
+            <li>
+              <a href="Levenshtein.html">Levenshtein Search</a> -
+              Provides the ability to calculate the Levenshtein distance of each
+              property against a particular term or other property.
+            </li>
+          </ul>
+        </p>
 
         <h2 id="IQueryableSearch">IQueryable String Searching</h2>
         <h3>Methods</h3>
@@ -570,6 +598,8 @@
             </a>.
           </p>
         </blockquote>
+      </div>
+    </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
