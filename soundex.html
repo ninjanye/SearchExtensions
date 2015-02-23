@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SearchExtensions : Library of IQueryable and IEnumerable extension methods to perform searching">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SearchExtensions - Soundex Searching</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+      <header class="inner">
+        <a id="forkme_banner" class="banner" href="https://github.com/ninjanye/SearchExtensions">View on GitHub</a>
+        <a id="blog_banner" class="banner" href="http://jnye.co">Visit blog</a>
+
+        <h1 id="project_title">SearchExtensions</h1>
+        <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
+        <section id="menu">
+          <a href="index.html" class="menu">Home</a>
+          <a href="simplesearch.html" class="menu">Simple Search</a>
+          <a href="stringsearch.html" class="menu">String Search</a>
+          <a href="soundex.html" class="menu selected">Soundex</a>
+          <a href="levenshtein.html" class="menu">Levenshtein</a>
+          <a href="releasehistory.html" class="menu">Release History</a>
+        </section>
+      </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+          This project is avaliable for download as a
+          <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">
+            nuget package
+          </a>
+          <p class="nuget-badge">
+            <code>PM> Install-Package NinjaNye.SearchExtensions</code>
+          </p>
+        </h3>
+
+        <h2 id="soundex-searching">Soundex Searching</h2>
+        <p>
+          Soundex search allows you to search any number of
+          <code>string</code> properties returning those that 'sounds like' any
+          of the given search terms.  Soundex searches can be made against any
+          number of search terms.
+        </p>
+
+        <h3>Methods</h3>
+        <p>
+          The following methods are available to both
+          <code>IQueryable</code> data and <code>IEnumerable</code> data.
+        </p>
+        <ul>
+          <li>
+            <code><a href="#soundex-search">Soundex</a></code> - target
+            property <em>contains any</em> of the search terms provided.
+          </li>
+          <li>
+            <code><a href="#reverse-soundex-search">ReverseSoundex</a></code> -
+            target property <em>contains all</em> of the search terms provided.
+          </li>
+        </ul>
+
+        <p>
+          As of Release 1.1,
+          <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">
+            NinjaNye.SearchExtensions
+          </a>
+          supports converting and searching for words that sound like a given
+          word.
+        </p>
+
+        <h3 id="soundex-search">
+          Performing <code>Soundex</code> searches
+        </h3>
+        <p>
+          Returning  records that 'sound like' "test" using the
+          <a href="http://en.wikipedia.org/wiki/Soundex">Soundex algorythm</a>
+        </p>
+        <p>
+          Search where a <strong>single property</strong> sounds like a
+          <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1).Soundex("test")
+</code></pre>
+
+        <p>
+          Search where a any of <strong>multiple properties</strong> sounds like
+          a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+         .Soundex("test")
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> sounds like any one of
+          <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1)
+         .Soundex("test", "another")
+</code></pre>
+
+        <p>
+          Search where a any of <strong>multiple properties</strong> sounds like
+          any of <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+         .Soundex("test", "another")
+</code></pre>
+
+        <h3 id="reverse-soundex-search">
+          Performing <code>ReverseSoundex</code> searches
+        </h3>
+        <p>
+          The reverse soundex algorithm is calculated in the same way as the
+          soundex code, the difference being that the word is reversed before
+          the code is calculated.
+        </p>
+        <p>
+          Search where a <strong>single property</strong> sounds like a
+          <strong>single search term</strong> based on the reverse soundex
+          algorythm.
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1).ReverseSoundex("test")
+</code></pre>
+
+        <p>
+          Search where a any of <strong>multiple properties</strong> sounds like
+          a <strong>single search term</strong> based on the reverse soundex
+          algorythm.
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+                 .ReverseSoundex("test")
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> sounds like any one of
+          <strong>multiple search terms</strong> based on the reverse soundex
+          algorythm.
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1)
+                 .ReverseSoundex("test", "another")
+</code></pre>
+
+        <p>
+          Search where a any of <strong>multiple properties</strong> sounds like
+          any of <strong>multiple search terms</strong> based on the reverse soundex
+          algorythm.
+        </p>
+
+<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.PropertyTwo)
+                 .ReverseSoundex("test", "another")
+</code></pre>
+
+        <blockquote>
+          <p>
+            The above methods can be applied to <code>IQueryable</code>
+            data. For <code>IQueryable</code> we reduce the amount of records
+            returned from the data source as much as possible but be aware that
+            the soundex searching is performed on the in memory collection.
+          </p>
+        </blockquote>
+
+        <p>
+          For more information about the Soundex search functionality, soundex
+          search performance, and how it has been integrated with
+          <code>IQueryable</code>, please visit
+          <a href="http://jnye.co/soundex">http://jnye.co/soundex</a>
+        </p>
+        <hr>
+      </div>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SearchExtensions maintained by
+          <a href="https://github.com/ninjanye">ninjanye</a>
+        </p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
