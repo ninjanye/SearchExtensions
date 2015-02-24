@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="SearchExtensions : Library of IQueryable and IEnumerable extension methods to perform searching">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SearchExtensions - Levenshtein Searching</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+      <header class="inner">
+        <a id="forkme_banner" class="banner" href="https://github.com/ninjanye/SearchExtensions">View on GitHub</a>
+        <a id="blog_banner" class="banner" href="http://jnye.co">Visit blog</a>
+
+        <h1 id="project_title">SearchExtensions : Levenshtein</h1>
+        <h2 id="project_tagline">Library of IQueryable and IEnumerable extension methods to perform searching</h2>
+        <section id="menu">
+          <a href="index.html" class="menu">Home</a>
+          <a href="simplesearch.html" class="menu">Simple Search</a>
+          <a href="stringsearch.html" class="menu">String Search</a>
+          <a href="soundex.html" class="menu">Soundex</a>
+          <a href="levenshtein.html" class="menu selected">Levenshtein</a>
+          <a href="releasehistory.html" class="menu">Release History</a>
+        </section>
+      </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+          This project is avaliable for download as a
+          <a href="https://www.nuget.org/packages/NinjaNye.SearchExtensions/">
+            nuget package
+          </a>
+          <p class="nuget-badge">
+            <code>PM> Install-Package NinjaNye.SearchExtensions</code>
+          </p>
+        </h3>
+
+        <h2 id="levenshtein-searching">Levenshtein Searching</h2>
+        <p>
+          Levenshtein search allows you to calculate the
+          <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">
+            Levenshtein distance
+          </a>
+          between a string property and any string value.
+        </p>
+
+        <h3>Methods</h3>
+        <p>
+          Levenshtein search methods are only able to be performed on
+          <code>IEnumerable</code> data, meaning using this on an
+          <code>IQueryable</code> data collections will evaluate the query into
+          memory before the Levenshtein calculation is performed.
+        </p>
+        <p>
+
+        <p>
+          The following is a list of current and future methods that are
+          available on <code>IEnumerable</code> data.
+        </p>
+        <ul>
+          <li>
+            <code>CompareTo</code> -
+            calculates the levenshtein distance between the supplied term and a
+            given <code>string</code> property.
+          </li>
+        </ul>
+
+        <p>
+          In order to perform a Levenshtein search you must first use
+          <code>LevenshteinDistanceOf</code> supplying the property you wish to
+          calculate the levenshtein distance from.
+        </p>
+
+        <p>
+          The following calculates the
+          <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">
+            levenshtein distance
+          </a> between <code>"test"</code> and the <code>StringOne</code>
+          property of TestModel.
+        </p>
+
+<pre><code>context.TestModels.LevenshteinDistanceOf(x =&gt; x.StringOne)
+                  .ComparedTo("test");
+</code></pre>
+
+        <p>
+          The levenshtein distance can also be calculated between two properties
+          on the same model. The following snippet calculates the levenshtein
+          distance between <code>StringOne</code> and <code>StringTwo</code>
+        </p>
+
+<pre><code>context.TestModels.LevenshteinDistanceOf(x =&gt; x.StringOne)
+                  .ComparedTo(x => x.StringTwo);
+</code></pre>
+
+        <h3>The result</h3>
+        <p>
+          The result of the above is defined as
+          <code>IEnumerable&lt;ILevenshteinDistance&lt;T&gt;&gt;</code>.
+        </p>
+        <p>
+          In order to return the Levenshtein distance for a particular record, a
+          new interface has been created.  This interface allows us to return
+          the result of the comparison as well as the source item itself and is
+          defined as follows:
+        </p>
+
+<pre><code>public interface ILevenshteinDistance&lt;out T&gt;
+{
+    int Distance { get; }
+    T Item { get; }
+}
+</code></pre>
+
+        <p>
+          This interface means that you can begin to filter out results based on
+          the Levenshtein Distance.  For example if we wanted to retrieve
+          records where the Levenshtein Distance from "test" is less than 5 we
+          would write the following:
+        </p>
+
+<pre><code>var result = data.LevenshteinDistanceOf(x =&gt; x.StringOne)
+                 .ComparedTo("test")
+                 .Where(x =&gt; x.Distance &lt; 5)
+                 .Select(x =&gt; x.Item);
+</code></pre>
+
+        <hr />
+        <blockquote>
+          <p>
+            If you have any new feature requests, questions, or
+            comments, please get in touch, either, via my
+            <a href="http://jnye.co">website</a>, through twitter:
+            <a href="https://twitter.com/ninjanye">@ninjanye</a> or by creating
+            an issue through the
+            <a href="https://github.com/ninjanye/SearchExtensions/">
+              projects github page
+            </a>.
+          </p>
+        </blockquote>
+
+      </div>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SearchExtensions maintained by
+          <a href="https://github.com/ninjanye">ninjanye</a>
+        </p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
