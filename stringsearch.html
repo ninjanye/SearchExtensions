@@ -76,6 +76,10 @@
             property <em>starts with any</em> of the search terms provided.
           </li>
           <li>
+            <code><a href="#ends-with-search">EndsWith</a></code> - target
+            property <em>ends with any</em> of the search terms provided.
+          </li>
+          <li>
             <code><a href="#to-ranked-search">ToRanked</a></code> - transforms
             the results of a <code>Containing</code> search into a ranked result.
           </li>
@@ -90,10 +94,6 @@
           <li>
             <code><a href="#set-culture">SetCulture</a></code> - Sets the string
             comparison culture with which to perform searches
-          </li>
-          <li>
-            <code><a href="#ends-with-search">EndsWith</a></code> - target
-            property <em>ends with any</em> of the search terms provided.
           </li>
         </ul>
 
@@ -293,6 +293,47 @@
                                       "searchTerm3");
 </code></pre>
 
+        <h3 id="ends-with-search">
+          Performing <code>EndsWith</code> searches
+        </h3>
+        <p>
+          Search where a <strong>single property</strong> ends with a
+          <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                  .EndsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> ends
+          with a <strong>single search term</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                  .EndsWith("searchTerm");
+</code></pre>
+
+        <p>
+          Search where a <strong>single property</strong> ends with any one of
+          <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1)
+                  .EndsWith("search", "term", "test");
+</code></pre>
+
+        <p>
+          Search where any one of <strong>multiple properties</strong> starts
+          with any one of <strong>multiple search terms</strong>
+        </p>
+
+<pre><code>var result = queryableData.Search(x =&gt; x.Property1, x =&gt; x.Property2,
+                                  x =&gt; x.Property3)
+                  .EndsWith("searchTerm1", "searchTerm2", "searchTerm3");
+</code></pre>
+
         <h2 id="ranked-search">Ranked Searches</h2>
         <p>
           As well as returning the matched items, a Ranked Search also returns a
@@ -439,45 +480,6 @@ T Item { get; }
                            .EndsWith("xyz")    // Uses Ordinal
                            .SetCulture(StringComparison.CurrentCulture)
                            .Containing("mno"); //Uses CurrentCulture
-</code></pre>
-
-        <h3 id="ends-with-search">
-          Performing <code>EndsWith</code> searches
-        </h3>
-        <p>
-          Search where a <strong>single property</strong> ends with a
-          <strong>single search term</strong>
-        </p>
-
-<pre><code>var result = data.Search(x =&gt; x.Property1)
-                 .EndsWith("searchTerm");
-</code></pre>
-
-        <p>
-          Search where any one of <strong>multiple properties</strong> ends
-          with a <strong>single search term</strong>
-        </p>
-
-<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
-                 .EndsWith("searchTerm");
-</code></pre>
-
-        <p>
-          Search where a <strong>single property</strong> ends with any one of
-          <strong>multiple search terms</strong>
-        </p>
-
-<pre><code>var result = data.Search(x =&gt; x.Property1)
-                 .EndsWith("search", "term", "test");
-</code></pre>
-
-        <p>
-          Search where any one of <strong>multiple properties</strong> starts
-          with any one of <strong>multiple search terms</strong>
-        </p>
-
-<pre><code>var result = data.Search(x =&gt; x.Property1, x =&gt; x.Property2, x =&gt; x.Property3)
-                 .EndsWith("searchTerm1", "searchTerm2", "searchTerm3");
 </code></pre>
 
         <h2 id="combining-searches">Combining instructions</h2>
