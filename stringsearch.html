@@ -438,18 +438,11 @@ T Item { get; }
           to search to build its hit count.
         </p>
 
+        <h3 id="set-culture">Performing IEnumerable searches</h3>
         <blockquote>
           The above methods can all be performed on both <code>IQueryable</code>
           collections and <code>IEnumerable</code> collections.
         </blockquote>
-
-        <h3 id="set-culture">Performing IEnumerable searches</h3>
-        <blockquote>
-          The following methods can only be performed
-          <code>IEnumerable</code> collections.  This means that the data will
-          be brought into memory and filtered in memory.
-        </blockquote>
-
         <p>
           The important thing to remember when performing an in memory search is
           to set the culture to the type of string comparison you wish to
@@ -479,7 +472,7 @@ T Item { get; }
                            .SetCulture(StringComparison.Ordinal)
                            .EndsWith("xyz")    // Uses Ordinal
                            .SetCulture(StringComparison.CurrentCulture)
-                           .Containing("mno"); //Uses CurrentCulture
+                           .Containing("mno"); // Uses CurrentCulture
 </code></pre>
 
         <h2 id="combining-searches">Combining instructions</h2>
