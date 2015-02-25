@@ -47,6 +47,7 @@
     <Compile Include="EnumerableStringSearch.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\QueryableContainsExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\EnumerableContainsExpressionBuilder.cs" />
+    <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\QueryableEndsWithExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\EnumerableEndsWithExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EnumerableExpressionHelper.cs" />
     <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\EnumerableEqualsExpressionBuilder.cs" />

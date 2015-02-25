@@ -28,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, ConstantExpression stringComparisonExpression)
         {
             var searchTermExpression = Expression.Constant(searchTerm);
-            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, searchTermExpression, stringComparisonExpression);
+            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethodWithComparison, searchTermExpression, stringComparisonExpression);
             return Expression.IsTrue(endsWithExpresion);
         }
 
@@ -53,7 +53,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
-            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, propertyToSearchFor.Body, stringComparisonExpression);
+            var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethodWithComparison, propertyToSearchFor.Body, stringComparisonExpression);
             Expression finalExpression = null;
             if (nullCheck)
             {

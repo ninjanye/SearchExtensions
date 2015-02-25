@@ -61,6 +61,19 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Test]
+        public void Search_ContainsThenEndsWith_OnlyResultsThatContainTextAndEndWithTextAreReturned()
+        {
+            //Arrange
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).Containing("abc").EndsWith("d").ToList();
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.All(x => x.StringOne.Contains("abc") && x.StringOne.EndsWith("d")));
+        }
+
+        [Test]
         public void Search_Equals_DefinedPropertyEqualsSearchResult()
         {
             //Arrange
@@ -99,6 +112,21 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Assert
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.StringOne.StartsWith(searchTerm) || x.StringTwo.StartsWith(searchTerm)));
+        }
+
+        [Test]
+        public void SearchMultiple_ResultEndsWithAcrossTwoProperties_ResultEndsWithTermInEitherProperty()
+        {
+            //Arrange
+            const string searchTerm = "gh";
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+                                                .EndsWith(searchTerm).ToList();
+            
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.StringOne.EndsWith(searchTerm) || x.StringTwo.EndsWith(searchTerm)));
         }
 
         [Test]
@@ -142,6 +170,20 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Test]
+        public void Search_EndsWithMultipleTerms_SearchAgainstMultipleTerms()
+        {
+            //Arrange
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne).EndsWith("cd", "gh").ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.StringOne.EndsWith("cd") || x.StringOne.EndsWith("gh")));
+
+        }
+
+        [Test]
         public void Search_SearchManyPropertiesContainingManyTerms_AllResultsHaveASearchTermWithin()
         {
             //Arrange
@@ -170,6 +212,20 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Test]
+        public void Search_SearchManyPropertiesEndingWithManyTerms_AllResultsHaveAPropertyEndingWithASpecifiedTerm()
+        {
+            //Arrange
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EndsWith("cd", "gh").ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.All(x => x.StringOne.EndsWith("cd") || x.StringOne.EndsWith("gh")
+                                       || x.StringTwo.EndsWith("cd") || x.StringTwo.EndsWith("gh")));
+        }
+
+        [Test]
         public void Search_SearchContainsIgnoreCase_CaseIsIgnored()
         {
             //Arrange
@@ -193,6 +249,19 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Assert
             Assert.AreEqual(3, result.Count());
             Assert.IsTrue(result.All(x => x.StringTwo.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Test]
+        public void Search_SearchEndsWithIgnoreCase_CaseIsIgnored()
+        {
+            //Arrange
+
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringTwo).EndsWith("E").ToList();
+
+            //Assert
+            Assert.AreEqual(7, result.Count());
+            Assert.IsTrue(result.All(x => x.StringTwo.EndsWith("e", StringComparison.OrdinalIgnoreCase)));
         }
 
         [Test]

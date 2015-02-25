@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressionBuilder;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpressionBuilder;
 using NinjaNye.SearchExtensions.Models;
@@ -133,6 +134,31 @@ namespace NinjaNye.SearchExtensions
             }
 
             this.BuildExpression(completeExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// ends with any of the defined search terms
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        public QueryableStringSearch<T> EndsWith(params string[] terms)
+        {
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, terms);
+            this.BuildExpression(endsWithExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties 
+        /// ends with any of the defined terms
+        /// </summary>
+        /// <param name="propertiesToSearchFor">properties defining the terms to search for</param>
+        public QueryableStringSearch<T> EndsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
+        {
+            var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, propertiesToSearch);
+            this.BuildExpression(endsWithExpression);
             return this;
         }
 
