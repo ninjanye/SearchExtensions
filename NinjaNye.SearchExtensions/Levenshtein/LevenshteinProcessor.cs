@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace NinjaNye.SearchExtensions.Levenshtein
 {
@@ -40,8 +41,9 @@ namespace NinjaNye.SearchExtensions.Levenshtein
         private static int ComputeDistance(string source, string comparedTo)
         {
             int sourceLength = source.Length + 1;
-            source = source.ToLower().PadLeft(sourceLength);
-            comparedTo = comparedTo.ToLower();
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            source = textInfo.ToLower(source).PadLeft(sourceLength);
+            comparedTo = textInfo.ToLower(comparedTo);
             var previousValues = new int[sourceLength];
             var currentValues = new int[sourceLength];
             for (int row = 0; row < sourceLength; row++)
@@ -58,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Levenshtein
                     int minimumCost = previousValues[row] + 1;
                     if (!isFirst)
                     {
-                        int cost = !source[row].Equals(comparedToCharacter) ? 1 : 0;
+                        int cost = source[row] != comparedToCharacter ? 1 : 0;
                         var previousRow = row - 1;
                         int diagonalIncrement = previousValues[previousRow] + cost;
                         int topIncrement = currentValues[previousRow] + 1;
