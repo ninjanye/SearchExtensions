@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     [TestFixture]
-    public class ContainingPropertyTests
+    public class ContainingTests
     {
         private List<TestData> testData = new List<TestData>();
         private readonly TestData matchingItem1 = new TestData { Name = "searching this", Description = "chin" };

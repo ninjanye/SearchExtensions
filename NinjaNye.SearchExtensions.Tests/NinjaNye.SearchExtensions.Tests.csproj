@@ -60,7 +60,8 @@
     <Compile Include="LevenshteinTests\LevenshteinDistanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingAllTests.cs" />
-    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingPropertyTests.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingTests.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingWholeWordTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\EndsWithTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\DateTimeSearchTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\IntegerSearchTests.cs" />

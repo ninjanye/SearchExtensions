@@ -69,6 +69,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableSearchBase.cs" />
     <Compile Include="SearchBase.cs" />
+    <Compile Include="SearchOptions.cs" />
+    <Compile Include="SearchTypeEnum.cs" />
     <Compile Include="Soundex\SoundexProcessor.cs" />
     <Compile Include="Validation\Ensure.cs" />
     <Compile Include="Visitors\SwapExpressionVisitor.cs" />
