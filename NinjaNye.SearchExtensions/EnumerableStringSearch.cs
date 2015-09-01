@@ -58,23 +58,7 @@ namespace NinjaNye.SearchExtensions
                 this.containingSearchTerms.Add(validSearchTerm);
             }
 
-            Expression orExpression = null;
-            var stringComparisonExpression = Expression.Constant(this._comparisonType);
-
-            foreach (var propertyToSearch in this.Properties)
-            {
-                foreach (var validSearchTerm in validSearchTerms)
-                {
-                    string searchTerm = validSearchTerm;
-                    if (_searchType == SearchTypeEnum.WholeWords)
-                    {
-                        searchTerm = String.Concat(" ", validSearchTerm, " ");
-                    }
-                    ConstantExpression searchTermExpression = Expression.Constant(searchTerm);
-                    var indexOfExpression = EnumerableContainsExpressionBuilder.Build(propertyToSearch, searchTermExpression, stringComparisonExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, indexOfExpression);
-                }
-            }
+            Expression orExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _comparisonType, _searchType);
 
             if (_searchType == SearchTypeEnum.WholeWords)
             {

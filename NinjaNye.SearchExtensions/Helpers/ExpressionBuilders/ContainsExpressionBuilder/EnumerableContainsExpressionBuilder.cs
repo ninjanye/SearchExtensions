@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder
@@ -27,5 +28,32 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             var nullCheckExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethodWithComparison, searchTermExpression, stringComparisonExpression);
             return Expression.GreaterThanOrEqual(nullCheckExpresion, ExpressionMethods.ZeroConstantExpression);
         }
+
+        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, IEnumerable<string> searchTerms, ConstantExpression stringComparisonExpression, SearchTypeEnum searchType)
+        {
+            Expression completeExpression = null;
+            bool isWholeWordSearch = searchType == SearchTypeEnum.WholeWords;
+            foreach (var searchTerm in searchTerms)
+            {
+                var searchTermExpression = Expression.Constant(isWholeWordSearch ? " " + searchTerm + " " : searchTerm);
+                var containsExpression = Build(propertyToSearch, searchTermExpression, stringComparisonExpression);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, containsExpression);
+            }
+
+            return completeExpression;
+        }
+
+        public static Expression Build<T>(Expression<Func<T, string>>[] properties, IEnumerable<string> searchTerms, StringComparison comparisonType, SearchTypeEnum searchType)
+        {
+            Expression completeExpression = null;
+            var comparisonTypeExpression = Expression.Constant(comparisonType);
+            foreach (var stringProperty in properties)
+            {
+                var containsExpression = Build(stringProperty, searchTerms, comparisonTypeExpression, searchType);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, containsExpression);
+            }
+            return completeExpression;
+        }
+
     }
 }
