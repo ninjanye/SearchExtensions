@@ -43,13 +43,13 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             return completeExpression;
         }
 
-        public static Expression Build<T>(Expression<Func<T, string>>[] properties, IEnumerable<string> searchTerms, StringComparison comparisonType, SearchTypeEnum searchType)
+        public static Expression Build<T>(Expression<Func<T, string>>[] properties, IEnumerable<string> searchTerms, SearchOptions searchOptions)
         {
             Expression completeExpression = null;
-            var comparisonTypeExpression = Expression.Constant(comparisonType);
+            var comparisonTypeExpression = Expression.Constant(searchOptions.ComparisonType);
             foreach (var stringProperty in properties)
             {
-                var containsExpression = Build(stringProperty, searchTerms, comparisonTypeExpression, searchType);
+                var containsExpression = Build(stringProperty, searchTerms, comparisonTypeExpression, searchOptions.SearchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, containsExpression);
             }
             return completeExpression;

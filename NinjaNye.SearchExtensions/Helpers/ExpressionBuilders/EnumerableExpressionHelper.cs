@@ -69,13 +69,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// Calculates how many search hits occured for a given property
         /// </summary>
         /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
-        public static Expression CalculateHitCount<T>(Expression<Func<T, string>> stringProperty, string searchTerm, StringComparison stringComparison)
+        public static Expression CalculateHitCount<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
         {
             Expression searchTermExpression = Expression.Constant(searchTerm);
             Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
-            Expression stringComparisonExpression = Expression.Constant(stringComparison);
             MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-            var replaceExpression = Expression.Call(ExpressionMethods.CustomReplaceMethod, stringProperty.Body, searchTermExpression, ExpressionMethods.EmptyStringExpression, stringComparisonExpression);
+            var replaceExpression = Expression.Call(ExpressionMethods.CustomReplaceMethod, stringProperty.Body, searchTermExpression, ExpressionMethods.EmptyStringExpression, searchOptions.ComparisonTypeExpression);
             var replacedLengthExpression = Expression.Property(replaceExpression, ExpressionMethods.StringLengthProperty);
             var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);
             var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
