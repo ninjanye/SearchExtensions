@@ -63,5 +63,27 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result, Contains.Item(expected));
         }
+
+        [Test]
+        public void Containing_ChangeMatchType_CorrectResultReturned()
+        {
+            //Arrange
+            var expected = new TestData { Description = "an expected result" };
+            var unexpected = new TestData { Description = "an not expected item" };
+            var data = new List<TestData> { expected, unexpected };
+
+            //Act
+            var result = data.Search(x => x.Description)
+                .Matching(SearchTypeEnum.WholeWords)
+                .Containing("expected")
+                .Matching(SearchTypeEnum.AnyOccurrence)
+                .Containing("res")
+                .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(expected));
+        }
+
     }
 }

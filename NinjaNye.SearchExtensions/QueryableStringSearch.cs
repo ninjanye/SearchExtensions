@@ -16,6 +16,7 @@ namespace NinjaNye.SearchExtensions
     public sealed class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
         private readonly IList<string> containingSearchTerms = new List<string>();
+        private SearchTypeEnum _searchType;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)
@@ -37,17 +38,7 @@ namespace NinjaNye.SearchExtensions
                 this.containingSearchTerms.Add(validSearchTerm);
             }
 
-            Expression orExpression = null;
-            foreach (var propertyToSearch in this.Properties)
-            {
-                foreach (var validSearchTerm in validSearchTerms)
-                {
-                    ConstantExpression searchTermExpression = Expression.Constant(validSearchTerm);
-                    Expression comparisonExpression =  QueryableContainsExpressionBuilder.Build(propertyToSearch, searchTermExpression);
-                    orExpression = ExpressionHelper.JoinOrExpression(orExpression, comparisonExpression);
-                }
-            }
-
+            Expression orExpression = QueryableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchType);
             this.BuildExpression(orExpression);
             return this;
         }
@@ -282,6 +273,12 @@ namespace NinjaNye.SearchExtensions
             var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, ExpressionMethods.EmptyStringExpression);
             var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, this.FirstParameter);
             return nullSafeExpression;
+        }
+
+        public QueryableStringSearch<T> Matching(SearchTypeEnum searchType)
+        {
+            _searchType = searchType;
+            return this;
         }
     }
 }
