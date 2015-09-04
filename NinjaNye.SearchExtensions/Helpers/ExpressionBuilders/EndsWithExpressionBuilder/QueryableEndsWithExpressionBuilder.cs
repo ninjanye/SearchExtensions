@@ -9,12 +9,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a collection of search terms against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, SearchTypeEnum searchType)
         {
             Expression completeExpression = null;
             foreach (var searchTerm in searchTerms)
             {
-                var endsWithExpression = Build(stringProperty, searchTerm);
+                var endsWithExpression = Build(stringProperty, searchTerm, searchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, endsWithExpression);
             }
 
@@ -24,9 +24,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a search term against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchTypeEnum searchType)
         {
-            var searchTermExpression = Expression.Constant(searchTerm);
+            var alteredSearchTerm = searchType == SearchTypeEnum.WholeWords ? " " + searchTerm : searchTerm;
+            var searchTermExpression = Expression.Constant(alteredSearchTerm);
             return Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, searchTermExpression);
         }
 
@@ -70,12 +71,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith([searchTerm])' expression comparing multiple string properties against string terms
         /// </summary>
-        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, string[] searchTerms)
+        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, string[] searchTerms, SearchTypeEnum searchType)
         {
             Expression finalExpression = null;
             foreach (var stringProperty in stringProperties)
             {
-                var endsWithExpression = Build(stringProperty, searchTerms);
+                var endsWithExpression = Build(stringProperty, searchTerms, searchType);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, endsWithExpression);
             }
             return finalExpression;

@@ -1,34 +1,10 @@
 using System;
 using System.Linq;
+using System.Runtime.Remoting;
 using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
-    [TestFixture]
-    internal class ContainingTests : IDisposable
-    {
-        private readonly TestContext context = new TestContext();
-
-        [Test]
-        public void Containing_SearchWholeWordsOnly_ReturnsOnlyRecordsWithWholeWordMatches()
-        {
-            //Arrange
-
-            //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
-                                                .Matching(SearchTypeEnum.WholeWords)
-                                                .Containing("word");
-
-            //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-        }
-
-        public void Dispose()
-        {
-            this.context.Dispose();
-        }        
-    }
-
     [TestFixture]
     internal class ContainingAllTests : IDisposable
     {

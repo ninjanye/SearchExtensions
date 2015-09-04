@@ -9,6 +9,20 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
         /// <summary>
         /// Build an 'equals' expression for a search term against a particular string property
         /// </summary>
+        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>>[] properties, IEnumerable<string> terms)
+        {
+            Expression completeExpression = null;
+            foreach (var property in properties)
+            {
+                var equalsExpression = Build(property, terms);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'equals' expression for a search term against a particular string property
+        /// </summary>
         public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> property, IEnumerable<string> terms)
         {
             Expression completeExpression = null;

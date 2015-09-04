@@ -9,12 +9,26 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// <summary>
         /// Build a 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        public static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms)
+        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, IEnumerable<string> searchTerms, SearchTypeEnum searchType)
+        {
+            Expression completeExpression = null;
+            foreach (var property in stringProperties)
+            {
+                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(property, searchTerms, searchType);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
+            }
+            return completeExpression;
+        }
+
+        /// <summary>
+        /// Build a 'indexof() == 0' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, SearchTypeEnum searchType)
         {
             Expression completeExpression = null;
             foreach (var searchTerm in searchTerms)
             {
-                var startsWithExpression = Build(stringProperty, searchTerm);
+                var startsWithExpression = Build(stringProperty, searchTerm, searchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
             return completeExpression;
@@ -23,9 +37,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
+        private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchTypeEnum searchType)
         {
-            var searchTermExpression = Expression.Constant(searchTerm);
+            var alteredSearchTerm = searchType == SearchTypeEnum.WholeWords ? searchTerm + " " : searchTerm;
+            var searchTermExpression = Expression.Constant(alteredSearchTerm);
             var indexOfCallExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethod, searchTermExpression);
             return Expression.Equal(indexOfCallExpresion, ExpressionMethods.ZeroConstantExpression);
         }

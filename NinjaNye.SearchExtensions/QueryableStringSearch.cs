@@ -39,6 +39,18 @@ namespace NinjaNye.SearchExtensions
             }
 
             Expression orExpression = QueryableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchType);
+            var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(Properties, validSearchTerms, _searchType);
+            orExpression = ExpressionHelper.JoinOrExpression(orExpression, startsWithExpression);
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(Properties, validSearchTerms.ToArray(), _searchType);
+            orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);
+
+            if (_searchType == SearchTypeEnum.WholeWords)
+            {
+                var equalsExpression = QueryableEqualsExpressionBuilder.Build(Properties, validSearchTerms);
+                orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
+            }
+
+
             this.BuildExpression(orExpression);
             return this;
         }
@@ -102,7 +114,7 @@ namespace NinjaNye.SearchExtensions
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)
             {
-                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertyToSearch, terms);
+                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertyToSearch, terms, _searchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
             }
             this.BuildExpression(completeExpression);
@@ -135,7 +147,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> EndsWith(params string[] terms)
         {
-            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, terms);
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchType);
             this.BuildExpression(endsWithExpression);
             return this;
         }
@@ -160,12 +172,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> EqualTo(params string[] terms)
         {
-            Expression completeExpression = null;
-            foreach (var propertyToSearch in this.Properties)
-            {
-                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, terms);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
-            }
+            Expression completeExpression = QueryableEqualsExpressionBuilder.Build(Properties, terms);
             this.BuildExpression(completeExpression);
             return this;
         }
