@@ -50,7 +50,6 @@ namespace NinjaNye.SearchExtensions
                 orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
             }
 
-
             this.BuildExpression(orExpression);
             return this;
         }

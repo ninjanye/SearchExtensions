@@ -67,7 +67,10 @@ namespace NinjaNye.SearchExtensions
                 orExpression = ExpressionHelper.JoinOrExpression(orExpression, startsWithExpression);
 
                 var endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
-                orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);            
+                orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);
+
+                var equalsExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
+                orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
             }
 
             this.BuildExpression(orExpression);

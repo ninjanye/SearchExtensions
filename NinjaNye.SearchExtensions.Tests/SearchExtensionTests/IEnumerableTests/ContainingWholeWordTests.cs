@@ -65,6 +65,25 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
+        public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordOnlyWord()
+        {
+            //Arrange
+            var expected = new TestData{Description = "expected"};
+            var unexpected = new TestData { Description = "unexpected" };
+            var data = new List<TestData> {expected, unexpected};
+
+            //Act
+            var result = data.Search(x => x.Description)
+                .Matching(SearchTypeEnum.WholeWords)
+                .Containing("expected")
+                .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(expected));
+        }
+
+        [Test]
         public void Containing_ChangeMatchType_CorrectResultReturned()
         {
             //Arrange
