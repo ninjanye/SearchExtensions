@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Act
             var result = this._context.TestModels.Search(x => x.StringOne)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("word");
 
             //Assert
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Act
             var result = this._context.TestModels.Search(x => x.StringOne)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("whole");
 
             //Assert
@@ -44,7 +44,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Act
             var result = this._context.TestModels.Search(x => x.StringOne)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("match");
 
             //Assert
@@ -59,7 +59,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Act
             var result = this._context.TestModels.Search(x => x.StringOne)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("wholewordmatch");
 
             //Assert

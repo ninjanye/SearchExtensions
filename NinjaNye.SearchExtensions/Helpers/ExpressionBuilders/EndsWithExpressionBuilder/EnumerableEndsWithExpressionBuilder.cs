@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
         {
-            var alteredTerm = searchOptions.SearchType == SearchTypeEnum.WholeWords ? " " + searchTerm : searchTerm;
+            var alteredTerm = searchOptions.SearchType == SearchType.WholeWords ? " " + searchTerm : searchTerm;
             var searchTermExpression = Expression.Constant(alteredTerm);
             var endsWithExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethodWithComparison, searchTermExpression, searchOptions.ComparisonTypeExpression);
             return Expression.IsTrue(endsWithExpresion);

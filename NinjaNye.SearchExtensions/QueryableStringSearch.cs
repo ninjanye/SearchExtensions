@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions
     public sealed class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
         private readonly IList<string> containingSearchTerms = new List<string>();
-        private SearchTypeEnum _searchType;
+        private SearchType _searchType;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)
@@ -44,7 +44,7 @@ namespace NinjaNye.SearchExtensions
             var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(Properties, validSearchTerms.ToArray(), _searchType);
             orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);
 
-            if (_searchType == SearchTypeEnum.WholeWords)
+            if (_searchType == SearchType.WholeWords)
             {
                 var equalsExpression = QueryableEqualsExpressionBuilder.Build(Properties, validSearchTerms);
                 orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
@@ -281,7 +281,7 @@ namespace NinjaNye.SearchExtensions
             return nullSafeExpression;
         }
 
-        public QueryableStringSearch<T> Matching(SearchTypeEnum searchType)
+        public QueryableStringSearch<T> Matching(SearchType searchType)
         {
             _searchType = searchType;
             return this;

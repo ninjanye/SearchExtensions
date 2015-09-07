@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// </summary>
         private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
         {
-            var alteredSearchTerm = searchOptions.SearchType == SearchTypeEnum.WholeWords ? searchTerm + " " : searchTerm;
+            var alteredSearchTerm = searchOptions.SearchType == SearchType.WholeWords ? searchTerm + " " : searchTerm;
             var searchTermExpression = Expression.Constant(alteredSearchTerm);
             if (searchOptions.NullCheck)
             {

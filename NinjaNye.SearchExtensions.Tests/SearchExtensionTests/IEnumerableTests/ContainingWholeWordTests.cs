@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = data.Search(x => x.Description)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("expected")
                 .ToList();
 
@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = data.Search(x => x.Description)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("expect")
                 .ToList();
 
@@ -55,7 +55,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = data.Search(x => x.Description)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("expected")
                 .ToList();
 
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = data.Search(x => x.Description)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("expected")
                 .ToList();
 
@@ -93,9 +93,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = data.Search(x => x.Description)
-                .Matching(SearchTypeEnum.WholeWords)
+                .Matching(SearchType.WholeWords)
                 .Containing("expected")
-                .Matching(SearchTypeEnum.AnyOccurrence)
+                .Matching(SearchType.AnyOccurrence)
                 .Containing("res")
                 .ToList();
 

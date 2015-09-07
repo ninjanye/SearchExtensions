@@ -29,10 +29,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             return Expression.GreaterThanOrEqual(nullCheckExpresion, ExpressionMethods.ZeroConstantExpression);
         }
 
-        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, IEnumerable<string> searchTerms, ConstantExpression stringComparisonExpression, SearchTypeEnum searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, IEnumerable<string> searchTerms, ConstantExpression stringComparisonExpression, SearchType searchType)
         {
             Expression completeExpression = null;
-            bool isWholeWordSearch = searchType == SearchTypeEnum.WholeWords;
+            bool isWholeWordSearch = searchType == SearchType.WholeWords;
             foreach (var searchTerm in searchTerms)
             {
                 var searchTermExpression = Expression.Constant(isWholeWordSearch ? " " + searchTerm + " " : searchTerm);

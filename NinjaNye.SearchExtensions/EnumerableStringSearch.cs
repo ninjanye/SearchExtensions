@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions
 
             Expression orExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _searchOptions);
 
-            if (_searchOptions.SearchType == SearchTypeEnum.WholeWords)
+            if (_searchOptions.SearchType == SearchType.WholeWords)
             {
                 var searchTermArray = validSearchTerms.ToArray();
                 var startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
@@ -285,7 +285,7 @@ namespace NinjaNye.SearchExtensions
             return nullSafeExpresion;
         }
 
-        public EnumerableStringSearch<T> Matching(SearchTypeEnum searchType)
+        public EnumerableStringSearch<T> Matching(SearchType searchType)
         {
             _searchOptions.SearchType = searchType;
             return this;

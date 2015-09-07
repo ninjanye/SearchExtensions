@@ -1,6 +1,6 @@
 ﻿namespace NinjaNye.SearchExtensions
 {
-    public enum SearchTypeEnum
+    public enum SearchType
     {
         AnyOccurrence,
         WholeWords

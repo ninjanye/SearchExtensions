@@ -9,7 +9,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a collection of search terms against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, SearchTypeEnum searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, IEnumerable<string> searchTerms, SearchType searchType)
         {
             Expression completeExpression = null;
             foreach (var searchTerm in searchTerms)
@@ -24,9 +24,9 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a search term against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchTypeEnum searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchType searchType)
         {
-            var alteredSearchTerm = searchType == SearchTypeEnum.WholeWords ? " " + searchTerm : searchTerm;
+            var alteredSearchTerm = searchType == SearchType.WholeWords ? " " + searchTerm : searchTerm;
             var searchTermExpression = Expression.Constant(alteredSearchTerm);
             return Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, searchTermExpression);
         }
@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith([searchTerm])' expression comparing multiple string properties against string terms
         /// </summary>
-        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, string[] searchTerms, SearchTypeEnum searchType)
+        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, string[] searchTerms, SearchType searchType)
         {
             Expression finalExpression = null;
             foreach (var stringProperty in stringProperties)

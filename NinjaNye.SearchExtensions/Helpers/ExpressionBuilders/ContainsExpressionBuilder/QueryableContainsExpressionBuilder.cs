@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
 {
     internal static class QueryableContainsExpressionBuilder
     {
-        public static Expression Build<T>(Expression<Func<T, string>>[] propertiesToSearch, ICollection<string> searchTerms, SearchTypeEnum searchType)
+        public static Expression Build<T>(Expression<Func<T, string>>[] propertiesToSearch, ICollection<string> searchTerms, SearchType searchType)
         {
             Expression result = null;
             foreach (var propertyToSearch in propertiesToSearch)
@@ -19,7 +19,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             return result;
         }
 
-        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, ICollection<string> searchTerms, SearchTypeEnum searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, ICollection<string> searchTerms, SearchType searchType)
         {
             Expression result = null;
             foreach (var searchTerm in searchTerms)
@@ -34,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
         /// <summary>
         /// Build a 'contains' expression for a search term against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, string searchTerm, SearchTypeEnum searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> propertyToSearch, string searchTerm, SearchType searchType)
         {
             Ensure.ArgumentNotNull(searchTerm, "searchTerm");
-            if (searchType == SearchTypeEnum.WholeWords)
+            if (searchType == SearchType.WholeWords)
             {
                 searchTerm = " " + searchTerm + " ";
             }
