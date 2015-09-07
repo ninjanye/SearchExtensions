@@ -9,7 +9,7 @@
     <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.5 allows for multiple property searching against any struct type</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.6 allows for whole word searches against a collection of terms</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>search extension searchextensions methods linq ranked entityframework soundex levenshtein</tags>
   </metadata>
