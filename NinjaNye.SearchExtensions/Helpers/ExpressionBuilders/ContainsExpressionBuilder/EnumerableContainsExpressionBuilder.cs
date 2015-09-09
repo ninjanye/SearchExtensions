@@ -22,7 +22,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
         /// <summary>
         /// Build a 'indexof() >= 0' expression for a search term against a particular string property
         /// </summary>
-        public static BinaryExpression Build<T>(Expression<Func<T, string>> propertyToSearch, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        private static BinaryExpression Build<T>(Expression<Func<T, string>> propertyToSearch, ConstantExpression searchTermExpression, ConstantExpression stringComparisonExpression)
         {
             var coalesceExpression = Expression.Coalesce(propertyToSearch.Body, ExpressionMethods.EmptyStringExpression);
             var nullCheckExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethodWithComparison, searchTermExpression, stringComparisonExpression);
@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             return completeExpression;
         }
 
-        public static Expression Build<T>(Expression<Func<T, string>>[] properties, IEnumerable<string> searchTerms, SearchOptions searchOptions)
+        public static Expression Build<T>(Expression<Func<T, string>>[] properties, string[] searchTerms, SearchOptions searchOptions)
         {
             Expression completeExpression = null;
             var comparisonTypeExpression = Expression.Constant(searchOptions.ComparisonType);

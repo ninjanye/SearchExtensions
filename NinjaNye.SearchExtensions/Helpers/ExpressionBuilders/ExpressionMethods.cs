@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using NinjaNye.SearchExtensions.Levenshtein;
@@ -27,6 +28,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static readonly MethodInfo EqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
         public static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
         public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo StringConcatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
         public static readonly MethodInfo StringContainsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
         public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
         public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");

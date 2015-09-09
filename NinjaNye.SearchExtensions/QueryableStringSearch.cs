@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions
 {
     public sealed class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
-        private readonly IList<string> containingSearchTerms = new List<string>();
+        private IList<string> _containingSearchTerms = new List<string>();
         private SearchType _searchType;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
@@ -31,25 +31,10 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "terms");
-            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
+            _containingSearchTerms = _containingSearchTerms.Union(validSearchTerms).ToList();
 
-            foreach (var validSearchTerm in validSearchTerms)
-            {
-                this.containingSearchTerms.Add(validSearchTerm);
-            }
-
-            Expression orExpression = QueryableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchType);
-            var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(Properties, validSearchTerms, _searchType);
-            orExpression = ExpressionHelper.JoinOrExpression(orExpression, startsWithExpression);
-            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(Properties, validSearchTerms.ToArray(), _searchType);
-            orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);
-
-            if (_searchType == SearchType.WholeWords)
-            {
-                var equalsExpression = QueryableEqualsExpressionBuilder.Build(Properties, validSearchTerms);
-                orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
-            }
-
+            var orExpression = QueryableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchType);
             this.BuildExpression(orExpression);
             return this;
         }
@@ -128,13 +113,7 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> StartsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
-            Expression completeExpression = null;
-            foreach (var stringProperty in this.Properties)
-            {
-                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(stringProperty, propertiesToSearch);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
-            }
-
+            var completeExpression = QueryableStartsWithExpressionBuilder.Build(this.Properties, propertiesToSearch, _searchType);
             this.BuildExpression(completeExpression);
             return this;
         }
@@ -261,9 +240,9 @@ namespace NinjaNye.SearchExtensions
             foreach (var propertyToSearch in this.Properties)
             {
                 var nullSafeExpression = this.BuildNullSafeExpression(propertyToSearch);
-                for (int j = 0; j < this.containingSearchTerms.Count; j++)
+                for (int j = 0; j < this._containingSearchTerms.Count; j++)
                 {
-                    var searchTerm = this.containingSearchTerms[j];
+                    var searchTerm = this._containingSearchTerms[j];
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }

@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions
                 return null;
             }
 
-            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
+            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
             if (!validSearchTerms.Any())
             {
                 return null;
@@ -213,7 +213,7 @@ namespace NinjaNye.SearchExtensions
         [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
         public EnumerableStringSearch<T> IsEqual(params string[] terms)
         {
-            Expression fullExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, terms, _searchOptions);
+            var fullExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, terms, _searchOptions);
             this.BuildExpression(fullExpression);
             return this;
         }
@@ -227,7 +227,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             propertiesToSearchFor = propertiesToSearchFor.Select(AlignParameter).ToArray();
-            Expression completeExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, propertiesToSearchFor, _searchOptions);
+            var completeExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, propertiesToSearchFor, _searchOptions);
             this.BuildExpression(completeExpression);
             return this;
         }

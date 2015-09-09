@@ -12,10 +12,6 @@ namespace NinjaNye.SearchExtensions
         /// Search an Enumerable list of objects
         /// </summary>
         /// <typeparam name="T">Type of object to be searched</typeparam>
-        /// <param name="stringProperties">
-        /// String properties to search. If ommitted, a search 
-        /// on all string properties will be performed
-        /// </param>
         public static EnumerableStringSearch<T> Search<T>(this IEnumerable<T> source)
         {
             var stringProperties = EnumerableExpressionHelper.GetProperties<T, string>();
@@ -26,6 +22,7 @@ namespace NinjaNye.SearchExtensions
         /// Search an Enumerable list of objects
         /// </summary>
         /// <typeparam name="T">Type of object to be searched</typeparam>
+        /// <param name="source"></param>
         /// <param name="stringProperties">
         /// String properties to search. If ommitted, a search 
         /// on all string properties will be performed
@@ -44,10 +41,6 @@ namespace NinjaNye.SearchExtensions
         /// Search a Queryable collection
         /// </summary>
         /// <typeparam name="T">Type of object to be searched</typeparam>
-        /// <param name="stringProperties">
-        /// String properties to search. If ommitted, a search 
-        /// on all string properties will be performed
-        /// </param>
         public static QueryableStringSearch<T> Search<T>(this IQueryable<T> source)
         {
             var properties = EnumerableExpressionHelper.GetProperties<T, string>();
@@ -58,6 +51,7 @@ namespace NinjaNye.SearchExtensions
         /// Search a Queryable collection
         /// </summary>
         /// <typeparam name="T">Type of object to be searched</typeparam>
+        /// <param name="source"></param>
         /// <param name="stringProperties">
         /// String properties to search. If ommitted, a search 
         /// on all string properties will be performed

@@ -32,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i == 1));
             Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i == 2));
             Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i == 3));
-            Assert.IsTrue(stopwatch.Elapsed.TotalMilliseconds <= 1000);
+            Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThan(1000));
         }
     }
 }

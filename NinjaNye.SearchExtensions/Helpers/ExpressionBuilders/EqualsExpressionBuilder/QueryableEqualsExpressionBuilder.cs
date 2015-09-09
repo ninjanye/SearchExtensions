@@ -9,7 +9,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
         /// <summary>
         /// Build an 'equals' expression for a search term against a particular string property
         /// </summary>
-        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>>[] properties, IEnumerable<string> terms)
+        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>>[] properties, string[] terms)
         {
             Expression completeExpression = null;
             foreach (var property in properties)
@@ -44,11 +44,20 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
             Expression completeExpression = null;
             foreach (var propertyToSearchFor in comparedTo)
             {
-                var isEqualExpression = Expression.Equal(source.Body, propertyToSearchFor.Body);
+                var isEqualExpression = Build(source, propertyToSearchFor);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
             }
 
             return completeExpression;
+        }
+
+        /// <summary>
+        /// Build an 'equals' expression for a search term against a particular string property
+        /// </summary>
+        public static Expression Build<TSource, TType>(Expression<Func<TSource, TType>> source,
+                                                       Expression<Func<TSource, TType>> comparedTo)
+        {
+            return Expression.Equal(source.Body, comparedTo.Body);
         }             
     }
 }

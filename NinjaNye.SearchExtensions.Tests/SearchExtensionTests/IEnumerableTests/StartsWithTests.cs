@@ -17,12 +17,6 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             this.BuildTestData();
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            this.testData.Clear();
-        }
-
         private void BuildTestData()
         {
             this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "status" });
@@ -39,7 +33,6 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-
             //Assert
             Assert.DoesNotThrow(() => testData.Search(x => x.Name).StartsWith(x => x.Description));
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
 using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
@@ -8,35 +7,35 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
     [TestFixture]
     public class ContainingTests
     {
-        private List<TestData> testData = new List<TestData>();
-        private readonly TestData matchingItem1 = new TestData { Name = "searching this", Description = "chin" };
-        private readonly TestData matchingItem2 = new TestData { Name = "searching this", Description = "sea" };
-        private readonly TestData matchingItem3 = new TestData { Name = "look here", Description = "sea", Status = "chelsea"};
-        private readonly TestData matchingItem4 = new TestData { Name = "in status", Description = "miss", Status = "status"};
-        private readonly TestData unmatchingItem = new TestData { Name = "searching this", Description = "no match", Number = 1 };
-        private readonly TestData nullItem = new TestData();
+        private List<TestData> _testData = new List<TestData>();
+        private readonly TestData _matchingItem1 = new TestData { Name = "searching this", Description = "chin" };
+        private readonly TestData _matchingItem2 = new TestData { Name = "searching this", Description = "sea" };
+        private readonly TestData _matchingItem3 = new TestData { Name = "look here", Description = "sea", Status = "chelsea"};
+        private readonly TestData _matchingItem4 = new TestData { Name = "in status", Description = "miss", Status = "status"};
+        private readonly TestData _unmatchingItem = new TestData { Name = "searching this", Description = "no match", Number = 1 };
+        private readonly TestData _nullItem = new TestData();
 
         [SetUp]
         public void ClassSetup()
         {
-            this.testData = new List<TestData>();
+            this._testData = new List<TestData>();
             this.BuildTestData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.testData.Clear();
+            this._testData.Clear();
         }
 
         private void BuildTestData()
         {
-            this.testData.Add(this.matchingItem1);
-            this.testData.Add(this.unmatchingItem);
-            this.testData.Add(this.matchingItem2);
-            this.testData.Add(this.matchingItem3);
-            this.testData.Add(this.nullItem);
-            this.testData.Add(this.matchingItem4);
+            this._testData.Add(this._matchingItem1);
+            this._testData.Add(this._unmatchingItem);
+            this._testData.Add(this._matchingItem2);
+            this._testData.Add(this._matchingItem3);
+            this._testData.Add(this._nullItem);
+            this._testData.Add(this._matchingItem4);
         }
 
         [Test]
@@ -45,7 +44,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            testData.Search(x => x.Name).Containing(x => x.Description);
+            this._testData.Search(x => x.Name).Containing(x => x.Description);
 
             //Assert
             Assert.Pass("No exception thrown");
@@ -57,10 +56,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(x => x.Description);
+            var result = this._testData.Search(x => x.Name).Containing(x => x.Description);
 
             //Assert
-            CollectionAssert.DoesNotContain(result, unmatchingItem);
+            CollectionAssert.DoesNotContain(result, this._unmatchingItem);
         }
 
         [Test]
@@ -69,11 +68,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(x => x.Description).ToList();
+            var result = this._testData.Search(x => x.Name).Containing(x => x.Description).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);
-            CollectionAssert.Contains(result, matchingItem2);
+            CollectionAssert.Contains(result, this._matchingItem2);
         }
 
         [Test]
@@ -82,10 +81,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name, x => x.Status).Containing(x => x.Description).ToList();
+            var result = this._testData.Search(x => x.Name, x => x.Status).Containing(x => x.Description).ToList();
 
             //Assert
-            CollectionAssert.Contains(result, matchingItem3);
+            CollectionAssert.Contains(result, this._matchingItem3);
         }
 
         [Test]
@@ -94,10 +93,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(x => x.Description, x => x.Status).ToList();
+            var result = this._testData.Search(x => x.Name).Containing(x => x.Description, x => x.Status).ToList();
 
             //Assert
-            CollectionAssert.Contains(result, matchingItem4);
+            CollectionAssert.Contains(result, this._matchingItem4);
         }
     }
 }

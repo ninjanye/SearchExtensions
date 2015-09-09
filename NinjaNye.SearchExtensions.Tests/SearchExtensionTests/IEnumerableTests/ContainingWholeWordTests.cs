@@ -103,6 +103,5 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result, Contains.Item(expected));
         }
-
     }
 }

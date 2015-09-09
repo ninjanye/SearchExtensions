@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpressionBuilder;
 using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder
@@ -14,6 +18,18 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             {
                 var containsExpression = Build(propertyToSearch, searchTerms, searchType);
                 result = ExpressionHelper.JoinOrExpression(result, containsExpression);
+            }
+
+            var terms = searchTerms.ToArray();
+            var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
+            result = ExpressionHelper.JoinOrExpression(result, startsWithExpression);
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
+            result = ExpressionHelper.JoinOrExpression(result, endsWithExpression);
+
+            if (searchType == SearchType.WholeWords)
+            {
+                var equalsExpression = QueryableEqualsExpressionBuilder.Build(propertiesToSearch, terms);
+                result = ExpressionHelper.JoinOrExpression(result, equalsExpression);
             }
 
             return result;

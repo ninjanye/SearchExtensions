@@ -71,6 +71,35 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             Assert.IsTrue(result.Any(x => x.StringTwo.StartsWith(x.StringThree)));
         }
 
+        [Test]
+        public void StartsWith_SearchPropertyMatchingWholeWord_MatchesSingleWord()
+        {
+            //Arrange
+            
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne)
+                                                .Matching(SearchType.WholeWords)
+                                                .StartsWith(x => x.StringThree);
+
+            //Assert
+            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
+        }
+
+        [Test]
+        public void StartsWith_SearchPropertyMatchingWholeWord_MatchesWholeWordsOnly()
+        {
+            //Arrange
+            
+            //Act
+            var result = this.context.TestModels.Search(x => x.StringOne)
+                                                .Matching(SearchType.WholeWords)
+                                                .StartsWith(x => x.StringThree);
+
+            //Assert
+            Assert.That(result.Select(x => x.Id), Is.Not.Contains(new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
+            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
+        }
+
         public void Dispose()
         {
             this.context.Dispose();
