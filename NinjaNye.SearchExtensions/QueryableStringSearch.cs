@@ -138,7 +138,7 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> EndsWith(params Expression<Func<T, string>>[] propertiesToSearchFor)
         {
             var propertiesToSearch = propertiesToSearchFor.Select(AlignParameter).ToArray();
-            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, propertiesToSearch);
+            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, propertiesToSearch, this._searchType);
             this.BuildExpression(endsWithExpression);
             return this;
         }

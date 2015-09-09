@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressionBuilder
 {
@@ -34,12 +35,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a collection of properties against a particular string property
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>>[] propertiesToSearchFor)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>>[] propertiesToSearchFor, SearchType searchType)
         {
             Expression completeExpression = null;
             foreach (var propertyToSearchFor in propertiesToSearchFor)
             {
-                var endsWithExpression = Build(stringProperty, propertyToSearchFor);
+                var endsWithExpression = Build(stringProperty, propertyToSearchFor, searchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, endsWithExpression);
             }
 
@@ -49,20 +50,33 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// <summary>
         /// Build an 'EndsWith' expression for a string property against multiple properties
         /// </summary>
-        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, SearchType searchType)
         {
-            return Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, propertyToSearchFor.Body);
+            var seperator = Expression.Constant(" ");
+            var paddedTerm = propertyToSearchFor.Body;
+            if (searchType == SearchType.WholeWords)
+            {
+                paddedTerm = Expression.Call(ExpressionMethods.StringConcatMethod, seperator, propertyToSearchFor.Body);
+            }
+
+            var result = Expression.Call(stringProperty.Body, ExpressionMethods.EndsWithMethod, paddedTerm);
+            if (searchType == SearchType.WholeWords)
+            {
+                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(stringProperty, propertyToSearchFor);
+                return ExpressionHelper.JoinOrExpression(result, isEqualExpression);
+            }
+            return result;
         }
 
         /// <summary>
         /// Build an 'EndsWith' expression comparing multiple string properties against other string properties
         /// </summary>
-        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, Expression<Func<T, string>>[] propertiesToSearchFor)
+        public static Expression Build<T>(Expression<Func<T, string>>[] stringProperties, Expression<Func<T, string>>[] propertiesToSearchFor, SearchType searchType)
         {
             Expression finalExpression = null;
             foreach (var stringProperty in stringProperties)
             {
-                var endsWithExpression = Build(stringProperty, propertiesToSearchFor);
+                var endsWithExpression = Build(stringProperty, propertiesToSearchFor, searchType);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, endsWithExpression);
             }
             return finalExpression;
