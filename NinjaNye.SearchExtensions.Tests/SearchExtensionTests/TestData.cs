@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
 {
+    internal class ParentTestData
+    {
+        public IEnumerable<TestData> Children { get; set; }
+    }
+
     internal class TestData
     {
         public string Name { get; set; }

@@ -5,6 +5,64 @@ using NUnit.Framework;
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     [TestFixture]
+    public class SearchChildrenTests
+    {
+        [Test]
+        public void SearchChild_SearchChildCollection_ReturnParentType()
+        {
+            //Arrange
+            var parent = new ParentTestData
+            {
+                Children = new List<TestData>
+                {
+                    new TestData {Name = "child", Description = "child data", Number = 3},
+                    new TestData {Name = "child", Description = "child data", Number = 4},
+                    new TestData {Name = "child", Description = "child data", Number = 5},
+                    new TestData {Name = "child", Description = "child data", Number = 6}
+                }
+            };
+            var testData = new List<ParentTestData> {parent};
+
+            //Act
+            var result = testData.Search(p => p.Children)
+                                 .With(c => c.Number)
+                                 .Between(3,6);
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+        }
+
+        public void SearchChild_SearchChildCollectionForStringMatch_ReturnParentType()
+        {
+            //Arrange
+            var expected1 = new TestData {Name = "chris", Description = "child data", Number = 3};
+            var expected2 = new TestData {Name = "josh", Description = "child data", Number = 6};
+            var parent = new ParentTestData
+            {
+                Children = new List<TestData>
+                {
+                    expected1,
+                    new TestData {Name = "fred", Description = "child data", Number = 4},
+                    new TestData {Name = "teddy", Description = "child data", Number = 5},
+                    expected2
+                }
+            };
+            var testData = new List<ParentTestData> { parent };
+
+            //Act
+            var result = testData.Search(p => p.Children)
+                                 .With(c => c.Name)
+                                 .Containing("s");
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, expected1);
+            CollectionAssert.Contains(result, expected2);
+        }
+    }
+
+
+    [TestFixture]
     public class ContainingTests
     {
         private List<TestData> _testData = new List<TestData>();

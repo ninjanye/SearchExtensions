@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 
 namespace NinjaNye.SearchExtensions
 {
     public class EnumerableStructSearch<TSource, TProperty> : EnumerableSearchBase<TSource, TProperty>
-        where TProperty : struct 
     {
         public EnumerableStructSearch(IEnumerable<TSource> source, Expression<Func<TSource, TProperty>>[] properties) 
             : base(source, properties)
+        {
+        }
+
+        public EnumerableStructSearch(Expression<Func<object, IEnumerable<TSource>>> source, Expression<Func<TSource, TProperty>>[] properties)
+            : base(source.Compile().Invoke(0), properties)
         {
         }
 
@@ -83,6 +88,6 @@ namespace NinjaNye.SearchExtensions
             var betweenExpression = ExpressionBuilder.BetweenExpression(Properties, minValue, maxValue);
             BuildExpression(betweenExpression);
             return this;
-        } 
+        }
     }
 }
