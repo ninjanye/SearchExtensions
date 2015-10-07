@@ -12,10 +12,10 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         /// <typeparam name="TSource">Type of object to be searched</typeparam>
         /// <typeparam name="TProperty">Type of property to be searched</typeparam>
-        /// <param name="properties">Enumerable properties to search.</param>
-        public static EnumerableChildSearch<TSource, TProperty> Search<TSource, TProperty>(this IEnumerable<TSource> source, params Expression<Func<TSource, IEnumerable<TProperty>>>[] properties)
+        /// <param name="property">Enumerable properties to search.</param>
+        public static EnumerableChildSearch<TSource, TProperty> Search<TSource, TProperty>(this IEnumerable<TSource> source, Expression<Func<TSource, IEnumerable<TProperty>>> property)
         {
-            return new EnumerableChildSearch<TSource, TProperty>(source, properties);
+            return new EnumerableChildSearch<TSource, TProperty>(source, new[] {property});
         }
     }
 
