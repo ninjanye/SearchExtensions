@@ -13,7 +13,7 @@ using NinjaNye.SearchExtensions.Validation;
 
 namespace NinjaNye.SearchExtensions
 {
-    public sealed class QueryableStringSearch<T> : QueryableSearchBase<T, string>
+    public class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
         private IList<string> _containingSearchTerms = new List<string>();
         private SearchType _searchType;

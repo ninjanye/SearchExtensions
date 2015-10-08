@@ -31,9 +31,9 @@ namespace NinjaNye.SearchExtensions
             return new ExpressionStructSearch<TSource, TProperty, TNewProperty>(Source, Properties[0], properties);
         }
 
-        public ExpressionStringSearch<TSource, TProperty> With(params Expression<Func<TProperty, string>>[] properties)
+        public EnumerableExpressionStringSearch<TSource, TProperty> With(params Expression<Func<TProperty, string>>[] properties)
         {
-            return new ExpressionStringSearch<TSource, TProperty>(Source, Properties[0], properties);
+            return new EnumerableExpressionStringSearch<TSource, TProperty>(Source, Properties[0], properties);
         }
     }
 
@@ -45,9 +45,9 @@ namespace NinjaNye.SearchExtensions
         }
     }
 
-    public class ExpressionStringSearch<TBase, TSource> : EnumerableStringSearch<TSource>
+    public class EnumerableExpressionStringSearch<TBase, TSource> : EnumerableStringSearch<TSource>
     {
-        public ExpressionStringSearch(IEnumerable<TBase> baseSource, Expression<Func<TBase, IEnumerable<TSource>>> source, Expression<Func<TSource, string>>[] properties)
+        public EnumerableExpressionStringSearch(IEnumerable<TBase> baseSource, Expression<Func<TBase, IEnumerable<TSource>>> source, Expression<Func<TSource, string>>[] properties)
             : base(source.Compile().Invoke(baseSource.First()), properties)
         {
         }

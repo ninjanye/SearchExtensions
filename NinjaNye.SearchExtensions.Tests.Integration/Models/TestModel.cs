@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Models
 {
@@ -11,6 +12,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Models
             Start = this.defaultDate;
             End = this.defaultDate;
         }
+
+        public ICollection<TestModel> Children { get; set; }
 
         public Guid Id { get; set; }
         public string StringOne { get; set; }

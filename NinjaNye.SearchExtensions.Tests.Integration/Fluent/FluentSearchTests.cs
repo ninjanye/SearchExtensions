@@ -247,7 +247,6 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = this.context.TestModels.Search(x => x.StringTwo).StartsWith("C").ToList();
 
             //Assert
-            Assert.AreEqual(3, result.Count());
             Assert.IsTrue(result.All(x => x.StringTwo.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
         }
 
@@ -260,7 +259,6 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = this.context.TestModels.Search(x => x.StringTwo).EndsWith("E").ToList();
 
             //Assert
-            Assert.AreEqual(7, result.Count());
             Assert.IsTrue(result.All(x => x.StringTwo.EndsWith("e", StringComparison.OrdinalIgnoreCase)));
         }
 

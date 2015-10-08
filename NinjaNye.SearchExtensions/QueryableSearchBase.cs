@@ -9,7 +9,7 @@ namespace NinjaNye.SearchExtensions
     public class QueryableSearchBase<TSource, TProperty> 
         : SearchBase<IQueryable<TSource>, TSource, TProperty>, IQueryable<TSource>
     {
-        private bool expressionUpdated;
+        private bool _expressionUpdated;
 
         protected QueryableSearchBase(IQueryable<TSource> source, Expression<Func<TSource, TProperty>>[] properties)
             : base(source, properties)
@@ -32,18 +32,18 @@ namespace NinjaNye.SearchExtensions
 
         protected override void BuildExpression(Expression expressionToJoin)
         {
-            this.expressionUpdated = false;
+            this._expressionUpdated = false;
             base.BuildExpression(expressionToJoin);
         }
 
         private void UpdateSource()
         {
-            if (this.CompleteExpression == null || this.expressionUpdated)
+            if (this.CompleteExpression == null || this._expressionUpdated)
             {
                 return;
             }
 
-            this.expressionUpdated = true;
+            this._expressionUpdated = true;
             var finalExpression = Expression.Lambda<Func<TSource, bool>>(this.CompleteExpression, this.FirstParameter);
             this.Source = this.Source.Where(finalExpression);
         }
