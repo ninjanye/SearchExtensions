@@ -13,11 +13,6 @@ namespace NinjaNye.SearchExtensions
         {
         }
 
-        public EnumerableStructSearch(Expression<Func<object, IEnumerable<TSource>>> source, Expression<Func<TSource, TProperty>>[] properties)
-            : base(source.Compile().Invoke(0), properties)
-        {
-        }
-
         /// <summary>
         /// Retrieves items where any of the defined properties
         /// equal any of the supplied values

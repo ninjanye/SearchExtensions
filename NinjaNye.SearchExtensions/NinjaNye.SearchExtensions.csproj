@@ -36,6 +36,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableChildSearch.cs" />
+    <Compile Include="EnumerableChildSelector.cs" />
     <Compile Include="EnumerableStructSearch.cs" />
     <Compile Include="EnumerableLevenshteinCompare.cs" />
     <Compile Include="EnumerableLevenshteinSearch.cs" />

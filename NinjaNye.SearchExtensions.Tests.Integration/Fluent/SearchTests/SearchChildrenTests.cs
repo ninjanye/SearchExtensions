@@ -15,12 +15,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
 
             //Act
-            //var result = this._context.TestModels.Search(x => x.Children)
-            //                                     .With(x => x.StringOne)
-            //                                     .Containing("test");
+            var result = this._context.TestModels.Where(x => x.Children.Search(c => c.StringOne).Containing("test").Any());
 
             //Assert
-            //Assert.That(result.ToList().All(x => x.StringOne.Contains("test")));
+            Assert.That(result.ToList().All(x => x.StringOne.Contains("test")));
         }
 
         public void Dispose()

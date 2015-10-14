@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions
         /// Align the lambda parameter to that of the first string property
         /// </summary>
         protected Expression<TProperty> AlignParameter<TProperty>(Expression<TProperty> lambda)
-        {            
+        {
             return SwapExpressionVisitor.Swap(lambda, lambda.Parameters.Single(), this.FirstParameter);
         }
     }
