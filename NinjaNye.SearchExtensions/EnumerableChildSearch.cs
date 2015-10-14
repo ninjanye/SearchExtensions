@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Retrieves items where any of the defined properties
+        /// Identifies items where any of the defined properties
         /// are greater than any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
@@ -33,6 +33,18 @@ namespace NinjaNye.SearchExtensions
         {
             var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(new []{ this._property }, value);
             this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Identifies items where any of the defined properties
+        /// are less than any of the supplied value
+        /// </summary>
+        /// <param name="value">Value to search for</param>
+        public EnumerableChildSearch<TParent, TChild, TProperty> LessThan(TProperty value)
+        {
+            var lessThanExpression = ExpressionBuilder.LessThanExpression(new []{ this._property }, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
             return this;
         }
 

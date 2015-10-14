@@ -76,7 +76,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void SearchChildren_SearchChildCollectionWithPropertyGreaterThan_ReturnOnlyParentWhosChildNumberIsGreaterThan4()
+        public void SearchChildren_SearchChildCollectionWithPropertyGreaterThan()
         {
             //Arrange
             
@@ -93,35 +93,43 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.That(result.All(p => p.Children.Any(c => c.Number > 4)), Is.True);
         }
 
-        //[Test]
-        //public void SearchChild_SearchChildCollection_ReturnParentType()
-        //{
-        //    //Arrange
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyLessThan()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .LessThan(2)
+                                       .ToList();
 
-        //    //Act
-        //    var result = this._testData.Search(p => p.Children)
-        //        .With(c => c.Number)
-        //        .Between(3,6);
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(1));
+            CollectionAssert.Contains(result, _parent);
+        }
 
-        //    //Assert
-        //    Assert.That(result.Count(), Is.EqualTo(2));
-        //    CollectionAssert.Contains(result, this._parent);
-        //    CollectionAssert.Contains(result, this._otherParent);
-        //}
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyLessThanAndGreaterThan()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .LessThan(10)
+                                       .GreaterThan(2)
+                                       .ToList();
 
-        //public void SearchChild_SearchChildCollectionForStringMatch_ReturnParentType()
-        //{
-        //    //Arrange
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(1));
+            CollectionAssert.Contains(result, _parent);
+        }
 
-        //    //Act
-        //    var result = this._testData.Search(p => p.Children)
-        //        .With(c => c.Name)
-        //        .Containing("s");
-
-        //    //Assert
-        //    Assert.That(result.Count(), Is.EqualTo(2));
-        //    CollectionAssert.Contains(result, this._dataOne);
-        //    CollectionAssert.Contains(result, this._dataFour);
-        //}
+        //TODO: Between
+        //TODO: GreaterThanOrEqual
+        //TODO: LessThanOrEqual
+        //TODO: EqualTo
+        //TODO: Support multiple properties
     }
 }
