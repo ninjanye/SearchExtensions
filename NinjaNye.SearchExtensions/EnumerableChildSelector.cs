@@ -16,9 +16,9 @@ namespace NinjaNye.SearchExtensions
             this._child = child;
         }
 
-        public EnumerableChildSearch<TBase, TChild, TProperty> With<TProperty>(Expression<Func<TChild, TProperty>> property)
+        public EnumerableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TBase, TChild, TProperty>(this._parent, this._child, property);
+            return new EnumerableChildSearch<TBase, TChild, TProperty>(this._parent, this._child, properties);
         }
 
         public IEnumerator<TBase> GetEnumerator()

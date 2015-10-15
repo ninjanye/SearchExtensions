@@ -18,10 +18,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         [SetUp]
         public void SetUp()
         {
-            this._dataOne = new TestData { Name = "chris", Description = "child data", Number = 1 };
-            this._dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6 };
-            this._dataThree = new TestData { Name = "teddy", Description = "child data", Number = 2 };
-            this._dataFour = new TestData { Name = "josh", Description = "child data", Number = 20 };
+            this._dataOne = new TestData { Name = "chris", Description = "child data", Number = 1, Age = 20};
+            this._dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6, Age = 30 };
+            this._dataThree = new TestData { Name = "teddy", Description = "child data", Number = 2, Age = 40 };
+            this._dataFour = new TestData { Name = "josh", Description = "child data", Number = 20, Age = 50 };
             this._parent = new ParentTestData
             {
                 Children = new List<TestData> {this._dataOne, this._dataTwo}
@@ -210,6 +210,23 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _otherParent);
         }
 
-        //TODO: Support multiple values on EqualTo
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithMultiplePropertiesPropertyEqualTo()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number, c => c.Age)
+                                       .EqualTo(20)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
+        }
+
+
     }
 }
