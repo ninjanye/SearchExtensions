@@ -38,6 +38,18 @@ namespace NinjaNye.SearchExtensions
 
         /// <summary>
         /// Identifies items where any of the defined properties
+        /// are greater than or equal to any of the supplied value
+        /// </summary>
+        /// <param name="value">Value to search for</param>
+        public EnumerableChildSearch<TParent, TChild, TProperty> GreaterThanOrEqualTo(TProperty value)
+        {
+            var greaterThanExpression = ExpressionBuilder.GreaterThanOrEqualExpression(new []{ this._property }, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Identifies items where any of the defined properties
         /// are less than any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
@@ -50,13 +62,36 @@ namespace NinjaNye.SearchExtensions
 
         /// <summary>
         /// Identifies items where any of the defined properties
-        /// are less than any of the supplied value
+        /// are less than or equal to any of the supplied value
         /// </summary>
         /// <param name="value">Value to search for</param>
+        public EnumerableChildSearch<TParent, TChild, TProperty> LessThanOrEqualTo(TProperty value)
+        {
+            var lessThanExpression = ExpressionBuilder.LessThanOrEqualExpression(new []{ this._property }, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than <paramref name="minValue">minValue</paramref> 
+        /// AND less than <paramref name="maxValue">maxValue</paramref> 
+        /// </summary>
         public EnumerableChildSearch<TParent, TChild, TProperty> Between(TProperty minValue, TProperty maxValue)
         {
             var betweenExpression = ExpressionBuilder.BetweenExpression(new[] { this._property }, minValue, maxValue);
             this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, betweenExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are equal to the <paramref name="value">value</paramref> 
+        /// </summary>
+        public EnumerableChildSearch<TParent, TChild, TProperty> EqualTo(TProperty value)
+        {
+            var equalToExpression = ExpressionBuilder.EqualsExpression(new[] {this._property}, new[] {value});
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
             return this;
         }
 

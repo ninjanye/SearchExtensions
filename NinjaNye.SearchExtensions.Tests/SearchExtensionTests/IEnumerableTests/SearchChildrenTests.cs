@@ -94,6 +94,24 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyGreaterThanOrEqualTo()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .GreaterThanOrEqualTo(6)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
+            Assert.That(result.All(p => p.Children.Any(c => c.Number >= 6)), Is.True);
+        }
+
+        [Test]
         public void SearchChildren_SearchChildCollectionWithPropertyLessThan()
         {
             //Arrange
@@ -107,6 +125,23 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Assert
             Assert.That(result.Count(), Is.EqualTo(1));
             CollectionAssert.Contains(result, _parent);
+        }
+
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyLessThanOrEqualTo()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .LessThanOrEqualTo(2)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
         }
 
         [Test]
@@ -142,10 +177,21 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _parent);
         }
 
-        //TODO: Between
-        //TODO: GreaterThanOrEqual
-        //TODO: LessThanOrEqual
-        //TODO: EqualTo
-        //TODO: Support multiple properties
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyEqualTo()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .EqualTo(2)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(1));
+            CollectionAssert.Contains(result, _otherParent);
+        }
+
     }
 }
