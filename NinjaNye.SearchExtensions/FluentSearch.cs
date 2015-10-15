@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions
         /// <typeparam name="TProperty">Type of property to be searched</typeparam>
         /// <param name="properties">
         /// Properties to search.</param>
-        public static EnumerableStructSearch<TSource, TProperty> Search<TSource, TProperty>(this IEnumerable<TSource> source, params Expression<Func<TSource, TProperty>>[] properties)
+        public static EnumerableStructSearch<TSource, TProperty> Search<TSource, TProperty>(this IEnumerable<TSource> source, params Expression<Func<TSource, TProperty>>[] properties) where TProperty : struct
         {
             return new EnumerableStructSearch<TSource, TProperty>(source, properties);
         }

@@ -211,7 +211,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void SearchChildren_SearchChildCollectionWithMultiplePropertiesPropertyEqualTo()
+        public void SearchChildren_SearchChildCollectionWithMultiplePropertiesEqualTo()
         {
             //Arrange
             
@@ -227,6 +227,21 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _otherParent);
         }
 
+        //[Test]
+        //public void SearchChildren_SearchMultipleChildCollectionsWithPropertyEqualTo()
+        //{
+        //    //Arrange
+            
+        //    //Act
+        //    var result = this._testData.Search(p => p.Children, p => p.OtherChildren)
+        //                               .With(c => c.Number, c => c.Age)
+        //                               .EqualTo(20)
+        //                               .ToList();
 
+        //    //Assert
+        //    Assert.That(result.Count(), Is.EqualTo(2));
+        //    CollectionAssert.Contains(result, _parent);
+        //    CollectionAssert.Contains(result, _otherParent);
+        //}
     }
 }
