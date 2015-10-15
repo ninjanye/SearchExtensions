@@ -8,7 +8,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
     [TestFixture]
     public class  FluentRankedTests
     {
-        readonly TestContext context = new TestContext();
+        readonly TestContext _context = new TestContext();
 
         [Test]
         public void ToRanked_SearchedForData_RankedResultIsReturned()
@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringTwo).Containing("c").ToRanked();
+            var result = this._context.TestModels.Search(x => x.StringTwo).Containing("c").ToRanked();
 
             //Assert
             Assert.IsInstanceOf<IQueryable<IRanked<TestModel>>>(result);
@@ -28,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
 
             //Assert
             Assert.AreEqual(4, result.Count());
@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                                                 .Containing("c")
                                                 .ToRanked();
 
@@ -58,7 +58,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
+            var result = this._context.TestModels.Search(x => x.StringOne)
                                                 .Containing("g")
                                                 .ToRanked()
                                                 .Search(x => x.Item.StringTwo)

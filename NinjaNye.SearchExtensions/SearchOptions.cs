@@ -11,11 +11,11 @@ namespace NinjaNye.SearchExtensions
         public SearchOptions()
         {
             NullCheck = true;
-            SearchType = SearchExtensions.SearchType.AnyOccurrence;
+            SearchType = SearchType.AnyOccurrence;
             ComparisonType = StringComparison.CurrentCulture;
         }
 
-        public bool NullCheck { get; set; }
+        public bool NullCheck { get; private set; }
 
         public SearchType SearchType { get; set; }
 

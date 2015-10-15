@@ -4,11 +4,11 @@ namespace NinjaNye.SearchExtensions.Visitors
 {
     internal sealed class SwapExpressionVisitor : ExpressionVisitor
     {
-        private readonly Expression from, to;
+        private readonly Expression _from, _to;
         private SwapExpressionVisitor(Expression from, Expression to)
         {
-            this.@from = @from;
-            this.to = to;
+            this._from = @from;
+            this._to = to;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Visitors
 
         public override Expression Visit(Expression node)
         {
-            return node == this.@from ? this.to : base.Visit(node);
+            return node == this._from ? this._to : base.Visit(node);
         }
     }
 }

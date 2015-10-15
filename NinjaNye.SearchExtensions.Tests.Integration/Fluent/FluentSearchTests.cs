@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
     [TestFixture]
     public class FluentSearchTests : IDisposable
     {
-        readonly TestContext context = new TestContext();
+        readonly TestContext _context = new TestContext();
 
         [Test]
         public void Search_SearchWithoutActionHasNoAffectOnTheResults_ResultsAreUnchanged()
@@ -15,10 +15,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).ToList();
 
             //Assert
-            CollectionAssert.AreEqual(this.context.TestModels, result);
+            CollectionAssert.AreEqual(this._context.TestModels, result);
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("abc").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("abc").ToList();
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -38,10 +38,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         public void Search_ContainingNoValidSearchTerms_ReturnsAllRecords()
         {
             //Arrange
-            int expectedCount = this.context.TestModels.Count();
+            int expectedCount = this._context.TestModels.Count();
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("").ToList();
 
             //Assert
             Assert.AreEqual(expectedCount, result.Count);
@@ -53,7 +53,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("abc").StartsWith("a").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("abc").StartsWith("a").ToList();
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -66,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("abc").EndsWith("d").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("abc").EndsWith("d").ToList();
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -79,7 +79,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("abcd").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo("abcd").ToList();
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -93,7 +93,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             const string searchTerm = "cd";
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing(searchTerm).ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing(searchTerm).ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -107,7 +107,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             const string searchTerm = "ef";
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(searchTerm).ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(searchTerm).ToList();
             
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -121,7 +121,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             const string searchTerm = "gh";
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                                                 .EndsWith(searchTerm).ToList();
             
             //Assert
@@ -135,7 +135,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search().Containing("cd").ToList();
+            var result = this._context.TestModels.Search().Containing("cd").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -148,7 +148,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("ab", "jk").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("ab", "jk").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -161,7 +161,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).StartsWith("ab", "ef").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).StartsWith("ab", "ef").ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -175,7 +175,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).EndsWith("cd", "gh").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).EndsWith("cd", "gh").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -189,7 +189,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing("cd", "jk").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing("cd", "jk").ToList();
 
             //Assert
             Assert.AreEqual(5, result.Count());
@@ -203,7 +203,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith("cd", "ef").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith("cd", "ef").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -217,7 +217,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EndsWith("cd", "gh").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EndsWith("cd", "gh").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -231,7 +231,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).Containing("AB", "jk").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).Containing("AB", "jk").ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -244,7 +244,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringTwo).StartsWith("C").ToList();
+            var result = this._context.TestModels.Search(x => x.StringTwo).StartsWith("C").ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.StringTwo.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
@@ -256,7 +256,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringTwo).EndsWith("E").ToList();
+            var result = this._context.TestModels.Search(x => x.StringTwo).EndsWith("E").ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.StringTwo.EndsWith("e", StringComparison.OrdinalIgnoreCase)));
@@ -268,7 +268,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringTwo).EqualTo("CASE").ToList();
+            var result = this._context.TestModels.Search(x => x.StringTwo).EqualTo("CASE").ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -281,7 +281,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("abcd", "efgh").ToList();
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo("abcd", "efgh").ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -294,7 +294,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).EqualTo("ABCD", "EFGH");
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo("ABCD", "EFGH");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -303,7 +303,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

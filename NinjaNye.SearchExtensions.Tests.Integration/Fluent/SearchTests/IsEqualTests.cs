@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
     [TestFixture]
     internal class IsEqualTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void IsEqual_CallWithProperty_DoesNotThrowAnException()
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo));
+            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EqualTo(x => x.StringThree);
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EqualTo(x => x.StringThree);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.StringTwo == x.StringThree));
@@ -63,7 +63,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo, x => x.StringThree);
+            var result = this._context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo, x => x.StringThree);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.StringOne == x.StringThree));
@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

@@ -48,20 +48,6 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         [Test]
-        public void SearchChild_SearchChildCollection_ReturnParentType()
-        {
-            //Arrange
-
-            //Act
-            var result = this._testData.Search(p => p.Children)
-                                       .With(c => c.Number);
-
-            //Assert
-            Assert.That(result is IEnumerable<ParentTestData>, Is.True);
-            CollectionAssert.AreEqual(_testData, result);
-        }
-
-        [Test]
         public void SearchChild_SearchChildCollection_ReturnOnlyParentWhosChildNumberIsGreaterThanTen()
         {
             //Arrange

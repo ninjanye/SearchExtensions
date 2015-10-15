@@ -9,27 +9,27 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
     [TestFixture]
     public class LevenshteinSearch
     {
-        private List<TestData> testData = new List<TestData>();
+        private List<TestData> _testData = new List<TestData>();
 
         [SetUp]
         public void ClassSetup()
         {
-            this.testData = new List<TestData>();
+            this._testData = new List<TestData>();
             this.BuildTestData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.testData.Clear();
+            this._testData.Clear();
         }
 
         private void BuildTestData()
         {
-            this.testData.Add(new TestData {Name = "use", Description = "cdef"});
-            this.testData.Add(new TestData {Name = "house", Description = "mouse"});
-            this.testData.Add(new TestData {Name = "mouse", Description = "desc"});
-            this.testData.Add(new TestData {Name = "test", Description = "house"});
+            this._testData.Add(new TestData {Name = "use", Description = "cdef"});
+            this._testData.Add(new TestData {Name = "house", Description = "mouse"});
+            this._testData.Add(new TestData {Name = "mouse", Description = "desc"});
+            this._testData.Add(new TestData {Name = "test", Description = "house"});
         }
 
         [Test]
@@ -38,12 +38,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(string.Empty)
                                  .ToList();
 
             //Assert
-            Assert.AreEqual(testData.Count, result.Count);
+            Assert.AreEqual(this._testData.Count, result.Count);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(string.Empty)
                                  .ToList();
 
@@ -66,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(string.Empty)
                                  .Take(1)
                                  .ToList();
@@ -81,7 +81,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(string.Empty)
                                  .Skip(1)
                                  .Take(1)
@@ -97,7 +97,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(string.Empty)
                                  .ToList();
 
@@ -112,7 +112,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string compareTo = "choose";
 
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(compareTo)                               
                                  .ToList();
 
@@ -128,7 +128,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() => testData.LevenshteinDistanceOf(null));
+            Assert.Throws<ArgumentNullException>(() => this._testData.LevenshteinDistanceOf(null));
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.Throws<InvalidOperationException>(() => testData.LevenshteinDistanceOf(x => x.Name).ToList());
+            Assert.Throws<InvalidOperationException>(() => this._testData.LevenshteinDistanceOf(x => x.Name).ToList());
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(x => x.Description)
                                  .ToList();
 
@@ -162,7 +162,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = testData.LevenshteinDistanceOf(x => x.Name)
+            var result = this._testData.LevenshteinDistanceOf(x => x.Name)
                                  .ComparedTo(x => x.Description)
                                  .ToList();
 

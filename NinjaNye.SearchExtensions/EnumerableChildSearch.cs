@@ -126,7 +126,6 @@ namespace NinjaNye.SearchExtensions
                         break;
                     }
                 }
-
             }
         }
 

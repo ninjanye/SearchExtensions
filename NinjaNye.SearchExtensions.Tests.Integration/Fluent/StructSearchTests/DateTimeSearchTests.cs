@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
     [TestFixture]
     public class DateTimeSearchTests
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void Search_SearchConditionNotSupplied_ReturnsAllData()
@@ -15,10 +15,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.Start);
+            var result = this._context.TestModels.Search(x => x.Start);
 
             //Assert
-            CollectionAssert.AreEquivalent(this.context.TestModels, result);
+            CollectionAssert.AreEquivalent(this._context.TestModels, result);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2010, 1, 1);
             
             //Act
-            var result = this.context.TestModels.Search(x => x.Start).EqualTo(expected);
+            var result = this._context.TestModels.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var date2 = new DateTime(2040, 1, 1);
             
             //Act
-            var result = this.context.TestModels.Search(x => x.End)
+            var result = this._context.TestModels.Search(x => x.End)
                                       .EqualTo(date1, date2);
 
             ////Assert
@@ -58,7 +58,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
             
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End)
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End)
                                       .EqualTo(expected);
 
             ////Assert
@@ -73,7 +73,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start).GreaterThan(expected);
+            var result = this._context.TestModels.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -87,7 +87,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End).GreaterThan(expected);
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -101,7 +101,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.End).LessThan(expected);  
+            var result = this._context.TestModels.Search(x => x.End).LessThan(expected);  
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -115,7 +115,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End).LessThan(expected);
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -129,7 +129,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start).LessThanOrEqualTo(expected);
+            var result = this._context.TestModels.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -143,7 +143,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End)
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End)
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
@@ -158,7 +158,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start).GreaterThanOrEqualTo(expected);
+            var result = this._context.TestModels.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -172,7 +172,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End)
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End)
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
@@ -188,7 +188,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
             var greaterThanDate = new DateTime(2020, 1, 1);
             var lessThanDate = new DateTime(2040, 1, 1);
-            var result = this.context.TestModels.Search(x => x.Start)
+            var result = this._context.TestModels.Search(x => x.Start)
                                       .GreaterThan(greaterThanDate)
                                       .LessThan(lessThanDate);
 
@@ -205,7 +205,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var end = new DateTime(2040, 1, 1);
             
             //Act
-            var result = this.context.TestModels.Search(x => x.Start, x => x.End)
+            var result = this._context.TestModels.Search(x => x.Start, x => x.End)
                                       .Between(start, end);
 
             //Assert

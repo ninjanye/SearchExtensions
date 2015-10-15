@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
     [TestFixture]
     internal class BetweenTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void Between_CallWithValue_DoesNotThrowAnException()
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).Between(1,3));
+            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.IntegerOne).Between(1,3));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act 
-            var result = this.context.TestModels.Search(x => x.IntegerOne).Between(50, 150);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).Between(50, 150);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne).Between(10, 100);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).Between(10, 100);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
+            var result = this._context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .Between(3, 200);
 
             //Assert
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

@@ -61,10 +61,8 @@
     <Compile Include="Helpers\ExpressionBuilders\SoundexExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\EnumerableStartsWithExpressionBuilder.cs" />
     <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\QueryableStartsWithExpressionBuilder.cs" />
-    <Compile Include="Levenshtein\ILevenshteinDistance.cs" />
     <Compile Include="Levenshtein\LevenshteinDistance.cs" />
     <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
-    <Compile Include="Models\IRanked.cs" />
     <Compile Include="Models\Ranked.cs" />
     <Compile Include="QueryableStructSearch.cs" />
     <Compile Include="QueryableStringSearch.cs" />

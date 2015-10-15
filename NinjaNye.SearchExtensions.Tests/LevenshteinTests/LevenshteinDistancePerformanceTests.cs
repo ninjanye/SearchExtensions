@@ -7,7 +7,7 @@ using NinjaNye.SearchExtensions.Levenshtein;
 namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {
 #if DEBUG
-    // Performance test will always fail in debug mode
+    // Performance tests will likely fail in debug mode
     [Ignore]
 #endif
     [TestFixture]

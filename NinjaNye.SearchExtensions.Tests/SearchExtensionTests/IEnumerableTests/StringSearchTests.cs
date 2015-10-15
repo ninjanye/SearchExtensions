@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
@@ -9,27 +8,27 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
     [TestFixture]
     public class StringSearchTests
     {
-        private List<TestData> testData = new List<TestData>();
+        private List<TestData> _testData = new List<TestData>();
 
         [SetUp]
         public void ClassSetup()
         {
-            testData = new List<TestData>();
+            this._testData = new List<TestData>();
             this.BuildTestData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            testData.Clear();
+            this._testData.Clear();
         }
 
         private void BuildTestData()
         {
-            this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
-            this.testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
-            this.testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
-            this.testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
+            this._testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
+            this._testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
+            this._testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
+            this._testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
         }
 
         [Test]
@@ -38,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = testData.Search(x => x.Name);
+            var result = this._testData.Search(x => x.Name);
 
             //Assert
-            Assert.AreEqual(testData, result);
+            Assert.AreEqual(this._testData, result);
         }
 
         [Test]
@@ -51,7 +50,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "cd";
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(searchTerm).ToList();
+            var result = this._testData.Search(x => x.Name).Containing(searchTerm).ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
@@ -65,7 +64,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "jk";
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(searchTerm1, searchTerm2).ToList();
+            var result = this._testData.Search(x => x.Name).Containing(searchTerm1, searchTerm2).ToList();
 
             //Assert
             Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) || x.Name.Contains(searchTerm2)));
@@ -78,7 +77,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "cd";
             
             //Act
-            var result = testData.Search(x => x.Name, x => x.Description)
+            var result = this._testData.Search(x => x.Name, x => x.Description)
                                  .Containing(searchTerm)
                                  .ToList();
 
@@ -94,7 +93,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "uv";
 
             //Act
-            var result = testData.Search(x => x.Name, x => x.Description)
+            var result = this._testData.Search(x => x.Name, x => x.Description)
                                  .Containing(searchTerm1, searchTerm2)
                                  .ToList();
 
@@ -112,7 +111,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "CD";
 
             //Act
-            var result = testData.Search(x => x.Name)
+            var result = this._testData.Search(x => x.Name)
                                  .SetCulture(StringComparison.InvariantCultureIgnoreCase)
                                  .Containing(searchTerm)
                                  .ToList();
@@ -126,10 +125,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         {
             //Arrange
             const string searchTerm = "CD";
-            testData.Add(new TestData { Name = searchTerm });
+            this._testData.Add(new TestData { Name = searchTerm });
 
             //Act
-            var result = testData.Search(x => x.Name)
+            var result = this._testData.Search(x => x.Name)
                                  .SetCulture(StringComparison.Ordinal)
                                  .Containing(searchTerm)
                                  .ToList();
@@ -145,7 +144,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm = "cd";
             
             //Act
-            var result = this.testData.Search().Containing(searchTerm);
+            var result = this._testData.Search().Containing(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -156,11 +155,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         {
             //Arrange
             const string searchTerm = "CD";
-            testData.Add(new TestData { Name = searchTerm, Description = "test"});
-            testData.Add(new TestData { Name = "test", Description = searchTerm });
+            this._testData.Add(new TestData { Name = searchTerm, Description = "test"});
+            this._testData.Add(new TestData { Name = "test", Description = searchTerm });
             
             //Act
-            var result = testData.Search()
+            var result = this._testData.Search()
                                  .SetCulture(StringComparison.OrdinalIgnoreCase)
                                  .Containing(searchTerm)
                                  .ToList();
@@ -178,7 +177,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             const string searchTerm2 = "ef";
             
             //Act
-            var result = testData.Search(x => x.Name).Containing(searchTerm1)
+            var result = this._testData.Search(x => x.Name).Containing(searchTerm1)
                                  .Search(x => x.Description).Containing(searchTerm2);
 
             //Assert

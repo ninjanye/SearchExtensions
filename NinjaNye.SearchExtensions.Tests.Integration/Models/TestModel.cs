@@ -5,12 +5,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Models
 {
     public class TestModel
     {
-        private readonly DateTime defaultDate = new DateTime(1970, 1, 1);
+        private readonly DateTime _defaultDate = new DateTime(1970, 1, 1);
 
         public TestModel()
         {            
-            Start = this.defaultDate;
-            End = this.defaultDate;
+            Start = this._defaultDate;
+            End = this._defaultDate;
         }
 
         public ICollection<TestModel> Children { get; set; }

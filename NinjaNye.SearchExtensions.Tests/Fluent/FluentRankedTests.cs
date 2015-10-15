@@ -10,25 +10,25 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
     [TestFixture]
     public class FluentRankedTests
     {
-        private List<TestData> testData = new List<TestData>();
+        private List<TestData> _testData = new List<TestData>();
 
         [SetUp]
         public void ClassSetup()
         {
-            this.testData = new List<TestData>();
+            this._testData = new List<TestData>();
             this.BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this.testData.Add(new TestData {Name = "abcd", Description = "efgh", Number = 1});
-            this.testData.Add(new TestData {Name = "ijkl", Description = "mnop", Number = 2});
-            this.testData.Add(new TestData {Name = "qrst", Description = "uvwx", Number = 3});
-            this.testData.Add(new TestData {Name = "yzab", Description = "cdef", Number = 4});
-            this.testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
-            this.testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
-            this.testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
-            this.testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
+            this._testData.Add(new TestData {Name = "abcd", Description = "efgh", Number = 1});
+            this._testData.Add(new TestData {Name = "ijkl", Description = "mnop", Number = 2});
+            this._testData.Add(new TestData {Name = "qrst", Description = "uvwx", Number = 3});
+            this._testData.Add(new TestData {Name = "yzab", Description = "cdef", Number = 4});
+            this._testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
+            this._testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
+            this._testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
+            this._testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Description).Containing("c").ToRanked();
+            var result = this._testData.Search(x => x.Description).Containing("c").ToRanked();
 
             //Assert
             Assert.IsInstanceOf<IEnumerable<IRanked<TestData>>>(result);
@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
+            var result = this._testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);
@@ -64,7 +64,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Name, x => x.Description)
+            var result = this._testData.Search(x => x.Name, x => x.Description)
                              .Containing("c")
                              .ToRanked()
                              .ToList();
@@ -81,7 +81,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this.testData.Search(x => x.Description)
+            var result = this._testData.Search(x => x.Description)
                                       .SetCulture(StringComparison.OrdinalIgnoreCase)
                                       .Containing("c")
                                       .ToRanked()
@@ -98,7 +98,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Name)
+            var result = this._testData.Search(x => x.Name)
                                       .Containing("e")
                                       .ToRanked()
                                       .Search(x => x.Item.Description)

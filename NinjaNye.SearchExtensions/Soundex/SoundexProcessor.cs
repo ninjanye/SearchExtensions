@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using System.Text;
 using NinjaNye.SearchExtensions.Helpers;
 
@@ -75,6 +74,7 @@ namespace NinjaNye.SearchExtensions.Soundex
             return sb;
         }
 
+        // ReSharper disable once InconsistentNaming
         private static bool IsHOrW(this char character)
         {
             return character == 'h' || character == 'i' 

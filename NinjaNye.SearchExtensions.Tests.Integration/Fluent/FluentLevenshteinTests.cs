@@ -1,26 +1,23 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NinjaNye.SearchExtensions.Levenshtein;
+using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
     [TestFixture]
     public class FluentLevenshteinTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void LevenshteinDistanceOf_GetDistanceToString_ReturnAllRecords()
         {
             //Arrange
-            int totalRecords = context.TestModels.Count();
+            int totalRecords = this._context.TestModels.Count();
 
             //Act
-            var result = context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
+            var result = this._context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
 
             //Assert
             Assert.AreEqual(totalRecords, result.Count());
@@ -32,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
+            var result = this._context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
 
             //Assert
             Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, "test")));
@@ -42,10 +39,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         public void LevenshteinDistanceOf_GetDistanceToProperty_ReturnAllRecords()
         {
             //Arrange
-            int totalRecords = context.TestModels.Count();
+            int totalRecords = this._context.TestModels.Count();
 
             //Act
-            var result = context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
+            var result = this._context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
 
             //Assert
             Assert.AreEqual(totalRecords, result.Count());
@@ -57,7 +54,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
+            var result = this._context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
 
             //Assert
             Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, x.Item.StringTwo)));
@@ -65,7 +62,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

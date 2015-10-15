@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
     [TestFixture]
     internal class LessThanOrEqualTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void LessThanOrEqual_CallWithValue_DoesNotThrowAnException()
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(10));
+            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(10));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act 
-            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(50);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(50);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(3);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).LessThanOrEqualTo(3);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
+            var result = this._context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .LessThanOrEqualTo(101);
 
             //Assert
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

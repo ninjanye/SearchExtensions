@@ -6,49 +6,9 @@ using NinjaNye.SearchExtensions.Tests.Integration.Models;
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
     [TestFixture]
-    internal class EndsWithTests : IDisposable
-    {
-        private readonly TestContext context = new TestContext();
-
-        [Test]
-        public void EndsWith_SearchPropertyMatchingWholeWord_MatchesWholeWordsOnly()
-        {
-            //Arrange
-
-            //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
-                                                .Matching(SearchType.WholeWords)
-                                                .EndsWith(x => x.StringTwo);
-
-            //Assert
-            Assert.That(result.Select(x => x.Id), Is.Not.Contains(new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
-            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
-        }
-
-        [Test]
-        public void EndsWith_SearchPropertyMatchingWholeWord_MatchesSingleWord()
-        {
-            //Arrange
-
-            //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
-                                                .Matching(SearchType.WholeWords)
-                                                .EndsWith(x => x.StringThree);
-
-            //Assert
-            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
-        }
-
-        public void Dispose()
-        {
-            context.Dispose();
-        }
-    }
-
-    [TestFixture]
     internal class StartsWithTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void StartsWith_SearchStartsWith_DoesNotThrowAnException()
@@ -58,7 +18,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo));
+            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo));
         }
 
         [Test]
@@ -67,7 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
+            var result = this._context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
             Assert.IsInstanceOf<QueryableStringSearch<TestModel>>(result);
@@ -79,7 +39,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
+            var result = this._context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -92,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
+            var result = this._context.TestModels.Search(x => x.StringOne)
                                                 .StartsWith(x => x.StringTwo, x => x.StringThree);
 
             //Assert
@@ -105,7 +65,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(x => x.StringThree);
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(x => x.StringThree);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.StringTwo.StartsWith(x.StringThree)));
@@ -117,7 +77,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
+            var result = this._context.TestModels.Search(x => x.StringOne)
                                                 .Matching(SearchType.WholeWords)
                                                 .StartsWith(x => x.StringThree);
 
@@ -131,7 +91,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.StringOne)
+            var result = this._context.TestModels.Search(x => x.StringOne)
                                                 .Matching(SearchType.WholeWords)
                                                 .StartsWith(x => x.StringThree);
 
@@ -142,7 +102,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

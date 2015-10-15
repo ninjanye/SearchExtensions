@@ -8,18 +8,18 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
     [TestFixture]
     public class EndsWithTests
     {
-        private List<TestData> testData = new List<TestData>();
+        private List<TestData> _testData = new List<TestData>();
 
         [SetUp]
         public void ClassSetup()
         {
-            this.testData = new List<TestData>();
+            this._testData = new List<TestData>();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.testData.Clear();
+            this._testData.Clear();
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.testData.Search(x => x.Name).EndsWith(x => x.Description));
+            Assert.DoesNotThrow(() => this._testData.Search(x => x.Name).EndsWith(x => x.Description));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this.testData.Search(x => x.Name).EndsWith(x => x.Description);
+            var result = this._testData.Search(x => x.Name).EndsWith(x => x.Description);
 
             //Assert
             Assert.IsNotNull(result);
@@ -49,11 +49,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void Search_AllowEndsWithMethod_AllResultsEndWithSearchTerm()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "test" });
-            this.testData.Add(new TestData { Name = "false" });
+            this._testData.Add(new TestData { Name = "test" });
+            this._testData.Add(new TestData { Name = "false" });
 
             //Act
-            var result = testData.Search(x => x.Name).EndsWith("st");
+            var result = this._testData.Search(x => x.Name).EndsWith("st");
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -64,13 +64,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void Search_EndsWithMultipleTerms_SearchAgainstMultipleTerms()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "abcd" });
-            this.testData.Add(new TestData { Name = "efgh" });
+            this._testData.Add(new TestData { Name = "abcd" });
+            this._testData.Add(new TestData { Name = "efgh" });
             var notPresent = new TestData {Name = "not found"};
-            this.testData.Add(notPresent);
+            this._testData.Add(notPresent);
 
             //Act
-            var result = testData.Search(x => x.Name).EndsWith("cd", "gh");
+            var result = this._testData.Search(x => x.Name).EndsWith("cd", "gh");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -81,12 +81,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_ComparedToAnExistingProperty_ResultEndsWithExistingProperty()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "efgh", Description = "gh" });
+            this._testData.Add(new TestData { Name = "efgh", Description = "gh" });
             var notPresent = new TestData {Name = "no match", Description = "test"};
-            this.testData.Add(notPresent);
+            this._testData.Add(notPresent);
 
             //Act
-            var result = this.testData.Search(x => x.Name).EndsWith(x => x.Description);
+            var result = this._testData.Search(x => x.Name).EndsWith(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any(), "No records returned");
@@ -97,13 +97,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_ComparedToTwoExistingProperties_ResultEndsWithEitherOfExistingProperties()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "abcd", Status = "cd" });
-            this.testData.Add(new TestData { Name = "efgh", Description = "gh" });
+            this._testData.Add(new TestData { Name = "abcd", Status = "cd" });
+            this._testData.Add(new TestData { Name = "efgh", Description = "gh" });
             var notPresent = new TestData { Name = "no match", Description = "test" };
-            this.testData.Add(notPresent);
+            this._testData.Add(notPresent);
 
             //Act
-            var result = this.testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
+            var result = this._testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -114,13 +114,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_ComparedToTwoExistingPropertiesWithNullValue_NullValueIsIgnored()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "abcd", Description = "no match", Status = "cd" });
-            this.testData.Add(new TestData { Name = "efgh", Description = "gh" });
+            this._testData.Add(new TestData { Name = "abcd", Description = "no match", Status = "cd" });
+            this._testData.Add(new TestData { Name = "efgh", Description = "gh" });
             var notPresent = new TestData { Name = "no match", Description = "test" };
-            this.testData.Add(notPresent);
+            this._testData.Add(notPresent);
 
             //Act
-            var result = this.testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
+            var result = this._testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(), "No records returned");
@@ -131,12 +131,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_SearchTwoPropertiesComparedToAProperty_ResultsContainAllPermiatations()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "cd" });
-            this.testData.Add(new TestData { Name = "zzzz", Description = "match", Status = "ch"});
-            this.testData.Add(new TestData { Name = "zzzz", Description = "yyyy", Status = "xxxx"});
+            this._testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "cd" });
+            this._testData.Add(new TestData { Name = "zzzz", Description = "match", Status = "ch"});
+            this._testData.Add(new TestData { Name = "zzzz", Description = "yyyy", Status = "xxxx"});
 
             //Act
-            var result = this.testData.Search(x => x.Name, x => x.Description).EndsWith(x => x.Status);
+            var result = this._testData.Search(x => x.Name, x => x.Description).EndsWith(x => x.Status);
 
             //Assert
             Assert.AreEqual(2, result.Count(), "Not enough records returned");
@@ -147,11 +147,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_SearchPropertyWithIgnoreCaseCulture_ResultsAreCaseInsensitive()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "a TEST", Description = "test" });
-            this.testData.Add(new TestData { Name = "zzzz", Description = "yyyy" });
+            this._testData.Add(new TestData { Name = "a TEST", Description = "test" });
+            this._testData.Add(new TestData { Name = "zzzz", Description = "yyyy" });
 
             //Act
-            var result = this.testData.Search(x => x.Name)
+            var result = this._testData.Search(x => x.Name)
                                       .SetCulture(StringComparison.OrdinalIgnoreCase)
                                       .EndsWith(x => x.Description);
 
@@ -164,10 +164,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void EndsWith_SearchOccursTwice_ReturnExpectedRecord()
         {
             //Arrange
-            this.testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
+            this._testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
 
             //Act
-            var result = testData.Search(x => x.Name).EndsWith("st");
+            var result = this._testData.Search(x => x.Name).EndsWith("st");
 
             //Assert
             Assert.IsTrue(result.Any(td => td.Number == 8));
@@ -178,11 +178,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         {
             //Arrange
             const string searchTerm = "test";
-            this.testData.Add(new TestData { Name = "a test", Description = "zzzz" });
-            this.testData.Add(new TestData { Name = "zzzz", Description = "another test" });
+            this._testData.Add(new TestData { Name = "a test", Description = "zzzz" });
+            this._testData.Add(new TestData { Name = "zzzz", Description = "another test" });
 
             //Act
-            var result = testData.Search(x => x.Name, x => x.Description).EndsWith(searchTerm);
+            var result = this._testData.Search(x => x.Name, x => x.Description).EndsWith(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());

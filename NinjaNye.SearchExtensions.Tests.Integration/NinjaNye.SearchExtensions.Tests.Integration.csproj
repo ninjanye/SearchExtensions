@@ -55,6 +55,7 @@
     <Compile Include="Fluent\FluentSearchTests.cs" />
     <Compile Include="Fluent\FluentSoundexTests.cs" />
     <Compile Include="Fluent\SearchTests\ContainingTests.cs" />
+    <Compile Include="Fluent\SearchTests\EndsWithTests.cs" />
     <Compile Include="Fluent\SearchTests\SearchChildrenTests.cs" />
     <Compile Include="Fluent\StructSearchTests\BetweenTests.cs" />
     <Compile Include="Fluent\StructSearchTests\DateTimeSearchTests.cs" />

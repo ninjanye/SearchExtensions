@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NinjaNye.SearchExtensions.Helpers;
 using NUnit.Framework;
-using NinjaNye.SearchExtensions.Helpers;
 
 namespace NinjaNye.SearchExtensions.Tests.Helpers
 {

@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
     [TestFixture]
     internal class GreaterThanTests : IDisposable
     {
-        private readonly TestContext context = new TestContext();
+        private readonly TestContext _context = new TestContext();
 
         [Test]
         public void GreaterThan_CallWithValue_DoesNotThrowAnException()
@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this.context.TestModels.Search(x => x.IntegerOne).GreaterThan(1));
+            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.IntegerOne).GreaterThan(1));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act 
-            var result = this.context.TestModels.Search(x => x.IntegerOne).GreaterThan(50);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).GreaterThan(50);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne).GreaterThan(10);
+            var result = this._context.TestModels.Search(x => x.IntegerOne).GreaterThan(10);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this.context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
+            var result = this._context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .GreaterThan(3);
 
             //Assert
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 
         public void Dispose()
         {
-            this.context.Dispose();
+            this._context.Dispose();
         }
     }
 }

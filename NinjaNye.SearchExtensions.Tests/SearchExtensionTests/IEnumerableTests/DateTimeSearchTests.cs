@@ -8,27 +8,27 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
     [TestFixture]
     public class DateTimeSearchTests
     {
-        private List<TestData> testData = new List<TestData>();
+        private List<TestData> _testData = new List<TestData>();
 
         [SetUp]
         public void ClassSetup()
         {
-            this.testData = new List<TestData>();
+            this._testData = new List<TestData>();
             this.BuildTestData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.testData.Clear();
+            this._testData.Clear();
         }
 
         private void BuildTestData()
         {
-            this.testData.Add(new TestData { Start = new DateTime(2000, 1, 1), End = new DateTime(2010, 1, 1) });
-            this.testData.Add(new TestData { Start = new DateTime(2010, 1, 1), End = new DateTime(2020, 1, 1) });
-            this.testData.Add(new TestData { Start = new DateTime(2020, 1, 1), End = new DateTime(2030, 1, 1) });
-            this.testData.Add(new TestData { Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1) });
+            this._testData.Add(new TestData { Start = new DateTime(2000, 1, 1), End = new DateTime(2010, 1, 1) });
+            this._testData.Add(new TestData { Start = new DateTime(2010, 1, 1), End = new DateTime(2020, 1, 1) });
+            this._testData.Add(new TestData { Start = new DateTime(2020, 1, 1), End = new DateTime(2030, 1, 1) });
+            this._testData.Add(new TestData { Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1) });
         }
 
         [Test]
@@ -37,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this.testData.Search(x => x.Start);
+            var result = this._testData.Search(x => x.Start);
 
             //Assert
-            CollectionAssert.AreEquivalent(testData, result);
+            CollectionAssert.AreEquivalent(this._testData, result);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2010, 1, 1);
             
             //Act
-            var result = this.testData.Search(x => x.Start).EqualTo(expected);
+            var result = this._testData.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -65,7 +65,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var date2 = new DateTime(2040, 1, 1);
             
             //Act
-            var result = this.testData.Search(x => x.End)
+            var result = this._testData.Search(x => x.End)
                                       .EqualTo(date1, date2);
 
             ////Assert
@@ -80,7 +80,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
             
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End)
+            var result = this._testData.Search(x => x.Start, x => x.End)
                                       .EqualTo(expected);
 
             ////Assert
@@ -95,7 +95,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start).GreaterThan(expected);
+            var result = this._testData.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -109,7 +109,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End).GreaterThan(expected);
+            var result = this._testData.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -123,7 +123,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.End).LessThan(expected);  
+            var result = this._testData.Search(x => x.End).LessThan(expected);  
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -137,7 +137,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End).LessThan(expected);
+            var result = this._testData.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -151,7 +151,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start).LessThanOrEqualTo(expected);
+            var result = this._testData.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -165,7 +165,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End)
+            var result = this._testData.Search(x => x.Start, x => x.End)
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
@@ -180,7 +180,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2030, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start).GreaterThanOrEqualTo(expected);
+            var result = this._testData.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
             Assert.IsTrue(result.Any());
@@ -194,7 +194,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var expected = new DateTime(2020, 1, 1);
 
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End)
+            var result = this._testData.Search(x => x.Start, x => x.End)
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
@@ -210,7 +210,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
             var greaterThanDate = new DateTime(2020, 1, 1);
             var lessThanDate = new DateTime(2040, 1, 1);
-            var result = this.testData.Search(x => x.Start)
+            var result = this._testData.Search(x => x.Start)
                                       .GreaterThan(greaterThanDate)
                                       .LessThan(lessThanDate);
 
@@ -227,7 +227,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var end = new DateTime(2040, 1, 1);
             
             //Act
-            var result = this.testData.Search(x => x.Start, x => x.End)
+            var result = this._testData.Search(x => x.Start, x => x.End)
                                       .Between(start, end);
 
             //Assert
