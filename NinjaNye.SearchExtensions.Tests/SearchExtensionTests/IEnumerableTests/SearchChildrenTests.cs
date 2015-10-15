@@ -126,6 +126,22 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _parent);
         }
 
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyBetween()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .Between(2, 10)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(1));
+            CollectionAssert.Contains(result, _parent);
+        }
+
         //TODO: Between
         //TODO: GreaterThanOrEqual
         //TODO: LessThanOrEqual

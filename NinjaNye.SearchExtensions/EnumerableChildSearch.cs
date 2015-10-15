@@ -48,6 +48,18 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        /// <summary>
+        /// Identifies items where any of the defined properties
+        /// are less than any of the supplied value
+        /// </summary>
+        /// <param name="value">Value to search for</param>
+        public EnumerableChildSearch<TParent, TChild, TProperty> Between(TProperty minValue, TProperty maxValue)
+        {
+            var betweenExpression = ExpressionBuilder.BetweenExpression(new[] { this._property }, minValue, maxValue);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, betweenExpression);
+            return this;
+        }
+
 
         public IEnumerator<TParent> GetEnumerator()
         {
