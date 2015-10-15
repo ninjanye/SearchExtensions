@@ -12,15 +12,15 @@ namespace NinjaNye.SearchExtensions
     public class EnumerableChildSearch<TParent, TChild, TProperty> : IEnumerable<TParent>
     {
         private readonly IEnumerable<TParent> _parent;
-        private readonly Expression<Func<TParent, IEnumerable<TChild>>> _child;
+        private readonly Expression<Func<TParent, IEnumerable<TChild>>>[] _childProperties;
         private readonly Expression<Func<TChild, TProperty>>[] _properties;
         private Expression _completeExpression;
         private readonly ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
 
-        public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>> child, Expression<Func<TChild, TProperty>>[] properties)
+        public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties)
         {
             this._parent = parent;
-            this._child = child;
+            this._childProperties = childProperties;
 
             var swappedProperties = new List<Expression<Func<TChild, TProperty>>>();
             foreach (var property in properties)
@@ -116,12 +116,17 @@ namespace NinjaNye.SearchExtensions
             var finalExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter).Compile();
             foreach (var parent in this._parent)
             {
-                var children = this._child.Compile().Invoke(parent);
-                var isMatch = children.Any(c => finalExpression.Invoke(c));
-                if (isMatch)
+                foreach (var childProperty in _childProperties)
                 {
-                    yield return parent;
+                    var children = childProperty.Compile().Invoke(parent);
+                    var isMatch = children.Any(c => finalExpression.Invoke(c));
+                    if (isMatch)
+                    {
+                        yield return parent;
+                        break;
+                    }
                 }
+
             }
         }
 

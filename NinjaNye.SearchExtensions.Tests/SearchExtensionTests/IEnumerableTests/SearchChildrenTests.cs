@@ -24,11 +24,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             this._dataFour = new TestData { Name = "josh", Description = "child data", Number = 20, Age = 50 };
             this._parent = new ParentTestData
             {
-                Children = new List<TestData> {this._dataOne, this._dataTwo}
+                Children = new List<TestData> {this._dataOne, this._dataTwo},
+                OtherChildren = new List<TestData> { this._dataThree, this._dataFour }
             };
             this._otherParent = new ParentTestData
             {
-                Children = new List<TestData> {this._dataThree, this._dataFour}
+                Children = new List<TestData> {this._dataThree, this._dataFour},
+                OtherChildren = new List<TestData> { this._dataOne, this._dataTwo }
             };
             this._testData = new List<ParentTestData> { this._parent, this._otherParent };            
         }
@@ -227,21 +229,21 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _otherParent);
         }
 
-        //[Test]
-        //public void SearchChildren_SearchMultipleChildCollectionsWithPropertyEqualTo()
-        //{
-        //    //Arrange
-            
-        //    //Act
-        //    var result = this._testData.Search(p => p.Children, p => p.OtherChildren)
-        //                               .With(c => c.Number, c => c.Age)
-        //                               .EqualTo(20)
-        //                               .ToList();
+        [Test]
+        public void SearchChildren_SearchMultipleChildCollectionsWithPropertyEqualTo()
+        {
+            //Arrange
 
-        //    //Assert
-        //    Assert.That(result.Count(), Is.EqualTo(2));
-        //    CollectionAssert.Contains(result, _parent);
-        //    CollectionAssert.Contains(result, _otherParent);
-        //}
+            //Act
+            var result = this._testData.Search(p => p.Children, p => p.OtherChildren)
+                                       .With(c => c.Number)
+                                       .EqualTo(20)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
+        }
     }
 }
