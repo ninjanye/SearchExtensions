@@ -86,11 +86,12 @@ namespace NinjaNye.SearchExtensions
 
         /// <summary>
         /// Retrieves items where any of the defined properties
-        /// are equal to the <paramref name="value">value</paramref> 
+        /// are equal to any of the supplied <paramref name="values">value</paramref> 
         /// </summary>
-        public EnumerableChildSearch<TParent, TChild, TProperty> EqualTo(TProperty value)
+        /// <param name="values">A collection of values to match upon</param>
+        public EnumerableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
         {
-            var equalToExpression = ExpressionBuilder.EqualsExpression(new[] {this._property}, new[] {value});
+            var equalToExpression = ExpressionBuilder.EqualsExpression(new[] {this._property}, values);
             this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
             return this;
         }

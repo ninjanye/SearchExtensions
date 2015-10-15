@@ -193,5 +193,23 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _otherParent);
         }
 
+        [Test]
+        public void SearchChildren_SearchChildCollectionWithPropertyEqualToAnyOneOfMultiple()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(p => p.Children)
+                                       .With(c => c.Number)
+                                       .EqualTo(2, 6)
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
+        }
+
+        //TODO: Support multiple values on EqualTo
     }
 }
