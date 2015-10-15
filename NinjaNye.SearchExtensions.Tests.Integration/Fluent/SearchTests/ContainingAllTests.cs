@@ -19,7 +19,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = this._context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm);
 
             //Assert
-            Assert.IsTrue(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm, StringComparison.Ordinal) >= 0));
+            Assert.IsTrue(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm) >= 0));
         }
 
         [Test]
@@ -34,8 +34,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Assert
             Assert.That(result, Is.Not.Empty);
-            var hasBothTerms = result.All(t => t.StringOne.IndexOf(searchTerm1, StringComparison.Ordinal) >= 0 
-                                            && t.StringOne.IndexOf(searchTerm2, StringComparison.Ordinal) >= 0);
+            var hasBothTerms = result.All(t => t.StringOne.IndexOf(searchTerm1) >= 0 
+                                            && t.StringOne.IndexOf(searchTerm2) >= 0);
             Assert.That(hasBothTerms);
         }
 
