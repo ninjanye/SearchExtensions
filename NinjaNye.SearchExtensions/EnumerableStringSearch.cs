@@ -60,19 +60,6 @@ namespace NinjaNye.SearchExtensions
 
             Expression orExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _searchOptions);
 
-            if (_searchOptions.SearchType == SearchType.WholeWords)
-            {
-                var searchTermArray = validSearchTerms.ToArray();
-                var startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
-                orExpression = ExpressionHelper.JoinOrExpression(orExpression, startsWithExpression);
-
-                var endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
-                orExpression = ExpressionHelper.JoinOrExpression(orExpression, endsWithExpression);
-
-                var equalsExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, searchTermArray, _searchOptions);
-                orExpression = ExpressionHelper.JoinOrExpression(orExpression, equalsExpression);
-            }
-
             this.BuildExpression(orExpression);
             return this;
         }

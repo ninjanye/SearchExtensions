@@ -20,9 +20,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void SetUp()
         {
             this._dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
-            this._dataTwo = new TestData {Name = "fred", Description = "child data", Number = 6, Age = 30};
-            this._dataThree = new TestData {Name = "teddy", Description = "child data", Number = 2, Age = 40};
-            this._dataFour = new TestData {Name = "josh", Description = "child data", Number = 20, Age = 50};
+            this._dataTwo = new TestData {Name = "fred", Description = "children data", Number = 6, Age = 30};
+            this._dataThree = new TestData {Name = "teddy", Description = "children data", Number = 2, Age = 40};
+            this._dataFour = new TestData {Name = "josh", Description = "children data", Number = 20, Age = 50};
             this._parent = new ParentTestData
             {
                 Children = new List<TestData> {this._dataOne, this._dataTwo},
@@ -82,6 +82,91 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Assert
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result, Contains.Item(_parent));
+        }
+
+        [Test]
+        public void SearchChild_WithStringContaining_ReturnParentsWithMatches()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Name)
+                                  .Containing("ed")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result, Contains.Item(_parent));
+            Assert.That(result, Contains.Item(_otherParent));
+        }
+
+        [Test]
+        public void SearchChild_WithStringContaining_IgnoresEmptyStrings()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Name)
+                                  .Containing("chris", "")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(_parent));
+        }
+
+        [Test]
+        public void SearchChild_WithStringContainingNoValidSearchTerms_ReturnsAll()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Name)
+                                  .Containing("")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result, Contains.Item(_parent));
+            Assert.That(result, Contains.Item(_otherParent));
+        }
+
+        [Test]
+        public void SearchChild_WithStringContainingWholeWordSearch_ReturnsOnlyMatchesOfEntireWord()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Description)
+                                  .Matching(SearchType.WholeWords)
+                                  .Containing("child")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(_parent));
+        }
+
+        [Test]
+        public void SearchChild_WithStringContainingAnyOccurenceSearch_ReturnsAllMatches()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Description)
+                                  .Matching(SearchType.AnyOccurrence)
+                                  .Containing("child")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result, Contains.Item(_parent));
+            Assert.That(result, Contains.Item(_otherParent));
         }
     }
 }

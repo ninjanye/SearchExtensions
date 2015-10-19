@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 using NinjaNye.SearchExtensions.Visitors;
 
@@ -46,6 +47,22 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        /// <summary>
+        /// Retrieve items where any of the defined terms are contained 
+        /// within any of the defined properties
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        public EnumerableChildStringSearch<TParent, TChild> Containing(params string[] terms)
+        {
+            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
+            if (validSearchTerms.Any())
+            {
+                var containingExpression = EnumerableContainsExpressionBuilder.Build(_properties, validSearchTerms, _searchOptions);
+                this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, containingExpression);
+            }
+            return this;
+        }
+
         public IEnumerator<TParent> GetEnumerator()
         {
             return this._completeExpression == null ? this._parent.GetEnumerator() 
@@ -78,6 +95,12 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildStringSearch<TParent, TChild> SetCulture(StringComparison comparisonType)
         {
             _searchOptions.ComparisonType = comparisonType;
+            return this;
+        }
+
+        public EnumerableChildStringSearch<TParent, TChild> Matching(SearchType searchType)
+        {
+            _searchOptions.SearchType = searchType;
             return this;
         }
     }

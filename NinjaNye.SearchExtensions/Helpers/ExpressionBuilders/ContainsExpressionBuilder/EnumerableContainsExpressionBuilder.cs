@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpressionBuilder;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder
 {
@@ -51,6 +54,18 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
             {
                 var containsExpression = Build(stringProperty, searchTerms, comparisonTypeExpression, searchOptions.SearchType);
                 completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, containsExpression);
+            }
+
+            if (searchOptions.SearchType == SearchType.WholeWords)
+            {
+                var startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(properties, searchTerms, searchOptions);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, startsWithExpression);
+
+                var endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(properties, searchTerms, searchOptions);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, endsWithExpression);
+
+                var equalsExpression = EnumerableEqualsExpressionBuilder.Build(properties, searchTerms, searchOptions);
+                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, equalsExpression);
             }
             return completeExpression;
         }
