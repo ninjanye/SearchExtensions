@@ -93,13 +93,12 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> ContainingAll(params string[] terms)
         {
-            var result = this;
             for (int i = 0; i < terms.Length; i++)
             {
-                result = result.Containing(terms[i]);
+                this.Containing(terms[i]);
             }
 
-            return result;
+            return this;
         }
 
         /// <summary>

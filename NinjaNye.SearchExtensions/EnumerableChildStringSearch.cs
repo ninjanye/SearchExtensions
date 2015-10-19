@@ -63,6 +63,21 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        /// <summary>
+        /// Retrieve items where all of the defined terms are contained 
+        /// within any of the defined properties
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        public EnumerableChildStringSearch<TParent, TChild> ContainingAll(params string[] terms)
+        {
+            for (int i = 0; i < terms.Length; i++)
+            {
+                this.Containing(terms[i]);
+            }
+
+            return this;
+        }
+
         public IEnumerator<TParent> GetEnumerator()
         {
             return this._completeExpression == null ? this._parent.GetEnumerator() 
