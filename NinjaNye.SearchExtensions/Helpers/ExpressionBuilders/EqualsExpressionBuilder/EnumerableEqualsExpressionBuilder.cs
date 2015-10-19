@@ -6,7 +6,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionB
 {
     internal static class EnumerableEqualsExpressionBuilder
     {
-
         /// <summary>
         /// Build an 'equals' expression for a search term against a particular string property
         /// </summary>

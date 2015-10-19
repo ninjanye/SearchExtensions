@@ -67,6 +67,7 @@
     <Compile Include="SearchExtensionTests\IEnumerableTests\IntegerSearchTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\IsEqualTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\LevenshteinSearch.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\SearchChildrenForStringTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\SearchChildrenTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StartsWithTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearchTests.cs" />
