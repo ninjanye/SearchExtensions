@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressionBuilder;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
+using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpressionBuilder;
 using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
@@ -75,6 +76,18 @@ namespace NinjaNye.SearchExtensions
                 this.Containing(terms[i]);
             }
 
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve items where any of the defined properties starts 
+        /// with any of the defined search terms
+        /// </summary>
+        /// <param name="terms">Term or terms to search for</param>
+        public EnumerableChildStringSearch<TParent, TChild> StartsWith(params string[] terms)
+        {
+            Expression startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(_properties, terms, _searchOptions);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, startsWithExpression);
             return this;
         }
 

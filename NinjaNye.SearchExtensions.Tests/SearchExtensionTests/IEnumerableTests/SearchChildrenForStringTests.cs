@@ -184,5 +184,21 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result, Contains.Item(_parent));
         }
+
+        [Test]
+        public void SearchChild_StringStartsWith_ReturnsAllMatches()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Description)
+                                  .StartsWith("children")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(_otherParent));
+        }
     }
 }
