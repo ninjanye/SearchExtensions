@@ -20,7 +20,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         public void SetUp()
         {
             this._dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
-            this._dataTwo = new TestData {Name = "fred", Description = "nested data", Number = 6, Age = 30};
+            this._dataTwo = new TestData {Name = "fred", Description = "nested positionly", Number = 6, Age = 30};
             this._dataThree = new TestData {Name = "teddy", Description = "children description", Number = 2, Age = 40};
             this._dataFour = new TestData {Name = "josh", Description = "nested data", Number = 20, Age = 50};
             this._parent = new ParentTestData
@@ -194,6 +194,22 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(p => p.Children)
                                   .With(c => c.Description)
                                   .StartsWith("children")
+                                  .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Contains.Item(_otherParent));
+        }
+
+        [Test]
+        public void SearchChild_StringEndsWith_ReturnsAllMatches()
+        {
+            //Arrange
+            
+            //Act
+            var result = _testData.Search(p => p.Children)
+                                  .With(c => c.Description)
+                                  .EndsWith("tion")
                                   .ToList();
 
             //Assert
