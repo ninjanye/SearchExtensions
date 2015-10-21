@@ -41,7 +41,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(p => p.Children);
+            var result = this._testData.SearchChildren(p => p.Children);
 
             //Assert
             CollectionAssert.AreEqual(_testData, result);
@@ -53,7 +53,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .GreaterThan(10)
                                        .ToList();
@@ -69,7 +69,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .GreaterThan(4)
                                        .ToList();
@@ -87,7 +87,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .GreaterThanOrEqualTo(6)
                                        .ToList();
@@ -105,7 +105,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .LessThan(2)
                                        .ToList();
@@ -121,7 +121,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .LessThanOrEqualTo(2)
                                        .ToList();
@@ -138,7 +138,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .LessThan(10)
                                        .GreaterThan(2)
@@ -155,7 +155,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .Between(2, 10)
                                        .ToList();
@@ -171,7 +171,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .EqualTo(2)
                                        .ToList();
@@ -187,7 +187,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number)
                                        .EqualTo(2, 6)
                                        .ToList();
@@ -204,7 +204,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(p => p.Children)
+            var result = this._testData.SearchChildren(p => p.Children)
                                        .With(c => c.Number, c => c.Age)
                                        .EqualTo(20)
                                        .ToList();
@@ -221,7 +221,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(p => p.Children, p => p.OtherChildren)
+            var result = this._testData.SearchChildren(p => p.Children, p => p.OtherChildren)
                                        .With(c => c.Number)
                                        .EqualTo(20)
                                        .ToList();

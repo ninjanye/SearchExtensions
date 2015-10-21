@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .EqualTo("chris")
                                   .ToList();
@@ -56,7 +56,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .EqualTo("chris", "teddy")
                                   .ToList();
@@ -73,7 +73,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .SetCulture(StringComparison.OrdinalIgnoreCase)
                                   .EqualTo("CHRIS")
@@ -90,7 +90,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .Containing("ed")
                                   .ToList();
@@ -107,7 +107,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .Containing("chris", "")
                                   .ToList();
@@ -123,7 +123,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Name)
                                   .Containing("")
                                   .ToList();
@@ -140,7 +140,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Description)
                                   .Matching(SearchType.WholeWords)
                                   .Containing("child")
@@ -157,7 +157,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Description)
                                   .Matching(SearchType.AnyOccurrence)
                                   .Containing("child")
@@ -175,7 +175,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Description)
                                   .ContainingAll("child", "data")
                                   .ToList();
@@ -191,7 +191,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Description)
                                   .StartsWith("children")
                                   .ToList();
@@ -207,7 +207,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = _testData.Search(p => p.Children)
+            var result = _testData.SearchChildren(p => p.Children)
                                   .With(c => c.Description)
                                   .EndsWith("tion")
                                   .ToList();

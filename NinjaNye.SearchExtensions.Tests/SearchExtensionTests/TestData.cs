@@ -5,7 +5,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
 {
     internal class ParentTestData
     {
-        public IEnumerable<TestData> Children { get; set; }
+        public ICollection<TestData> Children { get; set; }
         public IEnumerable<TestData> OtherChildren { get; set; }
     }
 

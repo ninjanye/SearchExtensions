@@ -5,7 +5,8 @@ using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuild
 
 namespace NinjaNye.SearchExtensions
 {
-    public class EnumerableStructSearch<TSource, TProperty> : EnumerableSearchBase<TSource, TProperty> where TProperty : struct 
+    public class EnumerableStructSearch<TSource, TProperty> : EnumerableSearchBase<TSource, TProperty> 
+        where TProperty : struct 
     {
         public EnumerableStructSearch(IEnumerable<TSource> source, Expression<Func<TSource, TProperty>>[] properties) 
             : base(source, properties)
