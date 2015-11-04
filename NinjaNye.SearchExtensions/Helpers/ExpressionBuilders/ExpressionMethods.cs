@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using NinjaNye.SearchExtensions.Levenshtein;
@@ -35,6 +36,11 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetMethod("LevenshteinDistance");
         public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
         public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetMethod("QuickReverse");
+
+        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetMethods()
+                                                                                 .Single(mi => mi.Name == "Any" 
+                                                                                            && mi.GetParameters().Length == 2);
+
         #endregion
     }
 }

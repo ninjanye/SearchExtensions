@@ -12,6 +12,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
         }
 
         public DbSet<TestModel> TestModels { get; set; }
+        public DbSet<ChildTestModel> ChildTestModels { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -19,4 +20,6 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
             base.OnModelCreating(modelBuilder);
         }
     }
+
+
 }

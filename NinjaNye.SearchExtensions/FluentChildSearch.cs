@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace NinjaNye.SearchExtensions
@@ -23,6 +24,18 @@ namespace NinjaNye.SearchExtensions
         public static EnumerableChildSelector<TSource, TProperty> SearchChildren<TSource, TProperty>(this IEnumerable<TSource> source, params Expression<Func<TSource, IEnumerable<TProperty>>>[] properties)
         {
             return new EnumerableChildSelector<TSource, TProperty>(source, properties);
+        }
+
+        /// <summary>
+        /// Identify a child collection to search on
+        /// </summary>
+        /// <typeparam name="TSource">Type of object to be searched</typeparam>
+        /// <typeparam name="TProperty">Type of property to be searched</typeparam>
+        /// <param name="source">source data on which to search</param>
+        /// <param name="property">Enumerable properties to search.</param>
+        public static QueryableChildSelector<TSource, TProperty> SearchChildren<TSource, TProperty>(this IQueryable<TSource> source, Expression<Func<TSource, IEnumerable<TProperty>>> property)
+        {
+            return new QueryableChildSelector<TSource, TProperty>(source, property);
         }
     }
 }

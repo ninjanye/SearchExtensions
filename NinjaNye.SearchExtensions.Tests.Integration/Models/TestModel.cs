@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Models
 {
@@ -13,7 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Models
             End = this._defaultDate;
         }
 
-        public ICollection<TestModel> Children { get; set; }
+        public virtual ICollection<ChildTestModel> Children { get; set; }
 
         public Guid Id { get; set; }
         public string StringOne { get; set; }

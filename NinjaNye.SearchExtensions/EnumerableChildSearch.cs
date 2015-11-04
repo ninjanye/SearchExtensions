@@ -108,17 +108,21 @@ namespace NinjaNye.SearchExtensions
         public IEnumerator<TParent> GetEnumerator()
         {
             return this._completeExpression == null ? this._parent.GetEnumerator() 
-                                                    : this.GetEnueratorWithoutChecks();
+                                                    : this.GetEnumeratorWithoutChecks();
         }
 
-        private IEnumerator<TParent> GetEnueratorWithoutChecks()
+        private IEnumerator<TParent> GetEnumeratorWithoutChecks()
         {
             var finalExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter).Compile();
-            foreach (var parent in this._parent)
+            foreach (var parent in this._parent.ToList())
             {
                 foreach (var childProperty in _childProperties)
                 {
                     var children = childProperty.Compile().Invoke(parent);
+                    if (children == null)
+                    {
+                        break;
+                    }
                     var isMatch = children.Any(c => finalExpression.Invoke(c));
                     if (isMatch)
                     {

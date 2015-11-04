@@ -10,7 +10,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(TestContext context)
@@ -46,11 +47,6 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
                 new TestModel {Id = new Guid("15598E88-CD58-42E7-A96B-22CB220D5BB2"), StringOne = "search test record", StringTwo = "search", StringThree = "record"},
                 new TestModel {Id = new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C"), StringOne = "wholewordmatch", StringTwo = "match", StringThree = "whole"},
                 new TestModel {Id = new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251"), StringOne = "whole word match", StringTwo = "match", StringThree = "whole"},
-                new TestModel {Id = new Guid("0CFFA618-B70A-4965-9075-29F8377F60DA"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3},
-                new TestModel {Id = new Guid("BC0AC977-A5DC-4F3F-B355-8E30C6C0048B"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 103},
-                new TestModel {Id = new Guid("465253C0-CA3A-4787-87DF-1F76F9FD166B"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200},
-                new TestModel {Id = new Guid("94A911C4-23BB-4CB5-A0CF-AFB077F37AB9"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301},
-                new TestModel {Id = new Guid("0A6A88AE-5D68-4A94-B34E-843D9945E82D"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1},
                 new TestModel {Id = new Guid("DA60DD08-F3A6-4709-9560-AAFDAA91F3EB"), Start = new DateTime(2000, 1, 1), End = new DateTime(2010, 1, 1)},
                 new TestModel {Id = new Guid("D38974C3-72B5-44E6-B54E-CFF41552DE90"), Start = new DateTime(2010, 1, 1), End = new DateTime(2020, 1, 1)},
                 new TestModel {Id = new Guid("C24AD0A7-5B57-40D1-B5CC-FE8F0082FA78"), Start = new DateTime(2020, 1, 1), End = new DateTime(2030, 1, 1)},
@@ -58,12 +54,25 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
                 new TestModel {Id = new Guid("8AC7CFF4-0BF6-4883-95FB-6729369E606D"), Start = new DateTime(2040, 1, 1), End = new DateTime(2050, 1, 1)},
                 new TestModel
                 {
-                    Id = new Guid("FC81414F-20F9-4465-917F-4D6F89817819"), StringOne = "parent test model", StringTwo = "parent", Children = new List<TestModel>
+                    Id = new Guid("F672552D-2787-468D-8D2E-DE1E88F83E21"), StringOne = "parent test model", StringTwo = "parent", 
+                    Children = new List<ChildTestModel>
                     {
-                        new TestModel {Id = new Guid("DCC49232-9F09-43DE-ADAE-38182B5F76F8"), StringOne = "child test", StringTwo = "child one"},
-                        new TestModel {Id = new Guid("3BDB94A8-DEF9-4DA6-B18C-3F9F574E66FD"), StringOne = "test child", StringTwo = "child two"},
-                        new TestModel {Id = new Guid("F9999E52-54C5-4873-8AE3-ACBB9019C30D"), StringOne = "another child", StringTwo = "child three"},
-                        new TestModel {Id = new Guid("69ADC3C9-4BD4-4225-B492-5782C0753127"), StringOne = "last child", StringTwo = "child four"}
+                        new ChildTestModel {Id = new Guid("ADA68177-DE83-4462-B6F7-81827F9D8EA8"), StringOne = "child test", StringTwo = "child one"},
+                        new ChildTestModel {Id = new Guid("78AF04DC-A8AA-4293-9F9F-582A93C717BF"), StringOne = "test child", StringTwo = "child two"},
+                        new ChildTestModel {Id = new Guid("CCCF9D7B-631A-43D8-AC7A-58C6061890A8"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200},
+                        new ChildTestModel {Id = new Guid("EA2FEBC5-6689-4B15-8528-B8E86EA064F1"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301},
+                        new ChildTestModel {Id = new Guid("2191405A-6269-440F-8DD9-000882D742A3"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1},
+                    }
+                },
+                new TestModel
+                {
+                    Id = new Guid("24726ECC-953E-4F95-88AA-91E0C0B52D00"), StringOne = "parent model test", StringTwo = "parent", 
+                    Children = new List<ChildTestModel>
+                    {
+                        new ChildTestModel {Id = new Guid("BAD85289-DCC5-48FD-A054-58360A86F9FC"), StringOne = "another child", StringTwo = "child three"},
+                        new ChildTestModel {Id = new Guid("DA7B9641-D554-49A1-9F0F-3E6988733D1B"), StringOne = "last child", StringTwo = "child four"},
+                        new ChildTestModel {Id = new Guid("9FD0D2A9-BC71-42A3-9D72-8AA72619AA60"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3},
+                        new ChildTestModel {Id = new Guid("697AFA70-6544-4475-BB3F-A5FF4672B063"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 103},
                     }
                 }
                 );

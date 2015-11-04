@@ -65,11 +65,13 @@
     <Compile Include="Levenshtein\LevenshteinDistance.cs" />
     <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
     <Compile Include="Models\Ranked.cs" />
+    <Compile Include="QueryableChildSearch.cs" />
     <Compile Include="QueryableStructSearch.cs" />
     <Compile Include="QueryableStringSearch.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableSearchBase.cs" />
+    <Compile Include="QueryableChildSelector.cs" />
     <Compile Include="SearchBase.cs" />
     <Compile Include="SearchOptions.cs" />
     <Compile Include="SearchType.cs" />
