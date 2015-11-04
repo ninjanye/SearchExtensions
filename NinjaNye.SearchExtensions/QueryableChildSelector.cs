@@ -34,9 +34,9 @@ namespace NinjaNye.SearchExtensions
         public Type ElementType { get; private set; }
         public IQueryProvider Provider { get; private set; }
 
-        public QueryableChildSearch<TBase, TChild, TProperty> With<TProperty>(Expression<Func<TChild, TProperty>> property)
+        public QueryableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] property)
         {
-            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, new []{_childProperty}, new []{ property});
+            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, new []{_childProperty}, property);
         }
     }
 }

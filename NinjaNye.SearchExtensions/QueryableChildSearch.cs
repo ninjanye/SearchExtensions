@@ -25,6 +25,77 @@ namespace NinjaNye.SearchExtensions
             _properties = this.AlignParameters(properties);
         }
 
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are equal to any of the supplied <paramref name="values">values</paramref> 
+        /// </summary>
+        /// <param name="values">A collection of values to match upon</param>
+        public QueryableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
+        {
+            var equalToExpression = ExpressionBuilder.EqualsExpression(this._properties, values);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than any of the supplied <paramref name="value">value</paramref> 
+        /// </summary>
+        /// <param name="value">A collection of values to match upon</param>
+        public QueryableChildSearch<TParent, TChild, TProperty> GreaterThan(TProperty value)
+        {
+            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this._properties, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than or equal to any of the supplied <paramref name="value">value</paramref> 
+        /// </summary>
+        /// <param name="value">A collection of values to match upon</param>
+        public QueryableChildSearch<TParent, TChild, TProperty> GreaterThanOrEqualTo(TProperty value)
+        {
+            var greaterThanExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this._properties, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than any of the supplied <paramref name="value">value</paramref> 
+        /// </summary>
+        /// <param name="value">A collection of values to match upon</param>
+        public QueryableChildSearch<TParent, TChild, TProperty> LessThan(TProperty value)
+        {
+            var lessThanExpression = ExpressionBuilder.LessThanExpression(this._properties, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than any of the supplied <paramref name="value">value</paramref> 
+        /// </summary>
+        /// <param name="value">A collection of values to match upon</param>
+        public QueryableChildSearch<TParent, TChild, TProperty> LessThanOrEqualTo(TProperty value)
+        {
+            var lessThanExpression = ExpressionBuilder.LessThanOrEqualExpression(this._properties, value);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieves items where any of the defined properties
+        /// are greater than any of the supplied <paramref name="value">value</paramref> 
+        /// </summary>
+        public QueryableChildSearch<TParent, TChild, TProperty> Between(TProperty minvalue, TProperty maxValue)
+        {
+            var betweenExpression = ExpressionBuilder.BetweenExpression(this._properties, minvalue, maxValue);
+            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, betweenExpression);
+            return this;
+        }
+
         private Expression<Func<TChild, TProperty>>[] AlignParameters(Expression<Func<TChild, TProperty>>[] properties)
         {
             var swappedProperties = new List<Expression<Func<TChild, TProperty>>>();
@@ -35,18 +106,6 @@ namespace NinjaNye.SearchExtensions
             }
             this._properties = swappedProperties.ToArray();
             return swappedProperties.ToArray();
-        }
-
-        /// <summary>
-        /// Retrieves items where any of the defined properties
-        /// are equal to any of the supplied <paramref name="values">value</paramref> 
-        /// </summary>
-        /// <param name="values">A collection of values to match upon</param>
-        public QueryableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
-        {
-            var equalToExpression = ExpressionBuilder.EqualsExpression(this._properties, values);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
-            return this;
         }
 
         public IEnumerator<TParent> GetEnumerator()

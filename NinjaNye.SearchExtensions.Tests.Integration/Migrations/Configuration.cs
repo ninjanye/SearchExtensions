@@ -52,6 +52,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
                 new TestModel {Id = new Guid("C24AD0A7-5B57-40D1-B5CC-FE8F0082FA78"), Start = new DateTime(2020, 1, 1), End = new DateTime(2030, 1, 1)},
                 new TestModel {Id = new Guid("35BC5401-AF48-4757-A01D-1A5E85D926ED"), Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1)},
                 new TestModel {Id = new Guid("8AC7CFF4-0BF6-4883-95FB-6729369E606D"), Start = new DateTime(2040, 1, 1), End = new DateTime(2050, 1, 1)},
+                new TestModel {Id = new Guid("2F2DBCB1-88D0-4E95-84AF-1CE073C03513"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200 },
+                new TestModel {Id = new Guid("CAEF2CD5-1AED-4BEE-A5E7-36A711A1ABF3"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301 },
+                new TestModel {Id = new Guid("477BFDFB-5EEA-411D-B9AB-8E7F6DCB5BD3"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1 },
                 new TestModel
                 {
                     Id = new Guid("F672552D-2787-468D-8D2E-DE1E88F83E21"), StringOne = "parent test model", StringTwo = "parent", 
