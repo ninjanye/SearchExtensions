@@ -38,12 +38,11 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchType searchType)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchType searchType)
         {
-            var alteredSearchTerm = searchType == SearchType.WholeWords ? searchTerm + " " : searchTerm;
-            var searchTermExpression = Expression.Constant(alteredSearchTerm);
-            var indexOfCallExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            return Expression.Equal(indexOfCallExpresion, ExpressionMethods.ZeroConstantExpression);
+            var paddedTerm = searchType == SearchType.WholeWords ? searchTerm + " " : searchTerm;
+            var searchTermExpression = Expression.Constant(paddedTerm);
+            return Expression.Call(stringProperty.Body, ExpressionMethods.StartsWithMethod, searchTermExpression);
         }
 
         /// <summary>
@@ -79,14 +78,14 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, SearchType searchType)
         {
-            var seperator = Expression.Constant(" ");
             var paddedTerm = propertyToSearchFor.Body;
             if (searchType == SearchType.WholeWords)
             {
+                var seperator = Expression.Constant(" ");
                 paddedTerm = Expression.Call(ExpressionMethods.StringConcatMethod, propertyToSearchFor.Body, seperator);
             }
-            var indexOfCallExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethod, paddedTerm);
-            var result = Expression.Equal(indexOfCallExpresion, ExpressionMethods.ZeroConstantExpression);
+
+            var result = Expression.Call(stringProperty.Body, ExpressionMethods.StartsWithMethod, paddedTerm);
             if (searchType == SearchType.WholeWords)
             {
                 var isEqualExpression = QueryableEqualsExpressionBuilder.Build(stringProperty, propertyToSearchFor);

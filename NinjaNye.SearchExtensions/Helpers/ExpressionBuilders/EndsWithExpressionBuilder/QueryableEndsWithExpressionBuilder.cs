@@ -52,10 +52,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
         /// </summary>
         private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, SearchType searchType)
         {
-            var seperator = Expression.Constant(" ");
             var paddedTerm = propertyToSearchFor.Body;
             if (searchType == SearchType.WholeWords)
             {
+                var seperator = Expression.Constant(" ");
                 paddedTerm = Expression.Call(ExpressionMethods.StringConcatMethod, seperator, propertyToSearchFor.Body);
             }
 
