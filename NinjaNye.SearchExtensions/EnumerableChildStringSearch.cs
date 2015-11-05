@@ -139,10 +139,10 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
-        public EnumerableChildStringSearch<TParent, TChild> Matching(SearchType searchType)
-        {
-            _searchOptions.SearchType = searchType;
-            return this;
-        }
+            public EnumerableChildStringSearch<TParent, TChild> Matching(SearchType searchType)
+            {
+                _searchOptions.SearchType = searchType;
+                return this;
+            }
     }
 }

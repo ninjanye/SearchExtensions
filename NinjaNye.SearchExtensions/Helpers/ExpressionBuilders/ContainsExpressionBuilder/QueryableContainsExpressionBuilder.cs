@@ -20,14 +20,14 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.ContainsExpressio
                 result = ExpressionHelper.JoinOrExpression(result, containsExpression);
             }
 
-            var terms = searchTerms.ToArray();
-            var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
-            result = ExpressionHelper.JoinOrExpression(result, startsWithExpression);
-            var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
-            result = ExpressionHelper.JoinOrExpression(result, endsWithExpression);
-
             if (searchType == SearchType.WholeWords)
             {
+                var terms = searchTerms.ToArray();
+                var startsWithExpression = QueryableStartsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
+                result = ExpressionHelper.JoinOrExpression(result, startsWithExpression);
+                var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(propertiesToSearch, terms, searchType);
+                result = ExpressionHelper.JoinOrExpression(result, endsWithExpression);
+
                 var equalsExpression = QueryableEqualsExpressionBuilder.Build(propertiesToSearch, terms);
                 result = ExpressionHelper.JoinOrExpression(result, equalsExpression);
             }

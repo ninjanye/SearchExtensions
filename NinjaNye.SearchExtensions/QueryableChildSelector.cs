@@ -20,6 +20,16 @@ namespace NinjaNye.SearchExtensions
             this.Expression = this._parent.Expression;
         }
 
+        public QueryableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] properties)
+        {
+            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, new[] { _childProperty }, properties);
+        }
+
+        public QueryableChildStringSearch<TBase, TChild> With(params Expression<Func<TChild, string>>[] properties)
+        {
+            return new QueryableChildStringSearch<TBase, TChild>(_parent, new[] { _childProperty }, properties);
+        }
+
         public IEnumerator<TBase> GetEnumerator()
         {
             return this._parent.GetEnumerator();
@@ -33,10 +43,5 @@ namespace NinjaNye.SearchExtensions
         public Expression Expression { get; private set; }
         public Type ElementType { get; private set; }
         public IQueryProvider Provider { get; private set; }
-
-        public QueryableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] property)
-        {
-            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, new []{_childProperty}, property);
-        }
     }
 }
