@@ -23,19 +23,17 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
         {
             var alteredSearchTerm = searchOptions.SearchType == SearchType.WholeWords ? searchTerm + " " : searchTerm;
             var searchTermExpression = Expression.Constant(alteredSearchTerm);
             if (searchOptions.NullCheck)
             {
                 var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
-                var nullCheckExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethodWithComparison, searchTermExpression, searchOptions.ComparisonTypeExpression);
-                return Expression.Equal(nullCheckExpresion, ExpressionMethods.ZeroConstantExpression);
+                return Expression.Call(coalesceExpression, ExpressionMethods.StartsWithMethodWithComparison, searchTermExpression, searchOptions.ComparisonTypeExpression);
             }
 
-            var indexOfCallExpresion = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethodWithComparison, searchTermExpression, searchOptions.ComparisonTypeExpression);
-            return Expression.Equal(indexOfCallExpresion, ExpressionMethods.ZeroConstantExpression);
+            return Expression.Call(stringProperty.Body, ExpressionMethods.StartsWithMethodWithComparison, searchTermExpression, searchOptions.ComparisonTypeExpression);
         }
 
         /// <summary>
@@ -55,18 +53,17 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
         /// <summary>
         /// Build an 'indexof() == 0' expression for a search term against a particular string property
         /// </summary>
-        private static BinaryExpression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, ConstantExpression stringComparisonExpression, bool nullCheck = true)
+        private static Expression Build<T>(Expression<Func<T, string>> stringProperty, Expression<Func<T, string>> propertyToSearchFor, ConstantExpression stringComparisonExpression, bool nullCheck = true)
         {
-            var indexOfCallExpression = Expression.Call(stringProperty.Body, ExpressionMethods.IndexOfMethodWithComparison, propertyToSearchFor.Body, stringComparisonExpression);
-            var indexOfIsZeroExpression = Expression.Equal(indexOfCallExpression, ExpressionMethods.ZeroConstantExpression);
+            var startsWithExpression = Expression.Call(stringProperty.Body, ExpressionMethods.StartsWithMethodWithComparison, propertyToSearchFor.Body, stringComparisonExpression);
             if (nullCheck)
             {
                 var stringPropertyNotNullExpression = Expression.NotEqual(stringProperty.Body, ExpressionMethods.NullExpression);
                 var searchForNotNullExpression = Expression.NotEqual(propertyToSearchFor.Body, ExpressionMethods.NullExpression);
                 var propertiesNotNullExpression = Expression.AndAlso(stringPropertyNotNullExpression, searchForNotNullExpression);
-                return Expression.AndAlso(propertiesNotNullExpression, indexOfIsZeroExpression);
+                return Expression.AndAlso(propertiesNotNullExpression, startsWithExpression);
             }
-            return indexOfIsZeroExpression;
+            return startsWithExpression;
         }
 
         /// <summary>
