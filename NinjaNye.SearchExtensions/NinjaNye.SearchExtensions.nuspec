@@ -9,7 +9,7 @@
     <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.6 allows for whole word searches against a collection of terms</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.7 adds support for searching withing child collections of IQueryable collections, pushing the logic to the server</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>search extension searchextensions methods linq ranked entityframework soundex levenshtein</tags>
   </metadata>
