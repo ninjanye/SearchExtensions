@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions
 {
     public class QueryableChildSearch<TParent, TChild, TProperty> : IQueryable<TParent>
     {
-        private IQueryable<TParent> _parent;
+        private readonly IQueryable<TParent> _parent;
         private readonly Expression<Func<TParent, IEnumerable<TChild>>>[] _childProperties;
         private Expression<Func<TChild, TProperty>>[] _properties;
         private readonly ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
