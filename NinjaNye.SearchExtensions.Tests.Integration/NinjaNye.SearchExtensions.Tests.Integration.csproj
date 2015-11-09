@@ -60,6 +60,7 @@
     <Compile Include="Fluent\SearchTests\SearchChildren\LessThanTests.cs" />
     <Compile Include="Fluent\SearchTests\SearchChildren\GreaterThanTests.cs" />
     <Compile Include="Fluent\SearchTests\SearchChildren\EqualToTests.cs" />
+    <Compile Include="Fluent\SearchTests\SearchChildren\SearchChildrenWithChainingTests.cs" />
     <Compile Include="Fluent\SearchTests\SearchChildren\StringTests.cs" />
     <Compile Include="Fluent\SearchTests\SearchChildren\SearchChildrenTests.cs" />
     <Compile Include="Fluent\StructSearchTests\BetweenTests.cs" />

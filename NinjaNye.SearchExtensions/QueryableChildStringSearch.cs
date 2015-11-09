@@ -102,6 +102,12 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
+        public QueryableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
+        {
+            return new QueryableChildSearch<TParent, TChild, TAnotherProperty>(this.UpdatedSource(), _childProperties, properties);
+        }
+
+
         private Expression<Func<TChild, string>>[] AlignParameters(Expression<Func<TChild, string>>[] properties)
         {
             var swappedProperties = new List<Expression<Func<TChild, string>>>();
@@ -116,21 +122,23 @@ namespace NinjaNye.SearchExtensions
 
         public IEnumerator<TParent> GetEnumerator()
         {
-            return this._completeExpression == null ? this._parent.GetEnumerator() 
-                                                    : this.BuildEnumerator();
+            return this.UpdatedSource().GetEnumerator();
         }
 
-        private IEnumerator<TParent> BuildEnumerator()
+        private IQueryable<TParent> UpdatedSource()
         {
-            var childProperty = this._childProperties[0];
+            if (_completeExpression == null)
+            {
+                return _parent;
+            }
 
-            var methodInfo = ExpressionMethods.AnyQueryableMethod.MakeGenericMethod(typeof (TChild));
+            var childProperty = this._childProperties[0];
+            var methodInfo = ExpressionMethods.AnyQueryableMethod.MakeGenericMethod(typeof(TChild));
             var anyExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter);
 
             var anyChild = Expression.Call(null, methodInfo, childProperty.Body, anyExpression);
             var finalExpression = Expression.Lambda<Func<TParent, bool>>(anyChild, childProperty.Parameters[0]);
-
-            return this._parent.Where(finalExpression).GetEnumerator();
+            return this._parent.Where(finalExpression);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
