@@ -1,46 +1,21 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
-using NinjaNye.SearchExtensions.Visitors;
 
 namespace NinjaNye.SearchExtensions
 {
-    public class EnumerableChildSearch<TParent, TChild, TProperty> : IEnumerable<TParent>
+    public class EnumerableChildSearch<TParent, TChild, TProperty> : EnumerableChildSearchBase<TParent, TChild, TProperty>
     {
-        private readonly IEnumerable<TParent> _parent;
-        private readonly Expression<Func<TParent, IEnumerable<TChild>>>[] _childProperties;
-        private readonly Expression<Func<TChild, TProperty>>[] _properties;
-        private readonly ParameterExpression _parentParameter;
-        private readonly ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
-        private Expression _completeExpression;
-
         public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties)
-            :this(parent, childProperties, properties, null, null)
+            : base(parent, childProperties, properties)
         {
         }
 
         public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties, Expression completeExpression, ParameterExpression childParameter)
+            : base(parent, childProperties, properties, completeExpression, childParameter)
         {
-            this._parent = parent;
-            this._parentParameter = childProperties[0].Parameters[0];
-            if (childParameter != null) this._childParameter = childParameter;
-            _completeExpression = completeExpression;
-
-            _childProperties = this.AlignParameters(childProperties, this._parentParameter).ToArray();
-            _properties = this.AlignParameters(properties, this._childParameter).ToArray();
-        }
-
-        private IEnumerable<Expression<Func<TSource, TResult>>> AlignParameters<TSource, TResult>(Expression<Func<TSource, TResult>>[] properties, ParameterExpression parameterExpression)
-        {
-            for (int i = 0; i < properties.Length; i++)
-            {
-                var property = properties[i];
-                yield return SwapExpressionVisitor.Swap(property, property.Parameters.Single(), parameterExpression);
-            }
         }
 
         /// <summary>
@@ -50,8 +25,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public EnumerableChildSearch<TParent, TChild, TProperty> GreaterThan(TProperty value)
         {
-            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this._properties, value);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this.Properties, value);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, greaterThanExpression);
             return this;
         }
 
@@ -62,8 +37,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public EnumerableChildSearch<TParent, TChild, TProperty> GreaterThanOrEqualTo(TProperty value)
         {
-            var greaterThanExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this._properties, value);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this.Properties, value);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, greaterThanExpression);
             return this;
         }
 
@@ -74,8 +49,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public EnumerableChildSearch<TParent, TChild, TProperty> LessThan(TProperty value)
         {
-            var lessThanExpression = ExpressionBuilder.LessThanExpression(this._properties, value);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
+            var lessThanExpression = ExpressionBuilder.LessThanExpression(this.Properties, value);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, lessThanExpression);
             return this;
         }
 
@@ -86,8 +61,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public EnumerableChildSearch<TParent, TChild, TProperty> LessThanOrEqualTo(TProperty value)
         {
-            var lessThanExpression = ExpressionBuilder.LessThanOrEqualExpression(this._properties, value);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, lessThanExpression);
+            var lessThanExpression = ExpressionBuilder.LessThanOrEqualExpression(this.Properties, value);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, lessThanExpression);
             return this;
         }
 
@@ -98,8 +73,8 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public EnumerableChildSearch<TParent, TChild, TProperty> Between(TProperty minValue, TProperty maxValue)
         {
-            var betweenExpression = ExpressionBuilder.BetweenExpression(this._properties, minValue, maxValue);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, betweenExpression);
+            var betweenExpression = ExpressionBuilder.BetweenExpression(this.Properties, minValue, maxValue);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, betweenExpression);
             return this;
         }
 
@@ -110,49 +85,19 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">A collection of values to match upon</param>
         public EnumerableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
         {
-            var equalToExpression = ExpressionBuilder.EqualsExpression(this._properties, values);
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
+            var equalToExpression = ExpressionBuilder.EqualsExpression(this.Properties, values);
+            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, equalToExpression);
             return this;
         }
 
         public EnumerableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(_parent, _childProperties, properties, _completeExpression, _childParameter);
+            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(this.Parent, this.ChildProperties, properties, this.CompleteExpression, this.ChildParameter);
         }
 
         public EnumerableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            return new EnumerableChildStringSearch<TParent, TChild>(_parent, _childProperties, properties, _completeExpression, _childParameter);
-        }
-
-        public IEnumerator<TParent> GetEnumerator()
-        {
-            return this.UpdatedSource().GetEnumerator();
-        }
-
-        private IEnumerable<TParent> UpdatedSource()
-        {
-            if (_completeExpression == null)
-            {
-                return _parent;
-            }
-
-            var anyMethodInfo = ExpressionMethods.AnyQueryableMethod.MakeGenericMethod(typeof(TChild));
-            Expression finalExpression = null;
-            foreach (var childProperty in _childProperties)
-            {
-                var anyExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter);
-                var anyChild = Expression.Call(null, anyMethodInfo, childProperty.Body, anyExpression);
-                finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, anyChild);
-            }
-
-            var final = Expression.Lambda<Func<TParent, bool>>(finalExpression, this._parentParameter).Compile();
-            return this._parent.Where(final);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
+            return new EnumerableChildStringSearch<TParent, TChild>(this.Parent, this.ChildProperties, properties, this.CompleteExpression, this.ChildParameter);
         }
     }
 }
