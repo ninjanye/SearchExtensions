@@ -118,7 +118,7 @@ namespace NinjaNye.SearchExtensions
 
         public EnumerableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(this.UpdatedSource(), _childProperties, properties);
+            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(_parent, _childProperties, properties, _completeExpression, _childParameter);
         }
 
         public EnumerableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)

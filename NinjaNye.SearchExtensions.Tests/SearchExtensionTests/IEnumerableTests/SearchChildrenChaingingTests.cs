@@ -41,14 +41,14 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
             var result = _testData.SearchChildren(x => x.Children)
                                             .With(c => c.Name)
-                                            .EqualTo("josh")
+                                            .Containing("ed")
                                             .With(c => c.Number)
                                             .EqualTo(20)
                                             .ToList();
 
             //Assert
             Assert.That(result.Count, Is.EqualTo(1));
-            CollectionAssert.Contains(result, _otherParent);
+            CollectionAssert.Contains(result, _parent);
         }
 
         [Test]
