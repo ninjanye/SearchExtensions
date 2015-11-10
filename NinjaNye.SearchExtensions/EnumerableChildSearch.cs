@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,16 @@ namespace NinjaNye.SearchExtensions
         private Expression _completeExpression;
 
         public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties)
+            :this(parent, childProperties, properties, null, null)
+        {
+        }
+
+        private EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties, Expression completeExpression, ParameterExpression childParameter)
         {
             this._parent = parent;
             this._parentParameter = childProperties[0].Parameters[0];
+            if (childParameter != null) this._childParameter = childParameter;
+            _completeExpression = completeExpression;
 
             _childProperties = this.AlignParameters(childProperties, this._parentParameter).ToArray();
             _properties = this.AlignParameters(properties, this._childParameter).ToArray();
@@ -110,7 +118,12 @@ namespace NinjaNye.SearchExtensions
 
         public EnumerableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(this.UpdatedSource(), _childProperties, properties);
+            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(_parent, _childProperties, properties, _completeExpression, _childParameter);
+        }
+
+        public EnumerableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)
+        {
+            return new EnumerableChildStringSearch<TParent, TChild>(_parent, _childProperties, properties, _completeExpression, _childParameter);
         }
 
         public IEnumerator<TParent> GetEnumerator()

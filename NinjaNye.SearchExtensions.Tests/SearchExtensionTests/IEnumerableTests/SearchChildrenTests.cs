@@ -231,5 +231,22 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             CollectionAssert.Contains(result, _parent);
             CollectionAssert.Contains(result, _otherParent);
         }
+
+        [Test]
+        public void SearchChildren_SearchMultipleChildCollectionsWithStringPropertyEqualTo()
+        {
+            //Arrange
+
+            //Act
+            var result = this._testData.SearchChildren(p => p.Children, p => p.OtherChildren)
+                                       .With(c => c.Name)
+                                       .EqualTo("chris")
+                                       .ToList();
+
+            //Assert
+            Assert.That(result.Count(), Is.EqualTo(2));
+            CollectionAssert.Contains(result, _parent);
+            CollectionAssert.Contains(result, _otherParent);
+        }
     }
 }

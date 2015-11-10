@@ -18,9 +18,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         [SetUp]
         public void SetUp()
         {
-            this._dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
-            this._dataTwo = new TestData {Name = "fred", Description = "child data", Number = 20, Age = 30};
-            this._dataThree = new TestData {Name = "teddy", Description = "child data", Number = 2, Age = 40};
+            this._dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 60};
+            this._dataTwo = new TestData {Name = "fred", Description = "child", Number = 20, Age = 30};
+            this._dataThree = new TestData {Name = "teddy", Description = "data", Number = 2, Age = 40};
             this._dataFour = new TestData {Name = "josh", Description = "child data", Number = 20, Age = 50};
             this._parent = new ParentTestData
             {
@@ -40,10 +40,64 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             var result = _testData.SearchChildren(x => x.Children)
+                                            .With(c => c.Name)
+                                            .EqualTo("josh")
+                                            .With(c => c.Number)
+                                            .EqualTo(20)
+                                            .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            CollectionAssert.Contains(result, _otherParent);
+        }
+
+        [Test]
+        public void SearchChildren_SearchStringAndString_ResultsMatchBothOccurences()
+        {
+            //Arrange
+
+            //Act
+            var result = _testData.SearchChildren(x => x.Children)
+                                            .With(c => c.Name)
+                                            .Containing("ed")
+                                            .With(c => c.Description)
+                                            .Containing("child")
+                                            .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            CollectionAssert.Contains(result, _parent);
+        }
+
+        [Test]
+        public void SearchChildren_SearchIntegerAndString_ResultsMatchBothOccurences()
+        {
+            //Arrange
+
+            //Act
+            var result = _testData.SearchChildren(x => x.Children)
                                             .With(c => c.Number)
                                             .EqualTo(20)
                                             .With(c => c.Name)
-                                            .EqualTo("josh")
+                                            .Containing("ed")
+                                            .ToList();
+
+            //Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            CollectionAssert.Contains(result, _parent);
+        }
+
+        [Test]
+        public void SearchChildren_SearchIntegerAndInteger_ResultsMatchBothOccurences()
+        {
+            //Arrange
+
+            //Act
+            var result = _testData.SearchChildren(x => x.Children)
+                                            .With(c => c.Number)
+                                            .EqualTo(20)
+                                            .With(c => c.Age)
+                                            .GreaterThan(40)
                                             .ToList();
 
             //Assert

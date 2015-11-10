@@ -18,23 +18,35 @@ namespace NinjaNye.SearchExtensions
         private readonly Expression<Func<TParent, IEnumerable<TChild>>>[] _childProperties;
         private readonly Expression<Func<TChild, string>>[] _properties;
         private Expression _completeExpression;
+        private readonly ParameterExpression _parentParameter;
         private readonly ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
         private readonly SearchOptions _searchOptions;
 
         public EnumerableChildStringSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, string>>[] properties)
+            : this(parent, childProperties, properties, null, null)
+        {
+        }
+
+        public EnumerableChildStringSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, string>>[] properties, Expression currentExpression, ParameterExpression childParameter)
         {
             this._parent = parent;
-            this._childProperties = childProperties;
-
-            var swappedProperties = new List<Expression<Func<TChild, string>>>();
-            foreach (var property in properties)
-            {
-                var swappedProperty = SwapExpressionVisitor.Swap(property, property.Parameters.Single(), this._childParameter);
-                swappedProperties.Add(swappedProperty);
-            }
-
-            _properties = swappedProperties.ToArray();
+            this._parentParameter = childProperties[0].Parameters[0];
             _searchOptions = new SearchOptions();
+
+            _completeExpression = currentExpression;
+            if (childParameter != null) this._childParameter = childParameter;
+
+            _childProperties = this.AlignParameters(childProperties, this._parentParameter).ToArray();
+            _properties = this.AlignParameters(properties, this._childParameter).ToArray();
+        }
+
+        private IEnumerable<Expression<Func<TSource, TResult>>> AlignParameters<TSource, TResult>(Expression<Func<TSource, TResult>>[] properties, ParameterExpression parameterExpression)
+        {
+            for (int i = 0; i < properties.Length; i++)
+            {
+                var property = properties[i];
+                yield return SwapExpressionVisitor.Swap(property, property.Parameters.Single(), parameterExpression);
+            }
         }
 
         /// <summary>
@@ -104,33 +116,44 @@ namespace NinjaNye.SearchExtensions
             return this;
         }
 
-        public IEnumerator<TParent> GetEnumerator()
+        public EnumerableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return this._completeExpression == null ? this._parent.GetEnumerator() 
-                                                    : this.GetEnueratorWithoutChecks();
+            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(this.UpdatedSource(), _childProperties, properties);
         }
 
-        private IEnumerator<TParent> GetEnueratorWithoutChecks()
+        public EnumerableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            var finalExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter).Compile();
-            foreach (var parent in this._parent)
-            {
-                foreach (var childProperty in _childProperties)
-                {
-                    var children = childProperty.Compile().Invoke(parent);
-                    var isMatch = children.Any(c => finalExpression.Invoke(c));
-                    if (isMatch)
-                    {
-                        yield return parent;
-                        break;
-                    }
-                }
-            }
+            return new EnumerableChildStringSearch<TParent, TChild>(_parent, _childProperties, properties, _completeExpression, _childParameter);
+        }
+
+        public IEnumerator<TParent> GetEnumerator()
+        {
+            return this.UpdatedSource().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        private IEnumerable<TParent> UpdatedSource()
+        {
+            if (_completeExpression == null)
+            {
+                return _parent;
+            }
+
+            var anyMethodInfo = ExpressionMethods.AnyQueryableMethod.MakeGenericMethod(typeof(TChild));
+            Expression finalExpression = null;
+            foreach (var childProperty in _childProperties)
+            {
+                var anyExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter);
+                var anyChild = Expression.Call(null, anyMethodInfo, childProperty.Body, anyExpression);
+                finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, anyChild);
+            }
+
+            var final = Expression.Lambda<Func<TParent, bool>>(finalExpression, this._parentParameter).Compile();
+            return this._parent.Where(final);
         }
 
         public EnumerableChildStringSearch<TParent, TChild> SetCulture(StringComparison comparisonType)
