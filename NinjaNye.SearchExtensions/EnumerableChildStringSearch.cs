@@ -14,7 +14,7 @@ namespace NinjaNye.SearchExtensions
         private readonly SearchOptions _searchOptions = new SearchOptions();
 
         public EnumerableChildStringSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, string>>[] properties)
-            : base(parent, childProperties, properties)
+            : base(parent, childProperties, properties, null, null)
         {
         }
 

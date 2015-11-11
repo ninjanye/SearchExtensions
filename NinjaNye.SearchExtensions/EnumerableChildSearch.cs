@@ -8,7 +8,7 @@ namespace NinjaNye.SearchExtensions
     public class EnumerableChildSearch<TParent, TChild, TProperty> : EnumerableChildSearchBase<TParent, TChild, TProperty>
     {
         public EnumerableChildSearch(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties)
-            : base(parent, childProperties, properties)
+            : base(parent, childProperties, properties, null, null)
         {
         }
 

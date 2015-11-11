@@ -17,11 +17,6 @@ namespace NinjaNye.SearchExtensions
         private readonly ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
         private Expression _completeExpression;
 
-        protected EnumerableChildSearchBase(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties)
-            :this(parent, childProperties, properties, null, null)
-        {
-        }
-
         protected EnumerableChildSearchBase(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties, Expression completeExpression, ParameterExpression childParameter)
         {
             this._parent = parent;
