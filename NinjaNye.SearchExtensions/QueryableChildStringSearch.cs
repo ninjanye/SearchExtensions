@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableChildStringSearch<TParent, TChild> StartsWith(params string[] terms)
         {
-            this.AppendExpression(QueryableStartsWithExpressionBuilder.Build(Properties, terms, _searchOptions.SearchType));
+            this.AppendExpression(QueryableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions.SearchType));
             return this;
         }
 
@@ -78,7 +78,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableChildStringSearch<TParent, TChild> EndsWith(params string[] terms)
         {
-            this.AppendExpression(QueryableEndsWithExpressionBuilder.Build(Properties, terms, _searchOptions.SearchType));
+            this.AppendExpression(QueryableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions.SearchType));
             return this;
         }
 

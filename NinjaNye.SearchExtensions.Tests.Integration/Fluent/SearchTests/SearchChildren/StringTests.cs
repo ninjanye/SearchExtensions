@@ -34,7 +34,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Act
             var result = this._context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
-                                                 .Containing("st")
+                                                 .Containing("hil")
                                                  .ToList();
 
             //Assert
@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Act
             var result = this._context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
-                                                 .Containing("test", "last")
+                                                 .Containing("test", "child")
                                                  .ToList();
 
             //Assert
@@ -70,7 +70,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Act
             var result = this._context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
-                                                 .ContainingAll("child", "last")
+                                                 .ContainingAll("child", "another")
                                                  .ToList();
 
             //Assert

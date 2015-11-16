@@ -31,7 +31,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildStringSearch<TParent, TChild> EqualTo(params string[] values)
         {
             var equalToExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, values, this._searchOptions);
-            this.JoinExpression(equalToExpression);
+            this.AppendExpression(equalToExpression);
             return this;
         }
 
@@ -46,7 +46,7 @@ namespace NinjaNye.SearchExtensions
             if (validSearchTerms.Any())
             {
                 var containingExpression = EnumerableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchOptions);
-                this.JoinExpression(containingExpression);
+                this.AppendExpression(containingExpression);
             }
             return this;
         }
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildStringSearch<TParent, TChild> StartsWith(params string[] terms)
         {
             Expression startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
-            this.JoinExpression(startsWithExpression);
+            this.AppendExpression(startsWithExpression);
             return this;
         }
 
@@ -86,7 +86,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildStringSearch<TParent, TChild> EndsWith(params string[] terms)
         {
             Expression endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
-            this.JoinExpression(endsWithExpression);
+            this.AppendExpression(endsWithExpression);
             return this;
         }
 

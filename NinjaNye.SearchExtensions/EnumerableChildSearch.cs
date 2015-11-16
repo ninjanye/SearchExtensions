@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> GreaterThan(TProperty value)
         {
             var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this.Properties, value);
-            this.JoinExpression(greaterThanExpression);
+            this.AppendExpression(greaterThanExpression);
             return this;
         }
 
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> GreaterThanOrEqualTo(TProperty value)
         {
             var greaterThanExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this.Properties, value);
-            this.JoinExpression(greaterThanExpression);
+            this.AppendExpression(greaterThanExpression);
             return this;
         }
 
@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> LessThan(TProperty value)
         {
             var lessThanExpression = ExpressionBuilder.LessThanExpression(this.Properties, value);
-            this.JoinExpression(lessThanExpression);
+            this.AppendExpression(lessThanExpression);
             return this;
         }
 
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> LessThanOrEqualTo(TProperty value)
         {
             var lessThanExpression = ExpressionBuilder.LessThanOrEqualExpression(this.Properties, value);
-            this.JoinExpression(lessThanExpression);
+            this.AppendExpression(lessThanExpression);
             return this;
         }
 
@@ -73,7 +73,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> Between(TProperty minValue, TProperty maxValue)
         {
             var betweenExpression = ExpressionBuilder.BetweenExpression(this.Properties, minValue, maxValue);
-            this.JoinExpression(betweenExpression);
+            this.AppendExpression(betweenExpression);
             return this;
         }
 
@@ -85,7 +85,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
         {
             var equalToExpression = ExpressionBuilder.EqualsExpression(this.Properties, values);
-            this.JoinExpression(equalToExpression);
+            this.AppendExpression(equalToExpression);
             return this;
         }
     }

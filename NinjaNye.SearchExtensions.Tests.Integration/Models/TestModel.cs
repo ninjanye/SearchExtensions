@@ -16,6 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Models
         }
 
         public virtual ICollection<ChildTestModel> Children { get; set; }
+        public virtual ICollection<ChildTestModel> OtherChildren { get; set; }
 
         public Guid Id { get; set; }
         public string StringOne { get; set; }

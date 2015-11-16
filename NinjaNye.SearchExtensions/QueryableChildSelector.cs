@@ -9,12 +9,12 @@ namespace NinjaNye.SearchExtensions
     public class QueryableChildSelector<TBase, TChild> : IQueryable<TBase>
     {
         private readonly IQueryable<TBase> _parent;
-        private readonly Expression<Func<TBase, IEnumerable<TChild>>> _childProperty;
+        private readonly Expression<Func<TBase, IEnumerable<TChild>>>[] _childProperties;
 
-        public QueryableChildSelector(IQueryable<TBase> parent, Expression<Func<TBase, IEnumerable<TChild>>> childProperty)
+        public QueryableChildSelector(IQueryable<TBase> parent, Expression<Func<TBase, IEnumerable<TChild>>>[] childProperties)
         {
             this._parent = parent;
-            this._childProperty = childProperty;
+            this._childProperties = childProperties;
             this.Provider = this._parent.Provider;
             this.ElementType = this._parent.ElementType;
             this.Expression = this._parent.Expression;
@@ -22,12 +22,12 @@ namespace NinjaNye.SearchExtensions
 
         public QueryableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] properties)
         {
-            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, new[] { _childProperty }, properties);
+            return new QueryableChildSearch<TBase, TChild, TProperty>(_parent, this._childProperties, properties);
         }
 
         public QueryableChildStringSearch<TBase, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            return new QueryableChildStringSearch<TBase, TChild>(_parent, new[] { _childProperty }, properties);
+            return new QueryableChildStringSearch<TBase, TChild>(_parent, this._childProperties, properties);
         }
 
         public IEnumerator<TBase> GetEnumerator()

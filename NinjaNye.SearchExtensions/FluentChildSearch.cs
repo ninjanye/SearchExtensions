@@ -32,10 +32,10 @@ namespace NinjaNye.SearchExtensions
         /// <typeparam name="TSource">Type of object to be searched</typeparam>
         /// <typeparam name="TProperty">Type of property to be searched</typeparam>
         /// <param name="source">source data on which to search</param>
-        /// <param name="property">Enumerable properties to search.</param>
-        public static QueryableChildSelector<TSource, TProperty> SearchChildren<TSource, TProperty>(this IQueryable<TSource> source, Expression<Func<TSource, IEnumerable<TProperty>>> property)
+        /// <param name="properties">Enumerable properties to search.</param>
+        public static QueryableChildSelector<TSource, TProperty> SearchChildren<TSource, TProperty>(this IQueryable<TSource> source, params Expression<Func<TSource, IEnumerable<TProperty>>>[] properties)
         {
-            return new QueryableChildSelector<TSource, TProperty>(source, property);
+            return new QueryableChildSelector<TSource, TProperty>(source, properties);
         }
     }
 }

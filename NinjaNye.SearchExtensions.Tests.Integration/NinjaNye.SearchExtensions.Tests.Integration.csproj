@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201511021936101_InitialMigration.Designer.cs">
       <DependentUpon>201511021936101_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511120913152_AddOtherChildren.cs" />
+    <Compile Include="Migrations\201511120913152_AddOtherChildren.Designer.cs">
+      <DependentUpon>201511120913152_AddOtherChildren.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ChildTestModel.cs" />
     <Compile Include="Models\TestModel.cs" />
@@ -96,6 +100,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511021936101_InitialMigration.resx">
       <DependentUpon>201511021936101_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511120913152_AddOtherChildren.resx">
+      <DependentUpon>201511120913152_AddOtherChildren.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
