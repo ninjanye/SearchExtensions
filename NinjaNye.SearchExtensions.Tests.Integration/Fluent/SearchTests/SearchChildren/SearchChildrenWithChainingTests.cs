@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using NinjaNye.SearchExtensions.Tests.Integration.Migrations;
-using NinjaNye.SearchExtensions.Tests.Integration.Models;
 using NUnit.Framework;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchChildren
