@@ -16,6 +16,7 @@ namespace NinjaNye.SearchExtensions
     public class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
         private IList<string> _containingSearchTerms = new List<string>();
+        private IList<string> _startsWithSearchTerms = new List<string>();
         private SearchType _searchType;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
@@ -95,6 +96,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
+            this._startsWithSearchTerms = _startsWithSearchTerms.Union(terms).ToList();
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)
             {
@@ -237,12 +239,13 @@ namespace NinjaNye.SearchExtensions
         public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;
+            var searchTerms = this._containingSearchTerms.Any() ? this._containingSearchTerms : this._startsWithSearchTerms;
             foreach (var propertyToSearch in this.Properties)
             {
                 var nullSafeExpression = this.BuildNullSafeExpression(propertyToSearch);
-                for (int j = 0; j < this._containingSearchTerms.Count; j++)
+                for (int j = 0; j < searchTerms.Count; j++)
                 {
-                    var searchTerm = this._containingSearchTerms[j];
+                    var searchTerm = searchTerms[j];
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
