@@ -126,6 +126,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> EndsWith(params string[] terms)
         {
+            _searchTerms = _searchTerms.Union(terms).ToList();
             var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchType);
             this.BuildExpression(endsWithExpression);
             return this;
