@@ -69,5 +69,20 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual(1, result.First().Hits);
         }
+
+        [Test]
+        public void ToRanked_SearchedForData_RankedStartsWithSearch()
+        {
+            //Arrange
+
+            //Act
+            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+                .StartsWith("t")
+                .ToRanked();
+
+            //Assert
+            Assert.AreEqual(8, result.Count());
+            Assert.AreEqual(3, result.First().Hits);
+        }
     }
 }
