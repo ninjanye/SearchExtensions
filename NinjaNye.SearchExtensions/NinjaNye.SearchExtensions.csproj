@@ -78,6 +78,7 @@
     <Compile Include="QueryableChildSelector.cs" />
     <Compile Include="SearchBase.cs" />
     <Compile Include="SearchOptions.cs" />
+    <Compile Include="SearchTermCollection.cs" />
     <Compile Include="SearchType.cs" />
     <Compile Include="Soundex\SoundexProcessor.cs" />
     <Compile Include="Validation\Ensure.cs" />
