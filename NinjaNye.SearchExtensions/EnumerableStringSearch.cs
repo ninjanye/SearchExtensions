@@ -14,7 +14,7 @@ namespace NinjaNye.SearchExtensions
 {
     public class EnumerableStringSearch<T> : EnumerableSearchBase<T, string>
     {
-        private readonly IList<string> _containingSearchTerms = new List<string>();
+        private readonly IList<string> _searchTerms = new List<string>();
         private readonly SearchOptions _searchOptions;
 
         public EnumerableStringSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
@@ -55,7 +55,7 @@ namespace NinjaNye.SearchExtensions
 
             foreach (var validSearchTerm in validSearchTerms)
             {
-                this._containingSearchTerms.Add(validSearchTerm);
+                this._searchTerms.Add(validSearchTerm);
             }
 
             Expression orExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _searchOptions);
@@ -123,6 +123,10 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> StartsWith(params string[] terms)
         {
+            foreach (var term in terms)
+            {
+                _searchTerms.Add(term);
+            }
             Expression fullExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
             this.BuildExpression(fullExpression);
             return this;
@@ -250,9 +254,9 @@ namespace NinjaNye.SearchExtensions
             Expression combinedHitExpression = null;
             foreach (var propertyToSearch in this.Properties)
             {
-                for (int j = 0; j < this._containingSearchTerms.Count; j++)
+                for (int j = 0; j < this._searchTerms.Count; j++)
                 {
-                    var searchTerm = this._containingSearchTerms[j];
+                    var searchTerm = this._searchTerms[j];
                     var nullSafeExpresion = this.BuildNullSafeExpresion(propertyToSearch);
                     var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, _searchOptions);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
