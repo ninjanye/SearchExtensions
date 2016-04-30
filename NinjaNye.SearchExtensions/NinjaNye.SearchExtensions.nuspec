@@ -9,7 +9,7 @@
     <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.7 adds support for searching withing child collections of IQueryable collections, pushing the logic to the server</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.8 adds ToRanked() support for "starts with" and "ends with" searches</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>search extension searchextensions methods linq ranked entityframework soundex levenshtein</tags>
   </metadata>
