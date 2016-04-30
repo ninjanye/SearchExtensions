@@ -14,7 +14,7 @@ namespace NinjaNye.SearchExtensions
 {
     public class EnumerableStringSearch<T> : EnumerableSearchBase<T, string>
     {
-        private readonly IList<string> _searchTerms = new List<string>();
+        private readonly SearchTermCollection _searchTerms = new SearchTermCollection();
         private readonly SearchOptions _searchOptions;
 
         public EnumerableStringSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
@@ -47,17 +47,14 @@ namespace NinjaNye.SearchExtensions
                 return null;
             }
 
+            
             var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
             if (!validSearchTerms.Any())
             {
                 return null;
             }
 
-            foreach (var validSearchTerm in validSearchTerms)
-            {
-                this._searchTerms.Add(validSearchTerm);
-            }
-
+            _searchTerms.Add(validSearchTerms);
             Expression orExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _searchOptions);
 
             this.BuildExpression(orExpression);
@@ -123,10 +120,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> StartsWith(params string[] terms)
         {
-            foreach (var term in terms)
-            {
-                _searchTerms.Add(term);
-            }
+            _searchTerms.Add(terms);
             Expression fullExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
             this.BuildExpression(fullExpression);
             return this;
@@ -152,6 +146,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableStringSearch<T> EndsWith(params string[] terms)
         {
+            _searchTerms.Add(terms);
             Expression fullExpression = EnumerableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
             this.BuildExpression(fullExpression);
             return this;

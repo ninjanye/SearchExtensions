@@ -124,5 +124,20 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             Assert.AreEqual(4, result.Count());
             Assert.AreEqual(1, result.First().Hits);
         }
+
+        [Test]
+        public void ToRanked_SearchedForDataEndsWith_RankedResultIsReturned()
+        {
+            //Arrange
+
+            //Act
+            var result = this._testData.Search(x => x.Description)
+                                       .EndsWith("e")
+                                       .ToRanked();
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.First().Hits);
+        }
     }
 }

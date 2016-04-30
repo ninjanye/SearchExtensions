@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions
 {
     public class QueryableStringSearch<T> : QueryableSearchBase<T, string>
     {
-        private IList<string> _searchTerms = new List<string>();
+        private readonly ISearchTermCollection _searchTerms = new SearchTermCollection();
         private SearchType _searchType;
 
         public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
@@ -31,12 +31,18 @@ namespace NinjaNye.SearchExtensions
         public QueryableStringSearch<T> Containing(params string[] terms)
         {
             Ensure.ArgumentNotNull(terms, "terms");
-            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
-            _searchTerms = _searchTerms.Union(validSearchTerms).ToList();
+            var validSearchTerms = StoreSearchTerms(terms);
 
             var orExpression = QueryableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchType);
             this.BuildExpression(orExpression);
             return this;
+        }
+
+        private string[] StoreSearchTerms(string[] terms)
+        {
+            var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
+            _searchTerms.Add(validSearchTerms);
+            return validSearchTerms;
         }
 
         /// <summary>
@@ -95,7 +101,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> StartsWith(params string[] terms)
         {
-            this._searchTerms = _searchTerms.Union(terms).ToList();
+            _searchTerms.Add(terms);
             Expression completeExpression = null;
             foreach (var propertyToSearch in this.Properties)
             {
@@ -126,7 +132,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableStringSearch<T> EndsWith(params string[] terms)
         {
-            _searchTerms = _searchTerms.Union(terms).ToList();
+            _searchTerms.Add(terms);
             var endsWithExpression = QueryableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchType);
             this.BuildExpression(endsWithExpression);
             return this;
@@ -233,9 +239,10 @@ namespace NinjaNye.SearchExtensions
         /// Rank the filtered items based on the matched occurences
         /// </summary>
         /// <returns>
-        /// Enumerable of ranked items.  Each item will contain 
-        /// the amount of hits found across the defined properties
+        /// Queryable ranked items.  Each item will contain 
+        /// the amount of hits found across the defined properties.
         /// </returns>
+        /// <remarks>Only works in conjunction with string searches</remarks>
         public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;

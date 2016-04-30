@@ -29,9 +29,6 @@ namespace NinjaNye.SearchExtensions
             }
         }
 
-        public ConstantExpression ComparisonTypeExpression
-        {
-            get { return _comparisonTypeExpression; }
-        }
+        public ConstantExpression ComparisonTypeExpression => _comparisonTypeExpression;
     }
 }
