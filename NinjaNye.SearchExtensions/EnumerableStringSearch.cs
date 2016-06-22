@@ -44,14 +44,14 @@ namespace NinjaNye.SearchExtensions
 
             if (!terms.Any() || !this.Properties.Any())
             {
-                return null;
+                return this;
             }
 
             
             var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
             if (!validSearchTerms.Any())
             {
-                return null;
+                return this;
             }
 
             _searchTerms.Add(validSearchTerms);

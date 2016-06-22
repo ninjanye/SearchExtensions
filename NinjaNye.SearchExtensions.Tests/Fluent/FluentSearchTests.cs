@@ -56,6 +56,19 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         }
 
         [Test]
+        public void Search_FluentCallContaining_SearchEmptyString()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._testData.Search(x => x.Name).Containing("");
+
+            //Assert
+            Assert.AreEqual(8, result.Count());
+            CollectionAssert.AreEqual(_testData, result);
+        }
+
+        [Test]
         public void Search_AfterCallingContainsChainStartsWith_OnlyResultsThatContainTextAndStartWithTextAreReturned()
         {
             //Arrange
