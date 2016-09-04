@@ -18,8 +18,8 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
         public void ToLevenshteinDistance_CompareOneMillionStringsOfLengthX_ExecutesInLessThanOneSecond(int length)
         {
             //Arrange
-            var words = this.BuildWords(1000000, length, length);
-            var randomWord = this.BuildRandomWord(length,length);
+            var words = BuildWords(1000000, length, length);
+            var randomWord = BuildRandomWord(length,length);
             var stopwatch = new Stopwatch();
             //Act
             stopwatch.Start();

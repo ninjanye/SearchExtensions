@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">A collection of values to match upon</param>
         public QueryableChildSearch<TParent, TChild, TProperty> EqualTo(params TProperty[] values)
         {
-            this.AppendExpression(ExpressionBuilder.EqualsExpression(this.Properties, values));
+            AppendExpression(ExpressionBuilder.EqualsExpression(Properties, values));
             return this;
         }
 
@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">A collection of values to match upon</param>
         public QueryableChildSearch<TParent, TChild, TProperty> GreaterThan(TProperty value)
         {
-            this.AppendExpression(ExpressionBuilder.GreaterThanExpression(this.Properties, value));
+            AppendExpression(ExpressionBuilder.GreaterThanExpression(Properties, value));
             return this;
         }
 
@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">A collection of values to match upon</param>
         public QueryableChildSearch<TParent, TChild, TProperty> GreaterThanOrEqualTo(TProperty value)
         {
-            this.AppendExpression(ExpressionBuilder.GreaterThanOrEqualExpression(this.Properties, value));
+            AppendExpression(ExpressionBuilder.GreaterThanOrEqualExpression(Properties, value));
             return this;
         }
 
@@ -58,7 +58,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">A collection of values to match upon</param>
         public QueryableChildSearch<TParent, TChild, TProperty> LessThan(TProperty value)
         {
-            this.AppendExpression(ExpressionBuilder.LessThanExpression(this.Properties, value));
+            AppendExpression(ExpressionBuilder.LessThanExpression(Properties, value));
             return this;
         }
 
@@ -69,7 +69,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">A collection of values to match upon</param>
         public QueryableChildSearch<TParent, TChild, TProperty> LessThanOrEqualTo(TProperty value)
         {
-            this.AppendExpression(ExpressionBuilder.LessThanOrEqualExpression(this.Properties, value));
+            AppendExpression(ExpressionBuilder.LessThanOrEqualExpression(Properties, value));
             return this;
         }
 
@@ -79,7 +79,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public QueryableChildSearch<TParent, TChild, TProperty> Between(TProperty minvalue, TProperty maxValue)
         {
-            this.AppendExpression(ExpressionBuilder.BetweenExpression(this.Properties, minvalue, maxValue));
+            AppendExpression(ExpressionBuilder.BetweenExpression(Properties, minvalue, maxValue));
             return this;
         }
     }

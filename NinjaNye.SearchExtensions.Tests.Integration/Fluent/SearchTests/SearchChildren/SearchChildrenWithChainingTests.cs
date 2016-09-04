@@ -66,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

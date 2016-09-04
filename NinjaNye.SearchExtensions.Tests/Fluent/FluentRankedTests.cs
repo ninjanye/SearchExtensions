@@ -15,20 +15,20 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData {Name = "abcd", Description = "efgh", Number = 1});
-            this._testData.Add(new TestData {Name = "ijkl", Description = "mnop", Number = 2});
-            this._testData.Add(new TestData {Name = "qrst", Description = "uvwx", Number = 3});
-            this._testData.Add(new TestData {Name = "yzab", Description = "cdef", Number = 4});
-            this._testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
-            this._testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
-            this._testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
-            this._testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
+            _testData.Add(new TestData {Name = "abcd", Description = "efgh", Number = 1});
+            _testData.Add(new TestData {Name = "ijkl", Description = "mnop", Number = 2});
+            _testData.Add(new TestData {Name = "qrst", Description = "uvwx", Number = 3});
+            _testData.Add(new TestData {Name = "yzab", Description = "cdef", Number = 4});
+            _testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
+            _testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
+            _testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
+            _testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Description).Containing("c").ToRanked();
+            var result = _testData.Search(x => x.Description).Containing("c").ToRanked();
 
             //Assert
             Assert.IsInstanceOf<IEnumerable<IRanked<TestData>>>(result);
@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
+            var result = _testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);
@@ -64,7 +64,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description)
+            var result = _testData.Search(x => x.Name, x => x.Description)
                              .Containing("c")
                              .ToRanked()
                              .ToList();
@@ -81,7 +81,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description)
+            var result = _testData.Search(x => x.Description)
                                       .SetCulture(StringComparison.OrdinalIgnoreCase)
                                       .Containing("c")
                                       .ToRanked()
@@ -98,7 +98,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name)
+            var result = _testData.Search(x => x.Name)
                                       .Containing("e")
                                       .ToRanked()
                                       .Search(x => x.Item.Description)
@@ -116,7 +116,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Description)
+            var result = _testData.Search(x => x.Description)
                                        .SetCulture(StringComparison.OrdinalIgnoreCase)
                                        .StartsWith("c").ToRanked();
 
@@ -131,7 +131,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Description)
+            var result = _testData.Search(x => x.Description)
                                        .EndsWith("e")
                                        .ToRanked();
 

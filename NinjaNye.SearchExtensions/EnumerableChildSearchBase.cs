@@ -13,7 +13,7 @@ namespace NinjaNye.SearchExtensions
         protected EnumerableChildSearchBase(IEnumerable<TParent> parent, Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties, Expression completeExpression, ParameterExpression childParameter)
             : base(childProperties, properties, completeExpression, childParameter)
         {
-            this._parent = parent;
+            _parent = parent;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public EnumerableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(this._parent, this._childProperties, properties, this._completeExpression, this._childParameter);
+            return new EnumerableChildSearch<TParent, TChild, TAnotherProperty>(_parent, _childProperties, properties, _completeExpression, _childParameter);
         }
 
         /// <summary>
@@ -29,18 +29,18 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public EnumerableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            return new EnumerableChildStringSearch<TParent, TChild>(this._parent, this._childProperties, properties, this._completeExpression, this._childParameter);
+            return new EnumerableChildStringSearch<TParent, TChild>(_parent, _childProperties, properties, _completeExpression, _childParameter);
         }
 
         public IEnumerator<TParent> GetEnumerator()
         {
-            var final = this.BuildFinalExpression().Compile();
-            return this._parent.Where(final).GetEnumerator();
+            var final = BuildFinalExpression().Compile();
+            return _parent.Where(final).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace NinjaNye.SearchExtensions
         public EnumerableStructSearch<TSource, TProperty> EqualTo(params TProperty[] values)
         {
             var equalsExpression = ExpressionBuilder.EqualsExpression(Properties, values);
-            this.BuildExpression(equalsExpression);
+            BuildExpression(equalsExpression);
             return this;
         }
 

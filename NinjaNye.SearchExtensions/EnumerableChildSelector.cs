@@ -12,28 +12,28 @@ namespace NinjaNye.SearchExtensions
 
         public EnumerableChildSelector(IEnumerable<TBase> parent, Expression<Func<TBase, IEnumerable<TChild>>>[] childProperties) 
         {
-            this._parent = parent;
-            this._childProperties = childProperties;
+            _parent = parent;
+            _childProperties = childProperties;
         }
 
         public EnumerableChildSearch<TBase, TChild, TProperty> With<TProperty>(params Expression<Func<TChild, TProperty>>[] properties)
         {
-            return new EnumerableChildSearch<TBase, TChild, TProperty>(this._parent, this._childProperties, properties);
+            return new EnumerableChildSearch<TBase, TChild, TProperty>(_parent, _childProperties, properties);
         }
 
         public EnumerableChildStringSearch<TBase, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            return new EnumerableChildStringSearch<TBase, TChild>(this._parent, this._childProperties, properties);
+            return new EnumerableChildStringSearch<TBase, TChild>(_parent, _childProperties, properties);
         }
 
         public IEnumerator<TBase> GetEnumerator()
         {
-            return this._parent.GetEnumerator();
+            return _parent.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

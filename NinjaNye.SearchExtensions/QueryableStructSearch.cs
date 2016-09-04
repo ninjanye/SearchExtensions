@@ -20,8 +20,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">Values to search for</param>
         public QueryableStructSearch<TSource, TProperty> EqualTo(params TProperty[] values)
         {
-            var equalsExpression = ExpressionBuilder.EqualsExpression(this.Properties, values);
-            this.BuildExpression(equalsExpression);
+            var equalsExpression = ExpressionBuilder.EqualsExpression(Properties, values);
+            BuildExpression(equalsExpression);
             return this;
         }
 
@@ -32,8 +32,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public QueryableStructSearch<TSource, TProperty> GreaterThan(TProperty value)
         {
-            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(this.Properties, value);
-            this.BuildExpression(greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.GreaterThanExpression(Properties, value);
+            BuildExpression(greaterThanExpression);
             return this;
         }
 
@@ -44,8 +44,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public QueryableStructSearch<TSource, TProperty> LessThan(TProperty value)
         {
-            var greaterThanExpression = ExpressionBuilder.LessThanExpression(this.Properties, value);
-            this.BuildExpression(greaterThanExpression);
+            var greaterThanExpression = ExpressionBuilder.LessThanExpression(Properties, value);
+            BuildExpression(greaterThanExpression);
             return this;
         }
 
@@ -56,8 +56,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public QueryableStructSearch<TSource, TProperty> LessThanOrEqualTo(TProperty value)
         {
-            var lessThanOrEqualExpression = ExpressionBuilder.LessThanOrEqualExpression(this.Properties, value);
-            this.BuildExpression(lessThanOrEqualExpression);
+            var lessThanOrEqualExpression = ExpressionBuilder.LessThanOrEqualExpression(Properties, value);
+            BuildExpression(lessThanOrEqualExpression);
             return this;
         }
 
@@ -68,8 +68,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="value">Value to search for</param>
         public QueryableStructSearch<TSource, TProperty> GreaterThanOrEqualTo(TProperty value)
         {
-            var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(this.Properties, value);
-            this.BuildExpression(greaterThanOrEqualExpression);
+            var greaterThanOrEqualExpression = ExpressionBuilder.GreaterThanOrEqualExpression(Properties, value);
+            BuildExpression(greaterThanOrEqualExpression);
             return this;
         }
 
@@ -80,8 +80,8 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public QueryableStructSearch<TSource, TProperty> Between(TProperty minValue, TProperty maxValue)
         {
-            var betweenExpression = ExpressionBuilder.BetweenExpression(this.Properties, minValue, maxValue);
-            this.BuildExpression(betweenExpression);
+            var betweenExpression = ExpressionBuilder.BetweenExpression(Properties, minValue, maxValue);
+            BuildExpression(betweenExpression);
             return this;
         }
     }

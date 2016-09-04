@@ -14,20 +14,20 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
-            this._testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
-            this._testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
-            this._testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
-            this._testData.Add(new TestData { Name = "efgh", Description = "ijkl", Number = 5 });
-            this._testData.Add(new TestData { Name = "UPPER", Description = "CASE", Number = 6 });
-            this._testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
-            this._testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
+            _testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
+            _testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
+            _testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
+            _testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
+            _testData.Add(new TestData { Name = "efgh", Description = "ijkl", Number = 5 });
+            _testData.Add(new TestData { Name = "UPPER", Description = "CASE", Number = 6 });
+            _testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
+            _testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
         }
 
         [Test]
@@ -36,10 +36,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name);
+            var result = _testData.Search(x => x.Name);
 
             //Assert
-            CollectionAssert.AreEquivalent(this._testData, result);
+            CollectionAssert.AreEquivalent(_testData, result);
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).Containing("abc");
+            var result = _testData.Search(x => x.Name).Containing("abc");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).Containing("");
+            var result = _testData.Search(x => x.Name).Containing("");
 
             //Assert
             Assert.AreEqual(8, result.Count());
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).Containing("b").StartsWith("a");
+            var result = _testData.Search(x => x.Name).Containing("b").StartsWith("a");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -87,7 +87,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).EqualTo("abcd");
+            var result = _testData.Search(x => x.Name).EqualTo("abcd");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -100,7 +100,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).EndsWith("st")
+            var result = _testData.Search(x => x.Name).EndsWith("st")
                                                      .Containing("qr");
 
             //Assert
@@ -115,7 +115,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             const string searchTerm = "cd";
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).Containing(searchTerm);
+            var result = _testData.Search(x => x.Name, x => x.Description).Containing(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -129,7 +129,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             const string searchTerm = "ef";
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).StartsWith(searchTerm);
+            var result = _testData.Search(x => x.Name, x => x.Description).StartsWith(searchTerm);
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -142,7 +142,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search().Containing("cd");
+            var result = _testData.Search().Containing("cd");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -155,7 +155,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).Containing("ab", "jk");
+            var result = _testData.Search(x => x.Name).Containing("ab", "jk");
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -168,7 +168,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).StartsWith("ab", "ef");
+            var result = _testData.Search(x => x.Name).StartsWith("ab", "ef");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -182,7 +182,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).Containing("cd", "jk");
+            var result = _testData.Search(x => x.Name, x => x.Description).Containing("cd", "jk");
 
             //Assert
             Assert.AreEqual(4, result.Count());
@@ -196,7 +196,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).StartsWith("cd", "ef");
+            var result = _testData.Search(x => x.Name, x => x.Description).StartsWith("cd", "ef");
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -210,7 +210,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).EndsWith("kl", "ef");
+            var result = _testData.Search(x => x.Name, x => x.Description).EndsWith("kl", "ef");
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -224,7 +224,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).SetCulture(StringComparison.Ordinal).Containing("AB", "jk");
+            var result = _testData.Search(x => x.Name).SetCulture(StringComparison.Ordinal).Containing("AB", "jk");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -238,7 +238,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).Containing("AB", "jk");
+            var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).Containing("AB", "jk");
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -251,7 +251,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).StartsWith("C");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).StartsWith("C");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -264,7 +264,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith("C");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith("C");
 
             //Assert
             Assert.AreEqual(3, result.Count());
@@ -277,7 +277,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EndsWith("SE");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EndsWith("SE");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -290,7 +290,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EndsWith("SE");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EndsWith("SE");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -303,7 +303,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EqualTo("CASE");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EqualTo("CASE");
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -316,7 +316,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EqualTo("CASE");
+            var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EqualTo("CASE");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -329,7 +329,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).EqualTo("abcd", "efgh");
+            var result = _testData.Search(x => x.Name).EqualTo("abcd", "efgh");
 
             //Assert
             Assert.AreEqual(2, result.Count());
@@ -342,7 +342,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name)
+            var result = _testData.Search(x => x.Name)
                                  .SetCulture(StringComparison.OrdinalIgnoreCase)
                                  .EqualTo("ABCD", "EFGH");
 

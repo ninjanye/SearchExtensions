@@ -30,8 +30,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">A collection of values to match upon</param>
         public EnumerableChildStringSearch<TParent, TChild> EqualTo(params string[] values)
         {
-            var equalToExpression = EnumerableEqualsExpressionBuilder.Build(this.Properties, values, this._searchOptions);
-            this.AppendExpression(equalToExpression);
+            var equalToExpression = EnumerableEqualsExpressionBuilder.Build(Properties, values, _searchOptions);
+            AppendExpression(equalToExpression);
             return this;
         }
 
@@ -45,8 +45,8 @@ namespace NinjaNye.SearchExtensions
             var validSearchTerms = terms.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
             if (validSearchTerms.Any())
             {
-                var containingExpression = EnumerableContainsExpressionBuilder.Build(this.Properties, validSearchTerms, _searchOptions);
-                this.AppendExpression(containingExpression);
+                var containingExpression = EnumerableContainsExpressionBuilder.Build(Properties, validSearchTerms, _searchOptions);
+                AppendExpression(containingExpression);
             }
             return this;
         }
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions
         {
             for (int i = 0; i < terms.Length; i++)
             {
-                this.Containing(terms[i]);
+                Containing(terms[i]);
             }
 
             return this;
@@ -73,8 +73,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableChildStringSearch<TParent, TChild> StartsWith(params string[] terms)
         {
-            Expression startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
-            this.AppendExpression(startsWithExpression);
+            Expression startsWithExpression = EnumerableStartsWithExpressionBuilder.Build(Properties, terms, _searchOptions);
+            AppendExpression(startsWithExpression);
             return this;
         }
 
@@ -85,8 +85,8 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public EnumerableChildStringSearch<TParent, TChild> EndsWith(params string[] terms)
         {
-            Expression endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions);
-            this.AppendExpression(endsWithExpression);
+            Expression endsWithExpression = EnumerableEndsWithExpressionBuilder.Build(Properties, terms, _searchOptions);
+            AppendExpression(endsWithExpression);
             return this;
         }
 

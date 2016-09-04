@@ -16,10 +16,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children);
+            var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            CollectionAssert.AreEquivalent(this._context.TestModels, result);
+            CollectionAssert.AreEquivalent(_context.TestModels, result);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children);
+            var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
             Assert.That(result, Is.InstanceOf<IQueryable<TestModel>>());
@@ -40,10 +40,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children);
+            var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            Assert.That(result.Provider, Is.EqualTo(((IQueryable) this._context.TestModels).Provider));
+            Assert.That(result.Provider, Is.EqualTo(((IQueryable) _context.TestModels).Provider));
         }
 
         [Test]
@@ -52,10 +52,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children);
+            var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            Assert.That(result.ElementType, Is.EqualTo(((IQueryable) this._context.TestModels).ElementType));
+            Assert.That(result.ElementType, Is.EqualTo(((IQueryable) _context.TestModels).ElementType));
         }
 
         [Test]
@@ -64,12 +64,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne)
                                                  .ToList();
 
             //Assert
-            Assert.That(result, Is.EqualTo(this._context.TestModels));
+            Assert.That(result, Is.EqualTo(_context.TestModels));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne)
                                                  .EqualTo(50);
 
@@ -95,7 +95,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne)
                                                  .EqualTo(50, 1);
 
@@ -114,7 +114,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne, c => c.IntegerThree)
                                                  .EqualTo(1);
 
@@ -134,7 +134,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
             //Act
 
-            var result = this._context.TestModels.SearchChildren(x => x.Children, x => x.OtherChildren)
+            var result = _context.TestModels.SearchChildren(x => x.Children, x => x.OtherChildren)
                                                  .With(c => c.StringOne)
                                                  .EqualTo("child test")
                                                  .ToList();
@@ -152,7 +152,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
             //Act
 
-            var result = this._context.TestModels.SearchChildren(x => x.Children, x => x.OtherChildren)
+            var result = _context.TestModels.SearchChildren(x => x.Children, x => x.OtherChildren)
                                                  .With(c => c.IntegerOne)
                                                  .EqualTo(3)
                                                  .ToList();
@@ -165,7 +165,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

@@ -16,10 +16,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             var word = "prize";
             var soundex = word.ToSoundex();
-            var expected = this._context.TestModels.AsEnumerable().Where(x => x.StringOne.ToSoundex() == soundex);
+            var expected = _context.TestModels.AsEnumerable().Where(x => x.StringOne.ToSoundex() == soundex);
             
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne).Soundex(word).ToList();
+            var result = _context.TestModels.Search(x => x.StringOne).Soundex(word).ToList();
 
             //Assert
             CollectionAssert.AreEqual(expected, result);
@@ -31,10 +31,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             var words = new[] {"prize", "ashcraft"};
             var soundex = words.Select(w => w.ToSoundex());
-            var expected = this._context.TestModels.AsEnumerable().Where(x => soundex.Contains(x.StringOne.ToSoundex()));
+            var expected = _context.TestModels.AsEnumerable().Where(x => soundex.Contains(x.StringOne.ToSoundex()));
             
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne).Soundex(words).ToList();
+            var result = _context.TestModels.Search(x => x.StringOne).Soundex(words).ToList();
 
             //Assert
             CollectionAssert.AreEqual(expected, result);
@@ -42,7 +42,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

@@ -21,10 +21,10 @@ namespace NinjaNye.SearchExtensions
 
         public StringComparison ComparisonType
         {
-            get { return this._comparisonType; }
+            get { return _comparisonType; }
             set
             {
-                this._comparisonType = value;
+                _comparisonType = value;
                 _comparisonTypeExpression = Expression.Constant(value);
             }
         }

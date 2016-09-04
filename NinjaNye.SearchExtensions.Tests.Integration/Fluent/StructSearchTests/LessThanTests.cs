@@ -17,7 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this._context.TestModels.Search(x => x.IntegerOne).LessThan(10));
+            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.IntegerOne).LessThan(10));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act 
-            var result = this._context.TestModels.Search(x => x.IntegerOne).LessThan(50);
+            var result = _context.TestModels.Search(x => x.IntegerOne).LessThan(50);
 
             //Assert
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this._context.TestModels.Search(x => x.IntegerOne).LessThan(10);
+            var result = _context.TestModels.Search(x => x.IntegerOne).LessThan(10);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Arrange
             
             //Act
-            var result = this._context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
+            var result = _context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .LessThan(130);
 
             //Assert
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

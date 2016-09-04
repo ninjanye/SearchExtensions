@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne)
+            var result = _context.TestModels.Search(x => x.StringOne)
                 .Matching(SearchType.WholeWords)
                 .EndsWith(x => x.StringTwo);
 
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne)
+            var result = _context.TestModels.Search(x => x.StringOne)
                 .Matching(SearchType.WholeWords)
                 .EndsWith(x => x.StringThree);
 
@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

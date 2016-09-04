@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         public void ToReverseSoundex_OneMillionRecords_UnderOneSecond()
         {
             //Arrange
-            var words = this.BuildWords(1000000);
+            var words = BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
             var stopwatch = new Stopwatch();
             Console.WriteLine("Begin soundex...");
@@ -35,7 +35,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         public void ReverseSoundex_ReverseWordSoundexVsToReverseSoundex_ToReverseSoundexIsQuicker()
         {
             //Arrange
-            var words = this.BuildWords(1000000);
+            var words = BuildWords(1000000);
             Console.WriteLine("Processing {0} words", words.Count);
 
             var stopwatch = new Stopwatch();

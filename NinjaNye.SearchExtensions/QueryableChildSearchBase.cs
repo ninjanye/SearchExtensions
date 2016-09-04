@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions
             Expression = parent.Expression;
             ElementType = parent.ElementType;
             Provider = parent.Provider;
-            this._parent = parent;
+            _parent = parent;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public QueryableChildSearch<TParent, TChild, TAnotherProperty> With<TAnotherProperty>(params Expression<Func<TChild, TAnotherProperty>>[] properties)
         {
-            return new QueryableChildSearch<TParent, TChild, TAnotherProperty>(this._parent, this._childProperties, properties, this._completeExpression, this._childParameter);            
+            return new QueryableChildSearch<TParent, TChild, TAnotherProperty>(_parent, _childProperties, properties, _completeExpression, _childParameter);            
         }
 
         /// <summary>
@@ -32,17 +32,17 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         public QueryableChildStringSearch<TParent, TChild> With(params Expression<Func<TChild, string>>[] properties)
         {
-            return new QueryableChildStringSearch<TParent, TChild>(this._parent, this._childProperties, properties, this._completeExpression, this._childParameter);            
+            return new QueryableChildStringSearch<TParent, TChild>(_parent, _childProperties, properties, _completeExpression, _childParameter);            
         }
         public IEnumerator<TParent> GetEnumerator()
         {
-            var final = this.BuildFinalExpression();
-            return this._parent.Where(final).GetEnumerator();
+            var final = BuildFinalExpression();
+            return _parent.Where(final).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public Expression Expression { get; private set; }

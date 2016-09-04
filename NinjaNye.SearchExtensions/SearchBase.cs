@@ -16,13 +16,13 @@ namespace NinjaNye.SearchExtensions
 
         protected SearchBase(TSource source, Expression<Func<TType, TPropertyType>>[] properties)
         {
-            this.Source = source;
+            Source = source;
             var firstProperty = properties.FirstOrDefault();
             if (firstProperty != null)
             {
-                this.FirstParameter = firstProperty.Parameters[0];
+                FirstParameter = firstProperty.Parameters[0];
             }
-            this.Properties = properties.Select(AlignParameter).ToArray();
+            Properties = properties.Select(AlignParameter).ToArray();
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         protected virtual void BuildExpression(Expression expressionToJoin)
         {
-            this.CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(this.CompleteExpression, expressionToJoin);
+            CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(CompleteExpression, expressionToJoin);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         protected Expression<TProperty> AlignParameter<TProperty>(Expression<TProperty> lambda)
         {
-            return SwapExpressionVisitor.Swap(lambda, lambda.Parameters.Single(), this.FirstParameter);
+            return SwapExpressionVisitor.Swap(lambda, lambda.Parameters.Single(), FirstParameter);
         }
     }
 

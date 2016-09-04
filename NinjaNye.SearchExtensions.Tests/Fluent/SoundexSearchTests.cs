@@ -14,18 +14,18 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData {Name = "Robert", Description = "Sounds like Rupert", Number = 1});
-            this._testData.Add(new TestData {Name = "Rupert", Description = "SOunds like Robert", Number = 2});
-            this._testData.Add(new TestData {Name = "John", Description = "Sounds like Jon", Number = 3});
-            this._testData.Add(new TestData {Name = "Jon", Description = "Sounds like John", Number = 4});
-            this._testData.Add(new TestData {Name = "Matt", Description = "Sounds like Mitt", Number = 5});
-            this._testData.Add(new TestData {Name = "Aschcraft", Description = "Sounds like Ashcroft", Number = 6});
+            _testData.Add(new TestData {Name = "Robert", Description = "Sounds like Rupert", Number = 1});
+            _testData.Add(new TestData {Name = "Rupert", Description = "SOunds like Robert", Number = 2});
+            _testData.Add(new TestData {Name = "John", Description = "Sounds like Jon", Number = 3});
+            _testData.Add(new TestData {Name = "Jon", Description = "Sounds like John", Number = 4});
+            _testData.Add(new TestData {Name = "Matt", Description = "Sounds like Mitt", Number = 5});
+            _testData.Add(new TestData {Name = "Aschcraft", Description = "Sounds like Ashcroft", Number = 6});
         }
 
         [Test]
@@ -34,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).Soundex("Robert");
+            var result = _testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
-            CollectionAssert.Contains(result, this._testData[0]);
+            CollectionAssert.Contains(result, _testData[0]);
         }
 
         [Test]
@@ -46,10 +46,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).Soundex("Robert");
+            var result = _testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
-            CollectionAssert.DoesNotContain(result, this._testData[5]);
+            CollectionAssert.DoesNotContain(result, _testData[5]);
         }
 
         [Test]
@@ -58,10 +58,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             var names = new[] {"Robert", "Mitt"};
             var soundexCodes = names.Select(w => w.ToSoundex());
-            var expected = this._testData.Where(td => soundexCodes.Contains(td.Name.ToSoundex()));            
+            var expected = _testData.Where(td => soundexCodes.Contains(td.Name.ToSoundex()));            
             
             //Act
-            var result = this._testData.Search(x => x.Name).Soundex("Robert", "Mitt");
+            var result = _testData.Search(x => x.Name).Soundex("Robert", "Mitt");
 
             //Assert
             CollectionAssert.AreEqual(expected, result);

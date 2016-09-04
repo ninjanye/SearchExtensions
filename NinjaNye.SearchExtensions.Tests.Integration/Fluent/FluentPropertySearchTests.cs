@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            this._context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
+            _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
             Assert.Pass("No exception thrown");
@@ -27,7 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
+            var result = _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -39,7 +39,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
+            var result = _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
             Assert.IsTrue(result.All(x => x.StringOne.Contains(x.StringTwo)));
@@ -49,10 +49,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         public void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
         {
             //Arrange
-            var expected = this._context.TestModels.FirstOrDefault(x => x.Id == new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"));
+            var expected = _context.TestModels.FirstOrDefault(x => x.Id == new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"));
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing(x => x.StringThree).ToList();
+            var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing(x => x.StringThree).ToList();
 
             //Assert
             CollectionAssert.Contains(result, expected);
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

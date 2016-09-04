@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this._context.TestModels.Search(x => x.StringTwo).Containing("c").ToRanked();
+            var result = _context.TestModels.Search(x => x.StringTwo).Containing("c").ToRanked();
 
             //Assert
             Assert.IsInstanceOf<IQueryable<IRanked<TestModel>>>(result);
@@ -28,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
+            var result = _context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
 
             //Assert
             Assert.AreEqual(4, result.Count());
@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                                                 .Containing("c")
                                                 .ToRanked();
 
@@ -58,7 +58,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
             
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne)
+            var result = _context.TestModels.Search(x => x.StringOne)
                                                 .Containing("g")
                                                 .ToRanked()
                                                 .Search(x => x.Item.StringTwo)
@@ -76,7 +76,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                 .StartsWith("t")
                 .ToRanked();
 
@@ -91,7 +91,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Arrange
 
             //Act
-            var result = this._context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                 .EndsWith("t")
                 .ToRanked();
 

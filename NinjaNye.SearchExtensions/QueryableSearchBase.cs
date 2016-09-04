@@ -14,16 +14,16 @@ namespace NinjaNye.SearchExtensions
         protected QueryableSearchBase(IQueryable<TSource> source, Expression<Func<TSource, TProperty>>[] properties)
             : base(source, properties)
         {
-            this.ElementType = source.ElementType;
-            this.Provider = source.Provider;
+            ElementType = source.ElementType;
+            Provider = source.Provider;
         }
 
         public Expression Expression
         {
             get
             {
-                this.UpdateSource();
-                return this.Source.Expression;
+                UpdateSource();
+                return Source.Expression;
             }
         }
 
@@ -32,20 +32,20 @@ namespace NinjaNye.SearchExtensions
 
         protected override void BuildExpression(Expression expressionToJoin)
         {
-            this._expressionUpdated = false;
+            _expressionUpdated = false;
             base.BuildExpression(expressionToJoin);
         }
 
         private void UpdateSource()
         {
-            if (this.CompleteExpression == null || this._expressionUpdated)
+            if (CompleteExpression == null || _expressionUpdated)
             {
                 return;
             }
 
-            this._expressionUpdated = true;
-            var finalExpression = Expression.Lambda<Func<TSource, bool>>(this.CompleteExpression, this.FirstParameter);
-            this.Source = this.Source.Where(finalExpression);
+            _expressionUpdated = true;
+            var finalExpression = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter);
+            Source = Source.Where(finalExpression);
         }
 
         protected void QueryInclude(string path)
@@ -56,13 +56,13 @@ namespace NinjaNye.SearchExtensions
 
         public IEnumerator<TSource> GetEnumerator()
         {
-            this.UpdateSource();
-            return this.Source.GetEnumerator();
+            UpdateSource();
+            return Source.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

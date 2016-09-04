@@ -19,19 +19,19 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         [SetUp]
         public void SetUp()
         {
-            this._dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
-            this._dataTwo = new TestData {Name = "fred", Description = "nested positionly", Number = 6, Age = 30};
-            this._dataThree = new TestData {Name = "teddy", Description = "children description", Number = 2, Age = 40};
-            this._dataFour = new TestData {Name = "josh", Description = "nested data", Number = 20, Age = 50};
-            this._parent = new ParentTestData
+            _dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
+            _dataTwo = new TestData {Name = "fred", Description = "nested positionly", Number = 6, Age = 30};
+            _dataThree = new TestData {Name = "teddy", Description = "children description", Number = 2, Age = 40};
+            _dataFour = new TestData {Name = "josh", Description = "nested data", Number = 20, Age = 50};
+            _parent = new ParentTestData
             {
-                Children = new List<TestData> {this._dataOne, this._dataTwo},
+                Children = new List<TestData> {_dataOne, _dataTwo},
             };
-            this._otherParent = new ParentTestData
+            _otherParent = new ParentTestData
             {
-                Children = new List<TestData> {this._dataThree, this._dataFour},
+                Children = new List<TestData> {_dataThree, _dataFour},
             };
-            this._testData = new List<ParentTestData> {this._parent, this._otherParent};
+            _testData = new List<ParentTestData> {_parent, _otherParent};
         }
 
         [Test]

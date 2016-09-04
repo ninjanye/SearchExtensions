@@ -16,7 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .EqualTo("child test")
                                                  .ToList();
@@ -32,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .Containing("hil")
                                                  .ToList();
@@ -50,7 +50,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .Containing("test", "child")
                                                  .ToList();
@@ -68,7 +68,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .ContainingAll("child", "another")
                                                  .ToList();
@@ -85,7 +85,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .Matching(SearchType.WholeWords)
                                                  .Containing("st")
@@ -101,7 +101,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .StartsWith("ano")
                                                  .ToList();
@@ -117,7 +117,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
             
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .StartsWith("ano", "tes")
                                                  .ToList();
@@ -134,7 +134,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .EndsWith("est")
                                                  .ToList();
@@ -150,7 +150,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var result = this._context.TestModels.SearchChildren(x => x.Children)
+            var result = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.StringOne)
                                                  .EndsWith("est", "ild")
                                                  .ToList();
@@ -163,7 +163,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

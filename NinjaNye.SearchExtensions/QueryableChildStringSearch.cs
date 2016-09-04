@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">A collection of values to match upon</param>
         public QueryableChildStringSearch<TParent, TChild> EqualTo(params string[] values)
         {
-            this.AppendExpression(ExpressionBuilder.EqualsExpression(this.Properties, values));
+            AppendExpression(ExpressionBuilder.EqualsExpression(Properties, values));
             return this;
         }
 
@@ -41,7 +41,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="values">A collection of values to match upon</param>
         public QueryableChildStringSearch<TParent, TChild> Containing(params string[] values)
         {
-            this.AppendExpression(QueryableContainsExpressionBuilder.Build(this.Properties, values, _searchOptions.SearchType));
+            AppendExpression(QueryableContainsExpressionBuilder.Build(Properties, values, _searchOptions.SearchType));
             return this;
         }
 
@@ -54,7 +54,7 @@ namespace NinjaNye.SearchExtensions
         {
             for (int i = 0; i < values.Length; i++)
             {
-                this.Containing(values[i]);
+                Containing(values[i]);
             }
 
             return this;
@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableChildStringSearch<TParent, TChild> StartsWith(params string[] terms)
         {
-            this.AppendExpression(QueryableStartsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions.SearchType));
+            AppendExpression(QueryableStartsWithExpressionBuilder.Build(Properties, terms, _searchOptions.SearchType));
             return this;
         }
 
@@ -78,7 +78,7 @@ namespace NinjaNye.SearchExtensions
         /// <param name="terms">Term or terms to search for</param>
         public QueryableChildStringSearch<TParent, TChild> EndsWith(params string[] terms)
         {
-            this.AppendExpression(QueryableEndsWithExpressionBuilder.Build(this.Properties, terms, _searchOptions.SearchType));
+            AppendExpression(QueryableEndsWithExpressionBuilder.Build(Properties, terms, _searchOptions.SearchType));
             return this;
         }
 

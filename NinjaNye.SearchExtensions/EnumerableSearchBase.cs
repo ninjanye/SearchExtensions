@@ -15,17 +15,17 @@ namespace NinjaNye.SearchExtensions
 
         public virtual IEnumerator<TSource> GetEnumerator()
         {
-            if (this.CompleteExpression != null)
+            if (CompleteExpression != null)
             {
-                var finalExpression = Expression.Lambda<Func<TSource, bool>>(this.CompleteExpression, this.FirstParameter).Compile();
-                this.Source = this.Source.Where(finalExpression);
+                var finalExpression = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter).Compile();
+                Source = Source.Where(finalExpression);
             }
-            return this.Source.GetEnumerator();
+            return Source.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 

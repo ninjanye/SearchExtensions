@@ -18,12 +18,12 @@ namespace NinjaNye.SearchExtensions
 
         protected ChildSearchBase(Expression<Func<TParent, IEnumerable<TChild>>>[] childProperties, Expression<Func<TChild, TProperty>>[] properties, Expression completeExpression, ParameterExpression childParameter)
         {
-            this._parentParameter = childProperties[0].Parameters[0];
-            if (childParameter != null) this._childParameter = childParameter;
+            _parentParameter = childProperties[0].Parameters[0];
+            if (childParameter != null) _childParameter = childParameter;
 
-            this._childProperties = this.AlignParameters(childProperties, this._parentParameter).ToArray();
-            this.Properties = this.AlignParameters(properties, this._childParameter).ToArray();
-            this._completeExpression = completeExpression;
+            _childProperties = AlignParameters(childProperties, _parentParameter).ToArray();
+            Properties = AlignParameters(properties, _childParameter).ToArray();
+            _completeExpression = completeExpression;
         }
 
         private IEnumerable<Expression<Func<TSource, TResult>>> AlignParameters<TSource, TResult>(Expression<Func<TSource, TResult>>[] properties, ParameterExpression parameterExpression)
@@ -37,7 +37,7 @@ namespace NinjaNye.SearchExtensions
 
         protected void AppendExpression(Expression equalToExpression)
         {
-            this._completeExpression = ExpressionHelper.JoinAndAlsoExpression(this._completeExpression, equalToExpression);
+            _completeExpression = ExpressionHelper.JoinAndAlsoExpression(_completeExpression, equalToExpression);
         }
 
         protected Expression<Func<TParent, bool>> BuildFinalExpression()
@@ -48,14 +48,14 @@ namespace NinjaNye.SearchExtensions
             }
             var anyMethodInfo = ExpressionMethods.AnyQueryableMethod.MakeGenericMethod(typeof (TChild));
             Expression finalExpression = null;
-            foreach (var childProperty in this._childProperties)
+            foreach (var childProperty in _childProperties)
             {
-                var anyExpression = Expression.Lambda<Func<TChild, bool>>(this._completeExpression, this._childParameter);
+                var anyExpression = Expression.Lambda<Func<TChild, bool>>(_completeExpression, _childParameter);
                 var anyChild = Expression.Call(null, anyMethodInfo, childProperty.Body, anyExpression);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, anyChild);
             }
 
-            var final = Expression.Lambda<Func<TParent, bool>>(finalExpression, this._parentParameter);
+            var final = Expression.Lambda<Func<TParent, bool>>(finalExpression, _parentParameter);
             return final;
         }
     }

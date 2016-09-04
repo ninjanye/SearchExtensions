@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests
             var result = new List<string>();
             for (int i = 0; i < wordCount; i++)
             {
-                string randomWord = this.BuildRandomWord(minSize, maxSize);
+                string randomWord = BuildRandomWord(minSize, maxSize);
                 result.Add(randomWord);
             }
             Console.WriteLine("Built words: {0}", wordCount);
@@ -24,11 +24,11 @@ namespace NinjaNye.SearchExtensions.Tests
 
         protected string BuildRandomWord(int minSize, int maxSize)
         {
-            var letterCount = this.RandomInt(minSize, maxSize);
+            var letterCount = RandomInt(minSize, maxSize);
             var sb = new StringBuilder(letterCount);
             for (int i = 0; i < letterCount; i++)
             {
-                var letterIndex = this.RandomInt(0, 51);
+                var letterIndex = RandomInt(0, 51);
                 sb.Append(letters[letterIndex]);
             }
             return sb.ToString();

@@ -7,8 +7,8 @@ namespace NinjaNye.SearchExtensions.Visitors
         private readonly Expression _from, _to;
         private SwapExpressionVisitor(Expression from, Expression to)
         {
-            this._from = @from;
-            this._to = to;
+            _from = @from;
+            _to = to;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Visitors
 
         public override Expression Visit(Expression node)
         {
-            return node == this._from ? this._to : base.Visit(node);
+            return node == _from ? _to : base.Visit(node);
         }
     }
 }

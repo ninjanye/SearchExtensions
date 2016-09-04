@@ -9,8 +9,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Models
 
         public TestModel()
         {            
-            Start = this._defaultDate;
-            End = this._defaultDate;
+            Start = _defaultDate;
+            End = _defaultDate;
         }
 
         public virtual ICollection<ChildTestModel> Children { get; set; }

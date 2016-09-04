@@ -25,13 +25,13 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToSoundex()).ToList();
-            foreach (var propertyToSearch in this.Properties)
+            foreach (var propertyToSearch in Properties)
             {
                 var soundsLikeExpression = SoundexExpressionBuilder.BuildSoundsLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                                         : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
-            this.BuildExpression(fullExpression);
+            BuildExpression(fullExpression);
             return this;
         }
 
@@ -46,13 +46,13 @@ namespace NinjaNye.SearchExtensions
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToReverseSoundex()).ToList();
-            foreach (var propertyToSearch in this.Properties)
+            foreach (var propertyToSearch in Properties)
             {
                 var soundsLikeExpression = SoundexExpressionBuilder.BuildReverseSoundexLikeExpression(propertyToSearch, soundexCodes);
                 fullExpression = fullExpression == null ? soundsLikeExpression
                                                         : Expression.OrElse(fullExpression, soundsLikeExpression);
             }
-            this.BuildExpression(fullExpression);
+            BuildExpression(fullExpression);
             return this;
         }
     }

@@ -15,7 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne)
                                                  .EqualTo(50);
 
@@ -32,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne)
                                                  .EqualTo(50, 1);
 
@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             //Arrange
 
             //Act
-            var query = this._context.TestModels.SearchChildren(x => x.Children)
+            var query = _context.TestModels.SearchChildren(x => x.Children)
                                                  .With(c => c.IntegerOne, c => c.IntegerThree)
                                                  .EqualTo(1);
 
@@ -66,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
         public void Dispose()
         {
-            this._context.Dispose();
+            _context.Dispose();
         }
     }
 }

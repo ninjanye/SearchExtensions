@@ -14,16 +14,16 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData { Name = "arrange", Description = "", Number = 1 });
-            this._testData.Add(new TestData { Name = "estrange", Description = "", Number = 2 });
-            this._testData.Add(new TestData { Name = "Taint", Description = "", Number = 3 });
-            this._testData.Add(new TestData { Name = "Paint", Description = "", Number = 4 });
+            _testData.Add(new TestData { Name = "arrange", Description = "", Number = 1 });
+            _testData.Add(new TestData { Name = "estrange", Description = "", Number = 2 });
+            _testData.Add(new TestData { Name = "Taint", Description = "", Number = 3 });
+            _testData.Add(new TestData { Name = "Paint", Description = "", Number = 4 });
         }
 
         [Test]
@@ -32,10 +32,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).ReverseSoundex("range");
+            var result = _testData.Search(x => x.Name).ReverseSoundex("range");
 
             //Assert
-            CollectionAssert.Contains(result, this._testData[0]);
+            CollectionAssert.Contains(result, _testData[0]);
         }
 
         [Test]
@@ -44,10 +44,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).ReverseSoundex("range");
+            var result = _testData.Search(x => x.Name).ReverseSoundex("range");
 
             //Assert
-            CollectionAssert.DoesNotContain(result, this._testData[3]);
+            CollectionAssert.DoesNotContain(result, _testData[3]);
         }
 
         [Test]
@@ -56,10 +56,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             var names = new[] { "range", "point" };
             var soundexCodes = names.Select(w => w.ToReverseSoundex());
-            var expected = this._testData.Where(td => soundexCodes.Contains(td.Name.ToReverseSoundex()));
+            var expected = _testData.Where(td => soundexCodes.Contains(td.Name.ToReverseSoundex()));
 
             //Act
-            var result = this._testData.Search(x => x.Name).ReverseSoundex(names);
+            var result = _testData.Search(x => x.Name).ReverseSoundex(names);
 
             //Assert
             CollectionAssert.AreEqual(expected, result);

@@ -13,23 +13,23 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this._testData.Clear();
+            _testData.Clear();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData {Name = "abcd", Description = "efgh", Status = "status"});
-            this._testData.Add(new TestData {Name = "match", Description = "match", Status = "status"});
-            this._testData.Add(new TestData {Name = "match", Description = "status", Status = "status"});
-            this._testData.Add(new TestData {Name = "status", Description = "test", Status = "status"});
-            this._testData.Add(new TestData {Name = "TEst", Description = "teST", Status = "case"});
+            _testData.Add(new TestData {Name = "abcd", Description = "efgh", Status = "status"});
+            _testData.Add(new TestData {Name = "match", Description = "match", Status = "status"});
+            _testData.Add(new TestData {Name = "match", Description = "status", Status = "status"});
+            _testData.Add(new TestData {Name = "status", Description = "test", Status = "status"});
+            _testData.Add(new TestData {Name = "TEst", Description = "teST", Status = "case"});
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => this._testData.Search(x => x.Name).EqualTo(x => x.Description));
+            Assert.DoesNotThrow(() => _testData.Search(x => x.Name).EqualTo(x => x.Description));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).EqualTo(x => x.Description);
+            var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
             Assert.IsNotNull(result);
@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).EqualTo(x => x.Description);
+            var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any());
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
+            var result = _testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.Description == x.Status));
@@ -86,7 +86,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
+            var result = _testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(x => x.Name == x.Status));
@@ -98,7 +98,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
             
             //Act
-            var result = this._testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase)
+            var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase)
                                                      .EqualTo(x => x.Description);
 
             //Assert

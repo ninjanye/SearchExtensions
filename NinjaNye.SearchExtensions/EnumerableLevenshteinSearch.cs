@@ -21,13 +21,13 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(Expression<Func<T, string>> stringProperty)
         {
-            var sourceProperty = this.Properties[0];
-            var targetProperty = this.AlignParameter(stringProperty);
+            var sourceProperty = Properties[0];
+            var targetProperty = AlignParameter(stringProperty);
 
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(sourceProperty, targetProperty);
-            var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, this.FirstParameter);
-            var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, this.FirstParameter).Compile();
-            var convertedSource = this.Source.Select(selectExpression.Invoke);
+            var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, FirstParameter);
+            var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, FirstParameter).Compile();
+            var convertedSource = Source.Select(selectExpression.Invoke);
             return new EnumerableLevenshteinCompare<ILevenshteinDistance<T>>(convertedSource);
         }
 
@@ -38,11 +38,11 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(string term)
         {
-            var stringProperty = this.Properties[0];
+            var stringProperty = Properties[0];
             var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(stringProperty, term);
-            var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, this.FirstParameter);
-            var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, this.FirstParameter).Compile();
-            var convertedSource = this.Source.Select(selectExpression.Invoke);
+            var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, FirstParameter);
+            var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, FirstParameter).Compile();
+            var convertedSource = Source.Select(selectExpression.Invoke);
             return new EnumerableLevenshteinCompare<ILevenshteinDistance<T>>(convertedSource);
         }
 

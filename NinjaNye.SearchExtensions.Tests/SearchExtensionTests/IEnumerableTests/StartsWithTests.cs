@@ -13,18 +13,18 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         [SetUp]
         public void ClassSetup()
         {
-            this._testData = new List<TestData>();
-            this.BuildTestData();
+            _testData = new List<TestData>();
+            BuildTestData();
         }
 
         private void BuildTestData()
         {
-            this._testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "status" });
-            this._testData.Add(new TestData { Name = "mnop", Description = "m", Status = "status" });
-            this._testData.Add(new TestData { Name = "yesterday", Description = "no", Status = "yes" });
-            this._testData.Add(new TestData { Name = "another day", Description = "null status" });
-            this._testData.Add(new TestData { Name = "test", Description = "description", Status = "desc" });
-            this._testData.Add(new TestData { Name = "teSt cAsE iNsEnSiTiViTy", Description = "TEsT" });
+            _testData.Add(new TestData { Name = "abcd", Description = "efgh", Status = "status" });
+            _testData.Add(new TestData { Name = "mnop", Description = "m", Status = "status" });
+            _testData.Add(new TestData { Name = "yesterday", Description = "no", Status = "yes" });
+            _testData.Add(new TestData { Name = "another day", Description = "null status" });
+            _testData.Add(new TestData { Name = "test", Description = "description", Status = "desc" });
+            _testData.Add(new TestData { Name = "teSt cAsE iNsEnSiTiViTy", Description = "TEsT" });
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Act
             //Assert
-            Assert.DoesNotThrow(() => this._testData.Search(x => x.Name).StartsWith(x => x.Description));
+            Assert.DoesNotThrow(() => _testData.Search(x => x.Name).StartsWith(x => x.Description));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).StartsWith(x => x.Description);
+            var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
 
             //Assert
             Assert.IsNotNull(result);
@@ -55,7 +55,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).StartsWith(x => x.Description);
+            var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any(), "No records returned");
@@ -68,7 +68,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
+            var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(), "No records returned");
@@ -81,7 +81,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
+            var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Any(), "No records returned");
@@ -94,7 +94,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name, x => x.Description).StartsWith(x => x.Status);
+            var result = _testData.Search(x => x.Name, x => x.Description).StartsWith(x => x.Status);
 
             //Assert
             Assert.IsTrue(result.Count() > 1, "Not enough records returned");
@@ -107,7 +107,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Arrange
 
             //Act
-            var result = this._testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith(x => x.Description);
+            var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith(x => x.Description);
 
             //Assert
             Assert.IsTrue(result.Any(t => t.Description == "TEsT"));
