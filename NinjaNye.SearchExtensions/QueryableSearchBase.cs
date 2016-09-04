@@ -48,6 +48,12 @@ namespace NinjaNye.SearchExtensions
             this.Source = this.Source.Where(finalExpression);
         }
 
+        protected void QueryInclude(string path)
+        {
+            var includeMethod = Source.GetType().GetMethod("Include", new[] {typeof(string)});
+            Source = (IQueryable<TSource>) includeMethod?.Invoke(Source, new[] {path});
+        }
+
         public IEnumerator<TSource> GetEnumerator()
         {
             this.UpdateSource();

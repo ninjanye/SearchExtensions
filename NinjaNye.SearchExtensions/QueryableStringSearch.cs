@@ -23,6 +23,12 @@ namespace NinjaNye.SearchExtensions
         {
         }
 
+        public IQueryable<T> Include(string path)
+        {
+            base.QueryInclude(path);
+            return this;
+        }
+
         /// <summary>
         /// Retrieve items where any of the defined terms are contained 
         /// within any of the defined properties

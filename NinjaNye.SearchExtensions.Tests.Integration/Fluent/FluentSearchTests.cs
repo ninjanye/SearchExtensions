@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using NUnit.Framework;
 
@@ -299,6 +300,18 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Assert
             Assert.AreEqual(2, result.Count());
             Assert.IsTrue(result.All(x => x.StringOne == "abcd" || x.StringOne == "efgh"));
+        }
+
+        [Test]
+        public void Search_IncludeAfterSearch_ReturnsResults()
+        {
+            _context.Configuration.LazyLoadingEnabled = false;
+            var result = _context.TestModels.Search(x => x.StringOne)
+                                            .ContainingAll("parent", "test")
+                                            .Include(x => x.Children);
+
+            var model = result.First();
+            Assert.IsNotNull(model.Children);
         }
 
         public void Dispose()
