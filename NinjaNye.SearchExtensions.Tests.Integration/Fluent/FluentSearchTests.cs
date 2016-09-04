@@ -314,6 +314,18 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             Assert.IsNotNull(model.Children);
         }
 
+        [Test]
+        public void Search_IncludeAfterSearchForInt_ReturnsResults()
+        {
+            _context.Configuration.LazyLoadingEnabled = false;
+            var result = _context.TestModels.Search(x => x.IntegerOne)
+                                            .GreaterThan(5)
+                                            .Include(x => x.Children);
+
+            var model = result.First();
+            Assert.IsNotNull(model.Children);
+        }
+
         public void Dispose()
         {
             _context.Dispose();

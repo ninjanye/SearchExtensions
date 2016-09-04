@@ -13,6 +13,12 @@ namespace NinjaNye.SearchExtensions
         {
         }
 
+        public IQueryable<TSource> Include(string path)
+        {
+            QueryInclude(path);
+            return this;
+        }
+
         /// <summary>
         /// Retrieves items where any of the defined properties
         /// equal any of the supplied values
