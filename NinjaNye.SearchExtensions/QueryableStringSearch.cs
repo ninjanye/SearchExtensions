@@ -18,7 +18,7 @@ namespace NinjaNye.SearchExtensions
         private readonly ISearchTermCollection _searchTerms = new SearchTermCollection();
         private SearchType _searchType;
 
-        public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties) 
+        public QueryableStringSearch(IQueryable<T> source, Expression<Func<T, string>>[] stringProperties)
             : base(source, stringProperties)
         {
         }
@@ -95,7 +95,7 @@ namespace NinjaNye.SearchExtensions
             var result = this;
             foreach (var propertyToSearchFor in propertiesToSearchFor)
             {
-                result = result.Containing(propertyToSearchFor);   
+                result = result.Containing(propertyToSearchFor);
             }
             return result;
         }
@@ -267,6 +267,26 @@ namespace NinjaNye.SearchExtensions
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, FirstParameter);
             return this.Select(selectExpression);
         }
+
+        public IQueryable<IRanked<T>> ToLeftWeightedRanked()
+        {
+            Expression combinedHitExpression = null;
+            foreach (var propertyToSearch in Properties)
+            {
+                var nullSafeExpression = BuildNullSafeExpression(propertyToSearch);
+                for (int j = 0; j < _searchTerms.Count; j++)
+                {
+                    var searchTerm = _searchTerms[j];
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount_LeftWeighted(nullSafeExpression, searchTerm);
+                    combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
+                }
+            }
+
+            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, FirstParameter);
+            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, FirstParameter);
+            return this.Select(selectExpression);
+        }
+
 
         private Expression<Func<T, string>> BuildNullSafeExpression(Expression<Func<T, string>> propertyToSearch)
         {
