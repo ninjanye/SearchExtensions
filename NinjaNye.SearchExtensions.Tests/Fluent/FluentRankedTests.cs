@@ -21,14 +21,14 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
 
         private void BuildTestData()
         {
-            _testData.Add(new TestData {Name = "abcd", Description = "efgh", Number = 1});
-            _testData.Add(new TestData {Name = "ijkl", Description = "mnop", Number = 2});
-            _testData.Add(new TestData {Name = "qrst", Description = "uvwx", Number = 3});
-            _testData.Add(new TestData {Name = "yzab", Description = "cdef", Number = 4});
-            _testData.Add(new TestData {Name = "efgh", Description = "ijkl", Number = 5});
-            _testData.Add(new TestData {Name = "UPPER", Description = "CASE", Number = 6});
-            _testData.Add(new TestData {Name = "lower", Description = "case", Number = 7});
-            _testData.Add(new TestData {Name = "tweeter", Description = "cheese", Number = 8});
+            _testData.Add(new TestData { Name = "abcd", Description = "efgh", Number = 1 });
+            _testData.Add(new TestData { Name = "ijkl", Description = "mnop", Number = 2 });
+            _testData.Add(new TestData { Name = "qrst", Description = "uvwx", Number = 3 });
+            _testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
+            _testData.Add(new TestData { Name = "efgh", Description = "ijkl", Number = 5 });
+            _testData.Add(new TestData { Name = "UPPER", Description = "CASE", Number = 6 });
+            _testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
+            _testData.Add(new TestData { Name = "tweeter", Description = "cheese", Number = 8 });
         }
 
         [Test]
@@ -42,6 +42,23 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Assert
             Assert.IsInstanceOf<IEnumerable<IRanked<TestData>>>(result);
         }
+
+        [Test]
+        public void ToRanked_CorrectRankReturned()
+        {
+            var result = _testData.Search(x => x.Name).ContainingAll("wee").ToLeftWeightedRanked();
+            var first = result.OrderByDescending(r => r.Hits).First();
+            var check = first.Hits;
+            //as 'wee' is one char into string, it should add (7 - 1) to the hit count. - should add 6
+            Assert.AreEqual(7, first.Hits);
+
+            result = _testData.Search(x => x.Name).ContainingAll("ete").ToLeftWeightedRanked();
+            first = result.OrderByDescending(r => r.Hits).First();
+
+            //as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
+            Assert.AreEqual(5, first.Hits);
+        }
+
 
         [Test]
         public void ToRanked_SearchOneColumn_RankIsCorrect()
@@ -79,7 +96,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         public void ToRanked_CultureSetToIgnoreCase_RankIgnoresCase()
         {
             //Arrange
-            
+
             //Act
             var result = _testData.Search(x => x.Description)
                                       .SetCulture(StringComparison.OrdinalIgnoreCase)
