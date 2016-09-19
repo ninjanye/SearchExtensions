@@ -84,12 +84,20 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
+
+            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var leftWeightExpressionWithNoValue = Expression.Constant(0);
+
+            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;
 
-            // return hitCountExpression;
+
+
+            
         }
 
 
@@ -128,7 +136,13 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
+
+            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var leftWeightExpressionWithNoValue = Expression.Constant(0);
+
+            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;

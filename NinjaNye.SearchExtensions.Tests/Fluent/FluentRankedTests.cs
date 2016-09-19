@@ -11,12 +11,15 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
     public class FluentRankedTests
     {
         private List<TestData> _testData = new List<TestData>();
-
+        private List<PersonTestData> _persontestData = new List<PersonTestData>();
         [SetUp]
         public void ClassSetup()
         {
             _testData = new List<TestData>();
             BuildTestData();
+
+            _persontestData = new List<PersonTestData>();
+            BuildPersonTestData();
         }
 
         private void BuildTestData()
@@ -30,6 +33,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             _testData.Add(new TestData { Name = "lower", Description = "case", Number = 7 });
             _testData.Add(new TestData { Name = "tweeter", Description = "cheese", Number = 8 });
         }
+
+        private void BuildPersonTestData()
+        {
+            _persontestData.Add(new PersonTestData { Title = "Lord", FirstName = "Albertino", LastName = "Grahamshire" });
+        }
+
 
         [Test]
         public void ToRanked_SearchedForData_RankedResultIsReturned()
@@ -46,17 +55,31 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [Test]
         public void ToRanked_CorrectRankReturned()
         {
-            var result = _testData.Search(x => x.Name).ContainingAll("wee").ToLeftWeightedRanked();
+            var result = _persontestData.Search(x => x.FirstName).ContainingAll("bert").ToLeftWeightedRanked();
             var first = result.OrderByDescending(r => r.Hits).First();
-            var check = first.Hits;
             //as 'wee' is one char into string, it should add (7 - 1) to the hit count. - should add 6
-            Assert.AreEqual(7, first.Hits);
+            Assert.AreEqual(8, first.Hits);
+           
+            //result = _persontestData.Search(x => x.Name).ContainingAll("ete").ToLeftWeightedRanked();
+            //first = result.OrderByDescending(r => r.Hits).First();
 
-            result = _testData.Search(x => x.Name).ContainingAll("ete").ToLeftWeightedRanked();
-            first = result.OrderByDescending(r => r.Hits).First();
+            ////as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
+            //Assert.AreEqual(5, first.Hits);
+        }
 
-            //as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
-            Assert.AreEqual(5, first.Hits);
+        [Test]
+        public void ToRanked_CorrectRankReturnedMultipleParam()
+        {
+            var result2 = _persontestData.Search(x => x.FirstName, x => x.LastName, x => x.Title).ContainingAll("bert").ToLeftWeightedRanked();
+            var second = result2.OrderByDescending(r => r.Hits).First();
+            //as word doesn't match second param at all, shouldn't increase hit count. 
+            Assert.AreEqual(8, second.Hits);
+
+            //result = _persontestData.Search(x => x.Name).ContainingAll("ete").ToLeftWeightedRanked();
+            //first = result.OrderByDescending(r => r.Hits).First();
+
+            ////as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
+            //Assert.AreEqual(5, first.Hits);
         }
 
 

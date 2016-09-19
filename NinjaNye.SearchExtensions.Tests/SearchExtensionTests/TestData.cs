@@ -19,4 +19,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
     }
+
+    internal class PersonTestData : TestData
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Title { get; set; }
+
+    }
 }
