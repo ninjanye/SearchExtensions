@@ -88,11 +88,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;
-
-            // return hitCountExpression;
         }
-
-
 
         /// <summary>
         /// Calculates how many search hits occured for a given property

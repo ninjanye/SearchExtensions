@@ -244,7 +244,7 @@ namespace NinjaNye.SearchExtensions
         /// Enumerable of ranked items.  Each item will contain 
         /// the amount of hits found across the defined properties
         /// </returns>
-        public IEnumerable<IRanked<T>> ToRanked()
+        public IEnumerable<IRanked<T>> ToRanked(RankedType type = RankedType.Default)
         {
             Expression combinedHitExpression = null;
             foreach (var propertyToSearch in Properties)
@@ -253,7 +253,8 @@ namespace NinjaNye.SearchExtensions
                 {
                     var searchTerm = _searchTerms[j];
                     var nullSafeExpresion = BuildNullSafeExpresion(propertyToSearch);
-                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, _searchOptions);
+                    var hitCountExpression = type == RankedType.Default ? EnumerableExpressionHelper.CalculateHitCount(nullSafeExpresion, searchTerm, _searchOptions)
+                                                                        : EnumerableExpressionHelper.CalculateHitCount_LeftWeighted(nullSafeExpresion, searchTerm, _searchOptions);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }
@@ -262,27 +263,6 @@ namespace NinjaNye.SearchExtensions
             var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, FirstParameter).Compile();
             return this.Select(selectExpression.Invoke);
         }
-
-        public IEnumerable<IRanked<T>> ToLeftWeightedRanked()
-        {
-            Expression combinedHitExpression = null;
-            foreach (var propertyToSearch in Properties)
-            {
-                for (int j = 0; j < _searchTerms.Count; j++)
-                {
-                    var searchTerm = _searchTerms[j];
-                    var nullSafeExpresion = BuildNullSafeExpresion(propertyToSearch);
-                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount_LeftWeighted(nullSafeExpresion, searchTerm, _searchOptions);
-                    combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
-                }
-            }
-
-            var rankedInitExpression = EnumerableExpressionHelper.ConstructRankedResult<T>(combinedHitExpression, FirstParameter);
-            var selectExpression = Expression.Lambda<Func<T, Ranked<T>>>(rankedInitExpression, FirstParameter).Compile();
-            return this.Select(selectExpression.Invoke);
-        }
-
-
 
         private Expression<Func<T, string>> BuildNullSafeExpresion(Expression<Func<T, string>> propertyToSearch)
         {
