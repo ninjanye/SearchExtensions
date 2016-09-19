@@ -73,14 +73,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
         public static Expression CalculateHitCount_LeftWeighted<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
         {
-  
             Expression searchTermExpression = Expression.Constant(searchTerm);
             Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
             MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-
-            var replaceExpression = Expression.Call(ExpressionMethods.CustomReplaceMethod, stringProperty.Body, searchTermExpression, ExpressionMethods.EmptyStringExpression);
+            var replaceExpression = Expression.Call(stringProperty.Body, ExpressionMethods.ReplaceMethod,
+                                                    searchTermExpression, ExpressionMethods.EmptyStringExpression);
             var replacedLengthExpression = Expression.Property(replaceExpression, ExpressionMethods.StringLengthProperty);
-
             var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);
             var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
 
@@ -96,6 +94,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;
+
+
+
+            
         }
 
 
