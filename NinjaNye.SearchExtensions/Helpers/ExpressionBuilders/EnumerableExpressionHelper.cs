@@ -76,20 +76,25 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
             Expression searchTermExpression = Expression.Constant(searchTerm);
             Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
             MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-            var replaceExpression = Expression.Call(stringProperty.Body, ExpressionMethods.ReplaceMethod,
-                                                    searchTermExpression, ExpressionMethods.EmptyStringExpression);
+
+            var replaceExpression = Expression.Call(ExpressionMethods.CustomReplaceMethod, stringProperty.Body, searchTermExpression, ExpressionMethods.EmptyStringExpression, searchOptions.ComparisonTypeExpression);
             var replacedLengthExpression = Expression.Property(replaceExpression, ExpressionMethods.StringLengthProperty);
+
             var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);
             var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
 
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
+
+            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var leftWeightExpressionWithNoValue = Expression.Constant(0);
+
+            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;
-
-            // return hitCountExpression;
         }
 
 
@@ -128,7 +133,13 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
+
+            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var leftWeightExpressionWithNoValue = Expression.Constant(0);
+
+            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;
