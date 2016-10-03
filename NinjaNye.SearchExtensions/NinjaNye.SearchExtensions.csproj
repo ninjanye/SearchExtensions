@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableSearchBase.cs" />
     <Compile Include="QueryableChildSelector.cs" />
+    <Compile Include="RankedType.cs" />
     <Compile Include="SearchBase.cs" />
     <Compile Include="SearchOptions.cs" />
     <Compile Include="SearchTermCollection.cs" />
