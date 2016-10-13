@@ -38,12 +38,10 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
                                                                ParameterExpression parameterExpression)
         {
             var distanceType = typeof(LevenshteinDistance<T>);
-            var distanceCtor = Expression.New(distanceType);
-            PropertyInfo distanceProperty = distanceType.GetProperty("Distance");
-            PropertyInfo itemProperty = distanceType.GetProperty("Item");
-            var distanceValueAssignment = Expression.Bind(distanceProperty, distanceExpression);
-            var itemValueAssignment = Expression.Bind(itemProperty, parameterExpression);
-            return Expression.MemberInit(distanceCtor, distanceValueAssignment, itemValueAssignment);
+            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
+            var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpression);
+            var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
+            return distanceCtor;
         }
 
         /// <summary>
@@ -84,7 +82,12 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+            //var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));            
+            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
+            var leftWeightExpressionWithNoValue = Expression.Constant(0);
+            
+            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
 
             var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
             return finalHitCounterExpressionOffset;

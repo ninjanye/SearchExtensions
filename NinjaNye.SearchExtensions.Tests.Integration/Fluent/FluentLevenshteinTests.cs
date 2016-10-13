@@ -60,6 +60,16 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, x.Item.StringTwo)));
         }
 
+        [Test]
+        public void LevenschteinDistanceOf_CompareAgainstTwoStrings_AllDistancesReturned()
+        {
+            var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
+                                            .LevenshteinDistanceOf(x => x.StringOne)
+                                            .ComparedTo("abdc");
+
+            Assert.AreEqual(1, result.First().Distances.Length);
+        }
+
         public void Dispose()
         {
             _context.Dispose();
