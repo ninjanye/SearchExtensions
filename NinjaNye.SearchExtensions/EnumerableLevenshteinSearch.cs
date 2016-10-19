@@ -14,6 +14,11 @@ namespace NinjaNye.SearchExtensions
         {
         }
 
+        public EnumerableLevenshteinSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
+            : base(source, stringProperties)
+        {
+        }
+
         /// <summary>
         /// Define the term with which to compare string properties to
         /// </summary>
@@ -21,10 +26,9 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(params Expression<Func<T, string>>[] stringProperties)
         {
-            var sourceProperty = Properties[0];
             var targetProperties = stringProperties.Select(AlignParameter).ToArray();
 
-            var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(sourceProperty, targetProperties);
+            var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistance(Properties, targetProperties);
             var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, FirstParameter);
             var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, FirstParameter).Compile();
             var convertedSource = Source.Select(selectExpression.Invoke);
@@ -38,8 +42,7 @@ namespace NinjaNye.SearchExtensions
         /// <returns></returns>
         public IEnumerable<ILevenshteinDistance<T>> ComparedTo(params string[] terms)
         {
-            var stringProperty = Properties[0];
-            var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistances(stringProperty, terms);
+            var levenshteinDistanceExpression = EnumerableExpressionHelper.CalculateLevenshteinDistances(Properties, terms);
 
             var buildExpression = EnumerableExpressionHelper.ConstructLevenshteinResult<T>(levenshteinDistanceExpression, FirstParameter);
             var selectExpression = Expression.Lambda<Func<T, LevenshteinDistance<T>>>(buildExpression, FirstParameter).Compile();

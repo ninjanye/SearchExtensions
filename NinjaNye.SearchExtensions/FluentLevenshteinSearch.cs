@@ -12,11 +12,11 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         /// <typeparam name="T">Type of object to be searched</typeparam>
         /// <param name="source">source data on which to perform search</param>
-        /// <param name="stringProperty">String property to search.</param>
-        public static EnumerableLevenshteinSearch<T> LevenshteinDistanceOf<T>(this IEnumerable<T> source, Expression<Func<T, string>> stringProperty)
+        /// <param name="stringProperties">String property to search.</param>
+        public static EnumerableLevenshteinSearch<T> LevenshteinDistanceOf<T>(this IEnumerable<T> source, params Expression<Func<T, string>>[] stringProperties)
         {
-            Ensure.ArgumentNotNull(stringProperty, "stringProperty");
-            return new EnumerableLevenshteinSearch<T>(source, stringProperty);
+            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+            return new EnumerableLevenshteinSearch<T>(source, stringProperties);
         }        
     }
 }

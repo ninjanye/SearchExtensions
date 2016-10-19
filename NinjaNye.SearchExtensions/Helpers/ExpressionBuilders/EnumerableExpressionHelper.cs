@@ -154,19 +154,24 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
         /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
-        public static IEnumerable<Expression> CalculateLevenshteinDistances<T>(Expression<Func<T, string>> stringProperty, params string[] searchTerms)
+        public static IEnumerable<Expression> CalculateLevenshteinDistances<T>(Expression<Func<T, string>>[] stringProperties, params string[] searchTerms)
         {
-            return searchTerms.Select(Expression.Constant)
-                              .Select(searchTermExpression => Expression.Call(ExpressionMethods.LevensteinDistanceMethod, stringProperty.Body, searchTermExpression));
+            var searchTermExpressions = searchTerms.Select(Expression.Constant).ToList();
+            return from searchTerm in searchTermExpressions
+                   from sourceProperty in stringProperties
+                   select Expression.Call(ExpressionMethods.LevensteinDistanceMethod, sourceProperty.Body, searchTerm);
         }
 
         /// <summary>
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
         /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
-        public static IEnumerable<Expression> CalculateLevenshteinDistance<T>(Expression<Func<T, string>> sourceProperty, params Expression<Func<T, string>>[] targetProperties)
+        public static IEnumerable<Expression> CalculateLevenshteinDistance<T>(
+            Expression<Func<T, string>>[] sourceProperties, params Expression<Func<T, string>>[] targetProperties)
         {
-            return targetProperties.Select(p => Expression.Call(ExpressionMethods.LevensteinDistanceMethod, sourceProperty.Body, p.Body));
+            return from targetProperty in targetProperties
+                   from sourceProperty in sourceProperties
+                   select Expression.Call(ExpressionMethods.LevensteinDistanceMethod, sourceProperty.Body, targetProperty.Body);
         }
 
 
