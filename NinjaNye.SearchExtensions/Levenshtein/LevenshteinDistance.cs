@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NinjaNye.SearchExtensions.Levenshtein
 {
@@ -7,6 +8,8 @@ namespace NinjaNye.SearchExtensions.Levenshtein
         int Distance { get; }
         T Item { get; }
         int[] Distances { get; }
+        int MinimumDistance { get; }
+        int MaximumDistance { get; }
     }
 
     internal class LevenshteinDistance<T> : ILevenshteinDistance<T>
@@ -15,11 +18,13 @@ namespace NinjaNye.SearchExtensions.Levenshtein
         {
             Item = item;
             Distances = distances;
-            Distance = distances[0];
         }
 
-        public int Distance { get; }
+        public int Distance => Distances.First();
         public T Item { get; }
         public int[] Distances { get; }
+
+        public int MinimumDistance => Distances.Min();
+        public int MaximumDistance => Distances.Max();
     }
 }

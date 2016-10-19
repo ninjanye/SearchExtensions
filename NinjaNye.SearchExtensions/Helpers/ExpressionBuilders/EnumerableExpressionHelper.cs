@@ -45,6 +45,22 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         }
 
         /// <summary>
+        /// Constructs a ranked result of type T
+        /// </summary>
+        /// <param name="distanceExpressions">Expression representing how to calculated distance</param>
+        /// <param name="parameterExpression">property parameter</param>
+        /// <returns>Expression equivalent to: new LevenshteinDistance{ Distance = [hitCountExpression], Item = x }</returns>
+        public static Expression ConstructLevenshteinResult<T>(IEnumerable<Expression> distanceExpressions,
+                                                               ParameterExpression parameterExpression)
+        {
+            var distanceType = typeof(LevenshteinDistance<T>);
+            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
+            var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpressions);
+            var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
+            return distanceCtor;
+        }
+
+        /// <summary>
         /// Calculates how many search hits occured for a given property
         /// </summary>
         /// <param name="stringProperty">string property to analyse</param>
@@ -138,19 +154,19 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
         /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
-        public static Expression CalculateLevenshteinDistance<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
+        public static IEnumerable<Expression> CalculateLevenshteinDistances<T>(Expression<Func<T, string>> stringProperty, params string[] searchTerms)
         {
-            Expression searchTermExpression = Expression.Constant(searchTerm);
-            return Expression.Call(ExpressionMethods.LevensteinDistanceMethod, stringProperty.Body, searchTermExpression);
+            return searchTerms.Select(Expression.Constant)
+                              .Select(searchTermExpression => Expression.Call(ExpressionMethods.LevensteinDistanceMethod, stringProperty.Body, searchTermExpression));
         }
 
         /// <summary>
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
         /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
-        public static Expression CalculateLevenshteinDistance<T>(Expression<Func<T, string>> sourceProperty, Expression<Func<T, string>> targetProperty)
+        public static IEnumerable<Expression> CalculateLevenshteinDistance<T>(Expression<Func<T, string>> sourceProperty, params Expression<Func<T, string>>[] targetProperties)
         {
-            return Expression.Call(ExpressionMethods.LevensteinDistanceMethod, sourceProperty.Body, targetProperty.Body);
+            return targetProperties.Select(p => Expression.Call(ExpressionMethods.LevensteinDistanceMethod, sourceProperty.Body, p.Body));
         }
 
 
