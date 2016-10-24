@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,9 +7,25 @@ namespace NinjaNye.SearchExtensions.Levenshtein
     public interface ILevenshteinDistance<out T>
     {
         int Distance { get; }
+
+        /// <summary>
+        /// The queried item
+        /// </summary>
         T Item { get; }
+        
+        /// <summary>
+        /// A collection of all distances calculated
+        /// </summary>
         int[] Distances { get; }
+
+        /// <summary>
+        /// The minimum distance of all levenshtein calculations
+        /// </summary>
         int MinimumDistance { get; }
+
+        /// <summary>
+        /// The maximum distance of all levenshtein calculations
+        /// </summary>
         int MaximumDistance { get; }
     }
 
