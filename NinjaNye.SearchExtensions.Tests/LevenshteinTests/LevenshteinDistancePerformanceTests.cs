@@ -8,7 +8,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {
 #if DEBUG
     // Performance tests will likely fail in debug mode
-    [Ignore]
+    [Ignore("Performance tests will likely fail in debug mode. Run in release mode")]
 #endif
     [TestFixture]
     public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
@@ -32,6 +32,28 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i == 1));
             Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i == 2));
             Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i == 3));
+            Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThan(1000));
+        }
+
+        [Test]
+        public void PerformLevenshteinDistanceUsingExpressionTreeBuilder()
+        {
+            //Setup 1 million comparisons
+            var words = BuildWords(100000, 6, 6);
+            var wordsToCompareTo = BuildWords(10, 6, 6).ToArray();
+            var stopwatch = new Stopwatch();
+
+            //Act
+            stopwatch.Start();
+            var result = words.LevenshteinDistanceOf(x => x).ComparedTo(wordsToCompareTo).ToList();
+            stopwatch.Stop();
+
+            //Assert
+            Console.WriteLine("Elapsed Time: {0}", stopwatch.Elapsed);
+            Console.WriteLine("Total matching words: {0}", result.Count(i => i.MinimumDistance == 0));
+            Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i.MinimumDistance == 1));
+            Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i.MinimumDistance == 2));
+            Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i.MinimumDistance == 3));
             Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThan(1000));
         }
     }

@@ -9,11 +9,6 @@ namespace NinjaNye.SearchExtensions
 {
     public class EnumerableLevenshteinSearch<T> : EnumerableSearchBase<T, string>
     {
-        public EnumerableLevenshteinSearch(IEnumerable<T> source, Expression<Func<T, string>> stringProperty)
-            : base(source, new[]{stringProperty})
-        {
-        }
-
         public EnumerableLevenshteinSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties)
             : base(source, stringProperties)
         {

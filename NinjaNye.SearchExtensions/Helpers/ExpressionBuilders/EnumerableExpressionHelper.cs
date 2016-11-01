@@ -31,22 +31,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// <summary>
         /// Constructs a ranked result of type T
         /// </summary>
-        /// <param name="distanceExpression">Expression representing how to calculated distance</param>
-        /// <param name="parameterExpression">property parameter</param>
-        /// <returns>Expression equivalent to: new LevenshteinDistance{ Distance = [hitCountExpression], Item = x }</returns>
-        public static Expression ConstructLevenshteinResult<T>(Expression distanceExpression,
-                                                               ParameterExpression parameterExpression)
-        {
-            var distanceType = typeof(LevenshteinDistance<T>);
-            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
-            var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpression);
-            var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
-            return distanceCtor;
-        }
-
-        /// <summary>
-        /// Constructs a ranked result of type T
-        /// </summary>
         /// <param name="distanceExpressions">Expression representing how to calculated distance</param>
         /// <param name="parameterExpression">property parameter</param>
         /// <returns>Expression equivalent to: new LevenshteinDistance{ Distance = [hitCountExpression], Item = x }</returns>
@@ -87,19 +71,13 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
         public static Expression CalculateHitCount_LeftWeighted<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
         {
-            Expression searchTermExpression = Expression.Constant(searchTerm);
-            Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
-            MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-            var replaceExpression = Expression.Call(stringProperty.Body, ExpressionMethods.ReplaceMethod,
-                                                    searchTermExpression, ExpressionMethods.EmptyStringExpression);
-            var replacedLengthExpression = Expression.Property(replaceExpression, ExpressionMethods.StringLengthProperty);
-            var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);
-            var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
+            var hitCountExpression = CalculateHitCount(stringProperty, searchTerm);
 
+            Expression searchTermExpression = Expression.Constant(searchTerm);
             var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
             var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            //var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
-            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));            
+            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
+            MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
             var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
             var leftWeightExpressionWithNoValue = Expression.Constant(0);
             
