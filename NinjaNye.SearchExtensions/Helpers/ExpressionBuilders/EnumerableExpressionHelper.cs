@@ -64,30 +64,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         }
 
         /// <summary>
-        /// Calculates how many search hits occured for a given property - artificially weighted for results at start of
-        /// </summary>
-        /// <param name="stringProperty">string property to analyse</param>
-        /// <param name="searchTerm">search term to count</param>
-        /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
-        public static Expression CalculateHitCount_LeftWeighted<T>(Expression<Func<T, string>> stringProperty, string searchTerm)
-        {
-            var hitCountExpression = CalculateHitCount(stringProperty, searchTerm);
-
-            Expression searchTermExpression = Expression.Constant(searchTerm);
-            var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
-            var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var equalityCheckExpression = Expression.Equal(indexOfExpresion, Expression.Constant(-1));
-            MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-            var leftWeightExpressionWithValue = Expression.Subtract(lengthExpression, indexOfExpresion);
-            var leftWeightExpressionWithNoValue = Expression.Constant(0);
-            
-            var leftWeightExpression = Expression.Condition(equalityCheckExpression, leftWeightExpressionWithNoValue, leftWeightExpressionWithValue);
-
-            var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
-            return finalHitCounterExpressionOffset;
-        }
-
-        /// <summary>
         /// Calculates how many search hits occured for a given property
         /// </summary>
         /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
@@ -102,31 +78,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
             var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
             return hitCountExpression;
         }
-
-        /// <summary>
-        /// Calculates how many search hits occured for a given property
-        /// </summary>
-        /// <returns>Expression equivalent to: [property].Length - ([property].Replace([searchTerm], "").Length) / [searchTerm].Length</returns>
-        public static Expression CalculateHitCount_LeftWeighted<T>(Expression<Func<T, string>> stringProperty, string searchTerm, SearchOptions searchOptions)
-        {
-            Expression searchTermExpression = Expression.Constant(searchTerm);
-            Expression searchTermLengthExpression = Expression.Constant(searchTerm.Length);
-            MemberExpression lengthExpression = Expression.Property(stringProperty.Body, ExpressionMethods.StringLengthProperty);
-
-            var replaceExpression = Expression.Call(ExpressionMethods.CustomReplaceMethod, stringProperty.Body, searchTermExpression, ExpressionMethods.EmptyStringExpression, searchOptions.ComparisonTypeExpression);
-            var replacedLengthExpression = Expression.Property(replaceExpression, ExpressionMethods.StringLengthProperty);
-
-            var characterDiffExpression = Expression.Subtract(lengthExpression, replacedLengthExpression);
-            var hitCountExpression = Expression.Divide(characterDiffExpression, searchTermLengthExpression);
-
-            var coalesceExpression = Expression.Coalesce(stringProperty.Body, ExpressionMethods.EmptyStringExpression);
-            var indexOfExpresion = Expression.Call(coalesceExpression, ExpressionMethods.IndexOfMethod, searchTermExpression);
-            var leftWeightExpression = Expression.Subtract(lengthExpression, indexOfExpresion);
-
-            var finalHitCounterExpressionOffset = Expression.Add(hitCountExpression, leftWeightExpression);
-            return finalHitCounterExpressionOffset;
-        }
-
 
         /// <summary>
         /// Calculates the Levenshtein distance between a given property and a search term

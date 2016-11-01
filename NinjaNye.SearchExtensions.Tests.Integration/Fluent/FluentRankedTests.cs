@@ -98,19 +98,5 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             //Assert
             Assert.AreEqual(14, result.Count());
         }
-
-        [Test]
-        public void ToRanked_SearchedForData_LeftWeightedRankedResults()
-        {
-            //Arrange
-
-            //Act
-            var result = _context.TestModels.Search(x => x.StringOne)
-                .Containing("wordmatch")
-                .ToRanked(RankedType.LeftWeighted);
-
-            //Assert
-            Assert.AreEqual(10, result.First().Hits);
-        }
     }
 }

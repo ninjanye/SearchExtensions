@@ -249,7 +249,7 @@ namespace NinjaNye.SearchExtensions
         /// the amount of hits found across the defined properties.
         /// </returns>
         /// <remarks>Only works in conjunction with string searches</remarks>
-        public IQueryable<IRanked<T>> ToRanked(RankedType type = RankedType.Default)
+        public IQueryable<IRanked<T>> ToRanked()
         {
             Expression combinedHitExpression = null;
             foreach (var propertyToSearch in Properties)
@@ -258,8 +258,7 @@ namespace NinjaNye.SearchExtensions
                 for (int j = 0; j < _searchTerms.Count; j++)
                 {
                     var searchTerm = _searchTerms[j];
-                    var hitCountExpression = type == RankedType.Default ? EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm)
-                                                                        : EnumerableExpressionHelper.CalculateHitCount_LeftWeighted(nullSafeExpression, searchTerm);
+                    var hitCountExpression = EnumerableExpressionHelper.CalculateHitCount(nullSafeExpression, searchTerm);
                     combinedHitExpression = ExpressionHelper.AddExpressions(combinedHitExpression, hitCountExpression);
                 }
             }

@@ -46,12 +46,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         [Test]
         public void ToRanked_CorrectRankReturned()
         {
-            var result = _testData.Search(x => x.Name).ContainingAll("wee").ToRanked(RankedType.LeftWeighted);
+            var result = _testData.Search(x => x.Name).ContainingAll("wee").ToRanked();
             var first = result.OrderByDescending(r => r.Hits).First();
             //as 'wee' is one char into string, it should add (7 - 1) to the hit count. - should add 6
             Assert.AreEqual(7, first.Hits);
 
-            result = _testData.Search(x => x.Name).ContainingAll("ete").ToRanked(RankedType.LeftWeighted);
+            result = _testData.Search(x => x.Name).ContainingAll("ete").ToRanked();
             first = result.OrderByDescending(r => r.Hits).First();
 
             //as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
