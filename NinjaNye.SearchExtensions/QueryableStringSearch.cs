@@ -189,44 +189,6 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Retrieve items where any of the defined properties 
-        /// are equal to any of the defined search terms
-        /// </summary>
-        /// <param name="terms">Term or terms to search for</param>
-        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
-        public QueryableStringSearch<T> IsEqual(params string[] terms)
-        {
-            Expression completeExpression = null;
-            foreach (var propertyToSearch in Properties)
-            {
-                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, terms);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
-            }
-            BuildExpression(completeExpression);
-            return this;
-        }
-
-        /// <summary>
-        /// Retrieve items where any of the defined search properties 
-        /// are equal to any of the properties supplied
-        /// </summary>
-        /// <param name="propertiesToSearchFor">Properties to match against</param>
-        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
-        public QueryableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
-        {
-            Expression completeExpression = null;
-            foreach (var propertyToSearch in Properties)
-            {
-                var alignedProperties = propertiesToSearchFor.Select(AlignParameter).ToArray();
-                var isEqualExpression = QueryableEqualsExpressionBuilder.Build(propertyToSearch, alignedProperties);
-                completeExpression = ExpressionHelper.JoinOrExpression(completeExpression, isEqualExpression);
-            }
-
-            BuildExpression(completeExpression);
-            return this;
-        }
-
-        /// <summary>
         /// Returns Enumerable of records that match the Soundex code for
         /// any of the given terms across any of the defined properties
         /// </summary>

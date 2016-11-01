@@ -191,33 +191,6 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Retrieve items where any of the defined properties 
-        /// are equal to any of the defined search terms
-        /// </summary>
-        /// <param name="terms">Term or terms to search for</param>
-        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
-        public EnumerableStringSearch<T> IsEqual(params string[] terms)
-        {
-            var fullExpression = EnumerableEqualsExpressionBuilder.Build(Properties, terms, _searchOptions);
-            BuildExpression(fullExpression);
-            return this;
-        }
-
-        /// <summary>
-        /// Retrieve items where any of the defined properties 
-        /// are equal to any of the defined properties to search for
-        /// </summary>
-        /// <param name="propertiesToSearchFor">Properties to search for</param>
-        [Obsolete("This method has been renamed.  Please use .EqualTo() instead.")]
-        public EnumerableStringSearch<T> IsEqual(params Expression<Func<T, string>>[] propertiesToSearchFor)
-        {
-            propertiesToSearchFor = propertiesToSearchFor.Select(AlignParameter).ToArray();
-            var completeExpression = EnumerableEqualsExpressionBuilder.Build(Properties, propertiesToSearchFor, _searchOptions);
-            BuildExpression(completeExpression);
-            return this;
-        }
-
-        /// <summary>
         /// Return records that match the Soundex code for any of the given terms
         /// </summary>
         /// <param name="terms">terms to search for</param>
