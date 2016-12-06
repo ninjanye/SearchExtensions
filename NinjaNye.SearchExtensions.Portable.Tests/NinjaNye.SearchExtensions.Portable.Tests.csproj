@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A2B64396-FE41-4F02-9A11-5050F16524C3}</ProjectGuid>
+    <ProjectGuid>{FAFE908A-DBA5-45FB-8562-6A1A38482F6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NinjaNye.SearchExtensions.Tests</RootNamespace>
-    <AssemblyName>NinjaNye.SearchExtensions.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>NinjaNye.SearchExtensions.Portable.Tests</RootNamespace>
+    <AssemblyName>NinjaNye.SearchExtensions.Portable.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -35,9 +35,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.util, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -62,8 +77,8 @@
     <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingAllTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingWholeWordTests.cs" />
-    <Compile Include="SearchExtensionTests\IEnumerableTests\EndsWithTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\DateTimeSearchTests.cs" />
+    <Compile Include="SearchExtensionTests\IEnumerableTests\EndsWithTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\IntegerSearchTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\IsEqualTests.cs" />
     <Compile Include="SearchExtensionTests\IEnumerableTests\LevenshteinSearch.cs" />
@@ -78,17 +93,16 @@
     <Compile Include="SoundexTests\ToSoundexPerformanceTests.cs" />
     <Compile Include="SoundexTests\ToSoundexTests.cs" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj">
-      <Project>{60b8e347-999f-4ee2-8172-9367d4f71860}</Project>
-      <Name>NinjaNye.SearchExtensions</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NinjaNye.SearchExtensions.Portable\NinjaNye.SearchExtensions.Portable.csproj">
+      <Project>{8eb3d1b8-0592-471a-829b-b7c776c37caa}</Project>
+      <Name>NinjaNye.SearchExtensions.Portable</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
