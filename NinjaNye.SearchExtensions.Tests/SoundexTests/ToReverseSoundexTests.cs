@@ -1,11 +1,10 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SoundexTests
 {
-    [TestFixture]
     public class ToReverseSoundexTests
     {
-        [Test]
+        [Fact]
         public void ToReverseSoundex_EmptyStringProvided_EmptyStringReturned()
         {
             //Arrange
@@ -14,10 +13,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             string result = Soundex.SoundexProcessor.ToReverseSoundex("");
 
             //Assert
-            Assert.IsEmpty(result);
+            Assert.Empty(result);
         }
 
-        [Test]
+        [Fact]
         public void ToReverseSoundex_NonEmptyStringProvided_NonEmptyStringReturned()
         {
             //Arrange
@@ -26,10 +25,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             string result = Soundex.SoundexProcessor.ToReverseSoundex("test");
 
             //Assert
-            Assert.IsNotEmpty(result);
+            Assert.NotEmpty(result);
         }
 
-        [Test]
+        [Fact]
         public void ToReverseSoundex_NonEmptyStringProvided_ReturnedStringStartsWithLastLetterInUpperCase()
         {
             //Arrange
@@ -38,15 +37,15 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             string result = Soundex.SoundexProcessor.ToReverseSoundex("Tester");
 
             //Assert
-            Assert.AreEqual('R', result[0]);
+            Assert.Equal('R', result[0]);
         }
 
-
-        [TestCase("umberella", "A461")]
-        [TestCase("apple", "E410")]
-        [TestCase("perreli", "I461")]
-        [TestCase("indigo", "O235")]
-        [TestCase("zulu", "U420")]
+        [Theory]
+        [InlineData("umberella", "A461")]
+        [InlineData("apple", "E410")]
+        [InlineData("perreli", "I461")]
+        [InlineData("indigo", "O235")]
+        [InlineData("zulu", "U420")]
         public void ToReverseSoundex_LastLetterIsAVowell_LastLetterIsNotRemoved(string value, string expected)
         {
             //Arrange
@@ -55,7 +54,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             string result = Soundex.SoundexProcessor.ToReverseSoundex(value).ToUpper();
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.Equal(expected, result);
         }
     }
 }

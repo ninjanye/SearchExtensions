@@ -1,12 +1,12 @@
 ﻿using NinjaNye.SearchExtensions.Helpers;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Helpers
 {
-    [TestFixture]
+    
     public class StringExtensionTests
     {
-        [Test]
+        [Fact]
         public void GetFirstCharacter_EmptyString_ReturnsNull()
         {
             //Arrange
@@ -15,10 +15,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
             var character = string.Empty.GetFirstCharacter();
 
             //Assert
-            Assert.IsNull(character);
+            Assert.Null(character);
         }
 
-        [Test]
+        [Fact]
         public void GetFirstCharacter_ValidString_ReturnedValueIsNotNull()
         {
             //Arrange
@@ -28,10 +28,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
             var character = word.GetFirstCharacter();
 
             //Assert
-            Assert.IsNotNullOrEmpty(character);
+            Assert.NotEmpty(character);
         }
 
-        [Test]
+        [Fact]
         public void GetFirstCharacter_ValidString_ReturnedValueIsFirstCharacterOnly()
         {
             //Arrange
@@ -41,10 +41,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
             var character = word.GetFirstCharacter();
 
             //Assert
-            Assert.AreEqual(word[0].ToString(), character);
+            Assert.Equal(word[0].ToString(), character);
         }
 
-        [Test]
+        [Fact]
         public void GetFirstCharacter_StringIsWhitespaceOnly_ReturnNull()
         {
             //Arrange
@@ -54,10 +54,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
             var character = word.GetFirstCharacter();
 
             //Assert
-            Assert.IsNull(character);
+            Assert.Null(character);
         }
 
-        [Test]
+        [Fact]
         public void GetFirstCharacter_StringBeginsWithWhitespace_ReturnFirstNonWhitespaceCharacter()
         {
             //Arrange
@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
             var character = word.GetFirstCharacter();
 
             //Assert
-            Assert.AreEqual("t", character);
+            Assert.Equal("t", character);
         }
     }
 }

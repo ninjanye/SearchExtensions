@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
+    
     public class ContainingWholeWordTests
     {
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_CorrectResultReturned()
         {
             //Arrange
@@ -22,11 +22,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(expected));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordIsFirstWord()
         {
             //Arrange
@@ -41,11 +41,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(expected));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordIsLastWord()
         {
             //Arrange
@@ -60,11 +60,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(expected));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordOnlyWord()
         {
             //Arrange
@@ -79,11 +79,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(expected));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_ChangeMatchType_CorrectResultReturned()
         {
             //Arrange
@@ -100,8 +100,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(expected));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(expected, result);
         }
     }
 }

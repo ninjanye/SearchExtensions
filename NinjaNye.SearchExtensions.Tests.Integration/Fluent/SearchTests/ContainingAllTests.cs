@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
-    [TestFixture]
-    internal class ContainingAllTests : IDisposable
+    [Collection("Database tests")]
+    public class ContainingAllTests 
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public ContainingAllTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchContainingAll_OneTermSupplied_ReturnsOnlyRecordsContainingSearchTerm()
         {
             //Arrange
@@ -19,10 +24,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm);
 
             //Assert
-            Assert.IsTrue(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm) >= 0));
+            Assert.True(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm) >= 0));
         }
 
-        [Test]
+        [Fact]
         public void SearchContainingAll_TwoTermsSupplied_ReturnsRecordsContainingBothSearchTerms()
         {
             //Arrange
@@ -33,13 +38,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm1, searchTerm2);
 
             //Assert
-            Assert.That(result, Is.Not.Empty);
+            Assert.NotEmpty(result);
             var hasBothTerms = result.All(t => t.StringOne.IndexOf(searchTerm1) >= 0 
                                             && t.StringOne.IndexOf(searchTerm2) >= 0);
-            Assert.That(hasBothTerms);
+            Assert.True(hasBothTerms);
         }
 
-        [Test]
+        [Fact]
         public void SearchContainingAll_TwoPropertiesAndTwoTermsSupplied_ReturnsDataWhereAllTermsAreMatched()
         {
             //Arrange
@@ -52,14 +57,14 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                              .ContainingAll(searchTerm1, searchTerm2, searchTerm3).ToList();
 
             //Assert
-            Assert.That(result, Is.Not.Empty);
-            Assert.That(result.All(t => (t.StringOne.Contains(searchTerm1) || t.StringTwo.Contains(searchTerm1))
+            Assert.NotEmpty(result);
+            Assert.True(result.All(t => (t.StringOne.Contains(searchTerm1) || t.StringTwo.Contains(searchTerm1))
                                      && (t.StringOne.Contains(searchTerm2) || t.StringTwo.Contains(searchTerm2))
                                      && (t.StringOne.Contains(searchTerm3) || t.StringTwo.Contains(searchTerm3))
                               ));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_SearchAgainstOneProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -67,10 +72,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo));
+            try { _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_SearchAgainstOneProperty_DoesNotReturnNull()
         {
             //Arrange
@@ -79,10 +84,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_SearchAgainstOneProperty_AllREsultsHaveAStringTwoInStringOne()
         {
             //Arrange
@@ -91,11 +96,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo).ToList();
 
             //Assert
-            Assert.IsTrue(result.Any(), "No records returned");
-            Assert.IsTrue(result.All(x => x.StringOne.Contains(x.StringTwo)));
+            Assert.True(result.Any(), "No records returned");
+            Assert.True(result.All(x => x.StringOne.Contains(x.StringTwo)));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_SearchAgainstTwoProperties_AllRsultsHaveBothProperties()
         {
             //Arrange
@@ -106,13 +111,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .ToList();
 
             //Assert
-            Assert.IsTrue(result.Any(), "No records returned");
-            Assert.IsTrue(result.All(x => x.StringOne.Contains(x.StringTwo) && x.StringOne.Contains(x.StringThree)));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.True(result.Any(), "No records returned");
+            Assert.True(result.All(x => x.StringOne.Contains(x.StringTwo) && x.StringOne.Contains(x.StringThree)));
         }
     }
 }

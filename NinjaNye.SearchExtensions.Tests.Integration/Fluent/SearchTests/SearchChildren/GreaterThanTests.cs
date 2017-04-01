@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchChildren
 {
-    [TestFixture]
-    internal class GreaterThanTests : IDisposable
+    [Collection("Database tests")]
+    public class GreaterThanTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public GreaterThanTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchChild_SearchChildCollection_ReturnsCorrectRecords()
         {
             //Arrange
@@ -21,12 +26,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
             //Assert
 
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ReturnsRecordsGreaterThanOrEqualTo()
         {
             //Arrange
@@ -38,14 +43,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
             //Assert
 
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
     }
 }

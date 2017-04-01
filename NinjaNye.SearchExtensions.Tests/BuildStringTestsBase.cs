@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Tests
 
         private int RandomInt(int min, int max)
         {
-            var rng = new RNGCryptoServiceProvider();
+            var rng = RandomNumberGenerator.Create();
             var buffer = new byte[4];
 
             rng.GetBytes(buffer);

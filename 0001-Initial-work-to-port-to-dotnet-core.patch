@@ -1,0 +1,4482 @@
+From a8bd8aced05fee1197cf1c56815b810bd8f603f4 Mon Sep 17 00:00:00 2001
+From: Nick Mayne <Jetski5822@gmail.com>
+Date: Wed, 15 Mar 2017 15:58:04 +0000
+Subject: [PATCH] Initial work to port to dotnet core
+
+---
+ .../Fluent/FluentRankedTests.cs                    |  57 +++---
+ .../Fluent/FluentSearchTests.cs                    | 153 +++++++-------
+ .../Fluent/ReverseSoundexSearchTests.cs            |  21 +-
+ .../Fluent/SoundexSearchTests.cs                   |  19 +-
+ .../Helpers/StringExtensionTests.cs                |  20 +-
+ .../LevenshteinDistancePerformanceTests.cs         |  31 +--
+ .../LevenshteinTests/LevenshteinDistanceTests.cs   |  47 +++--
+ .../NinjaNye.SearchExtensions.Tests.csproj         | 124 +-----------
+ .../Properties/AssemblyInfo.cs                     |  36 ----
+ .../IEnumerableTests/ContainingAllTests.cs         |  43 ++--
+ .../IEnumerableTests/ContainingTests.cs            |  26 +--
+ .../IEnumerableTests/ContainingWholeWordTests.cs   |  24 +--
+ .../IEnumerableTests/DateTimeSearchTests.cs        |  90 ++++-----
+ .../IEnumerableTests/EndsWithTests.cs              |  71 ++++---
+ .../IEnumerableTests/IntegerSearchTests.cs         |  94 +++++----
+ .../IEnumerableTests/IsEqualTests.cs               |  35 ++--
+ .../IEnumerableTests/LevenshteinSearch.cs          |  49 +++--
+ .../SearchChildrenChaingingTests.cs                |  30 ++-
+ .../SearchChildrenForStringTests.cs                |  80 ++++----
+ .../IEnumerableTests/SearchChildrenTests.cs        | 100 +++++-----
+ .../IEnumerableTests/StartsWithTests.cs            |  40 ++--
+ .../IEnumerableTests/StringSearchTests.cs          |  53 +++--
+ .../SoundexTests/ReverseSoundexPerformanceTests.cs |  18 +-
+ .../SoundexTests/ToReverseSoundexTests.cs          |  29 ++-
+ .../SoundexTests/ToSoundexPerformanceTests.cs      |  42 ++--
+ .../SoundexTests/ToSoundexTests.cs                 | 221 +++++++++++----------
+ .../EnumerableExpressionHelper.cs                  |   8 +-
+ .../ExpressionBuilders/ExpressionMethods.cs        |  36 ++--
+ .../Helpers/StringExtensions.cs                    |   2 +-
+ .../NinjaNye.SearchExtensions.csproj               |  99 +--------
+ .../Properties/AssemblyInfo.cs                     |  37 ----
+ NinjaNye.SearchExtensions/QueryableSearchBase.cs   |   8 +-
+ 32 files changed, 739 insertions(+), 1004 deletions(-)
+ delete mode 100644 NinjaNye.SearchExtensions.Tests/Properties/AssemblyInfo.cs
+ delete mode 100644 NinjaNye.SearchExtensions/Properties/AssemblyInfo.cs
+
+diff --git a/NinjaNye.SearchExtensions.Tests/Fluent/FluentRankedTests.cs b/NinjaNye.SearchExtensions.Tests/Fluent/FluentRankedTests.cs
+index 7f4a2ac..32bd447 100644
+--- a/NinjaNye.SearchExtensions.Tests/Fluent/FluentRankedTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/Fluent/FluentRankedTests.cs
+@@ -1,19 +1,18 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Models;
+ using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.Fluent
+ {
+-    [TestFixture]
++    
+     public class FluentRankedTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+-
+-        [SetUp]
+-        public void ClassSetup()
++        
++        public FluentRankedTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+@@ -31,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             _testData.Add(new TestData { Name = "tweeter", Description = "cheese", Number = 8 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchedForData_RankedResultIsReturned()
+         {
+             //Arrange
+@@ -40,25 +39,25 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).Containing("c").ToRanked();
+ 
+             //Assert
+-            Assert.IsInstanceOf<IEnumerable<IRanked<TestData>>>(result);
++            Assert.IsType<IEnumerable<IRanked<TestData>>>(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_CorrectRankReturned()
+         {
+             var result = _testData.Search(x => x.Name).ContainingAll("wee").ToRanked();
+             var first = result.OrderByDescending(r => r.Hits).First();
+             //as 'wee' is one char into string, it should add (7 - 1) to the hit count. - should add 6
+-            Assert.AreEqual(7, first.Hits);
++            Assert.Equal(7, first.Hits);
+ 
+             result = _testData.Search(x => x.Name).ContainingAll("ete").ToRanked();
+             first = result.OrderByDescending(r => r.Hits).First();
+ 
+             //as 'ete' is three char into string, it should add (7 - 3) to the hit count. - should add 4
+-            Assert.AreEqual(5, first.Hits);
++            Assert.Equal(5, first.Hits);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchOneColumn_RankIsCorrect()
+         {
+             //Arrange
+@@ -67,13 +66,13 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Containing("e").ToRanked().ToList();
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count);
++            Assert.Equal(3, result.Count);
+             var first = result.OrderByDescending(r => r.Hits).ToList();
+-            Assert.AreEqual(3, first[0].Hits);
+-            Assert.AreEqual(1, first[1].Hits);
++            Assert.Equal(3, first[0].Hits);
++            Assert.Equal(1, first[1].Hits);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchMultipleColumns_RankIsCombined()
+         {
+             //Arrange
+@@ -85,12 +84,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                              .ToList();
+ 
+             //Assert
+-            Assert.AreEqual(4, result.Count);
++            Assert.Equal(4, result.Count);
+             var ordered = result.OrderByDescending(r => r.Hits).ToList();
+-            Assert.AreEqual(1, ordered[0].Hits);
++            Assert.Equal(1, ordered[0].Hits);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_CultureSetToIgnoreCase_RankIgnoresCase()
+         {
+             //Arrange
+@@ -103,11 +102,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                       .ToList();
+ 
+             //Assert
+-            Assert.AreEqual(4, result.Count);
+-            Assert.IsTrue(result.All(r => r.Hits == 1));
++            Assert.Equal(4, result.Count);
++            Assert.True(result.All(r => r.Hits == 1));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchRankedSearch_OnlyRetrieveMatchingBothSearches()
+         {
+             //Arrange
+@@ -121,11 +120,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                       .StartsWith("i");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.AreEqual(1, result.First().Hits);
++            Assert.Equal(1, result.Count());
++            Assert.Equal(1, result.First().Hits);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchedForDataStartingWith_RankedResultIsReturned()
+         {
+             //Arrange
+@@ -136,11 +135,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                        .StartsWith("c").ToRanked();
+ 
+             //Assert
+-            Assert.AreEqual(4, result.Count());
+-            Assert.AreEqual(1, result.First().Hits);
++            Assert.Equal(4, result.Count());
++            Assert.Equal(1, result.First().Hits);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToRanked_SearchedForDataEndsWith_RankedResultIsReturned()
+         {
+             //Arrange
+@@ -151,8 +150,8 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                        .ToRanked();
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.AreEqual(1, result.First().Hits);
++            Assert.Equal(2, result.Count());
++            Assert.Equal(1, result.First().Hits);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/Fluent/FluentSearchTests.cs b/NinjaNye.SearchExtensions.Tests/Fluent/FluentSearchTests.cs
+index 8fe3f18..00c01f4 100644
+--- a/NinjaNye.SearchExtensions.Tests/Fluent/FluentSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/Fluent/FluentSearchTests.cs
+@@ -2,17 +2,16 @@
+ using System.Collections.Generic;
+ using System.Linq;
+ using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.Fluent
+ {
+-    [TestFixture]
++    
+     public class FluentSearchTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+-
+-        [SetUp]
+-        public void ClassSetup()
++        
++        public FluentSearchTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+@@ -30,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             _testData.Add(new TestData { Name = "tastiest", Description = "two occurences of st", Number = 8 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchWithoutActionHasNoAffectOnTheResults_ResultsAreUnchanged()
+         {
+             //Arrange
+@@ -39,10 +38,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name);
+ 
+             //Assert
+-            CollectionAssert.AreEquivalent(_testData, result);
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_FluentCallContaining_OnlyResultsContainingTermAreReturned()
+         {
+             //Arrange
+@@ -51,11 +50,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Containing("abc");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("abc")));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("abc")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_FluentCallContaining_SearchEmptyString()
+         {
+             //Arrange
+@@ -64,11 +63,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Containing("");
+ 
+             //Assert
+-            Assert.AreEqual(8, result.Count());
+-            CollectionAssert.AreEqual(_testData, result);
++            Assert.Equal(8, result.Count());
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_AfterCallingContainsChainStartsWith_OnlyResultsThatContainTextAndStartWithTextAreReturned()
+         {
+             //Arrange
+@@ -77,11 +76,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Containing("b").StartsWith("a");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("abc") && x.Name.StartsWith("a")));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("abc") && x.Name.StartsWith("a")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_AllowEqualsMethod_DefinedPropertyEqualsSearchResult()
+         {
+             //Arrange
+@@ -90,11 +89,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).EqualTo("abcd");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name == "abcd"));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Name == "abcd"));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_AllowEndsWithAndContainsMethod_AllResultsEndWithSearchTermAndContainSearch()
+         {
+             //Arrange
+@@ -104,11 +103,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                                      .Containing("qr");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith("st") && x.Name.Contains("qr")));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Name.EndsWith("st") && x.Name.Contains("qr")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchMultiple_ResultContainsAcrossTwoProperties_ResultContainsTermInEitherProperty()
+         {
+             //Arrange
+@@ -118,11 +117,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name, x => x.Description).Containing(searchTerm);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchMultiple_ResultStartsWithAcrossTwoProperties_ResultStartsWithTermInEitherProperty()
+         {
+             //Arrange
+@@ -132,11 +131,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name, x => x.Description).StartsWith(searchTerm);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith(searchTerm) || x.Description.StartsWith(searchTerm)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.StartsWith(searchTerm) || x.Description.StartsWith(searchTerm)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchAll_NoPropertiesDefined_AllPropertiesAreSearched()
+         {
+             //Arrange
+@@ -145,11 +144,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search().Containing("cd");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("cd") || x.Description.Contains("cd")));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("cd") || x.Description.Contains("cd")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_ContainingMultipleTerms_SearchAgainstMultipleTerms()
+         {
+             //Arrange
+@@ -158,11 +157,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Containing("ab", "jk");
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("ab") || x.Name.Contains("jk")));
++            Assert.Equal(3, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("ab") || x.Name.Contains("jk")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_StartsWithMultipleTerms_SearchAgainstMultipleTerms()
+         {
+             //Arrange
+@@ -171,12 +170,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).StartsWith("ab", "ef");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith("ab") || x.Name.StartsWith("ef")));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.StartsWith("ab") || x.Name.StartsWith("ef")));
+ 
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchManyPropertiesContainingManyTerms_AllResultsHaveASearchTermWithin()
+         {
+             //Arrange
+@@ -185,12 +184,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name, x => x.Description).Containing("cd", "jk");
+ 
+             //Assert
+-            Assert.AreEqual(4, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("cd") || x.Name.Contains("jk") 
++            Assert.Equal(4, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("cd") || x.Name.Contains("jk") 
+                                        || x.Description.Contains("cd") || x.Description.Contains("jk")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchManyPropertiesStartingWithManyTerms_AllResultsHaveAPropertyStartingWithASpecifiedTerm()
+         {
+             //Arrange
+@@ -199,12 +198,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name, x => x.Description).StartsWith("cd", "ef");
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith("cd") || x.Name.StartsWith("ef")
++            Assert.Equal(3, result.Count());
++            Assert.True(result.All(x => x.Name.StartsWith("cd") || x.Name.StartsWith("ef")
+                                        || x.Description.StartsWith("cd") || x.Description.StartsWith("ef")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchManyPropertiesEndingWithManyTerms_AllResultsHaveAPropertyEndingWithASpecifiedTerm()
+         {
+             //Arrange
+@@ -213,12 +212,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name, x => x.Description).EndsWith("kl", "ef");
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith("kl") || x.Name.EndsWith("ef")
++            Assert.Equal(3, result.Count());
++            Assert.True(result.All(x => x.Name.EndsWith("kl") || x.Name.EndsWith("ef")
+                                        || x.Description.EndsWith("kl") || x.Description.EndsWith("ef")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchContainingWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+         {
+             //Arrange
+@@ -227,12 +226,12 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.Ordinal).Containing("AB", "jk");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("jk")));
+-            Assert.IsFalse(result.Any(x => x.Name.Contains("AB")));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("jk")));
++            Assert.False(result.Any(x => x.Name.Contains("AB")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchContainingWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+         {
+             //Arrange
+@@ -241,11 +240,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).Containing("AB", "jk");
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.Contains("jk") || x.Name.Contains("ab")));
++            Assert.Equal(3, result.Count());
++            Assert.True(result.All(x => x.Name.Contains("jk") || x.Name.Contains("ab")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchStartsWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+         {
+             //Arrange
+@@ -254,11 +253,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).StartsWith("C");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.StartsWith("C")));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Description.StartsWith("C")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchStartsWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+         {
+             //Arrange
+@@ -267,11 +266,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith("C");
+ 
+             //Assert
+-            Assert.AreEqual(3, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
++            Assert.Equal(3, result.Count());
++            Assert.True(result.All(x => x.Description.StartsWith("c", StringComparison.OrdinalIgnoreCase)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchEndsWithOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+         {
+             //Arrange
+@@ -280,11 +279,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EndsWith("SE");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.EndsWith("SE", StringComparison.Ordinal)));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Description.EndsWith("SE", StringComparison.Ordinal)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchEndsWithOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+         {
+             //Arrange
+@@ -293,11 +292,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EndsWith("SE");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.EndsWith("se", StringComparison.OrdinalIgnoreCase)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Description.EndsWith("se", StringComparison.OrdinalIgnoreCase)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchIsEqualOrdinalStringComparison_OnlyMatchingCaseIsReturned()
+         {
+             //Arrange
+@@ -306,11 +305,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EqualTo("CASE");
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.EndsWith("CASE", StringComparison.Ordinal)));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(x => x.Description.EndsWith("CASE", StringComparison.Ordinal)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchIsEqualOrdinalIgnoreCaseStringComparison_CaseIsIgnored()
+         {
+             //Arrange
+@@ -319,11 +318,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.OrdinalIgnoreCase).EqualTo("CASE");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Description.Equals("case", StringComparison.OrdinalIgnoreCase)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Description.Equals("case", StringComparison.OrdinalIgnoreCase)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchManyTermsAreEqual_ResultsMatchAnyTerm()
+         {
+             //Arrange
+@@ -332,11 +331,11 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).EqualTo("abcd", "efgh");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchManyTermsAreEqualIgnoringCase_ResultsMatchAnyTermInAnyCase()
+         {
+             //Arrange
+@@ -347,8 +346,8 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+                                  .EqualTo("ABCD", "EFGH");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name == "abcd" || x.Name == "efgh"));
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions.Tests/Fluent/ReverseSoundexSearchTests.cs b/NinjaNye.SearchExtensions.Tests/Fluent/ReverseSoundexSearchTests.cs
+index 5f0998e..c1c0259 100644
+--- a/NinjaNye.SearchExtensions.Tests/Fluent/ReverseSoundexSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/Fluent/ReverseSoundexSearchTests.cs
+@@ -1,18 +1,17 @@
+ ﻿using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Soundex;
+ using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.Fluent
+ {
+-    [TestFixture]
++    
+     public class ReverseSoundexSearchTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+-
+-        [SetUp]
+-        public void ClassSetup()
++        
++        public ReverseSoundexSearchTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+@@ -26,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             _testData.Add(new TestData { Name = "Paint", Description = "", Number = 4 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchSingleWord_ReturnsMatchingRecord()
+         {
+             //Arrange
+@@ -35,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).ReverseSoundex("range");
+ 
+             //Assert
+-            CollectionAssert.Contains(result, _testData[0]);
++            Assert.Contains(result, _testData[0]);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchSingleWord_DoesNotReturnsNonMatchingRecords()
+         {
+             //Arrange
+@@ -47,10 +46,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).ReverseSoundex("range");
+ 
+             //Assert
+-            CollectionAssert.DoesNotContain(result, _testData[3]);
++            Assert.DoesNotContain(result, _testData[3]);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchMultipleWords_ReturnsAllMatchingRecords()
+         {
+             //Arrange
+@@ -62,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).ReverseSoundex(names);
+ 
+             //Assert
+-            CollectionAssert.AreEqual(expected, result);
++            Assert.Equal(expected, result);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/Fluent/SoundexSearchTests.cs b/NinjaNye.SearchExtensions.Tests/Fluent/SoundexSearchTests.cs
+index 1a36686..0af7466 100644
+--- a/NinjaNye.SearchExtensions.Tests/Fluent/SoundexSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/Fluent/SoundexSearchTests.cs
+@@ -1,18 +1,17 @@
+ ﻿using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Soundex;
+ using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.Fluent
+ {
+-    [TestFixture]
++    
+     public class SoundexSearchTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+-
+-        [SetUp]
+-        public void ClassSetup()
++        
++        public SoundexSearchTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+@@ -28,7 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             _testData.Add(new TestData {Name = "Aschcraft", Description = "Sounds like Ashcroft", Number = 6});
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchSingleWord_ReturnsMatchingRecord()
+         {
+             //Arrange
+@@ -37,10 +36,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Soundex("Robert");
+ 
+             //Assert
+-            CollectionAssert.Contains(result, _testData[0]);
++            Assert.Contains(result, _testData[0]);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchSingleWord_DoesNotReturnsNonMatchingRecords()
+         {
+             //Arrange
+@@ -52,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             CollectionAssert.DoesNotContain(result, _testData[5]);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SoundsLike_SearchMultipleWords_ReturnsAllMatchingRecords()
+         {
+             //Arrange
+@@ -64,7 +63,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
+             var result = _testData.Search(x => x.Name).Soundex("Robert", "Mitt");
+ 
+             //Assert
+-            CollectionAssert.AreEqual(expected, result);
++            CollectionAssert.Equal(expected, result);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/Helpers/StringExtensionTests.cs b/NinjaNye.SearchExtensions.Tests/Helpers/StringExtensionTests.cs
+index 8cdf77b..0d841b2 100644
+--- a/NinjaNye.SearchExtensions.Tests/Helpers/StringExtensionTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/Helpers/StringExtensionTests.cs
+@@ -1,12 +1,12 @@
+ ﻿using NinjaNye.SearchExtensions.Helpers;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.Helpers
+ {
+-    [TestFixture]
++    
+     public class StringExtensionTests
+     {
+-        [Test]
++        [Fact]
+         public void GetFirstCharacter_EmptyString_ReturnsNull()
+         {
+             //Arrange
+@@ -18,7 +18,7 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
+             Assert.IsNull(character);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GetFirstCharacter_ValidString_ReturnedValueIsNotNull()
+         {
+             //Arrange
+@@ -28,10 +28,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
+             var character = word.GetFirstCharacter();
+ 
+             //Assert
+-            Assert.IsNotNullOrEmpty(character);
++            Assert.NotNullOrEmpty(character);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GetFirstCharacter_ValidString_ReturnedValueIsFirstCharacterOnly()
+         {
+             //Arrange
+@@ -41,10 +41,10 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
+             var character = word.GetFirstCharacter();
+ 
+             //Assert
+-            Assert.AreEqual(word[0].ToString(), character);
++            Assert.Equal(word[0].ToString(), character);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GetFirstCharacter_StringIsWhitespaceOnly_ReturnNull()
+         {
+             //Arrange
+@@ -57,7 +57,7 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
+             Assert.IsNull(character);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GetFirstCharacter_StringBeginsWithWhitespace_ReturnFirstNonWhitespaceCharacter()
+         {
+             //Arrange
+@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions.Tests.Helpers
+             var character = word.GetFirstCharacter();
+ 
+             //Assert
+-            Assert.AreEqual("t", character);
++            Assert.Equal("t", character);
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistancePerformanceTests.cs b/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistancePerformanceTests.cs
+index 621ec9a..a302d96 100644
+--- a/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistancePerformanceTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistancePerformanceTests.cs
+@@ -1,20 +1,21 @@
+ ﻿using System;
+ using System.Diagnostics;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Levenshtein;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+ {
++    public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
++    {
++
+ #if DEBUG
+-    // Performance tests will likely fail in debug mode
+-    [Ignore("Performance tests will likely fail in debug mode. Run in release mode")]
++        [Theory(Skip = "Performance tests will likely fail in debug mode. Run in release mode")]
++#else
++        [Theory]
+ #endif
+-    [TestFixture]
+-    public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
+-    {
+-        [TestCase(6)]
+-        [TestCase(7)]
++        [InlineData(6)]
++        [InlineData(7)]
+         public void ToLevenshteinDistance_CompareOneMillionStringsOfLengthX_ExecutesInLessThanOneSecond(int length)
+         {
+             //Arrange
+@@ -32,10 +33,14 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i == 1));
+             Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i == 2));
+             Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i == 3));
+-            Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThan(1000));
+-        }
+-
+-        [Test]
++            Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
++        }
++
++#if DEBUG
++        [Fact(Skip = "Performance tests will likely fail in debug mode. Run in release mode")]
++#else
++        [Fact]
++#endif
+         public void PerformLevenshteinDistanceUsingExpressionTreeBuilder()
+         {
+             //Setup 1 million comparisons
+@@ -54,7 +59,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i.MinimumDistance == 1));
+             Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i.MinimumDistance == 2));
+             Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i.MinimumDistance == 3));
+-            Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThan(1000));
++            Assert.True(stopwatch.Elapsed.TotalMilliseconds <1000);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistanceTests.cs b/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistanceTests.cs
+index 4709ee8..e933574 100644
+--- a/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistanceTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/LevenshteinTests/LevenshteinDistanceTests.cs
+@@ -1,12 +1,11 @@
+-﻿using NUnit.Framework;
++﻿using Xunit;
+ using NinjaNye.SearchExtensions.Levenshtein;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+ {
+-    [TestFixture]
+     public class LevenshteinDistanceTests
+     {
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_DefaultBehaviour_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -15,10 +14,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             LevenshteinProcessor.LevenshteinDistance("", "");
+ 
+             //Assert
+-            Assert.Pass("No exception thrown");
++            Assert.True(true, "No exception thrown");
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_AcceptsTwoStrings_ReturnsUnsignedInteger()
+         {
+             //Arrange
+@@ -27,10 +26,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("string", "string");
+ 
+             //Assert
+-            Assert.IsInstanceOf<int>(result);
++            Assert.IsType<int>(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_FirstStringIsEmpty_ReturnLengthOfSecondString()
+         {
+             //Arrange
+@@ -39,10 +38,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance(string.Empty, "string");
+ 
+             //Assert
+-            Assert.AreEqual(6, result);
++            Assert.Equal(6, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_SecondStringIsEmpty_ReturnLengthOfFirstString()
+         {
+             //Arrange
+@@ -51,10 +50,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("test", string.Empty);
+ 
+             //Assert
+-            Assert.AreEqual(4, result);
++            Assert.Equal(4, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsAreEqual_ReturnZero()
+         {
+             //Arrange
+@@ -63,10 +62,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("test", "test");
+ 
+             //Assert
+-            Assert.AreEqual(0, result);
++            Assert.Equal(0, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_BothStringsNull_ReturnZero()
+         {
+             //Arrange
+@@ -75,10 +74,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance(null, null);
+ 
+             //Assert
+-            Assert.AreEqual(0, result);
++            Assert.Equal(0, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsDiffer_ReturnGreaterThanZero()
+         {
+             //Arrange
+@@ -87,10 +86,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("Ninja", "Nye");
+ 
+             //Assert
+-            Assert.Greater(result, 0);
++            Assert.True(result > 0);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsAreEqualExceptForCase_ReturnZero()
+         {
+             //Arrange
+@@ -99,10 +98,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("test", "TEST");
+ 
+             //Assert
+-            Assert.AreEqual(0, result);
++            Assert.Equal(0, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsDifferByTwoCharacters_ReturnTwo()
+         {
+             //Arrange
+@@ -111,10 +110,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("Barry", "Lorry");
+ 
+             //Assert
+-            Assert.AreEqual(2, result);
++            Assert.Equal(2, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsDifferByTwoCharactersAndCasing_ReturnTwo()
+         {
+             //Arrange
+@@ -123,10 +122,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("Barry", "LORRY");
+ 
+             //Assert
+-            Assert.AreEqual(2, result);
++            Assert.Equal(2, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LevenshteinDistance_StringsDifferByNonLinearChanges_ReturnTwo()
+         {
+             //Arrange
+@@ -135,7 +134,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
+             var result = LevenshteinProcessor.LevenshteinDistance("house", "use");
+ 
+             //Assert
+-            Assert.AreEqual(2, result);
++            Assert.Equal(2, result);
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions.Tests/NinjaNye.SearchExtensions.Tests.csproj b/NinjaNye.SearchExtensions.Tests/NinjaNye.SearchExtensions.Tests.csproj
+index 88b0773..4b61b0a 100644
+--- a/NinjaNye.SearchExtensions.Tests/NinjaNye.SearchExtensions.Tests.csproj
++++ b/NinjaNye.SearchExtensions.Tests/NinjaNye.SearchExtensions.Tests.csproj
+@@ -1,118 +1,16 @@
+-﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++﻿<Project Sdk="Microsoft.NET.Sdk">
++
+   <PropertyGroup>
+-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+-    <ProjectGuid>{A2B64396-FE41-4F02-9A11-5050F16524C3}</ProjectGuid>
+-    <OutputType>Library</OutputType>
+-    <AppDesignerFolder>Properties</AppDesignerFolder>
+-    <RootNamespace>NinjaNye.SearchExtensions.Tests</RootNamespace>
+-    <AssemblyName>NinjaNye.SearchExtensions.Tests</AssemblyName>
+-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+-    <FileAlignment>512</FileAlignment>
+-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+-    <IsCodedUITest>False</IsCodedUITest>
+-    <TestProjectType>UnitTest</TestProjectType>
++    <TargetFramework>netstandard1.6</TargetFramework>
++    <Description>Package Description sss</Description>
+   </PropertyGroup>
+-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+-    <DebugSymbols>true</DebugSymbols>
+-    <DebugType>full</DebugType>
+-    <Optimize>false</Optimize>
+-    <OutputPath>bin\Debug\</OutputPath>
+-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+-    <ErrorReport>prompt</ErrorReport>
+-    <WarningLevel>4</WarningLevel>
+-  </PropertyGroup>
+-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+-    <DebugType>pdbonly</DebugType>
+-    <Optimize>true</Optimize>
+-    <OutputPath>bin\Release\</OutputPath>
+-    <DefineConstants>TRACE</DefineConstants>
+-    <ErrorReport>prompt</ErrorReport>
+-    <WarningLevel>4</WarningLevel>
+-  </PropertyGroup>
+-  <ItemGroup>
+-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+-      <Private>True</Private>
+-    </Reference>
+-    <Reference Include="System" />
+-  </ItemGroup>
+-  <Choose>
+-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+-      <ItemGroup>
+-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+-      </ItemGroup>
+-    </When>
+-    <Otherwise />
+-  </Choose>
+-  <ItemGroup>
+-    <Compile Include="BuildStringTestsBase.cs" />
+-    <Compile Include="Fluent\FluentRankedTests.cs" />
+-    <Compile Include="Fluent\FluentSearchTests.cs" />
+-    <Compile Include="Fluent\ReverseSoundexSearchTests.cs" />
+-    <Compile Include="Fluent\SoundexSearchTests.cs" />
+-    <Compile Include="Helpers\StringExtensionTests.cs" />
+-    <Compile Include="LevenshteinTests\LevenshteinDistancePerformanceTests.cs" />
+-    <Compile Include="LevenshteinTests\LevenshteinDistanceTests.cs" />
+-    <Compile Include="Properties\AssemblyInfo.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingAllTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\ContainingWholeWordTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\EndsWithTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\DateTimeSearchTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\IntegerSearchTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\IsEqualTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\LevenshteinSearch.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\SearchChildrenChaingingTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\SearchChildrenForStringTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\SearchChildrenTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\StartsWithTests.cs" />
+-    <Compile Include="SearchExtensionTests\IEnumerableTests\StringSearchTests.cs" />
+-    <Compile Include="SearchExtensionTests\TestData.cs" />
+-    <Compile Include="SoundexTests\ReverseSoundexPerformanceTests.cs" />
+-    <Compile Include="SoundexTests\ToReverseSoundexTests.cs" />
+-    <Compile Include="SoundexTests\ToSoundexPerformanceTests.cs" />
+-    <Compile Include="SoundexTests\ToSoundexTests.cs" />
+-  </ItemGroup>
+-  <ItemGroup />
+-  <ItemGroup>
+-    <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj">
+-      <Project>{60b8e347-999f-4ee2-8172-9367d4f71860}</Project>
+-      <Name>NinjaNye.SearchExtensions</Name>
+-    </ProjectReference>
++
++  <ItemGroup>
++    <PackageReference Include="xunit" Version="2.2.0" />
++    <PackageReference Include="xunit.runners" Version="2.0.0" />
+   </ItemGroup>
+-  <ItemGroup>
+-    <None Include="packages.config" />
++
++  <ItemGroup>
++    <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj" />
+   </ItemGroup>
+-  <Choose>
+-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+-      <ItemGroup>
+-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+-          <Private>False</Private>
+-        </Reference>
+-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+-          <Private>False</Private>
+-        </Reference>
+-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+-          <Private>False</Private>
+-        </Reference>
+-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+-          <Private>False</Private>
+-        </Reference>
+-      </ItemGroup>
+-    </When>
+-  </Choose>
+-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+-       Other similar extension points exist, see Microsoft.Common.targets.
+-  <Target Name="BeforeBuild">
+-  </Target>
+-  <Target Name="AfterBuild">
+-  </Target>
+-  -->
+ </Project>
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/Properties/AssemblyInfo.cs b/NinjaNye.SearchExtensions.Tests/Properties/AssemblyInfo.cs
+deleted file mode 100644
+index e009ae6..0000000
+--- a/NinjaNye.SearchExtensions.Tests/Properties/AssemblyInfo.cs
++++ /dev/null
+@@ -1,36 +0,0 @@
+-﻿using System.Reflection;
+-using System.Runtime.CompilerServices;
+-using System.Runtime.InteropServices;
+-
+-// General Information about an assembly is controlled through the following 
+-// set of attributes. Change these attribute values to modify the information
+-// associated with an assembly.
+-[assembly: AssemblyTitle("NinjaNye.SearchExtensions.Tests")]
+-[assembly: AssemblyDescription("")]
+-[assembly: AssemblyConfiguration("")]
+-[assembly: AssemblyCompany("")]
+-[assembly: AssemblyProduct("NinjaNye.SearchExtensions.Tests")]
+-[assembly: AssemblyCopyright("Copyright ©  2014")]
+-[assembly: AssemblyTrademark("")]
+-[assembly: AssemblyCulture("")]
+-
+-// Setting ComVisible to false makes the types in this assembly not visible 
+-// to COM components.  If you need to access a type in this assembly from 
+-// COM, set the ComVisible attribute to true on that type.
+-[assembly: ComVisible(false)]
+-
+-// The following GUID is for the ID of the typelib if this project is exposed to COM
+-[assembly: Guid("26687838-4fa6-45d6-a161-45734e768066")]
+-
+-// Version information for an assembly consists of the following four values:
+-//
+-//      Major Version
+-//      Minor Version 
+-//      Build Number
+-//      Revision
+-//
+-// You can specify all the values or you can default the Build and Revision Numbers 
+-// by using the '*' as shown below:
+-// [assembly: AssemblyVersion("1.0.*")]
+-[assembly: AssemblyVersion("1.0.0.0")]
+-[assembly: AssemblyFileVersion("1.0.0.0")]
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingAllTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingAllTests.cs
+index 7c25ad5..8d6ab98 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingAllTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingAllTests.cs
+@@ -1,23 +1,22 @@
+ ﻿using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
++    
+     public class ContainingAllTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public ContainingAllTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -31,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData { Name = "search test property match", Description = "test", Status = "match", Number = 5 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_OneTermSupplied_ReturnsRecordNumber2()
+         {
+             //Arrange
+@@ -40,10 +39,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).ContainingAll("test").ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(r => r.Number == 2));
++            Assert.True(result.Any(r => r.Number == 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_TwoTermsSupplied_ReturnsRecordNumber3()
+         {
+             //Arrange
+@@ -52,10 +51,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).ContainingAll("test", "search").ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(r => r.Number == 3));
++            Assert.True(result.Any(r => r.Number == 3));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_TwoPropertiesAndTwoTermsSupplied_ReturnsRecordNumber3()
+         {
+             //Arrange
+@@ -65,11 +64,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ContainingAll("test", "search", "three").ToList();
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.Any(r => r.Number == 4));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.Any(r => r.Number == 4));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_CompareAgainstOneProperty_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -80,7 +79,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.DoesNotThrow(() => _testData.Search(x => x.Name).ContainingAll(x => x.Description));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_CompareAgainstOneProperty_DoesNotReturnNull()
+         {
+             //Arrange
+@@ -89,10 +88,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description);
+ 
+             //Assert
+-            Assert.IsNotNull(result);
++            Assert.NotNull(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_CompareAgainstOneProperty_ResultNameContainsDescription()
+         {
+             //Arrange
+@@ -101,11 +100,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description).ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description)));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Name.Contains(x.Description)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ContainingAll_CompareAgainstTwoProperties_ResultNameContainsDescriptionAndStatus()
+         {
+             //Arrange
+@@ -114,8 +113,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description, x => x.Status).ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingTests.cs
+index f42fc40..5982a99 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingTests.cs
+@@ -1,10 +1,10 @@
+ ﻿using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
++    
+     public class ContainingTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+@@ -22,8 +22,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(_matchingItem4);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_CompareAgainstAnotherProperty_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -50,7 +50,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.Pass("No exception thrown");
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_ComapareAgainstAnotherProperty_DoesNotReturnUnmatchedData()
+         {
+             //Arrange
+@@ -62,7 +62,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             CollectionAssert.DoesNotContain(result, _unmatchingItem);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_ComapareAgainstAnotherProperty_ReturnsAllMatchedData()
+         {
+             //Arrange
+@@ -71,11 +71,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).Containing(x => x.Description).ToList();
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count);
+-            CollectionAssert.Contains(result, _matchingItem2);
++            Assert.Equal(2, result.Count);
++            Assert.Contains(result, _matchingItem2);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
+         {
+             //Arrange
+@@ -84,10 +84,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name, x => x.Status).Containing(x => x.Description).ToList();
+ 
+             //Assert
+-            CollectionAssert.Contains(result, _matchingItem3);
++            Assert.Contains(result, _matchingItem3);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_SearchAgainstMultipleProperties_ReturnMatchingItemOnSecondProperty()
+         {
+             //Arrange
+@@ -96,7 +96,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).Containing(x => x.Description, x => x.Status).ToList();
+ 
+             //Assert
+-            CollectionAssert.Contains(result, _matchingItem4);
++            Assert.Contains(result, _matchingItem4);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingWholeWordTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingWholeWordTests.cs
+index cf378b7..b33520c 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingWholeWordTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/ContainingWholeWordTests.cs
+@@ -1,13 +1,13 @@
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
++    
+     public class ContainingWholeWordTests
+     {
+-        [Test]
++        [Fact]
+         public void Containing_SearchWholeWordsOnly_CorrectResultReturned()
+         {
+             //Arrange
+@@ -22,11 +22,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                 .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
++            Assert.Equal(1, result.Count);
+             Assert.That(result, Contains.Item(expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordIsFirstWord()
+         {
+             //Arrange
+@@ -41,11 +41,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                 .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
++            Assert.Equal(1, result.Count);
+             Assert.That(result, Contains.Item(expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordIsLastWord()
+         {
+             //Arrange
+@@ -60,11 +60,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                 .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
++            Assert.Equal(1, result.Count);
+             Assert.That(result, Contains.Item(expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_SearchWholeWordsOnly_ResultReturnedIfMatchingWordOnlyWord()
+         {
+             //Arrange
+@@ -79,11 +79,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                 .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
++            Assert.Equal(1, result.Count);
+             Assert.That(result, Contains.Item(expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Containing_ChangeMatchType_CorrectResultReturned()
+         {
+             //Arrange
+@@ -100,7 +100,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                 .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
++            Assert.Equal(1, result.Count);
+             Assert.That(result, Contains.Item(expected));
+         }
+     }
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/DateTimeSearchTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/DateTimeSearchTests.cs
+index 732bbd1..7b1836f 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/DateTimeSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/DateTimeSearchTests.cs
+@@ -1,11 +1,11 @@
+ using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
++    
+     public class DateTimeSearchTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+@@ -17,8 +17,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -31,7 +31,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData { Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1) });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchConditionNotSupplied_ReturnsAllData()
+         {
+             //Arrange
+@@ -40,10 +40,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start);
+ 
+             //Assert
+-            CollectionAssert.AreEquivalent(_testData, result);
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
+         {
+             //Arrange
+@@ -53,11 +53,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start).EqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start == expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start == expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchTwoValues_ReturnsMatchingDataOnly()
+         {
+             //Arrange
+@@ -69,11 +69,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .EqualTo(date1, date2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.End == date1 || x.End == date2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.End == date1 || x.End == date2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchTwoProperties_ReturnsMatchingDataOnly()
+         {
+             //Arrange
+@@ -84,11 +84,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .EqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start == expected || x.End == expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start == expected || x.End == expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+         {
+             //Arrange
+@@ -98,11 +98,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start).GreaterThan(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start > expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start > expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThan_SearchTwoProperties_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+         {
+             //Arrange
+@@ -112,11 +112,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start, x => x.End).GreaterThan(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start > expected || x.End > expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start > expected || x.End > expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanValue()
+         {
+             //Arrange
+@@ -126,11 +126,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.End).LessThan(expected);  
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.End < expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.End < expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThan_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanValue()
+         {
+             //Arrange
+@@ -140,11 +140,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start, x => x.End).LessThan(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start < expected || x.End < expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start < expected || x.End < expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanOrEqualToValue()
+         {
+             //Arrange
+@@ -154,11 +154,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start).LessThanOrEqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start <= expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start <= expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanOrEqualToValue()
+         {
+             //Arrange
+@@ -169,11 +169,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .LessThanOrEqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start <= expected || x.End <= expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start <= expected || x.End <= expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanOrEqualToValue()
+         {
+             //Arrange
+@@ -183,11 +183,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Start).GreaterThanOrEqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start >= expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start >= expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsGreaterThanOrEqualToValue()
+         {
+             //Arrange
+@@ -198,11 +198,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .GreaterThanOrEqualTo(expected);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start >= expected || x.End >= expected));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start >= expected || x.End >= expected));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrLessThan_SearchOnePropertyBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+         {
+             //Arrange
+@@ -215,11 +215,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .LessThan(lessThanDate);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Between_SearchTwoPropertiesBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+         {
+             //Arrange
+@@ -231,8 +231,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .Between(start, end);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => (x.Start > start && x.Start < end)
++            Assert.True(result.Any());
++            Assert.True(result.All(x => (x.Start > start && x.Start < end)
+                                        || (x.End > start && x.End < end)));
+         }
+ 
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/EndsWithTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/EndsWithTests.cs
+index 36b8ab1..27897f7 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/EndsWithTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/EndsWithTests.cs
+@@ -1,28 +1,25 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+-    public class EndsWithTests
++    public class EndsWithTests : IDisposable
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public EndsWithTests()
+         {
+             _testData = new List<TestData>();
+         }
+-
+-        [TearDown]
+-        public void TearDown()
++        
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_ComparedToAnExistingProperty_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -33,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.DoesNotThrow(() => _testData.Search(x => x.Name).EndsWith(x => x.Description));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_ComparedToAnExistingProperty_ResultIsNotNull()
+         {
+             //Arrange
+@@ -42,10 +39,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.IsNotNull(result);
++            Assert.NotNull(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_AllowEndsWithMethod_AllResultsEndWithSearchTerm()
+         {
+             //Arrange
+@@ -56,11 +53,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith("st");
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith("st")));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Name.EndsWith("st")));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_EndsWithMultipleTerms_SearchAgainstMultipleTerms()
+         {
+             //Arrange
+@@ -73,11 +70,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith("cd", "gh");
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsFalse(result.Contains(notPresent));
++            Assert.Equal(2, result.Count());
++            Assert.False(result.Contains(notPresent));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_ComparedToAnExistingProperty_ResultEndsWithExistingProperty()
+         {
+             //Arrange
+@@ -89,11 +86,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(), "No records returned");
+-            Assert.IsFalse(result.Contains(notPresent));
++            Assert.True(result.Any(), "No records returned");
++            Assert.False(result.Contains(notPresent));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_ComparedToTwoExistingProperties_ResultEndsWithEitherOfExistingProperties()
+         {
+             //Arrange
+@@ -106,11 +103,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsFalse(result.Contains(notPresent));
++            Assert.Equal(2, result.Count());
++            Assert.False(result.Contains(notPresent));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_ComparedToTwoExistingPropertiesWithNullValue_NullValueIsIgnored()
+         {
+             //Arrange
+@@ -123,11 +120,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(), "No records returned");
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith(x.Description) || (x.Status != null && x.Name.EndsWith(x.Status))));
++            Assert.True(result.Any(), "No records returned");
++            Assert.True(result.All(x => x.Name.EndsWith(x.Description) || (x.Status != null && x.Name.EndsWith(x.Status))));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_SearchTwoPropertiesComparedToAProperty_ResultsContainAllPermiatations()
+         {
+             //Arrange
+@@ -139,11 +136,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name, x => x.Description).EndsWith(x => x.Status);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count(), "Not enough records returned");
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith(x.Status) || x.Description.EndsWith(x.Status)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.EndsWith(x.Status) || x.Description.EndsWith(x.Status)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_SearchPropertyWithIgnoreCaseCulture_ResultsAreCaseInsensitive()
+         {
+             //Arrange
+@@ -156,11 +153,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .EndsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.AreEqual(1, result.Count());
+-            Assert.IsTrue(result.Any(t => t.Description == "test"));
++            Assert.Equal(1, result.Count());
++            Assert.True(result.Any(t => t.Description == "test"));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_SearchOccursTwice_ReturnExpectedRecord()
+         {
+             //Arrange
+@@ -170,10 +167,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EndsWith("st");
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(td => td.Number == 8));
++            Assert.True(result.Any(td => td.Number == 8));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void EndsWith_SerchAcrossTwoProperties_ResultEndsWithTermInEitherProperty()
+         {
+             //Arrange
+@@ -185,8 +182,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name, x => x.Description).EndsWith(searchTerm);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
+-            Assert.IsTrue(result.All(x => x.Name.EndsWith(searchTerm) || x.Description.EndsWith(searchTerm)));
++            Assert.Equal(2, result.Count());
++            Assert.True(result.All(x => x.Name.EndsWith(searchTerm) || x.Description.EndsWith(searchTerm)));
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IntegerSearchTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IntegerSearchTests.cs
+index bce9242..96999a9 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IntegerSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IntegerSearchTests.cs
+@@ -1,23 +1,21 @@
++using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+-    public class IntegerSearchTests
++    public class IntegerSearchTests : IDisposable
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public IntegerSearchTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -30,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData { Number = 4, Age = 8 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchConditionNotSupplied_ReturnsAllData()
+         {
+             //Arrange
+@@ -39,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number);
+ 
+             //Assert
+-            CollectionAssert.AreEquivalent(_testData, result);
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
+         {
+             //Arrange
+@@ -51,11 +49,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).EqualTo(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number == 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number == 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchTwoValues_ReturnsMatchingDataOnly()
+         {
+             //Arrange
+@@ -64,11 +62,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).EqualTo(2, 4);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number == 2 || x.Number == 4));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number == 2 || x.Number == 4));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SearchTwoProperties_ReturnsMatchingDataOnly()
+         {
+             //Arrange
+@@ -77,11 +75,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number, x => x.Age).EqualTo(5);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number == 5 || x.Age == 5));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number == 5 || x.Age == 5));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+         {
+             //Arrange
+@@ -90,11 +88,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).GreaterThan(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number > 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number > 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThan_SearchTwoProperties_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
+         {
+             //Arrange
+@@ -103,11 +101,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number, x => x.Age).GreaterThan(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number > 2 || x.Age > 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number > 2 || x.Age > 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanValue()
+         {
+             //Arrange
+@@ -116,11 +114,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).LessThan(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number < 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number < 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThan_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanValue()
+         {
+             //Arrange
+@@ -129,11 +127,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number, x => x.Age).LessThan(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number < 2 || x.Age < 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number < 2 || x.Age < 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanOrEqualToValue()
+         {
+             //Arrange
+@@ -142,11 +140,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).LessThanOrEqualTo(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number <= 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number <= 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void LessThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanOrEqualToValue()
+         {
+             //Arrange
+@@ -155,11 +153,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number, x => x.Age).LessThanOrEqualTo(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number <= 2 || x.Age <= 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number <= 2 || x.Age <= 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanOrEqualToValue()
+         {
+             //Arrange
+@@ -168,11 +166,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number).GreaterThanOrEqualTo(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number >= 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number >= 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsGreaterThanOrEqualToValue()
+         {
+             //Arrange
+@@ -181,11 +179,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Number, x => x.Age).GreaterThanOrEqualTo(2);
+ 
+             ////Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number >= 2 || x.Age >= 2));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number >= 2 || x.Age >= 2));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void GreaterThanOrLessThan_SearchOnePropertyBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+         {
+             //Arrange
+@@ -196,11 +194,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .LessThan(4);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Number > 2 && x.Number < 4));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Number > 2 && x.Number < 4));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Between_SearchTwoPropertiesBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
+         {
+             //Arrange
+@@ -210,8 +208,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                       .Between(2, 6);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => (x.Number > 2 && x.Number < 6)
++            Assert.True(result.Any());
++            Assert.True(result.All(x => (x.Number > 2 && x.Number < 6)
+                                        || (x.Age > 2 && x.Age < 6)));
+         }
+ 
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IsEqualTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IsEqualTests.cs
+index 6264b78..e922550 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IsEqualTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/IsEqualTests.cs
+@@ -1,24 +1,21 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+-    public class IsEqualTests
++    public class IsEqualTests : IDisposable
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public IsEqualTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -32,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData {Name = "TEst", Description = "teST", Status = "case"});
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_CallWithProperty_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -43,7 +40,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.DoesNotThrow(() => _testData.Search(x => x.Name).EqualTo(x => x.Description));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_CallWithProperty_DoesNotReturnNull()
+         {
+             //Arrange
+@@ -52,10 +49,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
+ 
+             //Assert
+-            Assert.IsNotNull(result);
++            Assert.NotNull(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_CallWithProperty_OnlyMatchingDataReturned()
+         {
+             //Arrange
+@@ -64,11 +61,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any());
+-            Assert.IsTrue(result.All(x => x.Name == x.Description));
++            Assert.True(result.Any());
++            Assert.True(result.All(x => x.Name == x.Description));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_CompareTwoProperties_RecordsForSecondPropertyMatchReturned()
+         {
+             //Arrange
+@@ -77,10 +74,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(x => x.Description == x.Status));
++            Assert.True(result.Any(x => x.Description == x.Status));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_CompareAgainstTwoProperties_RecordsForSecondPropertyMatchReturned()
+         {
+             //Arrange
+@@ -89,10 +86,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(x => x.Name == x.Status));
++            Assert.True(result.Any(x => x.Name == x.Status));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void IsEqual_SetCultureToIgnoreCase_MatchedRecordsOfDifferentCaseReturned()
+         {
+             //Arrange
+@@ -102,7 +99,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                                      .EqualTo(x => x.Description);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(x => x.Name == "TEst" && x.Description == "teST"));
++            Assert.True(result.Any(x => x.Name == "TEst" && x.Description == "teST"));
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/LevenshteinSearch.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/LevenshteinSearch.cs
+index 3f234de..7f6a7ee 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/LevenshteinSearch.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/LevenshteinSearch.cs
+@@ -1,25 +1,22 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Levenshtein;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+-    public class LevenshteinSearch
++    public class LevenshteinSearch : IDisposable
+     {
+         private List<TestData> _testData = new List<TestData>();
+-
+-        [SetUp]
+-        public void ClassSetup()
++        
++        public LevenshteinSearch()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -32,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData {Name = "test", Description = "house"});
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistance_AllResultsReturned()
+         {
+             //Arrange
+@@ -43,10 +40,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.AreEqual(_testData.Count, result.Count);
++            Assert.Equal(_testData.Count, result.Count);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistance_ResultsOfTypeILevenshteinDistance()
+         {
+             //Arrange
+@@ -57,10 +54,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsInstanceOf<IEnumerable<ILevenshteinDistance<TestData>>>(result);
++            Assert.IsType<IEnumerable<ILevenshteinDistance<TestData>>>(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_DistanceOfFirstItemIsEqualToSourceLength()
+         {
+             //Arrange
+@@ -72,10 +69,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.AreEqual(result[0].Item.Name.Length, result[0].Distance);
++            Assert.Equal(result[0].Item.Name.Length, result[0].Distance);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_DistanceOfSecondItemIsEqualToSourceLength()
+         {
+             //Arrange
+@@ -88,10 +85,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.AreEqual(result[0].Item.Name.Length, result[0].Distance);
++            Assert.Equal(result[0].Item.Name.Length, result[0].Distance);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_AllDistancesAreEqualToSourceLength()
+         {
+             //Arrange
+@@ -102,10 +99,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Distance == x.Item.Name.Length));
++            Assert.True(result.All(x => x.Distance == x.Item.Name.Length));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstDefinedString_DistanceIsLevenshteinDistance()
+         {
+             //Arrange
+@@ -117,10 +114,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, compareTo)));
++            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, compareTo)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceWithoutProperty_ThrowArgumentNullException()
+         {
+             //Arrange
+@@ -131,7 +128,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.Throws<ArgumentNullException>(() => _testData.LevenshteinDistanceOf(null));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceCompareTo_IncompleteRequestException()
+         {
+             //Arrange
+@@ -142,7 +139,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.Throws<InvalidOperationException>(() => _testData.LevenshteinDistanceOf(x => x.Name).ToList());
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstDefinedProperty_DistanceIsLevenshteinDistance()
+         {
+             //Arrange
+@@ -153,10 +150,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
++            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Levenshtein_GetLevenshteinDistanceAgainstMultipleDefinedProperties_DistanceIsLevenshteinDistance()
+         {
+             //Arrange
+@@ -167,7 +164,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
++            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenChaingingTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenChaingingTests.cs
+index 4cd510b..c5f0d6e 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenChaingingTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenChaingingTests.cs
+@@ -1,10 +1,9 @@
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+     public class SearchChildrenChaingingTests
+     {
+         private ParentTestData _parent;
+@@ -15,8 +14,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+         private TestData _dataThree;
+         private ParentTestData _otherParent;
+ 
+-        [SetUp]
+-        public void SetUp()
++        public SearchChildrenChaingingTests()
+         {
+             _dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 60};
+             _dataTwo = new TestData {Name = "fred", Description = "child", Number = 20, Age = 30};
+@@ -33,7 +31,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData = new List<ParentTestData> {_parent, _otherParent};
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchStringAndInteger_ResultsMatchBothOccurences()
+         {
+             //Arrange
+@@ -47,11 +45,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                             .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchStringAndString_ResultsMatchBothOccurences()
+         {
+             //Arrange
+@@ -65,11 +63,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                             .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchIntegerAndString_ResultsMatchBothOccurences()
+         {
+             //Arrange
+@@ -83,11 +81,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                             .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchIntegerAndInteger_ResultsMatchBothOccurences()
+         {
+             //Arrange
+@@ -101,8 +99,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                             .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_otherParent, result);
+         }
+         
+     }
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenForStringTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenForStringTests.cs
+index 77acae1..bd1948b 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenForStringTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenForStringTests.cs
+@@ -1,11 +1,10 @@
+ using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+     public class SearchChildrenForStringTests
+     {
+         private ParentTestData _parent;
+@@ -16,8 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+         private TestData _dataThree;
+         private ParentTestData _otherParent;
+ 
+-        [SetUp]
+-        public void SetUp()
++        public SearchChildrenForStringTests()
+         {
+             _dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
+             _dataTwo = new TestData {Name = "fred", Description = "nested positionly", Number = 6, Age = 30};
+@@ -34,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData = new List<ParentTestData> {_parent, _otherParent};
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_StringEquals_ReturnParentsWIthAnyChildThatMatches()
+         {
+             //Arrange
+@@ -46,11 +44,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_parent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_StringEqualsMany_ReturnParentsWIthAnyChildThatMatches()
+         {
+             //Arrange
+@@ -62,12 +60,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(2));
+-            Assert.That(result, Contains.Item(_parent));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(2, result.Count);
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringEqualToCaseInsensitive_ReturnParentsWithMatches()
+         {
+             //Arrange
+@@ -80,11 +78,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_parent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContaining_ReturnParentsWithMatches()
+         {
+             //Arrange
+@@ -96,12 +94,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(2));
+-            Assert.That(result, Contains.Item(_parent));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(2, result.Count);
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContaining_IgnoresEmptyStrings()
+         {
+             //Arrange
+@@ -113,11 +111,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_parent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContainingNoValidSearchTerms_ReturnsAll()
+         {
+             //Arrange
+@@ -129,12 +127,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(2));
+-            Assert.That(result, Contains.Item(_parent));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(2, result.Count);
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContainingWholeWordSearch_ReturnsOnlyMatchesOfEntireWord()
+         {
+             //Arrange
+@@ -147,11 +145,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_parent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContainingAnyOccurenceSearch_ReturnsAllMatches()
+         {
+             //Arrange
+@@ -164,12 +162,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(2));
+-            Assert.That(result, Contains.Item(_parent));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(2, result.Count);
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_WithStringContainingAllSuppliedWords_ReturnsAllMatches()
+         {
+             //Arrange
+@@ -181,11 +179,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_parent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_StringStartsWith_ReturnsAllMatches()
+         {
+             //Arrange
+@@ -197,11 +195,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_StringEndsWith_ReturnsAllMatches()
+         {
+             //Arrange
+@@ -213,8 +211,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                   .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count, Is.EqualTo(1));
+-            Assert.That(result, Contains.Item(_otherParent));
++            Assert.Equal(1, result.Count);
++            Assert.Contains(_otherParent, result);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenTests.cs
+index 7b86856..882573e 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/SearchChildrenTests.cs
+@@ -1,10 +1,9 @@
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+     public class SearchChildrenTests
+     {
+         private ParentTestData _parent;
+@@ -15,8 +14,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+         private TestData _dataThree;
+         private ParentTestData _otherParent;
+ 
+-        [SetUp]
+-        public void SetUp()
++        public SearchChildrenTests()
+         {
+             _dataOne = new TestData { Name = "chris", Description = "child data", Number = 1, Age = 20};
+             _dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6, Age = 30 };
+@@ -35,7 +33,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData = new List<ParentTestData> { _parent, _otherParent };            
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_SearchChildCollectionWithoutProperty_ReturnParent()
+         {
+             //Arrange
+@@ -44,10 +42,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.SearchChildren(p => p.Children);
+ 
+             //Assert
+-            CollectionAssert.AreEqual(_testData, result);
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChild_SearchChildCollection_ReturnOnlyParentWhosChildNumberIsGreaterThanTen()
+         {
+             //Arrange
+@@ -59,11 +57,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(1));
+-            Assert.That(result.All(p => p.Children.Any(c => c.Number > 10)), Is.True);
++            Assert.Equal(1, result.Count());
++            Assert.True(result.All(p => p.Children.Any(c => c.Number > 10)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyGreaterThan()
+         {
+             //Arrange
+@@ -75,13 +73,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
+-            Assert.That(result.All(p => p.Children.Any(c => c.Number > 4)), Is.True);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
++            Assert.True(result.All(p => p.Children.Any(c => c.Number > 4)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyGreaterThanOrEqualTo()
+         {
+             //Arrange
+@@ -93,13 +91,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
+-            Assert.That(result.All(p => p.Children.Any(c => c.Number >= 6)), Is.True);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
++            Assert.True(result.All(p => p.Children.Any(c => c.Number >= 6)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyLessThan()
+         {
+             //Arrange
+@@ -111,11 +109,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count());
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyLessThanOrEqualTo()
+         {
+             //Arrange
+@@ -127,12 +125,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyLessThanAndGreaterThan()
+         {
+             //Arrange
+@@ -145,11 +143,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count());
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyBetween()
+         {
+             //Arrange
+@@ -161,11 +159,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _parent);
++            Assert.Equal(1, result.Count());
++            Assert.Contains(_parent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyEqualTo()
+         {
+             //Arrange
+@@ -177,11 +175,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(1));
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(1, result.Count());
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithPropertyEqualToAnyOneOfMultiple()
+         {
+             //Arrange
+@@ -193,12 +191,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchChildCollectionWithMultiplePropertiesEqualTo()
+         {
+             //Arrange
+@@ -210,12 +208,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchMultipleChildCollectionsWithPropertyEqualTo()
+         {
+             //Arrange
+@@ -227,12 +225,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void SearchChildren_SearchMultipleChildCollectionsWithStringPropertyEqualTo()
+         {
+             //Arrange
+@@ -244,9 +242,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                        .ToList();
+ 
+             //Assert
+-            Assert.That(result.Count(), Is.EqualTo(2));
+-            CollectionAssert.Contains(result, _parent);
+-            CollectionAssert.Contains(result, _otherParent);
++            Assert.Equal(2, result.Count());
++            Assert.Contains(_parent, result);
++            Assert.Contains(_otherParent, result);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StartsWithTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StartsWithTests.cs
+index 28aacf1..7944989 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StartsWithTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StartsWithTests.cs
+@@ -1,17 +1,15 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+     public class StartsWithTests
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public StartsWithTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+@@ -27,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData { Name = "teSt cAsE iNsEnSiTiViTy", Description = "TEsT" });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_ComparedToAnExistingProperty_DoesNotThrowAnException()
+         {
+             //Arrange
+@@ -37,7 +35,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             Assert.DoesNotThrow(() => _testData.Search(x => x.Name).StartsWith(x => x.Description));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_ComparedToAnExistingProperty_ResultIsNotNull()
+         {
+             //Arrange
+@@ -46,10 +44,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.IsNotNull(result);
++            Assert.NotNull(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_ComparedToAnExistingProperty_ResultStartsWithExistingProperty()
+         {
+             //Arrange
+@@ -58,11 +56,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(), "No records returned");
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description)));
++            Assert.True(result.Any(), "No records returned");
++            Assert.True(result.All(x => x.Name.StartsWith(x.Description)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_ComparedToTwoExistingProperties_ResultStartsWithEitherOfExistingProperties()
+         {
+             //Arrange
+@@ -71,11 +69,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(), "No records returned");
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description) || x.Name.StartsWith(x.Status)));
++            Assert.True(result.Any(), "No records returned");
++            Assert.True(result.All(x => x.Name.StartsWith(x.Description) || x.Name.StartsWith(x.Status)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_ComparedToTwoExistingPropertiesWithNullValue_NullValueIsIgnored()
+         {
+             //Arrange
+@@ -84,11 +82,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(), "No records returned");
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description) || (x.Status != null && x.Name.StartsWith(x.Status))));
++            Assert.True(result.Any(), "No records returned");
++            Assert.True(result.All(x => x.Name.StartsWith(x.Description) || (x.Status != null && x.Name.StartsWith(x.Status))));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_SearchTwoPropertiesComparedToAProperty_ResultsContainAllPermiatations()
+         {
+             //Arrange
+@@ -97,11 +95,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name, x => x.Description).StartsWith(x => x.Status);
+ 
+             //Assert
+-            Assert.IsTrue(result.Count() > 1, "Not enough records returned");
+-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Status) || x.Description.StartsWith(x.Status)));
++            Assert.True(result.Count() > 1, "Not enough records returned");
++            Assert.True(result.All(x => x.Name.StartsWith(x.Status) || x.Description.StartsWith(x.Status)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void StartsWith_SearchPropertyWithIgnoreCaseCulture_ResultsAreCaseInsensitive()
+         {
+             //Arrange
+@@ -110,7 +108,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith(x => x.Description);
+ 
+             //Assert
+-            Assert.IsTrue(result.Any(t => t.Description == "TEsT"));
++            Assert.True(result.Any(t => t.Description == "TEsT"));
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StringSearchTests.cs b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StringSearchTests.cs
+index ade6e6b..beccc0a 100644
+--- a/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StringSearchTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SearchExtensionTests/IEnumerableTests/StringSearchTests.cs
+@@ -1,24 +1,21 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ {
+-    [TestFixture]
+-    public class StringSearchTests
++    public class StringSearchTests : IDisposable
+     {
+         private List<TestData> _testData = new List<TestData>();
+ 
+-        [SetUp]
+-        public void ClassSetup()
++        public StringSearchTests()
+         {
+             _testData = new List<TestData>();
+             BuildTestData();
+         }
+ 
+-        [TearDown]
+-        public void TearDown()
++        public void Dispose()
+         {
+             _testData.Clear();
+         }
+@@ -31,7 +28,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             _testData.Add(new TestData { Name = "yzab", Description = "cdef", Number = 4 });
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchTermNotSupplied_AllDataReturned()
+         {
+             //Arrange
+@@ -40,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name);
+ 
+             //Assert
+-            Assert.AreEqual(_testData, result);
++            Assert.Equal(_testData, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchAParticularProperty_OnlyResultsWithAMatchAreReturned()
+         {
+             //Arrange
+@@ -53,10 +50,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).Containing(searchTerm).ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchAParticularPropertyWithMultipleTerms_OnlyResultsWithAMatchAreReturned()
+         {
+             //Arrange
+@@ -67,10 +64,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search(x => x.Name).Containing(searchTerm1, searchTerm2).ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) || x.Name.Contains(searchTerm2)));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm1) || x.Name.Contains(searchTerm2)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchForATermWithMultipleProperties_OnlyResultsWithAMatchAreReturned()
+         {
+             //Arrange
+@@ -82,10 +79,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm) || x.Description.Contains(searchTerm)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchForMultipleTermsWithMultipleProperties_OnlyResultsWithAMatchAreReturned()
+         {
+             //Arrange
+@@ -98,13 +95,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) 
++            Assert.True(result.All(x => x.Name.Contains(searchTerm1) 
+                                        || x.Name.Contains(searchTerm2)
+                                        || x.Description.Contains(searchTerm1) 
+                                        || x.Description.Contains(searchTerm2)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchForAnUppercaseTermIgnoringCase_StringComparisonIsRespected()
+         {
+             //Arrange
+@@ -112,15 +109,15 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+ 
+             //Act
+             var result = _testData.Search(x => x.Name)
+-                                 .SetCulture(StringComparison.InvariantCultureIgnoreCase)
++                                 .SetCulture(StringComparison.OrdinalIgnoreCase)
+                                  .Containing(searchTerm)
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm.ToLower())));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm.ToLower())));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchForAnUppercaseTermRespectingCase_OnlyMatchingResultsAreReturned()
+         {
+             //Arrange
+@@ -134,10 +131,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm)));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm)));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchWithoutProperties_AllPropertiesSearched()
+         {
+             //Arrange
+@@ -147,10 +144,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+             var result = _testData.Search().Containing(searchTerm);
+ 
+             //Assert
+-            Assert.AreEqual(2, result.Count());
++            Assert.Equal(2, result.Count());
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_SearchAllPropertiesIgnoreCase_MatchesMadeRegardlessOfCase()
+         {
+             //Arrange
+@@ -165,11 +162,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .ToList();
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1
++            Assert.True(result.All(x => x.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1
+                                        || x.Description.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) > -1 ));
+         }
+ 
+-        [Test]
++        [Fact]
+         public void Search_PerformANDSearchAcrossTwoProperties_MatchesOnlyWhereBothAreTrue()
+         {
+             //Arrange
+@@ -181,7 +178,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
+                                  .Search(x => x.Description).Containing(searchTerm2);
+ 
+             //Assert
+-            Assert.IsTrue(result.All(x => x.Name.Contains(searchTerm1) && x.Description.Contains(searchTerm2)));
++            Assert.True(result.All(x => x.Name.Contains(searchTerm1) && x.Description.Contains(searchTerm2)));
+ 
+         }
+     }
+diff --git a/NinjaNye.SearchExtensions.Tests/SoundexTests/ReverseSoundexPerformanceTests.cs b/NinjaNye.SearchExtensions.Tests/SoundexTests/ReverseSoundexPerformanceTests.cs
+index 77469ce..98d3ab3 100644
+--- a/NinjaNye.SearchExtensions.Tests/SoundexTests/ReverseSoundexPerformanceTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SoundexTests/ReverseSoundexPerformanceTests.cs
+@@ -1,18 +1,18 @@
+ using System;
+ using System.Diagnostics;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Soundex;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+ {
++    public class  ReverseSoundexPerformanceTests : BuildStringTestsBase
++    {
+ #if DEBUG
+-    [Ignore("Performance tests only to be run in Release mode")]
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
+ #endif
+-    [TestFixture]
+-    public class  ReverseSoundexPerformanceTests : BuildStringTestsBase
+-    {
+-        [Test]
+         public void ToReverseSoundex_OneMillionRecords_UnderOneSecond()
+         {
+             //Arrange
+@@ -31,7 +31,11 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
+         }
+ 
+-        [Test]
++#if DEBUG
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
++#endif
+         public void ReverseSoundex_ReverseWordSoundexVsToReverseSoundex_ToReverseSoundexIsQuicker()
+         {
+             //Arrange
+diff --git a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToReverseSoundexTests.cs b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToReverseSoundexTests.cs
+index 4f4e955..22d57d4 100644
+--- a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToReverseSoundexTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToReverseSoundexTests.cs
+@@ -1,11 +1,10 @@
+-﻿using NUnit.Framework;
++﻿using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+ {
+-    [TestFixture]
+     public class ToReverseSoundexTests
+     {
+-        [Test]
++        [Fact]
+         public void ToReverseSoundex_EmptyStringProvided_EmptyStringReturned()
+         {
+             //Arrange
+@@ -14,10 +13,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToReverseSoundex("");
+ 
+             //Assert
+-            Assert.IsEmpty(result);
++            Assert.Empty(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToReverseSoundex_NonEmptyStringProvided_NonEmptyStringReturned()
+         {
+             //Arrange
+@@ -26,10 +25,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToReverseSoundex("test");
+ 
+             //Assert
+-            Assert.IsNotEmpty(result);
++            Assert.NotEmpty(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToReverseSoundex_NonEmptyStringProvided_ReturnedStringStartsWithLastLetterInUpperCase()
+         {
+             //Arrange
+@@ -38,15 +37,15 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToReverseSoundex("Tester");
+ 
+             //Assert
+-            Assert.AreEqual('R', result[0]);
++            Assert.Equal('R', result[0]);
+         }
+ 
+-
+-        [TestCase("umberella", "A461")]
+-        [TestCase("apple", "E410")]
+-        [TestCase("perreli", "I461")]
+-        [TestCase("indigo", "O235")]
+-        [TestCase("zulu", "U420")]
++        [Theory]
++        [InlineData("umberella", "A461")]
++        [InlineData("apple", "E410")]
++        [InlineData("perreli", "I461")]
++        [InlineData("indigo", "O235")]
++        [InlineData("zulu", "U420")]
+         public void ToReverseSoundex_LastLetterIsAVowell_LastLetterIsNotRemoved(string value, string expected)
+         {
+             //Arrange
+@@ -55,7 +54,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToReverseSoundex(value).ToUpper();
+ 
+             //Assert
+-            Assert.AreEqual(expected, result);
++            Assert.Equal(expected, result);
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexPerformanceTests.cs b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexPerformanceTests.cs
+index f5c20ed..dfc2da0 100644
+--- a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexPerformanceTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexPerformanceTests.cs
+@@ -1,18 +1,18 @@
+ using System;
+ using System.Diagnostics;
+ using System.Linq;
+-using NUnit.Framework;
++using Xunit;
+ using NinjaNye.SearchExtensions.Soundex;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+ {
++    public class ToSoundexPerformanceTests : BuildStringTestsBase
++    {
+ #if DEBUG
+-    [Ignore("Performance tests only to be run in Release mode")]
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
+ #endif
+-    [TestFixture]
+-    public class ToSoundexPerformanceTests : BuildStringTestsBase
+-    {
+-        [Test]
+         public void ToSoundex_OneMillionRecords_UnderOneSecond()
+         {
+             //Arrange
+@@ -29,9 +29,13 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             Console.WriteLine("Results retrieved: {0}", result.Count()); 
+             //Assert
+             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
+-        }
+-
+-        [Test]
++        }
++
++#if DEBUG
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
++#endif
+         public void SearchSoundex_OneMillionWordsComparedToOneWord_UnderOneSecond()
+         {
+             //Arrange
+@@ -49,9 +53,13 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             Console.WriteLine("Results retrieved: {0}", result.Count);
+             //Assert
+             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
+-        }
+-
+-        [Test]
++        }
++
++#if DEBUG
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
++#endif
+         public void SearchSoundex_OneMillionWordsComparedToTwoWords_UnderOneSecond()
+         {
+             //Arrange
+@@ -69,9 +77,13 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             Console.WriteLine("Results retrieved: {0}", result.Count);
+             //Assert
+             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
+-        }
+-
+-        [Test]
++        }
++
++#if DEBUG
++        [Fact(Skip = "Performance tests only to be run in Release mode")]
++#else
++        [Fact]
++#endif
+         public void SearchSoundex_OneMillionWordsComparedToTenWords_UnderOneSecond()
+         {
+             //Arrange
+diff --git a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexTests.cs b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexTests.cs
+index d5fcd55..541bcae 100644
+--- a/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexTests.cs
++++ b/NinjaNye.SearchExtensions.Tests/SoundexTests/ToSoundexTests.cs
+@@ -1,11 +1,10 @@
+-﻿using NUnit.Framework;
++﻿using Xunit;
+ 
+ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+ {
+-    [TestFixture]
+     public class ToSoundexTests
+     {
+-        [Test]
++        [Fact]
+         public void ToSoundex_EmptyStringProvided_EmptyStringReturned()
+         {
+             //Arrange
+@@ -14,10 +13,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("");
+ 
+             //Assert
+-            Assert.IsEmpty(result);
++            Assert.Empty(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_NonEmptyStringReturned()
+         {
+             //Arrange
+@@ -26,10 +25,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("test");
+ 
+             //Assert
+-            Assert.IsNotEmpty(result);
++            Assert.NotEmpty(result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringStartsWithSameUpperCaseLetter()
+         {
+             //Arrange
+@@ -38,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Test");
+ 
+             //Assert
+-            Assert.AreEqual('T', result[0]);
++            Assert.Equal('T', result[0]);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoACharacters()
+         {
+             //Arrange
+@@ -50,10 +49,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Bats");
+ 
+             //Assert
+-            Assert.AreEqual("B320", result);
++            Assert.Equal("B320", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseACharacters()
+         {
+             //Arrange
+@@ -62,10 +61,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BATS");
+ 
+             //Assert
+-            Assert.AreEqual("B320", result);
++            Assert.Equal("B320", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoECharacters()
+         {
+             //Arrange
+@@ -74,10 +73,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Breeze");
+ 
+             //Assert
+-            Assert.AreEqual("B620", result);
++            Assert.Equal("B620", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseECharacters()
+         {
+             //Arrange
+@@ -86,10 +85,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BREEZE");
+ 
+             //Assert
+-            Assert.AreEqual("B620", result);
++            Assert.Equal("B620", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoICharacters()
+         {
+             //Arrange
+@@ -98,10 +97,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Brick");
+ 
+             //Assert
+-            Assert.AreEqual("B620", result);
++            Assert.Equal("B620", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseICharacters()
+         {
+             //Arrange
+@@ -110,10 +109,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BRICK");
+ 
+             //Assert
+-            Assert.AreEqual("B620", result);
++            Assert.Equal("B620", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUCharacters()
+         {
+             //Arrange
+@@ -122,10 +121,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Hunt");
+ 
+             //Assert
+-            Assert.AreEqual("H530", result);
++            Assert.Equal("H530", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseUCharacters()
+         {
+             //Arrange
+@@ -134,10 +133,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("HUNT");
+ 
+             //Assert
+-            Assert.AreEqual("H530", result);
++            Assert.Equal("H530", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoYCharacters()
+         {
+             //Arrange
+@@ -146,10 +145,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Bayern");
+ 
+             //Assert
+-            Assert.AreEqual("B650", result);
++            Assert.Equal("B650", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseYCharacters()
+         {
+             //Arrange
+@@ -158,10 +157,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BAYERN");
+ 
+             //Assert
+-            Assert.AreEqual("B650", result);
++            Assert.Equal("B650", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoHCharacters()
+         {
+             //Arrange
+@@ -170,10 +169,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Breathe");
+ 
+             //Assert
+-            Assert.AreEqual("B630", result);
++            Assert.Equal("B630", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseHCharacters()
+         {
+             //Arrange
+@@ -182,10 +181,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BREATHE");
+ 
+             //Assert
+-            Assert.AreEqual("B630", result);
++            Assert.Equal("B630", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoWCharacters()
+         {
+             //Arrange
+@@ -194,10 +193,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Qwerty");
+ 
+             //Assert
+-            Assert.AreEqual("Q630", result);
++            Assert.Equal("Q630", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseWCharacters()
+         {
+             //Arrange
+@@ -206,10 +205,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("QWERTY");
+ 
+             //Assert
+-            Assert.AreEqual("Q630", result);
++            Assert.Equal("Q630", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoOCharacters()
+         {
+             //Arrange
+@@ -218,10 +217,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Broom");
+ 
+             //Assert
+-            Assert.AreEqual("B650", result);
++            Assert.Equal("B650", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NonEmptyStringProvided_ReturnedStringHasNoUppercaseOCharacters()
+         {
+             //Arrange
+@@ -230,14 +229,15 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("BROOM");
+ 
+             //Assert
+-            Assert.AreEqual("B650", result);
++            Assert.Equal("B650", result);
+         }
+ 
+-        [TestCase("apple", "A140")]
+-        [TestCase("elephant", "E415")]
+-        [TestCase("indigo", "I532")]
+-        [TestCase("orange", "O652")]
+-        [TestCase("umbrella", "U516")]
++        [Theory]
++        [InlineData("apple", "A140")]
++        [InlineData("elephant", "E415")]
++        [InlineData("indigo", "I532")]
++        [InlineData("orange", "O652")]
++        [InlineData("umbrella", "U516")]
+         public void ToSoundex_FirstLetterIsAVowell_FirstLetterIsNotRemoved(string value, string expected)
+         {
+             //Arrange
+@@ -246,10 +246,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex(value).ToUpper();
+ 
+             //Assert
+-            Assert.AreEqual(expected, result);
++            Assert.Equal(expected, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceBWith1()
+         {
+             //Arrange
+@@ -258,10 +258,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("ABCD");
+ 
+             //Assert
+-            Assert.AreEqual("A123", result);
++            Assert.Equal("A123", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceFWith1()
+         {
+             //Arrange
+@@ -270,10 +270,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("DEFG");
+ 
+             //Assert
+-            Assert.AreEqual("D120", result);
++            Assert.Equal("D120", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplacePWith1()
+         {
+             //Arrange
+@@ -282,10 +282,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("NOPQ");
+ 
+             //Assert
+-            Assert.AreEqual("N120", result);
++            Assert.Equal("N120", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceVWith1()
+         {
+             //Arrange
+@@ -294,13 +294,14 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("TUVW");
+ 
+             //Assert
+-            Assert.AreEqual("T100", result);
++            Assert.Equal("T100", result);
+         }
+ 
+-        [TestCase("BCDE", "B230")]
+-        [TestCase("FGHI", "F200")]
+-        [TestCase("PQRS", "P262")]
+-        [TestCase("VWXY", "V200")]
++        [Theory]
++        [InlineData("BCDE", "B230")]
++        [InlineData("FGHI", "F200")]
++        [InlineData("PQRS", "P262")]
++        [InlineData("VWXY", "V200")]
+         public void ToSoundex_NumberReplacements_FirstCharacterIsNotReplaced(string value, string expected)
+         {
+             //Arrange
+@@ -309,10 +310,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex(value);
+ 
+             //Assert
+-            Assert.AreEqual(expected, result);
++            Assert.Equal(expected, result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceCWith2()
+         {
+             //Arrange
+@@ -321,10 +322,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("ABCD");
+ 
+             //Assert
+-            Assert.AreEqual("A123", result);
++            Assert.Equal("A123", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceGWith2()
+         {
+             //Arrange
+@@ -333,10 +334,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("EFGH");
+ 
+             //Assert
+-            Assert.AreEqual("E120", result);
++            Assert.Equal("E120", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceJWith2()
+         {
+             //Arrange
+@@ -345,10 +346,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("HIJK");
+ 
+             //Assert
+-            Assert.AreEqual("H200", result);
++            Assert.Equal("H200", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceKWith2()
+         {
+             //Arrange
+@@ -357,10 +358,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("HIJK");
+ 
+             //Assert
+-            Assert.AreEqual("H200", result);
++            Assert.Equal("H200", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceQWith2()
+         {
+             //Arrange
+@@ -369,10 +370,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("PQRS");
+ 
+             //Assert
+-            Assert.AreEqual("P262", result);
++            Assert.Equal("P262", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceSWith2()
+         {
+             //Arrange
+@@ -381,10 +382,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("PQRS");
+ 
+             //Assert
+-            Assert.AreEqual("P262", result);
++            Assert.Equal("P262", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceXWith2()
+         {
+             //Arrange
+@@ -393,10 +394,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("VWXY");
+ 
+             //Assert
+-            Assert.AreEqual("V200", result);
++            Assert.Equal("V200", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplacezWith2()
+         {
+             //Arrange
+@@ -405,10 +406,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("WXYZ");
+ 
+             //Assert
+-            Assert.AreEqual("W220", result);
++            Assert.Equal("W220", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceDWith3()
+         {
+             //Arrange
+@@ -417,10 +418,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("CDEF");
+ 
+             //Assert
+-            Assert.AreEqual("C310", result);
++            Assert.Equal("C310", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceTWith3()
+         {
+             //Arrange
+@@ -429,10 +430,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("RSTU");
+ 
+             //Assert
+-            Assert.AreEqual("R230", result);
++            Assert.Equal("R230", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceLWith4()
+         {
+             //Arrange
+@@ -441,10 +442,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("MNLO");
+ 
+             //Assert    
+-            Assert.AreEqual("M400", result);
++            Assert.Equal("M400", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceTWith5()
+         {
+             //Arrange
+@@ -453,10 +454,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("LMNO");
+ 
+             //Assert
+-            Assert.AreEqual("L500", result);
++            Assert.Equal("L500", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceLWith5()
+         {
+             //Arrange
+@@ -465,10 +466,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("LMNO");
+ 
+             //Assert
+-            Assert.AreEqual("L500", result);
++            Assert.Equal("L500", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_NumberReplacements_ReplaceLWith6()
+         {
+             //Arrange
+@@ -477,10 +478,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("PQRS");
+ 
+             //Assert
+-            Assert.AreEqual("P262", result);
++            Assert.Equal("P262", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // If two or more letters with the same number are adjacent in the 
+         // original name (before step 1), only retain the first letter
+         public void ToSoundex_TwoMatchingLetterGroups_OnlyRetainOnce()
+@@ -491,10 +492,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Flasker");
+ 
+             //Assert
+-            Assert.AreEqual("F426", result);
++            Assert.Equal("F426", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // If two or more letters with the same number are adjacent in the 
+         // original name (before step 1), only retain the first letter
+         public void ToSoundex_ThreeMatchingLetterGroups_OnlyRetainOnce()
+@@ -505,10 +506,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Flasks");
+ 
+             //Assert
+-            Assert.AreEqual("F420", result);
++            Assert.Equal("F420", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // two letters with the same number separated by 'h' or 'w' are coded as a single number
+         public void ToSoundex_MatchingLetterGroupSeperatedByH_OnlyRetainOnce()
+         {
+@@ -518,10 +519,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Ashcraft");
+ 
+             //Assert
+-            Assert.AreEqual("A261", result);
++            Assert.Equal("A261", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // letters separated by a vowel are coded twice
+         public void ToSoundex_MatchingLetterGroupSeperatedByVowell_RetainBoth()
+         {
+@@ -531,10 +532,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Stadium");
+ 
+             //Assert
+-            Assert.AreEqual("S335", result);
++            Assert.Equal("S335", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // If two or more letters with the same number are adjacent in the 
+         // original name (before step 1), only retain the first letter
+         public void ToSoundex_TwoMatchingLetterGroupsAtStart_OnlyRetainOnce()
+@@ -545,10 +546,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Pfister");
+ 
+             //Assert
+-            Assert.AreEqual("P236", result);
++            Assert.Equal("P236", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         // If you have too few letters in your word that you can't assign 
+         // three numbers, append with zeros until there are three numbers
+         public void ToSoundex_TooFewNumbers_PadToThreeNumbers()
+@@ -559,10 +560,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Rubin");
+ 
+             //Assert
+-            Assert.AreEqual("R150", result);
++            Assert.Equal("R150", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         //  If you have more than 3 letters, just retain the first 3 numbers
+         public void ToSoundex_TooManyNumbers_TrimToThreeNumbers()
+         {
+@@ -572,10 +573,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Ashcraft");
+ 
+             //Assert
+-            Assert.AreEqual("A261", result);
++            Assert.Equal("A261", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         //  If you have more than 3 letters, just retain the first 3 numbers
+         public void ToSoundex_AnalyseRobertAndRupert_BothReturnTheSameCode()
+         {
+@@ -586,11 +587,11 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result2 = Soundex.SoundexProcessor.ToSoundex("Rupert");
+ 
+             //Assert
+-            Assert.AreEqual("R163", result1);
+-            Assert.AreEqual(result1, result2);
++            Assert.Equal("R163", result1);
++            Assert.Equal(result1, result2);
+         }
+ 
+-        [Test]
++        [Fact]
+         //  If you have more than 3 letters, just retain the first 3 numbers
+         public void ToSoundex_AnalyseAshcraftAndAshcroft_BothReturnTheSameCode()
+         {
+@@ -601,10 +602,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result2 = Soundex.SoundexProcessor.ToSoundex("Aschroft");
+ 
+             //Assert
+-            Assert.AreEqual(result1, result2);
++            Assert.Equal(result1, result2);
+         }
+ 
+-        [Test]
++        [Fact]
+         //  If you have more than 3 letters, just retain the first 3 numbers
+         public void ToSoundex_AnalyseTymczak_ReturnCorrectCode()
+         {
+@@ -614,10 +615,10 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("Tymczak");
+ 
+             //Assert
+-            Assert.AreEqual("T522", result);
++            Assert.Equal("T522", result);
+         }
+ 
+-        [Test]
++        [Fact]
+         public void ToSoundex_LowercaseWord_ReturnUppercaseCode()
+         {
+             //Arrange
+@@ -626,7 +627,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
+             string result = Soundex.SoundexProcessor.ToSoundex("ashcraft");
+ 
+             //Assert
+-            Assert.AreEqual("A261", result);
++            Assert.Equal("A261", result);
+         }
+     }
+ }
+diff --git a/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/EnumerableExpressionHelper.cs b/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/EnumerableExpressionHelper.cs
+index be8f267..2da3075 100644
+--- a/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/EnumerableExpressionHelper.cs
++++ b/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/EnumerableExpressionHelper.cs
+@@ -21,8 +21,8 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
+         {
+             var rankedType = typeof(Ranked<T>);
+             var rankedCtor = Expression.New(rankedType);
+-            PropertyInfo hitProperty = rankedType.GetProperty("Hits");
+-            PropertyInfo itemProperty = rankedType.GetProperty("Item");
++            PropertyInfo hitProperty = rankedType.GetTypeInfo().GetProperty("Hits");
++            PropertyInfo itemProperty = rankedType.GetTypeInfo().GetProperty("Item");
+             var hitValueAssignment = Expression.Bind(hitProperty, hitCountExpression);
+             var itemValueAssignment = Expression.Bind(itemProperty, parameterExpression);
+             return Expression.MemberInit(rankedCtor, hitValueAssignment, itemValueAssignment);
+@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
+                                                                ParameterExpression parameterExpression)
+         {
+             var distanceType = typeof(LevenshteinDistance<T>);
+-            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
++            var constructor = distanceType.GetTypeInfo().GetConstructor(new [] {typeof(T), typeof(int[])});
+             var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpressions);
+             var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
+             return distanceCtor;
+@@ -113,7 +113,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
+         public static Expression<Func<TSource, TType>>[] GetProperties<TSource, TType>()
+         {
+             var parameter = Expression.Parameter(typeof(TSource));
+-            var stringProperties = typeof(TSource).GetProperties()
++            var stringProperties = typeof(TSource).GetTypeInfo().GetProperties()
+                                                   .Where(property => property.CanRead
+                                                                   && property.PropertyType == typeof(TType));
+ 
+diff --git a/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/ExpressionMethods.cs b/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/ExpressionMethods.cs
+index 206d136..ecb9d3e 100644
+--- a/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/ExpressionMethods.cs
++++ b/NinjaNye.SearchExtensions/Helpers/ExpressionBuilders/ExpressionMethods.cs
+@@ -17,29 +17,29 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
+         #endregion
+ 
+         #region Properties
+-        public static readonly PropertyInfo StringLengthProperty = typeof(string).GetProperty("Length");
++        public static readonly PropertyInfo StringLengthProperty = typeof(string).GetTypeInfo().GetProperty("Length");
+         #endregion
+ 
+         #region Methods
+ 
+-        public static readonly MethodInfo IndexOfMethod = typeof (string).GetMethod("IndexOf", new[] {typeof (string)});
+-        public static readonly MethodInfo IndexOfMethodWithComparison = typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
+-        public static readonly MethodInfo ReplaceMethod = typeof(string).GetMethod("Replace", new[] { typeof(string), typeof(string) });
+-        public static readonly MethodInfo EqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
+-        public static readonly MethodInfo StartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
+-        public static readonly MethodInfo StartsWithMethodWithComparison = typeof(string).GetMethod("StartsWith", new[] { typeof(string), typeof(StringComparison) });
+-        public static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
+-        public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
+-        public static readonly MethodInfo StringConcatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+-        public static readonly MethodInfo StringContainsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+-        public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
+-        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");
+-        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetMethod("ToReverseSoundex");
+-        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetMethod("LevenshteinDistance");
+-        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
+-        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetMethod("QuickReverse");
++        public static readonly MethodInfo IndexOfMethod = typeof (string).GetTypeInfo().GetMethod("IndexOf", new[] {typeof (string)});
++        public static readonly MethodInfo IndexOfMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
++        public static readonly MethodInfo ReplaceMethod = typeof(string).GetTypeInfo().GetMethod("Replace", new[] { typeof(string), typeof(string) });
++        public static readonly MethodInfo EqualsMethod = typeof(string).GetTypeInfo().GetMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
++        public static readonly MethodInfo StartsWithMethod = typeof(string).GetTypeInfo().GetMethod("StartsWith", new[] { typeof(string) });
++        public static readonly MethodInfo StartsWithMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("StartsWith", new[] { typeof(string), typeof(StringComparison) });
++        public static readonly MethodInfo EndsWithMethod = typeof(string).GetTypeInfo().GetMethod("EndsWith", new[] { typeof(string) });
++        public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
++        public static readonly MethodInfo StringConcatMethod = typeof(string).GetTypeInfo().GetMethod("Concat", new[] { typeof(string), typeof(string) });
++        public static readonly MethodInfo StringContainsMethod = typeof(string).GetTypeInfo().GetMethod("Contains", new[] { typeof(string) });
++        public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetTypeInfo().GetMethod("Contains", new[] { typeof(string) });
++        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetTypeInfo().GetMethod("ToSoundex");
++        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetTypeInfo().GetMethod("ToReverseSoundex");
++        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetTypeInfo().GetMethod("LevenshteinDistance");
++        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetTypeInfo().GetMethod("Replace");
++        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetTypeInfo().GetMethod("QuickReverse");
+ 
+-        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetMethods()
++        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetTypeInfo().GetMethods()
+                                                                                  .Single(mi => mi.Name == "Any" 
+                                                                                             && mi.GetParameters().Length == 2);
+ 
+diff --git a/NinjaNye.SearchExtensions/Helpers/StringExtensions.cs b/NinjaNye.SearchExtensions/Helpers/StringExtensions.cs
+index facad79..99bb2df 100644
+--- a/NinjaNye.SearchExtensions/Helpers/StringExtensions.cs
++++ b/NinjaNye.SearchExtensions/Helpers/StringExtensions.cs
+@@ -23,7 +23,7 @@ namespace NinjaNye.SearchExtensions.Helpers
+                 return null;
+             }
+ 
+-            return text.TrimStart()[0].ToString(CultureInfo.InvariantCulture);
++            return text.TrimStart()[0].ToString();
+         }
+ 
+         public static string QuickReverse(this string value)
+diff --git a/NinjaNye.SearchExtensions/NinjaNye.SearchExtensions.csproj b/NinjaNye.SearchExtensions/NinjaNye.SearchExtensions.csproj
+index 61dc202..48205a8 100644
+--- a/NinjaNye.SearchExtensions/NinjaNye.SearchExtensions.csproj
++++ b/NinjaNye.SearchExtensions/NinjaNye.SearchExtensions.csproj
+@@ -1,96 +1,11 @@
+-﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
++﻿<Project Sdk="Microsoft.NET.Sdk">
++
+   <PropertyGroup>
+-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+-    <ProjectGuid>{60B8E347-999F-4EE2-8172-9367D4F71860}</ProjectGuid>
+-    <OutputType>Library</OutputType>
+-    <AppDesignerFolder>Properties</AppDesignerFolder>
+-    <RootNamespace>NinjaNye.SearchExtensions</RootNamespace>
+-    <AssemblyName>NinjaNye.SearchExtensions</AssemblyName>
+-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+-    <FileAlignment>512</FileAlignment>
+-    <TargetFrameworkProfile />
++    <TargetFramework>netstandard1.6</TargetFramework>
++    <Description>Package Description sss</Description>
+   </PropertyGroup>
+-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+-    <DebugSymbols>true</DebugSymbols>
+-    <DebugType>full</DebugType>
+-    <Optimize>false</Optimize>
+-    <OutputPath>bin\Debug\</OutputPath>
+-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+-    <ErrorReport>prompt</ErrorReport>
+-    <WarningLevel>4</WarningLevel>
+-  </PropertyGroup>
+-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+-    <DebugType>pdbonly</DebugType>
+-    <Optimize>true</Optimize>
+-    <OutputPath>bin\Release\</OutputPath>
+-    <DefineConstants>TRACE</DefineConstants>
+-    <ErrorReport>prompt</ErrorReport>
+-    <WarningLevel>4</WarningLevel>
+-  </PropertyGroup>
+-  <ItemGroup>
+-    <Reference Include="System" />
+-    <Reference Include="System.Core" />
+-    <Reference Include="Microsoft.CSharp" />
+-  </ItemGroup>
+-  <ItemGroup>
+-    <Compile Include="ChildSearchBase.cs" />
+-    <Compile Include="EnumerableChildSearchBase.cs" />
+-    <Compile Include="EnumerableChildStringSearch.cs" />
+-    <Compile Include="EnumerableChildSearch.cs" />
+-    <Compile Include="EnumerableChildSelector.cs" />
+-    <Compile Include="EnumerableStructSearch.cs" />
+-    <Compile Include="EnumerableLevenshteinCompare.cs" />
+-    <Compile Include="EnumerableLevenshteinSearch.cs" />
+-    <Compile Include="EnumerableSearchBase.cs" />
+-    <Compile Include="EnumerableSoundexSearch.cs" />
+-    <Compile Include="FluentChildSearch.cs" />
+-    <Compile Include="FluentSearch.cs" />
+-    <Compile Include="FluentLevenshteinSearch.cs" />
+-    <Compile Include="FluentStringSearch.cs" />
+-    <Compile Include="EnumerableStringSearch.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\QueryableContainsExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\EnumerableContainsExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\QueryableEndsWithExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\EnumerableEndsWithExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EnumerableExpressionHelper.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\EnumerableEqualsExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\ExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\QueryableEqualsExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\ExpressionHelper.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\ExpressionMethods.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\SoundexExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\EnumerableStartsWithExpressionBuilder.cs" />
+-    <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\QueryableStartsWithExpressionBuilder.cs" />
+-    <Compile Include="Levenshtein\LevenshteinDistance.cs" />
+-    <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
+-    <Compile Include="Models\Ranked.cs" />
+-    <Compile Include="QueryableChildSearchBase.cs" />
+-    <Compile Include="QueryableChildStringSearch.cs" />
+-    <Compile Include="QueryableChildSearch.cs" />
+-    <Compile Include="QueryableStructSearch.cs" />
+-    <Compile Include="QueryableStringSearch.cs" />
+-    <Compile Include="Helpers\StringExtensions.cs" />
+-    <Compile Include="Properties\AssemblyInfo.cs" />
+-    <Compile Include="QueryableSearchBase.cs" />
+-    <Compile Include="QueryableChildSelector.cs" />
+-    <Compile Include="SearchBase.cs" />
+-    <Compile Include="SearchOptions.cs" />
+-    <Compile Include="SearchTermCollection.cs" />
+-    <Compile Include="SearchType.cs" />
+-    <Compile Include="Soundex\SoundexProcessor.cs" />
+-    <Compile Include="Validation\Ensure.cs" />
+-    <Compile Include="Visitors\SwapExpressionVisitor.cs" />
++
++  <ItemGroup>
++    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+   </ItemGroup>
+-  <ItemGroup />
+-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+-       Other similar extension points exist, see Microsoft.Common.targets.
+-  <Target Name="BeforeBuild">
+-  </Target>
+-  <Target Name="AfterBuild">
+-  </Target>
+-  -->
+ </Project>
+\ No newline at end of file
+diff --git a/NinjaNye.SearchExtensions/Properties/AssemblyInfo.cs b/NinjaNye.SearchExtensions/Properties/AssemblyInfo.cs
+deleted file mode 100644
+index 706ff39..0000000
+--- a/NinjaNye.SearchExtensions/Properties/AssemblyInfo.cs
++++ /dev/null
+@@ -1,37 +0,0 @@
+-﻿using System.Reflection;
+-using System.Runtime.CompilerServices;
+-using System.Runtime.InteropServices;
+-
+-// General Information about an assembly is controlled through the following 
+-// set of attributes. Change these attribute values to modify the information
+-// associated with an assembly.
+-[assembly: AssemblyTitle("NinjaNye.SearchExtensions")]
+-[assembly: AssemblyDescription("A collection of extension methods to IQueryable and IEnumerable that enable easy searching and ranking.  Searches can be performed against multiple properties and support a wide range of types")]
+-[assembly: AssemblyConfiguration("")]
+-[assembly: AssemblyCompany("John Nye")]
+-[assembly: AssemblyProduct("NinjaNye.SearchExtensions")]
+-[assembly: AssemblyCopyright("Copyright © 2014")]
+-[assembly: AssemblyTrademark("")]
+-[assembly: AssemblyCulture("")]
+-
+-// Setting ComVisible to false makes the types in this assembly not visible 
+-// to COM components.  If you need to access a type in this assembly from 
+-// COM, set the ComVisible attribute to true on that type.
+-[assembly: ComVisible(false)]
+-[assembly: InternalsVisibleTo("NinjaNye.SearchExtensions.Tests")]
+-
+-// The following GUID is for the ID of the typelib if this project is exposed to COM
+-[assembly: Guid("0d7ebeb0-64e0-43e8-b10a-d63839cbd56c")]
+-
+-// Version information for an assembly consists of the following four values:
+-//
+-//      Major Version
+-//      Minor Version 
+-//      Build Number
+-//      Revision
+-//
+-// You can specify all the values or you can default the Build and Revision Numbers 
+-// by using the '*' as shown below:
+-// [assembly: AssemblyVersion("1.0.*")]
+-[assembly: AssemblyVersion("2.0.*")]
+-[assembly: AssemblyFileVersion("2.0")]
+diff --git a/NinjaNye.SearchExtensions/QueryableSearchBase.cs b/NinjaNye.SearchExtensions/QueryableSearchBase.cs
+index eaffa40..f5339dc 100644
+--- a/NinjaNye.SearchExtensions/QueryableSearchBase.cs
++++ b/NinjaNye.SearchExtensions/QueryableSearchBase.cs
+@@ -3,7 +3,8 @@ using System.Collections;
+ using System.Collections.Generic;
+ using System.Linq;
+ using System.Linq.Expressions;
+-
++using System.Reflection;
++
+ namespace NinjaNye.SearchExtensions
+ {
+     public class QueryableSearchBase<TSource, TProperty> 
+@@ -43,14 +44,15 @@ namespace NinjaNye.SearchExtensions
+                 return;
+             }
+ 
+-            _expressionUpdated = true;
++            _expressionUpdated = true;
++            
+             var finalExpression = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter);
+             Source = Source.Where(finalExpression);
+         }
+ 
+         protected void QueryInclude(string path)
+         {
+-            var includeMethod = Source.GetType().GetMethod("Include", new[] {typeof(string)});
++            var includeMethod = Source.GetType().GetTypeInfo().GetMethod("Include", new[] {typeof(string)});
+             Source = (IQueryable<TSource>) includeMethod?.Invoke(Source, new[] {path});
+         }
+ 
+-- 
+2.7.2.windows.1
+

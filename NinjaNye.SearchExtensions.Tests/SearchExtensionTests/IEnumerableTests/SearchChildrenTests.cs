@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
     public class SearchChildrenTests
     {
         private ParentTestData _parent;
@@ -15,8 +14,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         private TestData _dataThree;
         private ParentTestData _otherParent;
 
-        [SetUp]
-        public void SetUp()
+        public SearchChildrenTests()
         {
             _dataOne = new TestData { Name = "chris", Description = "child data", Number = 1, Age = 20};
             _dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6, Age = 30 };
@@ -35,7 +33,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData = new List<ParentTestData> { _parent, _otherParent };            
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollectionWithoutProperty_ReturnParent()
         {
             //Arrange
@@ -44,10 +42,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.SearchChildren(p => p.Children);
 
             //Assert
-            CollectionAssert.AreEqual(_testData, result);
+            Assert.Equal(_testData, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ReturnOnlyParentWhosChildNumberIsGreaterThanTen()
         {
             //Arrange
@@ -59,11 +57,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            Assert.That(result.All(p => p.Children.Any(c => c.Number > 10)), Is.True);
+            Assert.Equal(1, result.Count());
+            Assert.True(result.All(p => p.Children.Any(c => c.Number > 10)));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyGreaterThan()
         {
             //Arrange
@@ -75,13 +73,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
-            Assert.That(result.All(p => p.Children.Any(c => c.Number > 4)), Is.True);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
+            Assert.True(result.All(p => p.Children.Any(c => c.Number > 4)));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyGreaterThanOrEqualTo()
         {
             //Arrange
@@ -93,13 +91,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
-            Assert.That(result.All(p => p.Children.Any(c => c.Number >= 6)), Is.True);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
+            Assert.True(result.All(p => p.Children.Any(c => c.Number >= 6)));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyLessThan()
         {
             //Arrange
@@ -111,11 +109,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            CollectionAssert.Contains(result, _parent);
+            Assert.Equal(1, result.Count());
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyLessThanOrEqualTo()
         {
             //Arrange
@@ -127,12 +125,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyLessThanAndGreaterThan()
         {
             //Arrange
@@ -145,11 +143,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            CollectionAssert.Contains(result, _parent);
+            Assert.Equal(1, result.Count());
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyBetween()
         {
             //Arrange
@@ -161,11 +159,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            CollectionAssert.Contains(result, _parent);
+            Assert.Equal(1, result.Count());
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyEqualTo()
         {
             //Arrange
@@ -177,11 +175,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(1, result.Count());
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithPropertyEqualToAnyOneOfMultiple()
         {
             //Arrange
@@ -193,12 +191,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchChildCollectionWithMultiplePropertiesEqualTo()
         {
             //Arrange
@@ -210,12 +208,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchMultipleChildCollectionsWithPropertyEqualTo()
         {
             //Arrange
@@ -227,12 +225,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchMultipleChildCollectionsWithStringPropertyEqualTo()
         {
             //Arrange
@@ -244,9 +242,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(2));
-            CollectionAssert.Contains(result, _parent);
-            CollectionAssert.Contains(result, _otherParent);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
     }
 }

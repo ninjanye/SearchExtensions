@@ -1,24 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
-{
-    [TestFixture]
-    public class DateTimeSearchTests
+{    
+    public class DateTimeSearchTests : IDisposable
     {
         private List<TestData> _testData = new List<TestData>();
 
-        [SetUp]
-        public void ClassSetup()
+        public DateTimeSearchTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
         }
 
-        [TearDown]
-        public void TearDown()
+        
+        public void Dispose()
         {
             _testData.Clear();
         }
@@ -31,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(new TestData { Start = new DateTime(2030, 1, 1), End = new DateTime(2040, 1, 1) });
         }
 
-        [Test]
+        [Fact]
         public void Search_SearchConditionNotSupplied_ReturnsAllData()
         {
             //Arrange
@@ -40,10 +38,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start);
 
             //Assert
-            CollectionAssert.AreEquivalent(_testData, result);
+            Assert.Equal(_testData, result);
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
         {
             //Arrange
@@ -53,11 +51,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start == expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start == expected));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchTwoValues_ReturnsMatchingDataOnly()
         {
             //Arrange
@@ -69,11 +67,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .EqualTo(date1, date2);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.End == date1 || x.End == date2));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.End == date1 || x.End == date2));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchTwoProperties_ReturnsMatchingDataOnly()
         {
             //Arrange
@@ -84,11 +82,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .EqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start == expected || x.End == expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start == expected || x.End == expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
         {
             //Arrange
@@ -98,11 +96,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_SearchTwoProperties_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
         {
             //Arrange
@@ -112,11 +110,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > expected || x.End > expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > expected || x.End > expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanValue()
         {
             //Arrange
@@ -126,11 +124,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.End).LessThan(expected);  
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.End < expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.End < expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThan_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanValue()
         {
             //Arrange
@@ -140,11 +138,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start < expected || x.End < expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start < expected || x.End < expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanOrEqualToValue()
         {
             //Arrange
@@ -154,11 +152,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start <= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start <= expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanOrEqualToValue()
         {
             //Arrange
@@ -169,11 +167,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start <= expected || x.End <= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start <= expected || x.End <= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanOrEqualToValue()
         {
             //Arrange
@@ -183,11 +181,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start >= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start >= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsGreaterThanOrEqualToValue()
         {
             //Arrange
@@ -198,11 +196,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start >= expected || x.End >= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start >= expected || x.End >= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrLessThan_SearchOnePropertyBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
         {
             //Arrange
@@ -215,11 +213,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .LessThan(lessThanDate);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
         }
 
-        [Test]
+        [Fact]
         public void Between_SearchTwoPropertiesBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
         {
             //Arrange
@@ -231,8 +229,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .Between(start, end);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => (x.Start > start && x.Start < end)
+            Assert.True(result.Any());
+            Assert.True(result.All(x => (x.Start > start && x.Start < end)
                                        || (x.End > start && x.End < end)));
         }
 

@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Linq;
 using NinjaNye.SearchExtensions.Levenshtein;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
-    [TestFixture]
-    public class FluentLevenshteinTests : IDisposable
+    [Collection("Database tests")]
+    public class FluentLevenshteinTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public FluentLevenshteinTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void LevenshteinDistanceOf_GetDistanceToString_ReturnAllRecords()
         {
             //Arrange
@@ -20,10 +25,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
 
             //Assert
-            Assert.AreEqual(totalRecords, result.Count());
+            Assert.Equal(totalRecords, result.Count());
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistanceOf_GetDistanceToString_DistancesAreCorrect()
         {
             //Arrange
@@ -32,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo("test");
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, "test")));
+            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, "test")));
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistanceOf_GetDistanceToProperty_ReturnAllRecords()
         {
             //Arrange
@@ -45,10 +50,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
 
             //Assert
-            Assert.AreEqual(totalRecords, result.Count());
+            Assert.Equal(totalRecords, result.Count());
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistanceOf_GetDistanceToProperty_DistancesAreCorrect()
         {
             //Arrange
@@ -57,10 +62,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.LevenshteinDistanceOf(x => x.StringOne).ComparedTo(x => x.StringTwo);
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, x.Item.StringTwo)));
+            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.StringOne, x.Item.StringTwo)));
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareAgainstTwoStrings_AllDistancesReturned()
         {
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
@@ -68,12 +73,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo("abce", "efgh");
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(1, firstResult.Distances[0]);
-            Assert.AreEqual(4, firstResult.Distances[1]);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(1, firstResult.Distances[0]);
+            Assert.Equal(4, firstResult.Distances[1]);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareAgainstTwoProperties_AllDistancesReturned()
         {
             var result = _context.TestModels.Search(x => x.Id).EqualTo(new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"))
@@ -81,12 +86,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo(x => x.StringTwo, x => x.StringThree);
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(9, firstResult.Distances[0]);
-            Assert.AreEqual(5, firstResult.Distances[1]);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(9, firstResult.Distances[0]);
+            Assert.Equal(5, firstResult.Distances[1]);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareAgainstTwoStrings_MinimumDistanceReturned()
         {
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
@@ -94,11 +99,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo("abce", "efgh");
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(1, firstResult.MinimumDistance);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(1, firstResult.MinimumDistance);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareAgainstTwoStrings_MaximumDistanceReturned()
         {
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
@@ -106,11 +111,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo("abce", "efghsdfsdfadgv");
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(13, firstResult.MaximumDistance);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(13, firstResult.MaximumDistance);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareTwoPropertiesToString()
         {
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
@@ -118,12 +123,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo("abce");
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(1, firstResult.Distances[0]);
-            Assert.AreEqual(4, firstResult.Distances[1]);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(1, firstResult.Distances[0]);
+            Assert.Equal(4, firstResult.Distances[1]);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareTwoPropertiesToProperty()
         {
             var result = _context.TestModels.Search(x => x.Id).EqualTo(new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"))
@@ -131,12 +136,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo(x => x.StringThree);
 
             var firstResult = result.First();
-            Assert.AreEqual(2, firstResult.Distances.Length);
-            Assert.AreEqual(5, firstResult.Distances[0]);
-            Assert.AreEqual(9, firstResult.Distances[1]);
+            Assert.Equal(2, firstResult.Distances.Length);
+            Assert.Equal(5, firstResult.Distances[0]);
+            Assert.Equal(9, firstResult.Distances[1]);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareTwoPropertiesToTwoStrings()
         {
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd")
@@ -144,14 +149,14 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo("abce", "absdfb");
 
             var firstResult = result.First();
-            Assert.AreEqual(4, firstResult.Distances.Length);
-            Assert.AreEqual(1, firstResult.Distances[0]);
-            Assert.AreEqual(4, firstResult.Distances[1]);
-            Assert.AreEqual(3, firstResult.Distances[2]);
-            Assert.AreEqual(6, firstResult.Distances[3]);
+            Assert.Equal(4, firstResult.Distances.Length);
+            Assert.Equal(1, firstResult.Distances[0]);
+            Assert.Equal(4, firstResult.Distances[1]);
+            Assert.Equal(3, firstResult.Distances[2]);
+            Assert.Equal(6, firstResult.Distances[3]);
         }
 
-        [Test]
+        [Fact]
         public void LevenschteinDistanceOf_CompareTwoPropertiesToProperties()
         {
             var result = _context.TestModels.Search(x => x.Id).EqualTo(new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"))
@@ -159,16 +164,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                             .ComparedTo(x => x.StringThree, x => x.Id.ToString());
 
             var firstResult = result.First();
-            Assert.AreEqual(4, firstResult.Distances.Length);
-            Assert.AreEqual(5, firstResult.Distances[0]);
-            Assert.AreEqual(9, firstResult.Distances[1]);
-            Assert.AreEqual(33, firstResult.Distances[2]);
-            Assert.AreEqual(34, firstResult.Distances[3]);
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Equal(4, firstResult.Distances.Length);
+            Assert.Equal(5, firstResult.Distances[0]);
+            Assert.Equal(9, firstResult.Distances[1]);
+            Assert.Equal(33, firstResult.Distances[2]);
+            Assert.Equal(34, firstResult.Distances[3]);
         }
     }
 }

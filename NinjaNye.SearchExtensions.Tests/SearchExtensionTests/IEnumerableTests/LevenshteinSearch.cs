@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
-    public class LevenshteinSearch
+    public class LevenshteinSearch : IDisposable
     {
         private List<TestData> _testData = new List<TestData>();
-
-        [SetUp]
-        public void ClassSetup()
+        
+        public LevenshteinSearch()
         {
             _testData = new List<TestData>();
             BuildTestData();
         }
 
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             _testData.Clear();
         }
@@ -32,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(new TestData {Name = "test", Description = "house"});
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistance_AllResultsReturned()
         {
             //Arrange
@@ -43,10 +40,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.AreEqual(_testData.Count, result.Count);
+            Assert.Equal(_testData.Count, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistance_ResultsOfTypeILevenshteinDistance()
         {
             //Arrange
@@ -57,10 +54,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsInstanceOf<IEnumerable<ILevenshteinDistance<TestData>>>(result);
+            Assert.IsAssignableFrom<IEnumerable<ILevenshteinDistance<TestData>>>(result);
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_DistanceOfFirstItemIsEqualToSourceLength()
         {
             //Arrange
@@ -72,10 +69,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.AreEqual(result[0].Item.Name.Length, result[0].Distance);
+            Assert.Equal(result[0].Item.Name.Length, result[0].Distance);
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_DistanceOfSecondItemIsEqualToSourceLength()
         {
             //Arrange
@@ -88,10 +85,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.AreEqual(result[0].Item.Name.Length, result[0].Distance);
+            Assert.Equal(result[0].Item.Name.Length, result[0].Distance);
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstEmptyString_AllDistancesAreEqualToSourceLength()
         {
             //Arrange
@@ -102,10 +99,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == x.Item.Name.Length));
+            Assert.True(result.All(x => x.Distance == x.Item.Name.Length));
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstDefinedString_DistanceIsLevenshteinDistance()
         {
             //Arrange
@@ -117,10 +114,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, compareTo)));
+            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, compareTo)));
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceWithoutProperty_ThrowArgumentNullException()
         {
             //Arrange
@@ -131,7 +128,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.Throws<ArgumentNullException>(() => _testData.LevenshteinDistanceOf(null));
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceCompareTo_IncompleteRequestException()
         {
             //Arrange
@@ -142,7 +139,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             Assert.Throws<InvalidOperationException>(() => _testData.LevenshteinDistanceOf(x => x.Name).ToList());
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstDefinedProperty_DistanceIsLevenshteinDistance()
         {
             //Arrange
@@ -153,10 +150,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
         }
 
-        [Test]
+        [Fact]
         public void Levenshtein_GetLevenshteinDistanceAgainstMultipleDefinedProperties_DistanceIsLevenshteinDistance()
         {
             //Arrange
@@ -167,7 +164,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ToList();
 
             //Assert
-            Assert.IsTrue(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
+            Assert.True(result.All(x => x.Distance == LevenshteinProcessor.LevenshteinDistance(x.Item.Name, x.Item.Description)));
         }
     }
 }

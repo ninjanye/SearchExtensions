@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace NinjaNye.SearchExtensions
 {
@@ -44,13 +45,14 @@ namespace NinjaNye.SearchExtensions
             }
 
             _expressionUpdated = true;
+            
             var finalExpression = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter);
             Source = Source.Where(finalExpression);
         }
 
         protected void QueryInclude(string path)
         {
-            var includeMethod = Source.GetType().GetMethod("Include", new[] {typeof(string)});
+            var includeMethod = Source.GetType().GetTypeInfo().GetMethod("Include", new[] {typeof(string)});
             Source = (IQueryable<TSource>) includeMethod?.Invoke(Source, new[] {path});
         }
 

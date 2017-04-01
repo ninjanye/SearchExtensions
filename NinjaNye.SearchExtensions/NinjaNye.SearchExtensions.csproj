@@ -1,96 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{60B8E347-999F-4EE2-8172-9367D4F71860}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NinjaNye.SearchExtensions</RootNamespace>
-    <AssemblyName>NinjaNye.SearchExtensions</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net461;netstandard1.5</TargetFrameworks>
+    <Description>Package Description</Description>
+    <Version>2.1.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ChildSearchBase.cs" />
-    <Compile Include="EnumerableChildSearchBase.cs" />
-    <Compile Include="EnumerableChildStringSearch.cs" />
-    <Compile Include="EnumerableChildSearch.cs" />
-    <Compile Include="EnumerableChildSelector.cs" />
-    <Compile Include="EnumerableStructSearch.cs" />
-    <Compile Include="EnumerableLevenshteinCompare.cs" />
-    <Compile Include="EnumerableLevenshteinSearch.cs" />
-    <Compile Include="EnumerableSearchBase.cs" />
-    <Compile Include="EnumerableSoundexSearch.cs" />
-    <Compile Include="FluentChildSearch.cs" />
-    <Compile Include="FluentSearch.cs" />
-    <Compile Include="FluentLevenshteinSearch.cs" />
-    <Compile Include="FluentStringSearch.cs" />
-    <Compile Include="EnumerableStringSearch.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\QueryableContainsExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\ContainsExpressionBuilder\EnumerableContainsExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\QueryableEndsWithExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EndsWithExpressionBuilder\EnumerableEndsWithExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EnumerableExpressionHelper.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\EnumerableEqualsExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\ExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\EqualsExpressionBuilder\QueryableEqualsExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\ExpressionHelper.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\ExpressionMethods.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\SoundexExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\EnumerableStartsWithExpressionBuilder.cs" />
-    <Compile Include="Helpers\ExpressionBuilders\StartsWithExpressionBuilder\QueryableStartsWithExpressionBuilder.cs" />
-    <Compile Include="Levenshtein\LevenshteinDistance.cs" />
-    <Compile Include="Levenshtein\LevenshteinProcessor.cs" />
-    <Compile Include="Models\Ranked.cs" />
-    <Compile Include="QueryableChildSearchBase.cs" />
-    <Compile Include="QueryableChildStringSearch.cs" />
-    <Compile Include="QueryableChildSearch.cs" />
-    <Compile Include="QueryableStructSearch.cs" />
-    <Compile Include="QueryableStringSearch.cs" />
-    <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryableSearchBase.cs" />
-    <Compile Include="QueryableChildSelector.cs" />
-    <Compile Include="SearchBase.cs" />
-    <Compile Include="SearchOptions.cs" />
-    <Compile Include="SearchTermCollection.cs" />
-    <Compile Include="SearchType.cs" />
-    <Compile Include="Soundex\SoundexProcessor.cs" />
-    <Compile Include="Validation\Ensure.cs" />
-    <Compile Include="Visitors\SwapExpressionVisitor.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

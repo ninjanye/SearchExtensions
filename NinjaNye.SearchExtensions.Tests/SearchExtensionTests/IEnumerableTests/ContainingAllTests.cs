@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
+    
     public class ContainingAllTests
     {
         private List<TestData> _testData = new List<TestData>();
 
-        [SetUp]
-        public void ClassSetup()
+        public ContainingAllTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
         }
 
-        [TearDown]
-        public void TearDown()
+        
+        public void Dispose()
         {
             _testData.Clear();
         }
@@ -31,7 +31,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(new TestData { Name = "search test property match", Description = "test", Status = "match", Number = 5 });
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_OneTermSupplied_ReturnsRecordNumber2()
         {
             //Arrange
@@ -40,10 +40,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll("test").ToList();
 
             //Assert
-            Assert.IsTrue(result.Any(r => r.Number == 2));
+            Assert.True(result.Any(r => r.Number == 2));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_TwoTermsSupplied_ReturnsRecordNumber3()
         {
             //Arrange
@@ -52,10 +52,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll("test", "search").ToList();
 
             //Assert
-            Assert.IsTrue(result.Any(r => r.Number == 3));
+            Assert.True(result.Any(r => r.Number == 3));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_TwoPropertiesAndTwoTermsSupplied_ReturnsRecordNumber3()
         {
             //Arrange
@@ -65,11 +65,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ContainingAll("test", "search", "three").ToList();
 
             //Assert
-            Assert.AreEqual(1, result.Count());
-            Assert.IsTrue(result.Any(r => r.Number == 4));
+            Assert.Equal(1, result.Count());
+            Assert.True(result.Any(r => r.Number == 4));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_CompareAgainstOneProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -77,10 +77,16 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _testData.Search(x => x.Name).ContainingAll(x => x.Description));
+            try {
+                _testData.Search(x => x.Name).ContainingAll(x => x.Description);
+            }
+            catch(Exception)
+            {
+                Assert.False(true);
+            }
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_CompareAgainstOneProperty_DoesNotReturnNull()
         {
             //Arrange
@@ -89,10 +95,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_CompareAgainstOneProperty_ResultNameContainsDescription()
         {
             //Arrange
@@ -101,11 +107,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description).ToList();
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description)));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Name.Contains(x.Description)));
         }
 
-        [Test]
+        [Fact]
         public void ContainingAll_CompareAgainstTwoProperties_ResultNameContainsDescriptionAndStatus()
         {
             //Arrange
@@ -114,8 +120,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description, x => x.Status).ToList();
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
         }
     }
 }

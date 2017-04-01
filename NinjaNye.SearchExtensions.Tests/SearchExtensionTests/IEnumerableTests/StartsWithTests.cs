@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
     public class StartsWithTests
     {
         private List<TestData> _testData = new List<TestData>();
 
-        [SetUp]
-        public void ClassSetup()
+        public StartsWithTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
@@ -27,17 +25,17 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(new TestData { Name = "teSt cAsE iNsEnSiTiViTy", Description = "TEsT" });
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_ComparedToAnExistingProperty_DoesNotThrowAnException()
         {
             //Arrange
 
             //Act
             //Assert
-            Assert.DoesNotThrow(() => _testData.Search(x => x.Name).StartsWith(x => x.Description));
+            try { _testData.Search(x => x.Name).StartsWith(x => x.Description); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_ComparedToAnExistingProperty_ResultIsNotNull()
         {
             //Arrange
@@ -46,10 +44,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_ComparedToAnExistingProperty_ResultStartsWithExistingProperty()
         {
             //Arrange
@@ -58,11 +56,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
 
             //Assert
-            Assert.IsTrue(result.Any(), "No records returned");
-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description)));
+            Assert.True(result.Any(), "No records returned");
+            Assert.True(result.All(x => x.Name.StartsWith(x.Description)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_ComparedToTwoExistingProperties_ResultStartsWithEitherOfExistingProperties()
         {
             //Arrange
@@ -71,11 +69,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.IsTrue(result.Any(), "No records returned");
-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description) || x.Name.StartsWith(x.Status)));
+            Assert.True(result.Any(), "No records returned");
+            Assert.True(result.All(x => x.Name.StartsWith(x.Description) || x.Name.StartsWith(x.Status)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_ComparedToTwoExistingPropertiesWithNullValue_NullValueIsIgnored()
         {
             //Arrange
@@ -84,11 +82,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.IsTrue(result.Any(), "No records returned");
-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Description) || (x.Status != null && x.Name.StartsWith(x.Status))));
+            Assert.True(result.Any(), "No records returned");
+            Assert.True(result.All(x => x.Name.StartsWith(x.Description) || (x.Status != null && x.Name.StartsWith(x.Status))));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchTwoPropertiesComparedToAProperty_ResultsContainAllPermiatations()
         {
             //Arrange
@@ -97,11 +95,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name, x => x.Description).StartsWith(x => x.Status);
 
             //Assert
-            Assert.IsTrue(result.Count() > 1, "Not enough records returned");
-            Assert.IsTrue(result.All(x => x.Name.StartsWith(x.Status) || x.Description.StartsWith(x.Status)));
+            Assert.True(result.Count() > 1, "Not enough records returned");
+            Assert.True(result.All(x => x.Name.StartsWith(x.Status) || x.Description.StartsWith(x.Status)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchPropertyWithIgnoreCaseCulture_ResultsAreCaseInsensitive()
         {
             //Arrange
@@ -110,7 +108,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith(x => x.Description);
 
             //Assert
-            Assert.IsTrue(result.Any(t => t.Description == "TEsT"));
+            Assert.True(result.Any(t => t.Description == "TEsT"));
         }
     }
 }

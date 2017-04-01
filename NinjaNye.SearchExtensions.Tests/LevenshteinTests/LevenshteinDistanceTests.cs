@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {
-    [TestFixture]
     public class LevenshteinDistanceTests
     {
-        [Test]
+        [Fact]
         public void LevenshteinDistance_DefaultBehaviour_DoesNotThrowAnException()
         {
             //Arrange
@@ -15,10 +14,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             LevenshteinProcessor.LevenshteinDistance("", "");
 
             //Assert
-            Assert.Pass("No exception thrown");
+            Assert.True(true, "No exception thrown");
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_AcceptsTwoStrings_ReturnsUnsignedInteger()
         {
             //Arrange
@@ -27,10 +26,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("string", "string");
 
             //Assert
-            Assert.IsInstanceOf<int>(result);
+            Assert.IsType<int>(result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_FirstStringIsEmpty_ReturnLengthOfSecondString()
         {
             //Arrange
@@ -39,10 +38,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance(string.Empty, "string");
 
             //Assert
-            Assert.AreEqual(6, result);
+            Assert.Equal(6, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_SecondStringIsEmpty_ReturnLengthOfFirstString()
         {
             //Arrange
@@ -51,10 +50,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("test", string.Empty);
 
             //Assert
-            Assert.AreEqual(4, result);
+            Assert.Equal(4, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsAreEqual_ReturnZero()
         {
             //Arrange
@@ -63,10 +62,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("test", "test");
 
             //Assert
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_BothStringsNull_ReturnZero()
         {
             //Arrange
@@ -75,10 +74,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance(null, null);
 
             //Assert
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsDiffer_ReturnGreaterThanZero()
         {
             //Arrange
@@ -87,10 +86,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("Ninja", "Nye");
 
             //Assert
-            Assert.Greater(result, 0);
+            Assert.True(result > 0);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsAreEqualExceptForCase_ReturnZero()
         {
             //Arrange
@@ -99,10 +98,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("test", "TEST");
 
             //Assert
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsDifferByTwoCharacters_ReturnTwo()
         {
             //Arrange
@@ -111,10 +110,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("Barry", "Lorry");
 
             //Assert
-            Assert.AreEqual(2, result);
+            Assert.Equal(2, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsDifferByTwoCharactersAndCasing_ReturnTwo()
         {
             //Arrange
@@ -123,10 +122,10 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("Barry", "LORRY");
 
             //Assert
-            Assert.AreEqual(2, result);
+            Assert.Equal(2, result);
         }
 
-        [Test]
+        [Fact]
         public void LevenshteinDistance_StringsDifferByNonLinearChanges_ReturnTwo()
         {
             //Arrange
@@ -135,7 +134,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             var result = LevenshteinProcessor.LevenshteinDistance("house", "use");
 
             //Assert
-            Assert.AreEqual(2, result);
+            Assert.Equal(2, result);
         }
     }
 }

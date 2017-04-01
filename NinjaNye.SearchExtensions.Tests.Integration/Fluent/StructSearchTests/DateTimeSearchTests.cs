@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
-    [TestFixture]
-    public class DateTimeSearchTests
+    [Collection("Database tests")]
+    public class DateTimeSearchTests 
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public DateTimeSearchTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void Search_SearchConditionNotSupplied_ReturnsAllData()
         {
             //Arrange
@@ -18,10 +23,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start);
 
             //Assert
-            CollectionAssert.AreEquivalent(_context.TestModels, result);
+            Assert.Equal(_context.TestModels, result.ToList());
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchOnePropertyForMatchingNumber_ReturnsMatchingData()
         {
             //Arrange
@@ -31,11 +36,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start == expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start == expected));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchTwoValues_ReturnsMatchingDataOnly()
         {
             //Arrange
@@ -47,11 +52,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .EqualTo(date1, date2);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.End == date1 || x.End == date2));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.End == date1 || x.End == date2));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchTwoProperties_ReturnsMatchingDataOnly()
         {
             //Arrange
@@ -62,11 +67,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .EqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start == expected || x.End == expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start == expected || x.End == expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
         {
             //Arrange
@@ -76,11 +81,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_SearchTwoProperties_ReturnsOnlyDataWherePropertyIsGreaterThanValue()
         {
             //Arrange
@@ -90,11 +95,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > expected || x.End > expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > expected || x.End > expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThan_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanValue()
         {
             //Arrange
@@ -104,11 +109,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.End).LessThan(expected);  
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.End < expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.End < expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThan_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanValue()
         {
             //Arrange
@@ -118,11 +123,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start < expected || x.End < expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start < expected || x.End < expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsLessThanOrEqualToValue()
         {
             //Arrange
@@ -132,11 +137,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start <= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start <= expected));
         }
 
-        [Test]
+        [Fact]
         public void LessThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsLessThanOrEqualToValue()
         {
             //Arrange
@@ -147,11 +152,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start <= expected || x.End <= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start <= expected || x.End <= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrEqual_SearchOneProperty_ReturnsOnlyDataWherePropertyIsGreaterThanOrEqualToValue()
         {
             //Arrange
@@ -161,11 +166,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start >= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start >= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrEqual_SearchTwoProperties_ReturnsOnlyDataWhereEitherPropertyIsGreaterThanOrEqualToValue()
         {
             //Arrange
@@ -176,11 +181,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start >= expected || x.End >= expected));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start >= expected || x.End >= expected));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThanOrLessThan_SearchOnePropertyBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
         {
             //Arrange
@@ -193,11 +198,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .LessThan(lessThanDate);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
         }
 
-        [Test]
+        [Fact]
         public void Between_SearchTwoPropertiesBetweenTwoValues_OnlyRecordsBetweenValuesReturned()
         {
             //Arrange
@@ -209,10 +214,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .Between(start, end);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => (x.Start > start && x.Start < end)
+            Assert.True(result.Any());
+            Assert.True(result.All(x => (x.Start > start && x.Start < end)
                                        || (x.End > start && x.End < end)));
         }
-
     }
 }

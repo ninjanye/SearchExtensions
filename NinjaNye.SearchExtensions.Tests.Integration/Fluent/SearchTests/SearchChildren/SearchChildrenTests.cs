@@ -1,16 +1,21 @@
 using System;
 using System.Linq;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchChildren
 {
-    [TestFixture]
-    internal class SearchChildrenTests : IDisposable
+    [Collection("Database tests")]
+    public class SearchChildrenTests 
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public SearchChildrenTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchChild_SearchChildCollection_ReturnParentType()
         {
             //Arrange
@@ -19,10 +24,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            CollectionAssert.AreEquivalent(_context.TestModels, result);
+            Assert.Equal(_context.TestModels, result.ToList());
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ResultIsQueryable()
         {
             //Arrange
@@ -31,10 +36,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            Assert.That(result, Is.InstanceOf<IQueryable<TestModel>>());
+            Assert.IsAssignableFrom<IQueryable<TestModel>>(result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ProviderIsSet()
         {
             //Arrange
@@ -43,10 +48,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            Assert.That(result.Provider, Is.EqualTo(((IQueryable) _context.TestModels).Provider));
+            Assert.Equal(((IQueryable)_context.TestModels).Provider, result.Provider);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ElementTypeIsSet()
         {
             //Arrange
@@ -55,10 +60,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = _context.TestModels.SearchChildren(x => x.Children);
 
             //Assert
-            Assert.That(result.ElementType, Is.EqualTo(((IQueryable) _context.TestModels).ElementType));
+            Assert.Equal(((IQueryable) _context.TestModels).ElementType, result.ElementType);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_CanSelectChildParameters()
         {
             //Arrange
@@ -69,10 +74,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result, Is.EqualTo(_context.TestModels));
+            Assert.Equal(_context.TestModels, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_ReturnsCorrectRecords()
         {
             //Arrange
@@ -85,11 +90,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = query.ToList();
             //Assert
 
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchChildCollection_MatchAgainstTwoValues()
         {
             //Arrange
@@ -102,13 +107,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = query.ToList();
             //Assert
 
-            Assert.That(result, Is.Not.Empty);
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_SearchMultipleChildrensProperties_ResultMatchesAgainstAnyProperty()
         {
             //Arrange
@@ -121,13 +126,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
             var result = query.ToList();
             //Assert
 
-            Assert.That(result, Is.Not.Empty);
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchMultipleChildCollections_ResultMatchString()
         {
             //Arrange
@@ -140,12 +145,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchMultipleChildCollections_ResultMatchIntegers()
         {
             //Arrange
@@ -158,14 +163,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
     }
 }

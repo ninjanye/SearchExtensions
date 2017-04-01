@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
-    public class IsEqualTests
+    public class IsEqualTests : IDisposable
     {
         private List<TestData> _testData = new List<TestData>();
 
-        [SetUp]
-        public void ClassSetup()
+        public IsEqualTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
         }
 
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             _testData.Clear();
         }
@@ -32,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(new TestData {Name = "TEst", Description = "teST", Status = "case"});
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -40,10 +37,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _testData.Search(x => x.Name).EqualTo(x => x.Description));
+            try { _testData.Search(x => x.Name).EqualTo(x => x.Description); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithProperty_DoesNotReturnNull()
         {
             //Arrange
@@ -52,10 +49,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithProperty_OnlyMatchingDataReturned()
         {
             //Arrange
@@ -64,11 +61,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.Name == x.Description));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.Name == x.Description));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CompareTwoProperties_RecordsForSecondPropertyMatchReturned()
         {
             //Arrange
@@ -77,10 +74,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.Description == x.Status));
+            Assert.True(result.Any(x => x.Description == x.Status));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CompareAgainstTwoProperties_RecordsForSecondPropertyMatchReturned()
         {
             //Arrange
@@ -89,10 +86,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.Name == x.Status));
+            Assert.True(result.Any(x => x.Name == x.Status));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SetCultureToIgnoreCase_MatchedRecordsOfDifferentCaseReturned()
         {
             //Arrange
@@ -102,7 +99,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                                      .EqualTo(x => x.Description);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.Name == "TEst" && x.Description == "teST"));
+            Assert.True(result.Any(x => x.Name == "TEst" && x.Description == "teST"));
         }
     }
 }

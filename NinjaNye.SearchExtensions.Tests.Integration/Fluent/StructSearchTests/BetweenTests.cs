@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
-    [TestFixture]
-    internal class BetweenTests : IDisposable
+    [Collection("Database tests")]
+    public class BetweenTests 
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public BetweenTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void Between_CallWithValue_DoesNotThrowAnException()
         {
             //Arrange
@@ -17,10 +22,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.IntegerOne).Between(1,3));
+            try { _context.TestModels.Search(x => x.IntegerOne).Between(1,3); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void Between_CallWithValue_DoesNotReturnNull()
         {
             //Arrange
@@ -29,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.IntegerOne).Between(50, 150);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void Between_CallWithValue_AllRecordsHaveEqualPropertyValues()
         {
             //Arrange
@@ -41,11 +46,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.IntegerOne).Between(10, 100);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.IntegerOne > 10 && x.IntegerOne < 100));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.IntegerOne > 10 && x.IntegerOne < 100));
         }
 
-        [Test]
+        [Fact]
         public void Between_SearchMultipleProperties_RecordsFromSecondPropertyMatchRequest()
         {
             //Arrange
@@ -55,13 +60,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                                 .Between(3, 200);
 
             //Assert
-            Assert.IsTrue(result.All(x => (x.IntegerOne > 3 && x.IntegerOne < 200) 
+            Assert.True(result.All(x => (x.IntegerOne > 3 && x.IntegerOne < 200) 
                                        || (x.IntegerThree > 3 && x.IntegerThree < 200)));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

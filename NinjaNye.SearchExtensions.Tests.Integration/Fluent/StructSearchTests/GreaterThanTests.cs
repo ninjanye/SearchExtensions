@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
-    [TestFixture]
-    internal class GreaterThanTests : IDisposable
+    [Collection("Database tests")]
+    public class GreaterThanTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public GreaterThanTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void GreaterThan_CallWithValue_DoesNotThrowAnException()
         {
             //Arrange
@@ -17,10 +22,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.IntegerOne).GreaterThan(1));
+            try { _context.TestModels.Search(x => x.IntegerOne).GreaterThan(1); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_CallWithValue_DoesNotReturnNull()
         {
             //Arrange
@@ -29,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.IntegerOne).GreaterThan(50);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_CallWithValue_AllRecordsHaveEqualPropertyValues()
         {
             //Arrange
@@ -41,11 +46,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.IntegerOne).GreaterThan(10);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.IntegerOne > 10));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.IntegerOne > 10));
         }
 
-        [Test]
+        [Fact]
         public void GreaterThan_SearchMultipleProperties_RecordsFromSecondPropertyMatchRequest()
         {
             //Arrange
@@ -55,12 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                                 .GreaterThan(3);
 
             //Assert
-            Assert.IsTrue(result.All(x => x.IntegerOne > 3 || x.IntegerThree > 3));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.True(result.All(x => x.IntegerOne > 3 || x.IntegerThree > 3));
         }
     }
 }

@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
-    [TestFixture]
-    internal class IsEqualTests : IDisposable
+    [Collection("Database tests")]
+    public class IsEqualTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public IsEqualTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void IsEqual_CallWithProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -17,10 +22,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo));
+            try { _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo); } catch (Exception) { Assert.False(true); }
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithProperty_DoesNotReturnNull()
         {
             //Arrange
@@ -29,10 +34,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithProperty_AllRecordsHaveEqualPropertyValues()
         {
             //Arrange
@@ -41,11 +46,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.StringOne == x.StringTwo));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.StringOne == x.StringTwo));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchMultipleProperties_RecordsFromSecondPropertyMatchReturned()
         {
             //Arrange
@@ -54,10 +59,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EqualTo(x => x.StringThree);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.StringTwo == x.StringThree));
+            Assert.True(result.Any(x => x.StringTwo == x.StringThree));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchForMultipleProperties_RecordsFromSecondPropertyMatchReturned()
         {
             //Arrange
@@ -66,12 +71,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo, x => x.StringThree);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.StringOne == x.StringThree));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.True(result.Any(x => x.StringOne == x.StringThree));
         }
     }
 }

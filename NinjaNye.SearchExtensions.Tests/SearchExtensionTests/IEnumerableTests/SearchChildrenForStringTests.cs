@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
     public class SearchChildrenForStringTests
     {
         private ParentTestData _parent;
@@ -16,8 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         private TestData _dataThree;
         private ParentTestData _otherParent;
 
-        [SetUp]
-        public void SetUp()
+        public SearchChildrenForStringTests()
         {
             _dataOne = new TestData {Name = "chris", Description = "child data", Number = 1, Age = 20};
             _dataTwo = new TestData {Name = "fred", Description = "nested positionly", Number = 6, Age = 30};
@@ -34,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData = new List<ParentTestData> {_parent, _otherParent};
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_StringEquals_ReturnParentsWIthAnyChildThatMatches()
         {
             //Arrange
@@ -46,11 +44,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_parent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_StringEqualsMany_ReturnParentsWIthAnyChildThatMatches()
         {
             //Arrange
@@ -62,12 +60,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result, Contains.Item(_parent));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(2, result.Count);
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringEqualToCaseInsensitive_ReturnParentsWithMatches()
         {
             //Arrange
@@ -80,11 +78,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_parent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContaining_ReturnParentsWithMatches()
         {
             //Arrange
@@ -96,12 +94,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result, Contains.Item(_parent));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(2, result.Count);
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContaining_IgnoresEmptyStrings()
         {
             //Arrange
@@ -113,11 +111,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_parent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContainingNoValidSearchTerms_ReturnsAll()
         {
             //Arrange
@@ -129,12 +127,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result, Contains.Item(_parent));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(2, result.Count);
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContainingWholeWordSearch_ReturnsOnlyMatchesOfEntireWord()
         {
             //Arrange
@@ -147,11 +145,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_parent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContainingAnyOccurenceSearch_ReturnsAllMatches()
         {
             //Arrange
@@ -164,12 +162,12 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result, Contains.Item(_parent));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(2, result.Count);
+            Assert.Contains(_parent, result);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_WithStringContainingAllSuppliedWords_ReturnsAllMatches()
         {
             //Arrange
@@ -181,11 +179,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_parent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_parent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_StringStartsWith_ReturnsAllMatches()
         {
             //Arrange
@@ -197,11 +195,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_otherParent, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchChild_StringEndsWith_ReturnsAllMatches()
         {
             //Arrange
@@ -213,8 +211,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                   .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result, Contains.Item(_otherParent));
+            Assert.Equal(1, result.Count);
+            Assert.Contains(_otherParent, result);
         }
     }
 }

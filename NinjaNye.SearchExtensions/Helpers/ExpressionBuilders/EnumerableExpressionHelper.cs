@@ -21,8 +21,8 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         {
             var rankedType = typeof(Ranked<T>);
             var rankedCtor = Expression.New(rankedType);
-            PropertyInfo hitProperty = rankedType.GetProperty("Hits");
-            PropertyInfo itemProperty = rankedType.GetProperty("Item");
+            PropertyInfo hitProperty = rankedType.GetTypeInfo().GetProperty("Hits");
+            PropertyInfo itemProperty = rankedType.GetTypeInfo().GetProperty("Item");
             var hitValueAssignment = Expression.Bind(hitProperty, hitCountExpression);
             var itemValueAssignment = Expression.Bind(itemProperty, parameterExpression);
             return Expression.MemberInit(rankedCtor, hitValueAssignment, itemValueAssignment);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
                                                                ParameterExpression parameterExpression)
         {
             var distanceType = typeof(LevenshteinDistance<T>);
-            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
+            var constructor = distanceType.GetTypeInfo().GetConstructor(new [] {typeof(T), typeof(int[])});
             var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpressions);
             var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
             return distanceCtor;
@@ -113,7 +113,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static Expression<Func<TSource, TType>>[] GetProperties<TSource, TType>()
         {
             var parameter = Expression.Parameter(typeof(TSource));
-            var stringProperties = typeof(TSource).GetProperties()
+            var stringProperties = typeof(TSource).GetTypeInfo().GetProperties()
                                                   .Where(property => property.CanRead
                                                                   && property.PropertyType == typeof(TType));
 

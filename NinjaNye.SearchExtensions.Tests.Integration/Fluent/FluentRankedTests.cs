@@ -1,16 +1,21 @@
 ﻿using System.Linq;
-using NUnit.Framework;
 using NinjaNye.SearchExtensions.Models;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
-    [TestFixture]
-    public class  FluentRankedTests
+    [Collection("Database tests")]
+    public class  FluentRankedTests 
     {
-        readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public FluentRankedTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void ToRanked_SearchedForData_RankedResultIsReturned()
         {
             //Arrange
@@ -19,10 +24,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringTwo).Containing("c").ToRanked();
 
             //Assert
-            Assert.IsInstanceOf<IQueryable<IRanked<TestModel>>>(result);
+            Assert.IsAssignableFrom<IQueryable<IRanked<TestModel>>>(result);
         }
 
-        [Test]
+        [Fact]
         public void ToRanked_SearchOneColumn_RankIsCorrect()
         {
             //Arrange
@@ -31,13 +36,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing("g").ToRanked();
 
             //Assert
-            Assert.AreEqual(4, result.Count());
+            Assert.Equal(4, result.Count());
             var first = result.OrderByDescending(r => r.Hits).ToList();
-            Assert.AreEqual(2, first[0].Hits);
-            Assert.AreEqual(1, first[1].Hits);
+            Assert.Equal(2, first[0].Hits);
+            Assert.Equal(1, first[1].Hits);
         }
 
-        [Test]
+        [Fact]
         public void ToRanked_SearchMultipleColumns_RankIsCombined()
         {
             //Arrange
@@ -49,10 +54,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
             //Assert
             var ordered = result.OrderByDescending(r => r.Hits).ToList();
-            Assert.AreEqual(4, ordered[0].Hits);
+            Assert.Equal(4, ordered[0].Hits);
         }
 
-        [Test]
+        [Fact]
         public void ToRanked_SearchRankedSearch_OnlyRetrieveMatchingBothSearches()
         {
             //Arrange
@@ -66,11 +71,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                                 .StartsWith("i");
 
             //Assert
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual(1, result.First().Hits);
+            Assert.Equal(1, result.Count());
+            Assert.Equal(1, result.First().Hits);
         }
 
-        [Test]
+        [Fact]
         public void ToRanked_SearchedForData_RankedStartsWithSearch()
         {
             //Arrange
@@ -81,11 +86,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                 .ToRanked();
 
             //Assert
-            Assert.AreEqual(8, result.Count());
-            Assert.AreEqual(3, result.First().Hits);
+            Assert.Equal(8, result.Count());
+            Assert.Equal(3, result.First().Hits);
         }
 
-        [Test]
+        [Fact]
         public void ToRanked_SearchedForData_RankedEndsWithSearch()
         {
             //Arrange
@@ -96,7 +101,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                 .ToRanked();
 
             //Assert
-            Assert.AreEqual(14, result.Count());
+            Assert.Equal(14, result.Count());
         }
     }
 }

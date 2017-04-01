@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchChildren
 {
-    [TestFixture]
-    internal class SearchChildrenWithChainingTests : IDisposable
+    [Collection("Database tests")]
+    public class SearchChildrenWithChainingTests 
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public SearchChildrenWithChainingTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchChildren_SearchIntegerAndString_ResultsMatchBothOccurences()
         {
             //Arrange
@@ -23,11 +28,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                             .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchIntergerAndInteger_ResultsMatchBothOccurences()
         {
             //Arrange
@@ -41,11 +46,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                             .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchStringAndInteger_ResultsMatchBothOccurences()
         {
             //Arrange
@@ -59,8 +64,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                             .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
 

@@ -1,16 +1,20 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
+﻿using System.Linq;
 using NinjaNye.SearchExtensions.Soundex;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
-    [TestFixture]
-    public class FluentSoundexTests : IDisposable
+    [Collection("Database tests")]
+    public class FluentSoundexTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public FluentSoundexTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchSoundex_SoundsLikeSingleWord_OnlyMatchingResultsReturned()
         {
             //Arrange
@@ -22,10 +26,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Soundex(word).ToList();
 
             //Assert
-            CollectionAssert.AreEqual(expected, result);
+            Assert.Equal(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void SearchSoundex_SoundsLikeOneOfMultipleWords_OnlyMatchingResultsReturned()
         {
             //Arrange
@@ -37,12 +41,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Soundex(words).ToList();
 
             //Assert
-            CollectionAssert.AreEqual(expected, result);
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Equal(expected, result);
         }
     }
 }

@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using NinjaNye.SearchExtensions.Soundex;
 using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
 
 namespace NinjaNye.SearchExtensions.Tests.Fluent
 {
-    [TestFixture]
+    
     public class SoundexSearchTests
     {
         private List<TestData> _testData = new List<TestData>();
-
-        [SetUp]
-        public void ClassSetup()
+        
+        public SoundexSearchTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
@@ -28,7 +27,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             _testData.Add(new TestData {Name = "Aschcraft", Description = "Sounds like Ashcroft", Number = 6});
         }
 
-        [Test]
+        [Fact]
         public void SoundsLike_SearchSingleWord_ReturnsMatchingRecord()
         {
             //Arrange
@@ -37,10 +36,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
-            CollectionAssert.Contains(result, _testData[0]);
+            Assert.Contains(_testData[0], result);
         }
 
-        [Test]
+        [Fact]
         public void SoundsLike_SearchSingleWord_DoesNotReturnsNonMatchingRecords()
         {
             //Arrange
@@ -49,10 +48,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).Soundex("Robert");
 
             //Assert
-            CollectionAssert.DoesNotContain(result, _testData[5]);
+            Assert.DoesNotContain(_testData[5], result);
         }
 
-        [Test]
+        [Fact]
         public void SoundsLike_SearchMultipleWords_ReturnsAllMatchingRecords()
         {
             //Arrange
@@ -64,7 +63,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).Soundex("Robert", "Mitt");
 
             //Assert
-            CollectionAssert.AreEqual(expected, result);
+            Assert.Equal(expected, result);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace NinjaNye.SearchExtensions.Helpers
                 return null;
             }
 
-            return text.TrimStart()[0].ToString(CultureInfo.InvariantCulture);
+            return text.TrimStart()[0].ToString();
         }
 
         public static string QuickReverse(this string value)

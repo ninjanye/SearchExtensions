@@ -1,16 +1,21 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
-    [TestFixture]
-    internal class StartsWithTests : IDisposable
+    [Collection("Database tests")]
+    public class StartsWithTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public StartsWithTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void StartsWith_SearchStartsWith_DoesNotThrowAnException()
         {
             //Arrange
@@ -18,10 +23,17 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo));
+            try
+            {
+                _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
+            }
+            catch (Exception)
+            {
+                Assert.False(true);
+            }
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchStartsWith_ReturnsQueryableStringSearch()
         {
             //Arrange
@@ -30,10 +42,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
-            Assert.IsInstanceOf<QueryableStringSearch<TestModel>>(result);
+            Assert.IsType<QueryableStringSearch<TestModel>>(result);
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchStartsWithProperty_AllRecordsStartWithStringTwo()
         {
             //Arrange
@@ -42,11 +54,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.StringOne.StartsWith(x.StringTwo)));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.StringOne.StartsWith(x.StringTwo)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchStartsWithAgainstTwoProperties_AllRecordsStartWithEitherProperty()
         {
             //Arrange
@@ -56,10 +68,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .StartsWith(x => x.StringTwo, x => x.StringThree);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.StringOne.StartsWith(x.StringThree)));
+            Assert.True(result.Any(x => x.StringOne.StartsWith(x.StringThree)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchTwoPropertiesStartsWithOneProperty_AnyRecordMatchesSecondSearchedProperty()
         {
             //Arrange
@@ -68,10 +80,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(x => x.StringThree);
 
             //Assert
-            Assert.IsTrue(result.Any(x => x.StringTwo.StartsWith(x.StringThree)));
+            Assert.True(result.Any(x => x.StringTwo.StartsWith(x.StringThree)));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchPropertyMatchingWholeWord_MatchesSingleWord()
         {
             //Arrange
@@ -82,10 +94,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .StartsWith(x => x.StringThree);
 
             //Assert
-            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
+            Assert.True(result.Select(x => x.Id).Contains(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
         }
 
-        [Test]
+        [Fact]
         public void StartsWith_SearchPropertyMatchingWholeWord_MatchesWholeWordsOnly()
         {
             //Arrange
@@ -96,13 +108,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .StartsWith(x => x.StringThree);
 
             //Assert
-            Assert.That(result.Select(x => x.Id), Is.Not.Contains(new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
-            Assert.That(result.Select(x => x.Id), Contains.Item(new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            var guids = result.Select(x => x.Id).ToList();
+            Assert.False(guids.Contains(new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
+            Assert.True(guids.Contains(new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
-    [TestFixture]
-    public class ContainingTests
+    public class ContainingTests : IDisposable
     {
         private List<TestData> _testData = new List<TestData>();
         private readonly TestData _matchingItem1 = new TestData { Name = "searching this", Description = "chin" };
@@ -15,15 +15,13 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         private readonly TestData _unmatchingItem = new TestData { Name = "searching this", Description = "no match", Number = 1 };
         private readonly TestData _nullItem = new TestData();
 
-        [SetUp]
-        public void ClassSetup()
+        public ContainingTests()
         {
             _testData = new List<TestData>();
             BuildTestData();
         }
-
-        [TearDown]
-        public void TearDown()
+        
+        public void Dispose()
         {
             _testData.Clear();
         }
@@ -38,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Add(_matchingItem4);
         }
 
-        [Test]
+        [Fact]
         public void Containing_CompareAgainstAnotherProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -47,10 +45,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             _testData.Search(x => x.Name).Containing(x => x.Description);
 
             //Assert
-            Assert.Pass("No exception thrown");
+            Assert.True(true, "No exception thrown");
         }
 
-        [Test]
+        [Fact]
         public void Containing_ComapareAgainstAnotherProperty_DoesNotReturnUnmatchedData()
         {
             //Arrange
@@ -59,10 +57,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).Containing(x => x.Description);
 
             //Assert
-            CollectionAssert.DoesNotContain(result, _unmatchingItem);
+            Assert.DoesNotContain(_unmatchingItem, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_ComapareAgainstAnotherProperty_ReturnsAllMatchedData()
         {
             //Arrange
@@ -71,11 +69,11 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).Containing(x => x.Description).ToList();
 
             //Assert
-            Assert.AreEqual(2, result.Count);
-            CollectionAssert.Contains(result, _matchingItem2);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(_matchingItem2, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
         {
             //Arrange
@@ -84,10 +82,10 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name, x => x.Status).Containing(x => x.Description).ToList();
 
             //Assert
-            CollectionAssert.Contains(result, _matchingItem3);
+            Assert.Contains(_matchingItem3, result);
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchAgainstMultipleProperties_ReturnMatchingItemOnSecondProperty()
         {
             //Arrange
@@ -96,7 +94,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).Containing(x => x.Description, x => x.Status).ToList();
 
             //Assert
-            CollectionAssert.Contains(result, _matchingItem4);
+            Assert.Contains(_matchingItem4, result);
         }
     }
 }

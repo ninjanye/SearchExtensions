@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 {
-    [TestFixture]
-    public class FluentPropertySearchTests : IDisposable
+    [Collection("Database tests")]
+    public class FluentPropertySearchTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public FluentPropertySearchTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void Containing_CompareAgainstAnotherProperty_DoesNotThrowAnException()
         {
             //Arrange
@@ -18,10 +23,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
-            Assert.Pass("No exception thrown");
+            Assert.True(true, "No exception thrown");
         }
 
-        [Test]
+        [Fact]
         public void Containing_CompareAgainstAnotherProperty_ResultHasRecords()
         {
             //Arrange
@@ -30,10 +35,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
-            Assert.IsTrue(result.Any());
+            Assert.True(result.Any());
         }
 
-        [Test]
+        [Fact]
         public void Containing_CompareAgainstAnotherProperty_ResultDoesNotContainIncorrectRecords()
         {
             //Arrange
@@ -42,10 +47,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
-            Assert.IsTrue(result.All(x => x.StringOne.Contains(x.StringTwo)));
+            Assert.True(result.All(x => x.StringOne.Contains(x.StringTwo)));
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
         {
             //Arrange
@@ -55,12 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).Containing(x => x.StringThree).ToList();
 
             //Assert
-            CollectionAssert.Contains(result, expected);
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Contains(expected, result);
         }
     }
 }

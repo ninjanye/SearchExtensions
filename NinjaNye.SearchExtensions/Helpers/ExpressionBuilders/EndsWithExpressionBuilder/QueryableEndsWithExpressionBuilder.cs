@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EqualsExpressionBuilder;
 
@@ -76,7 +77,8 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
             Expression finalExpression = null;
             foreach (var stringProperty in stringProperties)
             {
-                var endsWithExpression = Build(stringProperty, propertiesToSearchFor, searchType);
+                var nullSafeProperty = BuildNullSafeExpression(stringProperty);
+                var endsWithExpression = Build(nullSafeProperty, propertiesToSearchFor, searchType);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, endsWithExpression);
             }
             return finalExpression;
@@ -90,10 +92,19 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.EndsWithExpressio
             Expression finalExpression = null;
             foreach (var stringProperty in stringProperties)
             {
-                var endsWithExpression = Build(stringProperty, searchTerms, searchType);
+                var nullSafeProperty = BuildNullSafeExpression(stringProperty);
+                var endsWithExpression = Build(nullSafeProperty, searchTerms, searchType);
                 finalExpression = ExpressionHelper.JoinOrExpression(finalExpression, endsWithExpression);
             }
             return finalExpression;
         }
+
+        private static Expression<Func<T, string>> BuildNullSafeExpression<T>(Expression<Func<T, string>> propertyToSearch)
+        {
+            var nullSafeProperty = Expression.Coalesce(propertyToSearch.Body, ExpressionMethods.EmptyStringExpression);
+            var nullSafeExpression = Expression.Lambda<Func<T, string>>(nullSafeProperty, propertyToSearch.Parameters.First());
+            return nullSafeExpression;
+        }
+
     }
 }

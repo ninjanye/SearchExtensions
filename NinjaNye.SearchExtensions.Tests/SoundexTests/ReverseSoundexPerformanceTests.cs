@@ -1,18 +1,18 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Tests.SoundexTests
 {
-#if DEBUG
-    [Ignore("Performance tests only to be run in Release mode")]
-#endif
-    [TestFixture]
     public class  ReverseSoundexPerformanceTests : BuildStringTestsBase
     {
-        [Test]
+#if DEBUG
+        [Fact(Skip = "Performance tests only to be run in Release mode")]
+#else
+        [Fact]
+#endif
         public void ToReverseSoundex_OneMillionRecords_UnderOneSecond()
         {
             //Arrange
@@ -31,7 +31,11 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-        [Test]
+#if DEBUG
+        [Fact(Skip = "Performance tests only to be run in Release mode")]
+#else
+        [Fact]
+#endif
         public void ReverseSoundex_ReverseWordSoundexVsToReverseSoundex_ToReverseSoundexIsQuicker()
         {
             //Arrange

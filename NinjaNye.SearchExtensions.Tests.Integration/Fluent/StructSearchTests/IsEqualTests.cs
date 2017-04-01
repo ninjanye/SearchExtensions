@@ -1,80 +1,87 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 {
-    [TestFixture]
-    internal class IsEqualTests : IDisposable
+    [Collection("Database tests")]
+    public class IsEqualTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public IsEqualTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void IsEqual_CallWithValue_DoesNotThrowAnException()
         {
             //Arrange
-            
+
             //Act
 
             //Assert
-            Assert.DoesNotThrow(() => _context.TestModels.Search(x => x.IntegerOne).EqualTo(1));
+            try
+            {
+                _context.TestModels.Search(x => x.IntegerOne).EqualTo(1);
+            }
+            catch (Exception)
+            {
+                Assert.False(true);
+            }
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithValue_DoesNotReturnNull()
         {
             //Arrange
-            
+
             //Act 
             var result = _context.TestModels.Search(x => x.IntegerOne).EqualTo(50);
 
             //Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_CallWithValue_AllRecordsHaveEqualPropertyValues()
         {
             //Arrange
-            
+
             //Act
             var result = _context.TestModels.Search(x => x.IntegerOne).EqualTo(101);
 
             //Assert
-            Assert.IsTrue(result.Any());
-            Assert.IsTrue(result.All(x => x.IntegerOne == 101));
+            Assert.True(result.Any());
+            Assert.True(result.All(x => x.IntegerOne == 101));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchMultipleProperties_RecordsFromSecondPropertyMatchRequest()
         {
             //Arrange
-            
+
             //Act
             var result = _context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .EqualTo(3);
 
             //Assert
-            Assert.IsTrue(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3));
+            Assert.True(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3));
         }
 
-        [Test]
+        [Fact]
         public void IsEqual_SearchMultipleAgainstMultipleValues_RecordsMatchingBothValuesReturned()
         {
             //Arrange
-            
+
             //Act
             var result = _context.TestModels.Search(x => x.IntegerOne, x => x.IntegerThree)
                                                 .EqualTo(3, 101);
 
             //Assert
-            Assert.IsTrue(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3 
+            Assert.True(result.All(x => x.IntegerOne == 3 || x.IntegerThree == 3
                                        || x.IntegerOne == 101 || x.IntegerThree == 101));
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

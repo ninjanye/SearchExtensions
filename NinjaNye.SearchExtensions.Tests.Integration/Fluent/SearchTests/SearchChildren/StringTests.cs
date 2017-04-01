@@ -1,16 +1,20 @@
 using System;
 using System.Linq;
-using NinjaNye.SearchExtensions.Tests.Integration.Models;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchChildren
 {
-    [TestFixture]
-    internal class StringTests : IDisposable
+    [Collection("Database tests")]
+    public class StringTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public StringTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void SearchChildren_SearchForMatchingString_CorrectResultsAreReturned()
         {
             //Arrange
@@ -22,11 +26,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForStringContaining_CorrectResultsAreReturned()
         {
             //Arrange
@@ -38,13 +42,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
 
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForAnyMatchingString_CorrectResultsAreReturned()
         {
             //Arrange
@@ -56,13 +60,13 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
 
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForPropertiesContainingAllStrings_CorrectResultsAreReturned()
         {
             //Arrange
@@ -74,12 +78,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
 
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForAnyMatchingWholeWords_CorrectResultsAreReturned()
         {
             //Arrange
@@ -92,10 +96,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(0));
+            Assert.Equal(0, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForRecordsStartingWith_CorrectResultsAreReturned()
         {
             //Arrange
@@ -107,11 +111,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForRecordsStartingWithMultiple_CorrectResultsAreReturned()
         {
             //Arrange
@@ -123,12 +127,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForRecordsEndsWith_CorrectResultsAreReturned()
         {
             //Arrange
@@ -140,11 +144,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.Equal(1, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
         }
 
-        [Test]
+        [Fact]
         public void SearchChildren_SearchForRecordsEndingWithAny_CorrectResultsAreReturned()
         {
             //Arrange
@@ -156,9 +160,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
                                                  .ToList();
 
             //Assert
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
-            Assert.That(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("F672552D-2787-468D-8D2E-DE1E88F83E21")));
+            Assert.True(result.Any(tm => tm.Id == Guid.Parse("24726ECC-953E-4F95-88AA-91E0C0B52D00")));
         }
 
         public void Dispose()

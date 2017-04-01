@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions", "NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj", "{60B8E347-999F-4EE2-8172-9367D4F71860}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions", "NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj", "{60B8E347-999F-4EE2-8172-9367D4F71860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Tests", "NinjaNye.SearchExtensions.Tests\NinjaNye.SearchExtensions.Tests.csproj", "{A2B64396-FE41-4F02-9A11-5050F16524C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Tests", "NinjaNye.SearchExtensions.Tests\NinjaNye.SearchExtensions.Tests.csproj", "{A2B64396-FE41-4F02-9A11-5050F16524C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Performance", "NinjaNye.SearchExtensions.Performance\NinjaNye.SearchExtensions.Performance.csproj", "{3BA8EC52-60C1-41E6-B154-53D40407115B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Tests.Integration", "NinjaNye.SearchExtensions.Tests.Integration\NinjaNye.SearchExtensions.Tests.Integration.csproj", "{F167ED45-5E0B-4085-A040-2784116A70FD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{35E478DF-0651-48E1-8F07-F8DBE2689088}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,8 +36,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{60B8E347-999F-4EE2-8172-9367D4F71860} = {35E478DF-0651-48E1-8F07-F8DBE2689088}
 	EndGlobalSection
 EndGlobal

@@ -1,15 +1,20 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
-    [TestFixture]
-    internal class ContainingTests : IDisposable
+    [Collection("Database tests")]
+    public class ContainingTests
     {
-        private readonly TestContext _context = new TestContext();
+        private readonly TestContext _context;
 
-        [Test]
+        public ContainingTests(DatabaseIntegrationTests @base)
+        {
+            _context = @base._context;
+        }
+
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ReturnsOnlyRecordsWithWholeWordMatches()
         {
             //Arrange
@@ -20,10 +25,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("word");
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.Equal(1, result.Count());
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ReturnsRecordsWithWholeWordAtTheStart()
         {
             //Arrange
@@ -34,10 +39,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("whole");
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.Equal(1, result.Count());
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ReturnsRecordsWithWholeWordAtTheEnd()
         {
             //Arrange
@@ -48,11 +53,11 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("match");
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            Assert.That(result.Any(x => x.Id == new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")), Is.True);
+            Assert.Equal(1, result.Count());
+            Assert.True(result.Any(x => x.Id == new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
         }
 
-        [Test]
+        [Fact]
         public void Containing_SearchWholeWordsOnly_ReturnsRecordsWithSearchedWord()
         {
             //Arrange
@@ -63,13 +68,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("wholewordmatch");
 
             //Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            Assert.That(result.Any(x => x.Id == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")), Is.True);
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
+            Assert.Equal(1, result.Count());
+            Assert.True(result.Any(x => x.Id == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
         }        
     }
 }
