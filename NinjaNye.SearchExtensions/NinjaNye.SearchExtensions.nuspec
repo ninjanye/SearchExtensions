@@ -9,8 +9,8 @@
     <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>NinjaNye.SearchExtensions library. Version 1.8 adds ToRanked() support for "starts with" and "ends with" searches</releaseNotes>
+    <releaseNotes>NinjaNye.SearchExtensions library. Now built with dotnet core support</releaseNotes>
     <copyright>Copyright 2014</copyright>
-    <tags>search extension searchextensions methods linq ranked entityframework soundex levenshtein</tags>
+    <tags>search extension searchextensions methods linq ranked entityframework soundex levenshtein dotnetcore</tags>
   </metadata>
 </package>
