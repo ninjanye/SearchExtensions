@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions
 
         protected void QueryInclude(string path)
         {
-            var includeMethod = Source.GetType().GetTypeInfo().GetMethod("Include", new[] {typeof(string)});
+            var includeMethod = Source.GetType().GetRuntimeMethod("Include", new[] {typeof(string)});
             Source = (IQueryable<TSource>) includeMethod?.Invoke(Source, new[] {path});
         }
 

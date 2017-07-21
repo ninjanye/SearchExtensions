@@ -17,32 +17,60 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         #endregion
 
         #region Properties
+#if NET45
         public static readonly PropertyInfo StringLengthProperty = typeof(string).GetTypeInfo().GetProperty("Length");
+#else
+        public static readonly PropertyInfo StringLengthProperty = typeof(string).GetRuntimeProperty("Length");
+#endif
         #endregion
 
         #region Methods
 
-        public static readonly MethodInfo IndexOfMethod = typeof (string).GetTypeInfo().GetMethod("IndexOf", new[] {typeof (string)});
-        public static readonly MethodInfo IndexOfMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
-        public static readonly MethodInfo ReplaceMethod = typeof(string).GetTypeInfo().GetMethod("Replace", new[] { typeof(string), typeof(string) });
-        public static readonly MethodInfo EqualsMethod = typeof(string).GetTypeInfo().GetMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
-        public static readonly MethodInfo StartsWithMethod = typeof(string).GetTypeInfo().GetMethod("StartsWith", new[] { typeof(string) });
-        public static readonly MethodInfo StartsWithMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("StartsWith", new[] { typeof(string), typeof(StringComparison) });
-        public static readonly MethodInfo EndsWithMethod = typeof(string).GetTypeInfo().GetMethod("EndsWith", new[] { typeof(string) });
-        public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetTypeInfo().GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
-        public static readonly MethodInfo StringConcatMethod = typeof(string).GetTypeInfo().GetMethod("Concat", new[] { typeof(string), typeof(string) });
-        public static readonly MethodInfo StringContainsMethod = typeof(string).GetTypeInfo().GetMethod("Contains", new[] { typeof(string) });
-        public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetTypeInfo().GetMethod("Contains", new[] { typeof(string) });
-        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetTypeInfo().GetMethod("ToSoundex");
-        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetTypeInfo().GetMethod("ToReverseSoundex");
-        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetTypeInfo().GetMethod("LevenshteinDistance");
-        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetTypeInfo().GetMethod("Replace");
-        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetTypeInfo().GetMethod("QuickReverse");
+#if NET45
+        public static readonly MethodInfo IndexOfMethod = typeof (string).GetMethod("IndexOf", new[] {typeof (string)});
+        public static readonly MethodInfo IndexOfMethodWithComparison = typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo ReplaceMethod = typeof(string).GetMethod("Replace", new[] { typeof(string), typeof(string) });
+        public static readonly MethodInfo EqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo StartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
+        public static readonly MethodInfo StartsWithMethodWithComparison = typeof(string).GetMethod("StartsWith", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
+        public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo StringConcatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+        public static readonly MethodInfo StringContainsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+        public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
+        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");
+        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetMethod("ToReverseSoundex");
+        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetMethod("LevenshteinDistance");
+        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
+        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetMethod("QuickReverse");
 
-        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetTypeInfo().GetMethods()
+        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetMethods()
                                                                                  .Single(mi => mi.Name == "Any" 
                                                                                             && mi.GetParameters().Length == 2);
+#else
+        public static readonly MethodInfo IndexOfMethod = typeof(string).GetRuntimeMethod("IndexOf", new[] { typeof(string) });
+        public static readonly MethodInfo IndexOfMethodWithComparison = typeof(string).GetRuntimeMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo ReplaceMethod = typeof(string).GetRuntimeMethod("Replace", new[] { typeof(string), typeof(string) });
+        public static readonly MethodInfo EqualsMethod = typeof(string).GetRuntimeMethod("Equals", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo StartsWithMethod = typeof(string).GetRuntimeMethod("StartsWith", new[] { typeof(string) });
+        public static readonly MethodInfo StartsWithMethodWithComparison = typeof(string).GetRuntimeMethod("StartsWith", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo EndsWithMethod = typeof(string).GetRuntimeMethod("EndsWith", new[] { typeof(string) });
+        public static readonly MethodInfo EndsWithMethodWithComparison = typeof(string).GetRuntimeMethod("EndsWith", new[] { typeof(string), typeof(StringComparison) });
+        public static readonly MethodInfo StringConcatMethod = typeof(string).GetRuntimeMethod("Concat", new[] { typeof(string), typeof(string) });
+        public static readonly MethodInfo StringContainsMethod = typeof(string).GetRuntimeMethod("Contains", new[] { typeof(string) });
+        public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetRuntimeMethod("Contains", new[] { typeof(string) });
+        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToSoundex", new Type[0]);
+        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToReverseSoundex", new Type[0]);
+        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetRuntimeMethod("LevenshteinDistance", new Type[0]);
+        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetRuntimeMethod("Replace", new Type[0]);
+        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetRuntimeMethod("QuickReverse", new Type[0]);
 
-        #endregion
+        public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetRuntimeMethods()
+                                                                                 .Single(mi => mi.Name == "Any"
+                                                                                            && mi.GetParameters().Length == 2);
+#endif
+
+
+#endregion
     }
 }

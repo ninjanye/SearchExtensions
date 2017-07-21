@@ -21,8 +21,8 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         {
             var rankedType = typeof(Ranked<T>);
             var rankedCtor = Expression.New(rankedType);
-            PropertyInfo hitProperty = rankedType.GetTypeInfo().GetProperty("Hits");
-            PropertyInfo itemProperty = rankedType.GetTypeInfo().GetProperty("Item");
+            PropertyInfo hitProperty = rankedType.GetRuntimeProperty("Hits");
+            PropertyInfo itemProperty = rankedType.GetRuntimeProperty("Item");
             var hitValueAssignment = Expression.Bind(hitProperty, hitCountExpression);
             var itemValueAssignment = Expression.Bind(itemProperty, parameterExpression);
             return Expression.MemberInit(rankedCtor, hitValueAssignment, itemValueAssignment);
@@ -38,7 +38,14 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
                                                                ParameterExpression parameterExpression)
         {
             var distanceType = typeof(LevenshteinDistance<T>);
-            var constructor = distanceType.GetTypeInfo().GetConstructor(new [] {typeof(T), typeof(int[])});
+#if NET45
+            var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
+#else
+            var constructor = distanceType.GetTypeInfo().DeclaredConstructors.Single(ci => 
+                ci.GetParameters().Length == 2 && ci.ContainsGenericParameters 
+                && ci.GetParameters().First().GetType() == typeof(T)
+                && ci.GetParameters().ElementAt(1).GetType() == typeof(int[]));
+#endif
             var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpressions);
             var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);
             return distanceCtor;
@@ -113,9 +120,15 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static Expression<Func<TSource, TType>>[] GetProperties<TSource, TType>()
         {
             var parameter = Expression.Parameter(typeof(TSource));
-            var stringProperties = typeof(TSource).GetTypeInfo().GetProperties()
+#if NET45
+                var stringProperties = typeof(TSource).GetTypeInfo().GetProperties()
                                                   .Where(property => property.CanRead
                                                                   && property.PropertyType == typeof(TType));
+#else
+            var stringProperties = typeof(TSource).GetRuntimeProperties()
+                                              .Where(property => property.CanRead
+                                                              && property.PropertyType == typeof(TType));
+#endif
 
             var result = new List<Expression<Func<TSource, TType>>>();
             foreach (var property in stringProperties)
