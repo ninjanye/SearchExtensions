@@ -1,7 +1,7 @@
 SearchExtensions
 ================
 
-###This project is avaliable for download as a nuget package at https://www.nuget.org/packages/NinjaNye.SearchExtensions/
+### This project is avaliable for download as a nuget package at https://www.nuget.org/packages/NinjaNye.SearchExtensions/
 
 SearchExtensions is a library of IQueryable and IEnumerable extension methods to perform searching.  For more information on these methods, please visit my blog:
 http://jnye.co/posts/tagged/search
@@ -34,7 +34,7 @@ Search methods available to IQueryable data are:
 * `IsEqual` - target property *equals* search term or terms
 * `StartsWith` - target property *starts with* search term or terms
 
-###How to: Performing `Containing` searches
+### How to: Performing `Containing` searches
 
 Search for a **single search term** within a **single property**
 
@@ -62,7 +62,7 @@ Search for **multiple search terms** within **multiple properties**
                                           "searchTerm2",
                                           "searchTerm3");
 
-###How to: Performing `Containing` AND searches
+### How to: Performing `Containing` AND searches
 
 Search where a **single property** contains a **single search term**  
 AND a **another property** contains a **single search term**
@@ -88,7 +88,7 @@ AND any of the **multiple search terms** exist within a **single property**
                               .Search(x => x.Property3)
                               .Containing("another", "term");
 
-###How to: Performing `IsEqual` searches
+### How to: Performing `IsEqual` searches
 
 Search where a **single property** equals a **single search term**
 
@@ -116,7 +116,7 @@ Search where any one of **multiple properties** is equal to any one of **multipl
                                        "searchTerm2",
                                        "searchTerm3");
 
-###How to: Performing `StartsWith` searches
+### How to: Performing `StartsWith` searches
 
 Search where a **single property** starts with a **single search term**
 
@@ -145,7 +145,7 @@ Search where any one of **multiple properties** starts with any one of **multipl
                                           "searchTerm3");
 
 
-###How to: Combining instructions
+### How to: Combining instructions
 With the latest version of SearchExtensions you can also combine search actions. For instance
 
 Search where a **single property** `starts with` a **single search term** AND `containing` a **single search term**
@@ -162,7 +162,7 @@ The ability to pass **multiple search terms** to any of the action methods still
                               // and contains "xyz" OR "extensions"
 							  .Containing("xyz", "extensions")  
 
-##IEnumerable (in memory) Searches
+## IEnumerable (in memory) Searches
 
 SearchExtensions has also been extended to support `IEnumerable` collections.
 
@@ -179,7 +179,7 @@ Currently `IEnumerable` searching has more features available to it than `IQuery
 
 The important thing to remember when performing an in memory search is to set the culture to the type of string comparison you wish to perform. **If `SetCulture` is not specified, `StringComparison.CurrentCulture` is used.**
 
-###How to: Performing IEnumerable searches
+### How to: Performing IEnumerable searches
 
 These methods are identical to that of the `IQueryable` methods.
 
@@ -206,7 +206,7 @@ Another feature of the fluent api across both `IQueryable` and `IEnumerable` col
 
 As well as returning the matched items, a Ranked Search also returns a hit count for each item in the form of an IRanked<T> result.  This enables you to order by hit count to retrieve the most relevant search results.
 
-###`IRanked<T>` result
+### `IRanked<T>` result
 
 An IRanked<T> result is simply defined as follows:
 
@@ -270,7 +270,7 @@ Be aware that the `ToRanked()` method uses the search terms of the `Containing()
 ## Soundex support
 As of release 1.1, [NinjaNye.SearchExtensions](https://www.nuget.org/packages/NinjaNye.SearchExtensions/) supports converting and searching for words that sound like a given word.  
 
-###How to: Performing `Soundex` searches  
+### How to: Performing `Soundex` searches  
 
 Returning  records that 'sound like' "test" using the [Soundex algorythm](http://en.wikipedia.org/wiki/Soundex):
 
