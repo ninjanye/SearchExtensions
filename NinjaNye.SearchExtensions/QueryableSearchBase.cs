@@ -45,9 +45,9 @@ namespace NinjaNye.SearchExtensions
             }
 
             _expressionUpdated = true;
-            
-            var finalExpression = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter);
-            Source = Source.Where(finalExpression);
+
+            FinalPredicate = Expression.Lambda<Func<TSource, bool>>(CompleteExpression, FirstParameter);
+            Source = Source.Where(FinalPredicate);
         }
 
         protected void QueryInclude(string path)

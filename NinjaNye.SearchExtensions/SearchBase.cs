@@ -9,6 +9,7 @@ namespace NinjaNye.SearchExtensions
 {
     public abstract class SearchBase<TSource, TType, TPropertyType> where TSource : IEnumerable<TType>
     {
+        public Expression<Func<TType, bool>> FinalPredicate;
         protected TSource Source;
         protected Expression CompleteExpression;
         protected readonly Expression<Func<TType, TPropertyType>>[] Properties;
