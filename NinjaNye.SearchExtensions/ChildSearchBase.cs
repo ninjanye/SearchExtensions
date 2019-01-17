@@ -63,7 +63,5 @@ namespace NinjaNye.SearchExtensions
         {
             return BuildFinalExpression();
         }
-
-        public Func<TParent, bool> AsFunc() => AsExpression().Compile();
     }
 }

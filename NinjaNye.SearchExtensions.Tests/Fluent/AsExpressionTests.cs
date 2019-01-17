@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
 using Xunit;
@@ -52,7 +53,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var expr = _testData.Search(x => x.Name).AsFunc();
+            var expr = _testData.Search(x => x.Name).AsExpression().Compile();
             var result = _testData.Where(expr).ToList();
 
             //Assert
@@ -65,7 +66,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var expr = _parentData.SearchChildren(x => x.Children).With(x => x.Name).AsFunc();
+            var expr = _parentData.SearchChildren(x => x.Children).With(x => x.Name).AsExpression().Compile();
             var result = _parentData.Where(expr).ToList();
 
             //Assert
@@ -93,7 +94,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var expected = _testData.Search(x => x.Name).Containing("a").ToList();
 
             //Act
-            var expression = _testData.Search(x => x.Name).Containing("a").AsFunc();
+            var expression = _testData.Search(x => x.Name).Containing("a").AsExpression().Compile();
             var result = _testData.Where(expression).ToList();
 
             //Assert
@@ -110,8 +111,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
 
             //Act
             var expression = _parentData.SearchChildren(x => x.Children)
-                .With(x => x.Name).Containing("a")
-                .AsFunc();
+                .With(x => x.Name).Containing("a").AsExpression().Compile();
             var result = _parentData.Where(expression).ToList();
 
             //Assert
