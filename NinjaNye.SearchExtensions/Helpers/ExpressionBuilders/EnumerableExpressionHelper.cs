@@ -41,10 +41,7 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
 #if NET45
             var constructor = distanceType.GetConstructor(new [] {typeof(T), typeof(int[])});
 #else
-            var constructor = distanceType.GetTypeInfo().DeclaredConstructors.Single(ci => 
-                ci.GetParameters().Length == 2 && ci.ContainsGenericParameters 
-                && ci.GetParameters().First().GetType() == typeof(T)
-                && ci.GetParameters().ElementAt(1).GetType() == typeof(int[]));
+            var constructor = distanceType.GetTypeInfo().DeclaredConstructors.First();
 #endif
             var distanceArray = Expression.NewArrayInit(typeof(int), distanceExpressions);
             var distanceCtor = Expression.New(constructor, parameterExpression, distanceArray);

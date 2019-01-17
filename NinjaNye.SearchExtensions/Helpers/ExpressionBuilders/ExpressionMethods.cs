@@ -59,11 +59,11 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static readonly MethodInfo StringConcatMethod = typeof(string).GetRuntimeMethod("Concat", new[] { typeof(string), typeof(string) });
         public static readonly MethodInfo StringContainsMethod = typeof(string).GetRuntimeMethod("Contains", new[] { typeof(string) });
         public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetRuntimeMethod("Contains", new[] { typeof(string) });
-        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToSoundex", new Type[0]);
-        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToReverseSoundex", new Type[0]);
-        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetRuntimeMethod("LevenshteinDistance", new Type[0]);
-        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetRuntimeMethod("Replace", new Type[0]);
-        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetRuntimeMethod("QuickReverse", new Type[0]);
+        public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToSoundex", new[] { typeof(string) });
+        public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToReverseSoundex", new[]{typeof(string)});
+        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetRuntimeMethod("LevenshteinDistance", new[] { typeof(string), typeof(string) });
+        public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetRuntimeMethod("Replace", new[] { typeof(string), typeof(string), typeof(string), typeof(StringComparison)});
+        public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetRuntimeMethod("QuickReverse", new[] {typeof(string)});
 
         public static readonly MethodInfo AnyQueryableMethod = typeof(Enumerable).GetRuntimeMethods()
                                                                                  .Single(mi => mi.Name == "Any"
