@@ -72,7 +72,14 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
 
             //Assert
-            try { _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo); } catch (Exception) { Assert.False(true); }
+            try
+            {
+                _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo);
+            }
+            catch (Exception)
+            {
+                Assert.False(true);
+            }
         }
 
         [Fact]

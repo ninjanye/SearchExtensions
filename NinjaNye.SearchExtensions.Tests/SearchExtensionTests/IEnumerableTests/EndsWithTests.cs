@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     public class EndsWithTests : IDisposable
     {
-        private List<TestData> _testData = new List<TestData>();
+        private readonly List<TestData> _testData;
 
         public EndsWithTests()
         {
@@ -27,7 +27,14 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             //Act
 
             //Assert
-            try { _testData.Search(x => x.Name).EndsWith(x => x.Description); } catch (Exception) { Assert.False(true); }
+            try
+            {
+                _testData.Search(x => x.Name).EndsWith(x => x.Description);
+            }
+            catch (Exception)
+            {
+                Assert.False(true);
+            }
         }
 
         [Fact]

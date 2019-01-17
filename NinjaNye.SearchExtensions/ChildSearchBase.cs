@@ -12,7 +12,7 @@ namespace NinjaNye.SearchExtensions
     {
         protected Expression<Func<TParent, IEnumerable<TChild>>>[] _childProperties;
         protected Expression<Func<TChild, TProperty>>[] Properties;
-        private ParameterExpression _parentParameter;
+        private readonly ParameterExpression _parentParameter;
         protected ParameterExpression _childParameter = Expression.Parameter(typeof(TChild), "child");
         protected Expression _completeExpression;
 
@@ -58,5 +58,12 @@ namespace NinjaNye.SearchExtensions
             var final = Expression.Lambda<Func<TParent, bool>>(finalExpression, _parentParameter);
             return final;
         }
+
+        public Expression<Func<TParent, bool>> AsExpression()
+        {
+            return BuildFinalExpression();
+        }
+
+        public Func<TParent, bool> AsFunc() => AsExpression().Compile();
     }
 }

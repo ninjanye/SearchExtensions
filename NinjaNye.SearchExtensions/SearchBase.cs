@@ -33,6 +33,15 @@ namespace NinjaNye.SearchExtensions
             CompleteExpression = ExpressionHelper.JoinAndAlsoExpression(CompleteExpression, expressionToJoin);
         }
 
+        public Expression<Func<TType, bool>> AsExpression()
+        {
+            return CompleteExpression == null
+                ? Expression.Lambda<Func<TType, bool>>(Expression.Constant(true), FirstParameter)
+                : Expression.Lambda<Func<TType, bool>>(CompleteExpression, FirstParameter);
+        }
+
+        public Func<TType, bool> AsFunc() => AsExpression().Compile();
+
         /// <summary>
         /// Align the lambda parameter to that of the first string property
         /// </summary>

@@ -6,7 +6,6 @@ using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
 
 namespace NinjaNye.SearchExtensions.Tests.Fluent
 {
-    
     public class ReverseSoundexSearchTests
     {
         private List<TestData> _testData = new List<TestData>();

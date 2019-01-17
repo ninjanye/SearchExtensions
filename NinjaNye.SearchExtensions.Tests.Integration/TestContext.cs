@@ -10,8 +10,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase("SearchExtensions.Tests.Integration");
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;");
+            optionsBuilder.UseInMemoryDatabase("SearchExtensions.Tests.Integration");
+            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;");
             base.OnConfiguring(optionsBuilder);
         }
 
