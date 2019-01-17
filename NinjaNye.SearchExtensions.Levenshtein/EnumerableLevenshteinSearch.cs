@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
 using NinjaNye.SearchExtensions.Levenshtein;
+using NinjaNye.SearchExtensions.Levenshtein.Helpers.ExpressionBuilders;
 
 namespace NinjaNye.SearchExtensions
 {

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj" />
     <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj" />
   </ItemGroup>
 

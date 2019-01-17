@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using NinjaNye.SearchExtensions.Levenshtein;
 using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
@@ -40,7 +39,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
         public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetMethod("ToSoundex");
         public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetMethod("ToReverseSoundex");
-        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetMethod("LevenshteinDistance");
         public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetMethod("Replace");
         public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetMethod("QuickReverse");
 
@@ -61,7 +59,6 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders
         public static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetRuntimeMethod("Contains", new[] { typeof(string) });
         public static readonly MethodInfo SoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToSoundex", new[] { typeof(string) });
         public static readonly MethodInfo ReverseSoundexMethod = typeof(SoundexProcessor).GetRuntimeMethod("ToReverseSoundex", new[]{typeof(string)});
-        public static readonly MethodInfo LevensteinDistanceMethod = typeof(LevenshteinProcessor).GetRuntimeMethod("LevenshteinDistance", new[] { typeof(string), typeof(string) });
         public static readonly MethodInfo CustomReplaceMethod = typeof(StringExtensionHelper).GetRuntimeMethod("Replace", new[] { typeof(string), typeof(string), typeof(string), typeof(StringComparison)});
         public static readonly MethodInfo QuickReverseMethod = typeof(StringExtensionHelper).GetRuntimeMethod("QuickReverse", new[] {typeof(string)});
 
