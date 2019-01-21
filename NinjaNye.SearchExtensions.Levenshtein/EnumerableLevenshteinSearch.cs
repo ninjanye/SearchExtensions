@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Levenshtein;
 using NinjaNye.SearchExtensions.Levenshtein.Helpers.ExpressionBuilders;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Levenshtein
 {
     public class EnumerableLevenshteinSearch<T> : EnumerableSearchBase<T, string>
     {
