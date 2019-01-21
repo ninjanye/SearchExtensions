@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Tests", "NinjaNye.SearchExtensions.Tests\NinjaNye.SearchExtensions.Tests.csproj", "{A2B64396-FE41-4F02-9A11-5050F16524C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Performance", "NinjaNye.SearchExtensions.Performance\NinjaNye.SearchExtensions.Performance.csproj", "{3BA8EC52-60C1-41E6-B154-53D40407115B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Performance", "NinjaNye.SearchExtensions.Performance\NinjaNye.SearchExtensions.Performance.csproj", "{3BA8EC52-60C1-41E6-B154-53D40407115B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Tests.Integration", "NinjaNye.SearchExtensions.Tests.Integration\NinjaNye.SearchExtensions.Tests.Integration.csproj", "{F167ED45-5E0B-4085-A040-2784116A70FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Tests.Integration", "NinjaNye.SearchExtensions.Tests.Integration\NinjaNye.SearchExtensions.Tests.Integration.csproj", "{F167ED45-5E0B-4085-A040-2784116A70FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Levenshtein", "NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj", "{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{F167ED45-5E0B-4085-A040-2784116A70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F167ED45-5E0B-4085-A040-2784116A70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F167ED45-5E0B-4085-A040-2784116A70FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18A43AB0-2BE2-4679-83D9-874EE1E7DCAD}
 	EndGlobalSection
 EndGlobal

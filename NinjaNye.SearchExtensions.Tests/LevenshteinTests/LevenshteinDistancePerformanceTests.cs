@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Xunit;
 using NinjaNye.SearchExtensions.Levenshtein;
+using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {

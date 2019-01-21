@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Levenshtein
 {
     public class EnumerableLevenshteinCompare<T> : EnumerableSearchBase<T, string>
     {

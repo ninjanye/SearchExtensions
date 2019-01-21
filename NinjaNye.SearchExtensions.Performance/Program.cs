@@ -1,9 +1,9 @@
-﻿using NinjaNye.SearchExtensions.Levenshtein;
-using NinjaNye.SearchExtensions.Soundex;
+﻿using NinjaNye.SearchExtensions.Soundex;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions.Performance
     {
         static void Main(string[] args)
         {
-            var words = new[] { "twitter", "nitter", "flitter", "critter" };
+            //var words = new[] { "twitter", "nitter", "flitter", "critter" };
 
             //const int recordCount = 10000;
             //var enumerableData = BuildData(recordCount);

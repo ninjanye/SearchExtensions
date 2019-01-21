@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Validation;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Levenshtein
 {
     public static class FluentLevenshteinSearch
     {
@@ -15,7 +14,10 @@ namespace NinjaNye.SearchExtensions
         /// <param name="stringProperties">String property to search.</param>
         public static EnumerableLevenshteinSearch<T> LevenshteinDistanceOf<T>(this IEnumerable<T> source, params Expression<Func<T, string>>[] stringProperties)
         {
-            Ensure.ArgumentNotNull(stringProperties, "stringProperties");
+            if (stringProperties == null)
+            {
+                throw new ArgumentNullException(nameof(stringProperties));
+            }
             return new EnumerableLevenshteinSearch<T>(source, stringProperties);
         }        
     }
