@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Tests.Integration", "NinjaNye.SearchExtensions.Tests.Integration\NinjaNye.SearchExtensions.Tests.Integration.csproj", "{F167ED45-5E0B-4085-A040-2784116A70FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaNye.SearchExtensions.Levenshtein", "NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj", "{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Levenshtein", "NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj", "{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NinjaNye.SearchExtensions.Soundex", "NinjaNye.SearchExtensions.Soundex\NinjaNye.SearchExtensions.Soundex.csproj", "{B9F9E66A-281A-484F-B01E-0F7E24CC0FDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57D1100A-D9E4-442A-A1B6-261E7FC1D56C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F9E66A-281A-484F-B01E-0F7E24CC0FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F9E66A-281A-484F-B01E-0F7E24CC0FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F9E66A-281A-484F-B01E-0F7E24CC0FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F9E66A-281A-484F-B01E-0F7E24CC0FDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

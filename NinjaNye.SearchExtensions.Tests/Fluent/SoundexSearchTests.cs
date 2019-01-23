@@ -33,7 +33,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             
             //Act
-            var result = _testData.Search(x => x.Name).Soundex("Robert");
+            var result = _testData.SoundexOf(x => x.Name).Matching("Robert");
 
             //Assert
             Assert.Contains(_testData[0], result);
@@ -43,9 +43,9 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
         public void SoundsLike_SearchSingleWord_DoesNotReturnsNonMatchingRecords()
         {
             //Arrange
-            
+
             //Act
-            var result = _testData.Search(x => x.Name).Soundex("Robert");
+            var result = _testData.SoundexOf(x => x.Name).Matching("Robert");
 
             //Assert
             Assert.DoesNotContain(_testData[5], result);
@@ -57,10 +57,10 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
             var names = new[] {"Robert", "Mitt"};
             var soundexCodes = names.Select(w => w.ToSoundex());
-            var expected = _testData.Where(td => soundexCodes.Contains(td.Name.ToSoundex()));            
-            
+            var expected = _testData.Where(td => soundexCodes.Contains(td.Name.ToSoundex()));
+
             //Act
-            var result = _testData.Search(x => x.Name).Soundex("Robert", "Mitt");
+            var result = _testData.SoundexOf(x => x.Name).Matching("Robert", "Mitt");
 
             //Assert
             Assert.Equal(expected, result);

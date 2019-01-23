@@ -47,7 +47,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             stopwatch.Start();
              
             //Act
-            var result = words.Search(x => x).Soundex("test").ToList();
+            var result = words.SoundexOf(x => x).Matching("test").ToList();
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count);
@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             stopwatch.Start();
 
             //Act
-            var result = words.Search(x => x).Soundex("test", "bacon").ToList();
+            var result = words.SoundexOf(x => x).Matching("test", "bacon").ToList();
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
             Console.WriteLine("Results retrieved: {0}", result.Count);
@@ -95,7 +95,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             stopwatch.Start();
 
             //Act
-            var result = words.Search(x => x).Soundex("historians", "often", "articulate", "great", "battles",
+            var result = words.SoundexOf(x => x).Matching("historians", "often", "articulate", "great", "battles",
                                                       "elegantly", "without", "pause", "for", "thought").ToList();
             stopwatch.Stop();
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);
