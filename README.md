@@ -272,27 +272,27 @@ As of release 1.1, [NinjaNye.SearchExtensions](https://www.nuget.org/packages/Ni
 
 ### How to: Performing `Soundex` searches  
 
-Returning  records that 'sound like' "test" using the [Soundex algorythm](http://en.wikipedia.org/wiki/Soundex):
+Returning records that 'sound like' "test" using the [Soundex algorythm](http://en.wikipedia.org/wiki/Soundex):
 
 Search where a **single property** sounds like a **single search term**
 
-    var result = data.Search(x => x.Property1).Soundex("test")
+    var result = data.SoundexOf(x => x.Property1).Matching("test")
 
 Search where a any of **multiple properties** sounds like a **single search term**
 
-    var result = data.Search(x => x.Property1, x => x.PropertyTwo)
-                     .Soundex("test")
+    var result = data.SoundexOf(x => x.Property1, x => x.PropertyTwo)
+                     .Matching("test")
 
 Search where a **single property** sounds like any one of **multiple search terms**
 
-    var result = data.Search(x => x.Property1).Soundex("test", "another")
+    var result = data.SoundexOf(x => x.Property1).Matching("test", "another")
 
 Search where a any of **multiple properties** sounds like any of **multiple search terms**
 
-    var result = data.Search(x => x.Property1, x => x.PropertyTwo)
-                     .Soundex("test", "another")
+    var result = data.SoundexOf(x => x.Property1, x => x.PropertyTwo)
+                     .Matching("test", "another")
 
-> The above methods can also be applied to `IQueryable` data.  For `IQueryable` we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the in memory collection.
+> The above methods can also be applied to `IQueryable` data.  For `IQueryable` we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the _in memory collection_.
 
 For more information about the Soundex search functionality, soundex search performance, and how it has been integrated with `IQueryable`, please visit [http://jnye.co/soundex](http://jnye.co/soundex)
 
@@ -302,6 +302,4 @@ For more information about the Soundex search functionality, soundex search perf
 
 ## Future Features
 * Ability to perform AND search on IRanked results
-* Levenshtein support
-* Fuzzy search support
 * IQueryable implementation improvements (remove null records)
