@@ -30,7 +30,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = _testData.Search(x => x.Name).ReverseSoundex("range");
+            var result = _testData.ReverseSoundexOf(x => x.Name).Matching("range");
 
             //Assert
             Assert.Contains(_testData[0], result);
@@ -42,7 +42,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Arrange
 
             //Act
-            var result = _testData.Search(x => x.Name).ReverseSoundex("range");
+            var result = _testData.ReverseSoundexOf(x => x.Name).Matching("range");
 
             //Assert
             Assert.DoesNotContain(_testData[3], result);
@@ -57,7 +57,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var expected = _testData.Where(td => soundexCodes.Contains(td.Name.ToReverseSoundex()));
 
             //Act
-            var result = _testData.Search(x => x.Name).ReverseSoundex(names);
+            var result = _testData.ReverseSoundexOf(x => x.Name).Matching(names);
 
             //Assert
             Assert.Equal(expected, result);

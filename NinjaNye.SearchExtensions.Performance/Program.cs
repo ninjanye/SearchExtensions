@@ -1,9 +1,9 @@
-﻿using NinjaNye.SearchExtensions.Soundex;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NinjaNye.SearchExtensions.Levenshtein;
+using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Performance
 {

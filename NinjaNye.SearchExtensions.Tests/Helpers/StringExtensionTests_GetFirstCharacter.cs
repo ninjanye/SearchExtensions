@@ -1,10 +1,10 @@
-﻿using NinjaNye.SearchExtensions.Helpers;
+﻿using NinjaNye.SearchExtensions.Soundex.Helpers;
 using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Helpers
 {
     
-    public class StringExtensionTests
+    public class StringExtensionTests_GetFirstCharacter
     {
         [Fact]
         public void GetFirstCharacter_EmptyString_ReturnsNull()

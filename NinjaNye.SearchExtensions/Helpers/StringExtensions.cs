@@ -14,22 +14,5 @@ namespace NinjaNye.SearchExtensions.Helpers
             }
             return text;
         }
-
-        public static string GetFirstCharacter(this string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return null;
-            }
-
-            return text.TrimStart()[0].ToString();
-        }
-
-        public static string QuickReverse(this string value)
-        {
-            var charArray = value.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
-        }
     }
 }

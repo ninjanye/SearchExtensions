@@ -189,21 +189,6 @@ namespace NinjaNye.SearchExtensions
         }
 
         /// <summary>
-        /// Returns Enumerable of records that match the Soundex code for
-        /// any of the given terms across any of the defined properties
-        /// </summary>
-        /// <param name="terms">terms to search for</param>
-        /// <returns>Enumerable of records where Soundex matches</returns>
-        public IEnumerable<T> Soundex(params string[] terms)
-        {
-            var firstCharacters = terms.Select(t => t.GetFirstCharacter())
-                                       .Distinct()
-                                       .ToArray();
-            return StartsWith(firstCharacters).AsEnumerable()
-                       .Search(Properties).Soundex(terms);
-        }
-
-        /// <summary>
         /// Rank the filtered items based on the matched occurences
         /// </summary>
         /// <returns>

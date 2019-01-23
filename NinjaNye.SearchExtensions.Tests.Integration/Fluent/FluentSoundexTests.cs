@@ -23,7 +23,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var expected = _context.TestModels.AsEnumerable().Where(x => x.StringOne.ToSoundex() == soundex);
             
             //Act
-            var result = _context.TestModels.Search(x => x.StringOne).Soundex(word).ToList();
+            var result = _context.TestModels.SoundexOf(x => x.StringOne).Matching(word).ToList();
 
             //Assert
             Assert.Equal(expected, result);
@@ -38,7 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var expected = _context.TestModels.AsEnumerable().Where(x => soundex.Contains(x.StringOne.ToSoundex()));
             
             //Act
-            var result = _context.TestModels.Search(x => x.StringOne).Soundex(words).ToList();
+            var result = _context.TestModels.SoundexOf(x => x.StringOne).Matching(words).ToList();
 
             //Assert
             Assert.Equal(expected, result);

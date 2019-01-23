@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
-using NinjaNye.SearchExtensions.Helpers;
+using NinjaNye.SearchExtensions.Soundex.Helpers;
 
 namespace NinjaNye.SearchExtensions.Soundex
 {

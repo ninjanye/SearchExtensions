@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NinjaNye.SearchExtensions.Helpers.ExpressionBuilders;
-using NinjaNye.SearchExtensions.Soundex;
+using NinjaNye.SearchExtensions.Soundex.Helpers.ExpressionBuilders;
 
-namespace NinjaNye.SearchExtensions
+namespace NinjaNye.SearchExtensions.Soundex
 {
-    internal class EnumerableSoundexSearch<T> : EnumerableSearchBase<T, string>
+    public class EnumerableSoundexSearch<T> : EnumerableSearchBase<T, string>
     {
         public EnumerableSoundexSearch(IEnumerable<T> source, Expression<Func<T, string>>[] stringProperties) 
             : base(source, stringProperties)
@@ -21,7 +20,7 @@ namespace NinjaNye.SearchExtensions
         /// </summary>
         /// <param name="terms">Term or terms results should sound similar to</param>
         /// <returns>Returns only the items that match the soundex codes for the terms supplied</returns>
-        public IEnumerable<T> American(params string[] terms)
+        public IEnumerable<T> Matching(params string[] terms)
         {
             Expression fullExpression = null;
             var soundexCodes = terms.Select(t => t.ToSoundex()).ToList();

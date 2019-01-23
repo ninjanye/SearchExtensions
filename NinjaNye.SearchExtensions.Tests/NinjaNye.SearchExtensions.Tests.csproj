@@ -17,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj" />
+    <ProjectReference Include="..\NinjaNye.SearchExtensions.Soundex\NinjaNye.SearchExtensions.Soundex.csproj" />
     <ProjectReference Include="..\NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
