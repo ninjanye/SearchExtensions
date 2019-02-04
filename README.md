@@ -1,33 +1,27 @@
-SearchExtensions
-================
+# SearchExtensions
 
-### This project is avaliable for download as a nuget package at https://www.nuget.org/packages/NinjaNye.SearchExtensions/
+SearchExtensions is a library of IQueryable and IEnumerable extension methods to perform searching. More information on these packages and it's use can be found by, visiting [my blog](http://jnye.co/posts/tagged/search).
 
-SearchExtensions is a library of IQueryable and IEnumerable extension methods to perform searching.  For more information on these methods, please visit my blog:
-http://jnye.co/posts/tagged/search
+This project is represents the source code for the following 3 nuget packages:
 
-> You can get in touch with me by adding a comment on my blog ([http://jnye.co](http://jnye.co)) or you can **follow me on twitter ([@ninjanye](https://twitter.com/ninjanye))**
+* [NinjaNye.SearchExtensions](https://www.nuget.org/packages/NinjaNye.SearchExtensions/) - _A fluent api for performing complex searches across `IEnumerable` and `IQueryable` collections._
+* [NinjaNye.SearchExtensions.Levenshtein](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Levenshtein/) - _This package specialises in performing Levenshtein searches across `IEnumerable` collections._
+* [NinjaNye.SearchExtensions.Soundex](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Soundex/) - _This package specialises in performing [Soundex](http://en.wikipedia.org/wiki/Soundex) searches across `IEnumerable` collections._
 
-## [`NEW` Release 1.1](http://jnye.co/soundex)
-The latest release includes [Soundex](http://en.wikipedia.org/wiki/Soundex) support to `IEnumerable` collections.
+## Version 3 release notes
 
+* Soundex support migrated to dedicated [nuget package](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Soundex/)
+* Levenshtein support migrated to dedicated [nuget package](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Levenshtein/)
+* Constructed expressions can now be pulled out and re-used.
 
-## [`NEW` Release 1.0](http://jnye.co/release1)
-The changes made to the latest release of Search extensions are:  
-
-* Bump version to **Release 1.0**
-* Remove the previously marked `[Obsolete]` methods
-* Promote the fluent `Search` methods out of the fluent namespace
-* Remove the specific `SearchAll()` method in favour of utilising `.Search()`
-* Performance improvements
-* Minor code cleanup
-
-## [`NEW` Fluent Search API](http://jnye.co/fluent)
-As of version 0.5, SearchExtensions has been upgraded to have a fluent API enabling a more control over your queries as well as making them easy to read and construct.
+> As of version 3.0 Soundex and Levenshtein support has been migrated into their own respective packages (above).  All functionality still remains. If you are currently using Levensthein or Soundex functionlity in version 2.2 or lower, please upgrade to you the dedicated package.
 
 ## IQueryable Searching
+
 The IQueryable extension methods build expression trees based on your command chain and then sends this request to the data provider when required.  This means that your data provider is restricting the records that are brought into memory instead of having all records brought into, and filtered, in memory.
+
 ### Methods
+
 Search methods available to IQueryable data are:
 
 * `Containing` - target property *contains* search term or terms
@@ -46,19 +40,19 @@ Search for a **single search term** within **multiple properties**
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .Containing("searchTerm");
+                              .Containing("searchTerm");
 
 Search for **multiple search terms** within a **single property**
 
     var result = queryableData.Search(x => x.Property1)
-							  .Containing("search", "term");
+                              .Containing("search", "term";
 
 Search for **multiple search terms** within **multiple properties**
 
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .Containing("searchTerm1",
+                              .Containing("searchTerm1",
                                           "searchTerm2",
                                           "searchTerm3");
 
@@ -100,7 +94,7 @@ Search where any one of **multiple properties** is equal to a **single search te
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .IsEqual("searchTerm");
+                              .IsEqual("searchTerm");
 
 Search where a **single property** is equal to any one of **multiple search terms**
 
@@ -112,7 +106,7 @@ Search where any one of **multiple properties** is equal to any one of **multipl
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .IsEqual("searchTerm1",
+                              .IsEqual("searchTerm1",
                                        "searchTerm2",
                                        "searchTerm3");
 
@@ -128,7 +122,7 @@ Search where any one of **multiple properties** starts with to a **single search
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .StartsWith("searchTerm");
+                              .StartsWith("searchTerm");
 
 Search where a **single property** starts with any one of **multiple search terms**
 
@@ -140,27 +134,27 @@ Search where any one of **multiple properties** starts with any one of **multipl
     var result = queryableData.Search(x => x.Property1,
                                       x => x.Property2,
                                       x => x.Property3)
-							  .StartsWith("searchTerm1",
+                              .StartsWith("searchTerm1",
                                           "searchTerm2",
                                           "searchTerm3");
 
-
 ### How to: Combining instructions
+
 With the latest version of SearchExtensions you can also combine search actions. For instance
 
 Search where a **single property** `starts with` a **single search term** AND `containing` a **single search term**
 
     var result = queryableData.Search(x => x.Property1)
-							  .StartsWith("abc")
-							  .Containing("mno");
+                              .StartsWith("abc")
+                              .Containing("mno");
 
 The ability to pass **multiple search terms** to any of the action methods still remains:
 
     var result = queryableData.Search(x => x.Property1, x => x.Property2)
                               // that starts with "abc" OR "ninja"
-							  .StartsWith("abc", "ninja")
+                              .StartsWith("abc", "ninja")
                               // and contains "xyz" OR "extensions"
-							  .Containing("xyz", "extensions")  
+                              .Containing("xyz", "extensions")  
 
 ## IEnumerable (in memory) Searches
 
@@ -169,7 +163,8 @@ SearchExtensions has also been extended to support `IEnumerable` collections.
 This means you can now perform all of the above searches on in memory collections should you need to.
 
 ### Methods
-Currently `IEnumerable` searching has more features available to it than `IQueryable`, namely `EndsWith` and 'SetCulture'
+
+Currently `IEnumerable` searching has more features available to it than `IQueryable`, namely `EndsWith` and `SetCulture`
 
 * `SetCulture` - Sets the string comparison culture with which to perform searches
 * `Containing` - target property *contains* search term or terms
@@ -184,31 +179,30 @@ The important thing to remember when performing an in memory search is to set th
 These methods are identical to that of the `IQueryable` methods.
 
     var result = enumerableData.Search(x => x.Property1)
-							   .SetCulture(StringComparison.OrdinalIgnoreCase) // Set culture for comparison
-							   .StartsWith("abc")
-							   .EndsWith("xyz")
-							   .Containing("mno");
+                               .SetCulture(StringComparison.OrdinalIgnoreCase) // Set culture for comparison
+                               .StartsWith("abc")
+                               .EndsWith("xyz")
+                               .Containing("mno");
 
 It is also possible to switch the `StringComparison` culture context multiple times
 
     var result = enumerableData.Search(x => x.Property1)
-							   .SetCulture(StringComparison.OrdinalIgnoreCase)
-							   .StartsWith("abc")  // Uses OrdinalIgnoreCase
-							   .SetCulture(StringComparison.Ordinal)
-							   .EndsWith("xyz")    // Uses Ordinal
-							   .SetCulture(StringComparison.CurrentCulture)
-							   .Containing("mno"); //Uses CurrentCulture
-
+                               .SetCulture(StringComparison.OrdinalIgnoreCase)
+                               .StartsWith("abc")  // Uses OrdinalIgnoreCase
+                               .SetCulture(StringComparison.Ordinal)
+                               .EndsWith("xyz")    // Uses Ordinal
+                               .SetCulture(StringComparison.CurrentCulture)
+                               .Containing("mno"); //Uses CurrentCulture
 
 ## [Ranked Searches](http://jnye.co/Posts/2031/searchextensions-ranked-searches-now-supported-by-the-fluent-api)
 
 Another feature of the fluent api across both `IQueryable` and `IEnumerable` collections is the `ToRanked()` method.  
 
-As well as returning the matched items, a Ranked Search also returns a hit count for each item in the form of an IRanked<T> result.  This enables you to order by hit count to retrieve the most relevant search results.
+As well as returning the matched items, a Ranked Search also returns a hit count for each item in the form of an IRanked\<T\> result.  This enables you to order by hit count to retrieve the most relevant search results.
 
 ### `IRanked<T>` result
 
-An IRanked<T> result is simply defined as follows:
+An IRanked\<T\> result is simply defined as follows:
 
     public interface IRanked<out T>
     {
@@ -268,7 +262,8 @@ We can also mix it up with the other fluent API methods
 Be aware that the `ToRanked()` method uses the search terms of the `Containing()` method combined with the properties to search to build its hit count.  The fluent `ToRanked()` method also means the old `RankedSearch` method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.
 
 ## Soundex support
-As of release 1.1, [NinjaNye.SearchExtensions](https://www.nuget.org/packages/NinjaNye.SearchExtensions/) supports converting and searching for words that sound like a given word.  
+
+[NinjaNye.SearchExtensions.Soundex](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Soundex/) supports converting and searching for words that sound like a given word.  
 
 ### How to: Performing `Soundex` searches  
 
@@ -292,14 +287,24 @@ Search where a any of **multiple properties** sounds like any of **multiple sear
     var result = data.SoundexOf(x => x.Property1, x => x.PropertyTwo)
                      .Matching("test", "another")
 
-> The above methods can also be applied to `IQueryable` data.  For `IQueryable` we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the _in memory collection_.
+### How to: Performing `ReverseSoundex` searches  
+
+All the abouve soundex axamples can be performed using the [Reverse Soundex algorythm](http://en.wikipedia.org/wiki/Soundex).
+Simply substitute in the `ReverseSoundexOf()` method. For example: 
+
+Search where a **single property** sounds like a **single search term**
+
+    var result = data.ReverseSoundexOf(x => x.Property1).Matching("test")
+
+Search where a any of **multiple properties** sounds like a **single search term**
+
+    var result = data.ReverseSoundexOf(x => x.Property1, x => x.PropertyTwo)
+                     .Matching("test")
+
+> The above `SoundexOf` and `ReverseSoundexOf` methods can also be applied to `IQueryable` data.  For `IQueryable` we reduce the amount of records returned from the data source as much as possible but be aware that the soundex searching is performed on the _in memory collection_.
 
 For more information about the Soundex search functionality, soundex search performance, and how it has been integrated with `IQueryable`, please visit [http://jnye.co/soundex](http://jnye.co/soundex)
 
 ---
 
-> And that is it.  If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or these github pages.
-
-## Future Features
-* Ability to perform AND search on IRanked results
-* IQueryable implementation improvements (remove null records)
+> If you have any new feature requests, questions, or comments, please get in touch, either, via my [website](http://jnye.co), [twitter](https://twitter.com/ninjanye) or preferrably raise an issue in this github repository.
