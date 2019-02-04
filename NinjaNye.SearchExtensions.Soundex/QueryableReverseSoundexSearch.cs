@@ -27,10 +27,10 @@ namespace NinjaNye.SearchExtensions.Soundex
         /// <returns>Enumerable of records where Soundex matches</returns>
         public IEnumerable<T> Matching(params string[] terms)
         {
-            var firstCharacters = terms.Select(t => t.GetLastCharacter())
+            var lastCharacters = terms.Select(t => t.GetLastCharacter())
                 .Distinct()
                 .ToArray();
-            return Source.Search(Properties).StartsWith(firstCharacters).AsEnumerable()
+            return Source.Search(Properties).EndsWith(lastCharacters).AsEnumerable()
                 .ReverseSoundexOf(Properties).Matching(terms);
         }
     }
