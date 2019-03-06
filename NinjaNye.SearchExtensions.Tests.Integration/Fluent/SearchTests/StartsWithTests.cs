@@ -54,7 +54,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.StringOne.StartsWith(x.StringTwo)));
         }
 
@@ -68,7 +68,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .StartsWith(x => x.StringTwo, x => x.StringThree);
 
             //Assert
-            Assert.True(result.Any(x => x.StringOne.StartsWith(x.StringThree)));
+            Assert.Contains(result, x => x.StringOne.StartsWith(x.StringThree));
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).StartsWith(x => x.StringThree);
 
             //Assert
-            Assert.True(result.Any(x => x.StringTwo.StartsWith(x.StringThree)));
+            Assert.Contains(result, x => x.StringTwo.StartsWith(x.StringThree));
         }
 
         [Fact]
@@ -109,8 +109,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Assert
             var guids = result.Select(x => x.Id).ToList();
-            Assert.False(guids.Contains(new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
-            Assert.True(guids.Contains(new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
+            Assert.DoesNotContain(guids, x => x == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C"));
+            Assert.Contains(guids, x => x == new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251"));
         }
     }
 }

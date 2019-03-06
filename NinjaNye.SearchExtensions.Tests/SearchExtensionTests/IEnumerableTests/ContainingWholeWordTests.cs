@@ -22,7 +22,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Contains(expected, result);
         }
 
@@ -41,7 +41,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Contains(expected, result);
         }
 
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Contains(expected, result);
         }
 
@@ -79,7 +79,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Contains(expected, result);
         }
 
@@ -100,7 +100,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                 .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Contains(expected, result);
         }
     }

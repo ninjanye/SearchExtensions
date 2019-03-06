@@ -61,7 +61,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name == x.Description));
         }
 
@@ -74,7 +74,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name, x => x.Description).EqualTo(x => x.Status);
 
             //Assert
-            Assert.True(result.Any(x => x.Description == x.Status));
+            Assert.Contains(result, x => x.Description == x.Status);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EqualTo(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.True(result.Any(x => x.Name == x.Status));
+            Assert.Contains(result, x => x.Name == x.Status);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                                      .EqualTo(x => x.Description);
 
             //Assert
-            Assert.True(result.Any(x => x.Name == "TEst" && x.Description == "teST"));
+            Assert.Contains(result, x => x.Name == "TEst" && x.Description == "teST");
         }
     }
 }

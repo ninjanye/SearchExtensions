@@ -56,7 +56,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description);
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.StartsWith(x.Description)));
         }
 
@@ -69,7 +69,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.StartsWith(x.Description) || x.Name.StartsWith(x.Status)));
         }
 
@@ -82,7 +82,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).StartsWith(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.StartsWith(x.Description) || (x.Status != null && x.Name.StartsWith(x.Status))));
         }
 
@@ -108,7 +108,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.OrdinalIgnoreCase).StartsWith(x => x.Description);
 
             //Assert
-            Assert.True(result.Any(t => t.Description == "TEsT"));
+            Assert.Contains(result, t => t.Description == "TEsT");
         }
     }
 }

@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing("abc").ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.StringOne.Contains("abc")));
         }
 
@@ -62,7 +62,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing("abc").StartsWith("a").ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.StringOne.Contains("abc") && x.StringOne.StartsWith("a")));
         }
 
@@ -75,7 +75,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing("abc").EndsWith("d").ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.StringOne.Contains("abc") && x.StringOne.EndsWith("d")));
         }
 
@@ -88,7 +88,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo("abcd").ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.StringOne == "abcd"));
         }
 

@@ -57,7 +57,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(p => p.Children.Any(c => c.Number > 10)));
         }
 
@@ -109,7 +109,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Contains(_parent, result);
         }
 
@@ -143,7 +143,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Contains(_parent, result);
         }
 
@@ -159,7 +159,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Contains(_parent, result);
         }
 
@@ -175,7 +175,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                        .ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Contains(_otherParent, result);
         }
 

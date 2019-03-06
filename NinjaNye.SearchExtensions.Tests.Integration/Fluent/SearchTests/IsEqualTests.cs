@@ -46,7 +46,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.StringOne == x.StringTwo));
         }
 
@@ -59,7 +59,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo).EqualTo(x => x.StringThree);
 
             //Assert
-            Assert.True(result.Any(x => x.StringTwo == x.StringThree));
+            Assert.Contains(result, x => x.StringTwo == x.StringThree);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).EqualTo(x => x.StringTwo, x => x.StringThree);
 
             //Assert
-            Assert.True(result.Any(x => x.StringOne == x.StringThree));
+            Assert.Contains(result, x => x.StringOne == x.StringThree);
         }
     }
 }

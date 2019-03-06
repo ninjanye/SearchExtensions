@@ -35,7 +35,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
             var result = _context.TestModels.Search(x => x.StringOne).Containing(x => x.StringTwo);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
         }
 
         [Fact]

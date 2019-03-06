@@ -50,7 +50,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).Containing("abc");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Name.Contains("abc")));
         }
 
@@ -76,7 +76,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).Containing("b").StartsWith("a");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Name.Contains("abc") && x.Name.StartsWith("a")));
         }
 
@@ -89,7 +89,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).EqualTo("abcd");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Name == "abcd"));
         }
 
@@ -103,7 +103,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
                                                      .Containing("qr");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Name.EndsWith("st") && x.Name.Contains("qr")));
         }
 
@@ -226,9 +226,9 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Name).SetCulture(StringComparison.Ordinal).Containing("AB", "jk");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Name.Contains("jk")));
-            Assert.False(result.Any(x => x.Name.Contains("AB")));
+            Assert.DoesNotContain(result, x => x.Name.Contains("AB"));
         }
 
         [Fact]
@@ -253,7 +253,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).StartsWith("C");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Description.StartsWith("C")));
         }
 
@@ -279,7 +279,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EndsWith("SE");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Description.EndsWith("SE", StringComparison.Ordinal)));
         }
 
@@ -305,7 +305,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             var result = _testData.Search(x => x.Description).SetCulture(StringComparison.Ordinal).EqualTo("CASE");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.True(result.All(x => x.Description.EndsWith("CASE", StringComparison.Ordinal)));
         }
 

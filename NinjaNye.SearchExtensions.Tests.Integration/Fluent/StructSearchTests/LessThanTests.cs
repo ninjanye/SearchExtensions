@@ -53,7 +53,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.IntegerOne).LessThan(10);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.IntegerOne < 10));
         }
 

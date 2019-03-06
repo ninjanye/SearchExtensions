@@ -24,7 +24,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm);
 
             //Assert
-            Assert.True(result.Any() && result.All(t => t.StringOne.IndexOf(searchTerm) >= 0));
+            Assert.NotEmpty(result);
+            Assert.All(result, t => Assert.True(t.StringOne.IndexOf(searchTerm) >= 0));
         }
 
         [Fact]
@@ -95,7 +96,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
         }
 
         [Fact]
-        public void ContainingAll_SearchAgainstOneProperty_AllREsultsHaveAStringTwoInStringOne()
+        public void ContainingAll_SearchAgainstOneProperty_AllResultsHaveAStringTwoInStringOne()
         {
             //Arrange
             
@@ -103,12 +104,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(x => x.StringTwo).ToList();
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.StringOne.Contains(x.StringTwo)));
         }
 
         [Fact]
-        public void ContainingAll_SearchAgainstTwoProperties_AllRsultsHaveBothProperties()
+        public void ContainingAll_SearchAgainstTwoProperties_AllResultsHaveBothProperties()
         {
             //Arrange
             
@@ -118,7 +119,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                                                 .ToList();
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.StringOne.Contains(x.StringTwo) && x.StringOne.Contains(x.StringThree)));
         }
     }

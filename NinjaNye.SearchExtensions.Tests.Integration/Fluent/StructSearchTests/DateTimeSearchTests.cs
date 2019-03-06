@@ -36,7 +36,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start == expected));
         }
 
@@ -52,7 +52,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .EqualTo(date1, date2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.End == date1 || x.End == date2));
         }
 
@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .EqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start == expected || x.End == expected));
         }
 
@@ -81,7 +81,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > expected));
         }
 
@@ -95,7 +95,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > expected || x.End > expected));
         }
 
@@ -109,7 +109,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.End).LessThan(expected);  
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.End < expected));
         }
 
@@ -123,7 +123,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start < expected || x.End < expected));
         }
 
@@ -137,7 +137,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start <= expected));
         }
 
@@ -152,7 +152,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start <= expected || x.End <= expected));
         }
 
@@ -166,7 +166,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
             var result = _context.TestModels.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start >= expected));
         }
 
@@ -181,7 +181,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start >= expected || x.End >= expected));
         }
 
@@ -198,7 +198,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .LessThan(lessThanDate);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
         }
 
@@ -214,7 +214,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
                                       .Between(start, end);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => (x.Start > start && x.Start < end)
                                        || (x.End > start && x.End < end)));
         }

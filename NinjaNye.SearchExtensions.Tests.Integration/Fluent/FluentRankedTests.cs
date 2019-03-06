@@ -71,7 +71,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
                                                 .StartsWith("i");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal(1, result.First().Hits);
         }
 

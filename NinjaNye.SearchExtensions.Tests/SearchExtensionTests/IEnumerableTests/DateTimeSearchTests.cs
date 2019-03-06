@@ -51,7 +51,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).EqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start == expected));
         }
 
@@ -67,7 +67,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .EqualTo(date1, date2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.End == date1 || x.End == date2));
         }
 
@@ -82,7 +82,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .EqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start == expected || x.End == expected));
         }
 
@@ -96,7 +96,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).GreaterThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > expected));
         }
 
@@ -110,7 +110,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start, x => x.End).GreaterThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > expected || x.End > expected));
         }
 
@@ -124,7 +124,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.End).LessThan(expected);  
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.End < expected));
         }
 
@@ -138,7 +138,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start, x => x.End).LessThan(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start < expected || x.End < expected));
         }
 
@@ -152,7 +152,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start <= expected));
         }
 
@@ -167,7 +167,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .LessThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start <= expected || x.End <= expected));
         }
 
@@ -181,7 +181,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Start).GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start >= expected));
         }
 
@@ -196,7 +196,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .GreaterThanOrEqualTo(expected);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start >= expected || x.End >= expected));
         }
 
@@ -213,7 +213,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .LessThan(lessThanDate);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Start > greaterThanDate && x.Start < lessThanDate));
         }
 
@@ -229,7 +229,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .Between(start, end);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => (x.Start > start && x.Start < end)
                                        || (x.End > start && x.End < end)));
         }

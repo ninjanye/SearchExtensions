@@ -15,10 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
             _context.Seed();
         }
 
-        public void Dispose()
-        {
-            _context?.Dispose();
-        }
+        public void Dispose() => _context?.Dispose();
     }
 
     [CollectionDefinition("Database tests")]

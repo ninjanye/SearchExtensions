@@ -49,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).EqualTo(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number == 2));
         }
 
@@ -62,7 +62,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).EqualTo(2, 4);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number == 2 || x.Number == 4));
         }
 
@@ -75,7 +75,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number, x => x.Age).EqualTo(5);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number == 5 || x.Age == 5));
         }
 
@@ -88,7 +88,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).GreaterThan(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number > 2));
         }
 
@@ -101,7 +101,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number, x => x.Age).GreaterThan(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number > 2 || x.Age > 2));
         }
 
@@ -114,7 +114,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).LessThan(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number < 2));
         }
 
@@ -127,7 +127,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number, x => x.Age).LessThan(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number < 2 || x.Age < 2));
         }
 
@@ -140,7 +140,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).LessThanOrEqualTo(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number <= 2));
         }
 
@@ -153,7 +153,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number, x => x.Age).LessThanOrEqualTo(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number <= 2 || x.Age <= 2));
         }
 
@@ -166,7 +166,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number).GreaterThanOrEqualTo(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number >= 2));
         }
 
@@ -179,7 +179,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Number, x => x.Age).GreaterThanOrEqualTo(2);
 
             ////Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number >= 2 || x.Age >= 2));
         }
 
@@ -194,7 +194,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .LessThan(4);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Number > 2 && x.Number < 4));
         }
 
@@ -208,7 +208,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .Between(2, 6);
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => (x.Number > 2 && x.Number < 6)
                                        || (x.Age > 2 && x.Age < 6)));
         }

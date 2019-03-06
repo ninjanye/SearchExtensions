@@ -6,9 +6,9 @@ using Xunit;
 namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     
-    public class ContainingAllTests
+    public class ContainingAllTests : IDisposable
     {
-        private List<TestData> _testData = new List<TestData>();
+        private readonly List<TestData> _testData;
 
         public ContainingAllTests()
         {
@@ -17,10 +17,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
         }
 
         
-        public void Dispose()
-        {
-            _testData.Clear();
-        }
+        public void Dispose() => _testData.Clear();
 
         private void BuildTestData()
         {
@@ -40,7 +37,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll("test").ToList();
 
             //Assert
-            Assert.True(result.Any(r => r.Number == 2));
+            Assert.Contains(result, r => r.Number == 2);
         }
 
         [Fact]
@@ -52,7 +49,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll("test", "search").ToList();
 
             //Assert
-            Assert.True(result.Any(r => r.Number == 3));
+            Assert.Contains(result, r => r.Number == 3);
         }
 
         [Fact]
@@ -65,8 +62,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                  .ContainingAll("test", "search", "three").ToList();
 
             //Assert
-            Assert.Equal(1, result.Count());
-            Assert.True(result.Any(r => r.Number == 4));
+            Assert.Single(result);
+            Assert.Contains(result, r => r.Number == 4);
         }
 
         [Fact]
@@ -107,7 +104,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description).ToList();
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.Contains(x.Description)));
         }
 
@@ -120,7 +117,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).ContainingAll(x => x.Description, x => x.Status).ToList();
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.Contains(x.Description) && x.Name.Contains(x.Status)));
         }
     }

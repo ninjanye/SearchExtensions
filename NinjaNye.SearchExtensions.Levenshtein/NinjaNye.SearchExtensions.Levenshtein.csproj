@@ -9,6 +9,7 @@
     <PackageTags>search extension searchextensions ienumerable iqueryable linq entityframework levenshtein dotnetcore</PackageTags>
     <PackageReleaseNotes>NinjaNye.SearchExtensions.Levenshtein library.</PackageReleaseNotes>
     <Authors>John Nye</Authors>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

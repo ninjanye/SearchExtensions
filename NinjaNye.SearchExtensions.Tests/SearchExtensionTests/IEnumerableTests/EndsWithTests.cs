@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EndsWith("st");
 
             //Assert
-            Assert.True(result.Any());
+            Assert.NotEmpty(result);
             Assert.True(result.All(x => x.Name.EndsWith("st")));
         }
 
@@ -78,7 +78,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Assert
             Assert.Equal(2, result.Count());
-            Assert.False(result.Contains(notPresent));
+            Assert.DoesNotContain(notPresent, result);
         }
 
         [Fact]
@@ -93,8 +93,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description);
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
-            Assert.False(result.Contains(notPresent));
+            Assert.NotEmpty(result);
+            Assert.DoesNotContain(result, x => x == notPresent);
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 
             //Assert
             Assert.Equal(2, result.Count());
-            Assert.False(result.Contains(notPresent));
+            Assert.DoesNotContain(result, x => x == notPresent);
         }
 
         [Fact]
@@ -127,8 +127,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EndsWith(x => x.Description, x => x.Status);
 
             //Assert
-            Assert.True(result.Any(), "No records returned");
-            Assert.True(result.All(x => x.Name.EndsWith(x.Description) || (x.Status != null && x.Name.EndsWith(x.Status))));
+            Assert.NotEmpty(result);
+            Assert.All(result, x => Assert.True(x.Name.EndsWith(x.Description) || (x.Status != null && x.Name.EndsWith(x.Status))));
         }
 
         [Fact]
@@ -160,8 +160,8 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
                                       .EndsWith(x => x.Description);
 
             //Assert
-            Assert.Equal(1, result.Count());
-            Assert.True(result.Any(t => t.Description == "test"));
+            Assert.Single(result);
+            Assert.Contains(result, t => t.Description == "test");
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
             var result = _testData.Search(x => x.Name).EndsWith("st");
 
             //Assert
-            Assert.True(result.Any(td => td.Number == 8));
+            Assert.Contains(result, td => td.Number == 8);
         }
 
         [Fact]

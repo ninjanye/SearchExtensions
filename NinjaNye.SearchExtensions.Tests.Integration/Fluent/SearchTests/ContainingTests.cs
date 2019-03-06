@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("word");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("whole");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
         }
 
         [Fact]
@@ -53,8 +53,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("match");
 
             //Assert
-            Assert.Equal(1, result.Count());
-            Assert.True(result.Any(x => x.Id == new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251")));
+            Assert.Single(result);
+            Assert.Contains(result, x => x.Id == new Guid("CADA7A13-931A-4CF0-B4F4-49160A743251"));
         }
 
         [Fact]
@@ -68,8 +68,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
                 .Containing("wholewordmatch");
 
             //Assert
-            Assert.Equal(1, result.Count());
-            Assert.True(result.Any(x => x.Id == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C")));
+            Assert.Single(result);
+            Assert.Contains(result, x => x.Id == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C"));
         }        
     }
 }

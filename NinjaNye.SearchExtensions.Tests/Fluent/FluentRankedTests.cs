@@ -114,7 +114,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
                                       .StartsWith("i");
 
             //Assert
-            Assert.Equal(1, result.Count());
+            Assert.Single(result);
             Assert.Equal(1, result.First().Hits);
         }
 

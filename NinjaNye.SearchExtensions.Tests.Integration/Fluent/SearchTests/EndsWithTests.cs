@@ -43,10 +43,5 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Assert
             Assert.True(result.Select(x => x.Id).Contains(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
         }
-
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
     }
 }
