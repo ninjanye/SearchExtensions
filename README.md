@@ -45,7 +45,7 @@ Search for a **single search term** within **multiple properties**
 Search for **multiple search terms** within a **single property**
 
     var result = queryableData.Search(x => x.Property1)
-                              .Containing("search", "term";
+                              .Containing("search", "term");
 
 Search for **multiple search terms** within **multiple properties**
 
