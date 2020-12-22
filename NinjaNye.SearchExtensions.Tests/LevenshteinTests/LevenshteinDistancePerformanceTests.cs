@@ -1,13 +1,19 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using NinjaNye.SearchExtensions.Levenshtein;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
 {
     public class LevenshteinDistancePerformanceTests : BuildStringTestsBase
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public LevenshteinDistancePerformanceTests(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
 
 #if DEBUG
         [Theory(Skip = "Performance tests will likely fail in debug mode. Run in release mode")]
@@ -28,11 +34,11 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             stopwatch.Stop();
 
             //Assert
-            Console.WriteLine("Elapsed Time: {0}", stopwatch.Elapsed);
-            Console.WriteLine("Total matching words: {0}", result.Count(i => i == 0));
-            Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i == 1));
-            Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i == 2));
-            Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i == 3));
+            _testOutputHelper.WriteLine("Elapsed Time: {0}", stopwatch.Elapsed);
+            _testOutputHelper.WriteLine("Total matching words: {0}", result.Count(i => i == 0));
+            _testOutputHelper.WriteLine("Total words with distance of 1: {0}", result.Count(i => i == 1));
+            _testOutputHelper.WriteLine("Total words with distance of 2: {0}", result.Count(i => i == 2));
+            _testOutputHelper.WriteLine("Total words with distance of 3: {0}", result.Count(i => i == 3));
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
@@ -54,11 +60,11 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             stopwatch.Stop();
 
             //Assert
-            Console.WriteLine("Elapsed Time: {0}", stopwatch.Elapsed);
-            Console.WriteLine("Total matching words: {0}", result.Count(i => i.MinimumDistance == 0));
-            Console.WriteLine("Total words with distance of 1: {0}", result.Count(i => i.MinimumDistance == 1));
-            Console.WriteLine("Total words with distance of 2: {0}", result.Count(i => i.MinimumDistance == 2));
-            Console.WriteLine("Total words with distance of 3: {0}", result.Count(i => i.MinimumDistance == 3));
+            _testOutputHelper.WriteLine("Elapsed Time: {0}", stopwatch.Elapsed);
+            _testOutputHelper.WriteLine("Total matching words: {0}", result.Count(i => i.MinimumDistance == 0));
+            _testOutputHelper.WriteLine("Total words with distance of 1: {0}", result.Count(i => i.MinimumDistance == 1));
+            _testOutputHelper.WriteLine("Total words with distance of 2: {0}", result.Count(i => i.MinimumDistance == 2));
+            _testOutputHelper.WriteLine("Total words with distance of 3: {0}", result.Count(i => i.MinimumDistance == 3));
             Assert.True(stopwatch.Elapsed.TotalMilliseconds <1000);
         }
     }

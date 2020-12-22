@@ -7,7 +7,7 @@ namespace NinjaNye.SearchExtensions.Tests
 {
     public class BuildStringTestsBase
     {
-        private const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         protected IList<string> BuildWords(int wordCount, int minSize = 2, int maxSize = 10)
         {
@@ -29,7 +29,7 @@ namespace NinjaNye.SearchExtensions.Tests
             for (int i = 0; i < letterCount; i++)
             {
                 var letterIndex = RandomInt(0, 51);
-                sb.Append(letters[letterIndex]);
+                sb.Append(LETTERS[letterIndex]);
             }
             return sb.ToString();
         }

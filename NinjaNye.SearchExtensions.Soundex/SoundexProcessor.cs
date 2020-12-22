@@ -6,7 +6,7 @@ namespace NinjaNye.SearchExtensions.Soundex
 {
     public static class SoundexProcessor
     {
-        private const int maxSoundexLength = 4;
+        private const int MAX_SOUNDEX_LENGTH = 4;
 
         /// <summary>
         /// Retrieve the Soundex value for a given string
@@ -60,7 +60,7 @@ namespace NinjaNye.SearchExtensions.Soundex
                 if (soundex != previousSoundex)
                 {
                     sb.Append(soundex);
-                    if (sb.Length == maxSoundexLength)
+                    if (sb.Length == MAX_SOUNDEX_LENGTH)
                     {
                         return sb;
                     }
@@ -109,9 +109,9 @@ namespace NinjaNye.SearchExtensions.Soundex
         private static void ValidateLength(this StringBuilder stringBuilder)
         {
             int soundexLength = stringBuilder.Length;
-            if (soundexLength < maxSoundexLength)
+            if (soundexLength < MAX_SOUNDEX_LENGTH)
             {
-                int zerosToAdd = maxSoundexLength - soundexLength;
+                int zerosToAdd = MAX_SOUNDEX_LENGTH - soundexLength;
                 for (int i = 0; i < zerosToAdd; i++)
                 {
                     stringBuilder.Append('0');

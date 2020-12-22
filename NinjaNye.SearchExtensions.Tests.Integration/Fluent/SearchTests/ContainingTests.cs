@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
@@ -11,7 +10,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public ContainingTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]

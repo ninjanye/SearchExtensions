@@ -6,29 +6,25 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.IEnumerableTests
 {
     public class SearchChildrenTests
     {
-        private ParentTestData _parent;
-        private List<ParentTestData> _testData;
-        private TestData _dataOne;
-        private TestData _dataFour;
-        private TestData _dataTwo;
-        private TestData _dataThree;
-        private ParentTestData _otherParent;
+        private readonly ParentTestData _parent;
+        private readonly List<ParentTestData> _testData;
+        private readonly ParentTestData _otherParent;
 
         public SearchChildrenTests()
         {
-            _dataOne = new TestData { Name = "chris", Description = "child data", Number = 1, Age = 20};
-            _dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6, Age = 30 };
-            _dataThree = new TestData { Name = "teddy", Description = "child data", Number = 2, Age = 40 };
-            _dataFour = new TestData { Name = "josh", Description = "child data", Number = 20, Age = 50 };
+            var dataOne = new TestData { Name = "chris", Description = "child data", Number = 1, Age = 20};
+            var dataTwo = new TestData { Name = "fred", Description = "child data", Number = 6, Age = 30 };
+            var dataThree = new TestData { Name = "teddy", Description = "child data", Number = 2, Age = 40 };
+            var dataFour = new TestData { Name = "josh", Description = "child data", Number = 20, Age = 50 };
             _parent = new ParentTestData
             {
-                Children = new List<TestData> {_dataOne, _dataTwo},
-                OtherChildren = new List<TestData> { _dataThree, _dataFour }
+                Children = new List<TestData> {dataOne, dataTwo},
+                OtherChildren = new List<TestData> { dataThree, dataFour }
             };
             _otherParent = new ParentTestData
             {
-                Children = new List<TestData> {_dataThree, _dataFour},
-                OtherChildren = new List<TestData> { _dataOne, _dataTwo }
+                Children = new List<TestData> {dataThree, dataFour},
+                OtherChildren = new List<TestData> { dataOne, dataTwo }
             };
             _testData = new List<ParentTestData> { _parent, _otherParent };            
         }

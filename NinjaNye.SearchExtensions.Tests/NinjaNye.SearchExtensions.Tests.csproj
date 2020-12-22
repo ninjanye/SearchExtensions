@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -19,10 +19,5 @@
     <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj" />
     <ProjectReference Include="..\NinjaNye.SearchExtensions.Soundex\NinjaNye.SearchExtensions.Soundex.csproj" />
     <ProjectReference Include="..\NinjaNye.SearchExtensions.Levenshtein\NinjaNye.SearchExtensions.Levenshtein.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="xunit.runner.visualstudio">
-      <Version>2.2.0</Version>
-    </PackageReference>
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public ContainingAllTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Assert
             Assert.NotEmpty(result);
-            Assert.All(result, t => Assert.True(t.StringOne.IndexOf(searchTerm) >= 0));
+            Assert.All(result, t => Assert.True(t.StringOne.IndexOf(searchTerm, StringComparison.Ordinal) >= 0));
         }
 
         [Fact]
@@ -36,12 +36,12 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             const string searchTerm2 = "search";
 
             //Act
-            var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm1, searchTerm2);
+            var result = _context.TestModels.Search(x => x.StringOne).ContainingAll(searchTerm1, searchTerm2).ToList();
 
             //Assert
             Assert.NotEmpty(result);
-            var hasBothTerms = result.All(t => t.StringOne.IndexOf(searchTerm1) >= 0 
-                                            && t.StringOne.IndexOf(searchTerm2) >= 0);
+            var hasBothTerms = result.All(t => t.StringOne.IndexOf(searchTerm1, StringComparison.Ordinal) >= 0 &&
+                                               t.StringOne.IndexOf(searchTerm2, StringComparison.Ordinal) >= 0);
             Assert.True(hasBothTerms);
         }
 
@@ -55,7 +55,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
             //Act
             var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
-                             .ContainingAll(searchTerm1, searchTerm2, searchTerm3).ToList();
+                .ContainingAll(searchTerm1, searchTerm2, searchTerm3)
+                .ToList();
 
             //Assert
             Assert.NotEmpty(result);

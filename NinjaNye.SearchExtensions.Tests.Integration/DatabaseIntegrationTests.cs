@@ -6,16 +6,16 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
 {
     public class DatabaseIntegrationTests : IDisposable
     {
-        public readonly TestContext _context;
+        public readonly TestContext Context;
 
         public DatabaseIntegrationTests()
         {
-            _context = new TestContext();
-            _context.Database.EnsureCreated();
-            _context.Seed();
+            Context = new TestContext();
+            Context.Database.EnsureCreated();
+            Context.Seed();
         }
 
-        public void Dispose() => _context?.Dispose();
+        public void Dispose() => Context?.Dispose();
     }
 
     [CollectionDefinition("Database tests")]

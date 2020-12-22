@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NinjaNye.SearchExtensions.Tests.Integration.Models;
+using Microsoft.Extensions.Logging.Debug;
 
 namespace NinjaNye.SearchExtensions.Tests.Integration
 {
@@ -10,8 +13,9 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase("SearchExtensions.Tests.Integration");
-            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;");
+            // optionsBuilder.UseInMemoryDatabase($"SearchExtensions.Tests.Integration{Guid.NewGuid()}");
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;");
+            optionsBuilder.UseLoggerFactory(new LoggerFactory(new []{new DebugLoggerProvider()}));
             base.OnConfiguring(optionsBuilder);
         }
 

@@ -82,9 +82,8 @@ namespace NinjaNye.SearchExtensions.Helpers.ExpressionBuilders.StartsWithExpress
             var paddedTerm = propertyToSearchFor.Body;
             if (searchType == SearchType.WholeWords)
             {
-                var seperator = Expression.Constant(" ");
-                var nullSafeProperty = BuildNullSafeExpression(propertyToSearchFor);
-                paddedTerm = Expression.Call(ExpressionMethods.StringConcatMethod, nullSafeProperty.Body, seperator);
+                var separator = Expression.Constant(" ");
+                paddedTerm = Expression.Call(ExpressionMethods.StringConcatMethod, propertyToSearchFor.Body, separator);
             }
 
             var nullSafeStringProperty = BuildNullSafeExpression(stringProperty);

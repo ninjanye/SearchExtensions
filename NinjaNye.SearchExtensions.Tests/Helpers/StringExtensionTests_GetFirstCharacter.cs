@@ -3,7 +3,6 @@ using Xunit;
 
 namespace NinjaNye.SearchExtensions.Tests.Helpers
 {
-    
     public class StringExtensionTests_GetFirstCharacter
     {
         [Fact]

@@ -12,7 +12,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
 
         public FluentSearchTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]

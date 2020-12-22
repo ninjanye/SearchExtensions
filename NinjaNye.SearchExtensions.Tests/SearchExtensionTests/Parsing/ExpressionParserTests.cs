@@ -15,6 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.Parsing
             var expression = ExpressionParser.Parse<TestObject, string>(expressionString);
 
             var parameterExpression = Assert.Single(expression.Parameters);
+            Assert.NotNull(parameterExpression);
             Assert.Equal(typeof(TestObject), parameterExpression.Type);
 
             var memberExpression = expression.Body as MemberExpression;
@@ -31,9 +32,9 @@ namespace NinjaNye.SearchExtensions.Tests.SearchExtensionTests.Parsing
         [Fact]
         public void ParseProperties_ReturnsCorrectResult()
         {
-            const string Expression = "Property1.Property2";
+            const string expression = "Property1.Property2";
 
-            string[] properties = ExpressionParser.ParseProperties(Expression);
+            string[] properties = ExpressionParser.ParseProperties(expression);
 
             Assert.Equal(2, properties.Length);
             Assert.Equal("Property1", properties[0]);

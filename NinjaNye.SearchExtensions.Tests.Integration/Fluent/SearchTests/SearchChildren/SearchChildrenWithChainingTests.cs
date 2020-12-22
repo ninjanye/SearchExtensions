@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests.SearchC
 
         public SearchChildrenWithChainingTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]

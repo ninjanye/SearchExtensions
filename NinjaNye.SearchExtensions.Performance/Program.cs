@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+// ReSharper disable once RedundantUsingDirective
 using NinjaNye.SearchExtensions.Levenshtein;
 using NinjaNye.SearchExtensions.Soundex;
 
@@ -84,7 +85,7 @@ namespace NinjaNye.SearchExtensions.Performance
             enumerableData = BuildData(recordCount);
             stopwatch.Reset();
             stopwatch.Start();
-            var containsResult = enumerableData.Where(s => searchTerms.Any(st => s.IndexOf(st) > -1)).ToList();
+            var containsResult = enumerableData.Where(s => searchTerms.Any(st => s.IndexOf(st, StringComparison.Ordinal) > -1)).ToList();
             stopwatch.Stop();
             Console.WriteLine("Results found: {0}", containsResult.Count);
             Console.WriteLine("Time taken: {0}", stopwatch.Elapsed);

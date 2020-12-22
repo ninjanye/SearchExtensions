@@ -75,7 +75,8 @@ namespace NinjaNye.SearchExtensions
 
         /// <summary>
         /// Retrieves items where any of the defined properties
-        /// are greater than any of the supplied <paramref name="value">value</paramref> 
+        /// are greater than the supplied <paramref name="minvalue">minvalue</paramref>
+        /// and  
         /// </summary>
         public QueryableChildSearch<TParent, TChild, TProperty> Between(TProperty minvalue, TProperty maxValue)
         {

@@ -12,7 +12,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 
         public StartsWithTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]
@@ -64,11 +64,10 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Arrange
             
             //Act
-            var result = _context.TestModels.Search(x => x.StringOne)
-                                                .StartsWith(x => x.StringTwo, x => x.StringThree);
+            var result = _context.TestModels.Search(x => x.StringOne).StartsWith(x => x.StringTwo, x => x.StringThree);
 
             //Assert
-            Assert.Contains(result, x => x.StringOne.StartsWith(x.StringThree));
+            Assert.Contains(result, x =>  x.StringOne.StartsWith(x.StringThree ?? ""));
         }
 
         [Fact]
@@ -90,8 +89,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             
             //Act
             var result = _context.TestModels.Search(x => x.StringOne)
-                                                .Matching(SearchType.WholeWords)
-                                                .StartsWith(x => x.StringThree);
+                .Matching(SearchType.WholeWords)
+                .StartsWith(x => x.StringThree);
 
             //Assert
             Assert.True(result.Select(x => x.Id).Contains(new Guid("624CFA9C-4FA1-4680-880D-AAB6507A3014")));
@@ -104,8 +103,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             
             //Act
             var result = _context.TestModels.Search(x => x.StringOne)
-                                                .Matching(SearchType.WholeWords)
-                                                .StartsWith(x => x.StringThree);
+                .Matching(SearchType.WholeWords)
+                .StartsWith(x => x.StringThree + " ");
 
             //Assert
             var guids = result.Select(x => x.Id).ToList();

@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.StructSearchTests
 
         public IsEqualTests(DatabaseIntegrationTests @base)
         {
-            _context = @base._context;
+            _context = @base.Context;
         }
 
         [Fact]

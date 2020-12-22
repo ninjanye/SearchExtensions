@@ -4,12 +4,13 @@ using System.Linq;
 using Xunit;
 using NinjaNye.SearchExtensions.Models;
 using NinjaNye.SearchExtensions.Tests.SearchExtensionTests;
+// ReSharper disable StringLiteralTypo
 
 namespace NinjaNye.SearchExtensions.Tests.Fluent
 {    
     public class FluentRankedTests
     {
-        private List<TestData> _testData;
+        private readonly List<TestData> _testData;
         
         public FluentRankedTests()
         {
@@ -126,7 +127,7 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Act
             var result = _testData.Search(x => x.Description)
                                        .SetCulture(StringComparison.OrdinalIgnoreCase)
-                                       .StartsWith("c").ToRanked();
+                                       .StartsWith("c").ToRanked().ToList();
 
             //Assert
             Assert.Equal(4, result.Count());
@@ -141,7 +142,8 @@ namespace NinjaNye.SearchExtensions.Tests.Fluent
             //Act
             var result = _testData.Search(x => x.Description)
                                        .EndsWith("e")
-                                       .ToRanked();
+                                       .ToRanked()
+                                       .ToList();
 
             //Assert
             Assert.Equal(2, result.Count());
