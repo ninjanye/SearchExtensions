@@ -1,5 +1,10 @@
 # SearchExtensions
 
+[![NuGet](https://img.shields.io/nuget/v/ninjanye.searchextensions.svg)](https://www.nuget.org/packages/ninjanye.searchextensions/)
+[![Downloads](https://img.shields.io/nuget/dt/ninjanye.searchextensions.svg)](https://www.nuget.org/packages/ninjanye.searchextensions/)
+[![Stars](https://img.shields.io/github/stars/ninjanye/searchextensions?color=yellow)](https://github.com/ninjanye/searchextensions/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+
 SearchExtensions is a library of IQueryable and IEnumerable extension methods to perform searching. More information on these packages and it's use can be found by, visiting [my blog](http://jnye.co/posts/tagged/search).
 
 This project is represents the source code for the following 3 nuget packages:
@@ -261,7 +266,7 @@ We can also mix it up with the other fluent API methods
 
 Be aware that the `ToRanked()` method uses the search terms of the `Containing()` method combined with the properties to search to build its hit count.  The fluent `ToRanked()` method also means the old `RankedSearch` method is now depreciated.  It still lives in the code but will soon be removed so please update your code to use the fluent api.
 
-## Soundex support
+## Soundex support [![Downloads](https://img.shields.io/nuget/dt/ninjanye.searchextensions.soundex.svg)](https://www.nuget.org/packages/ninjanye.searchextensions.soundex/)
 
 [NinjaNye.SearchExtensions.Soundex](https://www.nuget.org/packages/NinjaNye.SearchExtensions.Soundex/) supports converting and searching for words that sound like a given word.  
 
