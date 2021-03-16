@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$USER_HOME$/.nuget/packages/microsoft.diagnostics.tracing.traceevent/2.0.49/lib/native/amd64" />
+    <content url="file://$USER_HOME$/.nuget/packages/microsoft.diagnostics.tracing.traceevent/2.0.49/lib/native/x86" />
+    <content url="file://$USER_HOME$/.nuget/packages/microsoft.diagnostics.tracing.traceevent/2.0.49/lib/netstandard1.6/Dia2Lib.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/microsoft.diagnostics.tracing.traceevent/2.0.49/lib/netstandard1.6/OSExtensions.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/microsoft.diagnostics.tracing.traceevent/2.0.49/lib/netstandard1.6/TraceReloggerLib.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/net452/xunit.abstractions.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/net452/xunit.runner.reporters.net452.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/net452/xunit.runner.utility.net452.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/net452/xunit.runner.visualstudio.testadapter.dll" />
+    <content url="file://$MODULE_DIR$/../.." />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

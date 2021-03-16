@@ -1,5 +1,296 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\projects\SearchExtensions" t="IncludeFlat">
+      <e p="NinjaNye.SearchExtensions" t="IncludeRecursive">
+        <e p="AssemblyInfo.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ChildSearchBase.cs" t="Include" />
+        <e p="EnumerableChildSearch.cs" t="Include" />
+        <e p="EnumerableChildSearchBase.cs" t="Include" />
+        <e p="EnumerableChildSelector.cs" t="Include" />
+        <e p="EnumerableChildStringSearch.cs" t="Include" />
+        <e p="EnumerableSearchBase.cs" t="Include" />
+        <e p="EnumerableStringSearch.cs" t="Include" />
+        <e p="EnumerableStructSearch.cs" t="Include" />
+        <e p="FluentChildSearch.cs" t="Include" />
+        <e p="FluentSearch.cs" t="Include" />
+        <e p="FluentStringSearch.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="ExpressionBuilders" t="Include">
+            <e p="ContainsExpressionBuilder" t="Include">
+              <e p="EnumerableContainsExpressionBuilder.cs" t="Include" />
+              <e p="QueryableContainsExpressionBuilder.cs" t="Include" />
+            </e>
+            <e p="EndsWithExpressionBuilder" t="Include">
+              <e p="EnumerableEndsWithExpressionBuilder.cs" t="Include" />
+              <e p="QueryableEndsWithExpressionBuilder.cs" t="Include" />
+            </e>
+            <e p="EnumerableExpressionHelper.cs" t="Include" />
+            <e p="EqualsExpressionBuilder" t="Include">
+              <e p="EnumerableEqualsExpressionBuilder.cs" t="Include" />
+              <e p="ExpressionBuilder.cs" t="Include" />
+              <e p="QueryableEqualsExpressionBuilder.cs" t="Include" />
+            </e>
+            <e p="ExpressionHelper.cs" t="Include" />
+            <e p="ExpressionMethods.cs" t="Include" />
+            <e p="StartsWithExpressionBuilder" t="Include">
+              <e p="EnumerableStartsWithExpressionBuilder.cs" t="Include" />
+              <e p="QueryableStartsWithExpressionBuilder.cs" t="Include" />
+            </e>
+          </e>
+          <e p="StringExtensions.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="Ranked.cs" t="Include" />
+        </e>
+        <e p="NinjaNye.SearchExtensions.csproj" t="IncludeRecursive" />
+        <e p="NinjaNye.SearchExtensions.nuspec" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="net45" t="Include">
+              <e p="NinjaNye.SearchExtensions.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netstandard1.0" t="Include">
+              <e p="NinjaNye.SearchExtensions.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Parsing" t="Include">
+          <e p="ExpressionParser.cs" t="Include" />
+          <e p="TypeMismatchException.cs" t="Include" />
+        </e>
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="QueryableChildSearch.cs" t="Include" />
+        <e p="QueryableChildSearchBase.cs" t="Include" />
+        <e p="QueryableChildSelector.cs" t="Include" />
+        <e p="QueryableChildStringSearch.cs" t="Include" />
+        <e p="QueryableSearchBase.cs" t="Include" />
+        <e p="QueryableStringSearch.cs" t="Include" />
+        <e p="QueryableStructSearch.cs" t="Include" />
+        <e p="SearchBase.cs" t="Include" />
+        <e p="SearchOptions.cs" t="Include" />
+        <e p="SearchTermCollection.cs" t="Include" />
+        <e p="SearchType.cs" t="Include" />
+        <e p="Validation" t="Include">
+          <e p="Ensure.cs" t="Include" />
+        </e>
+        <e p="Visitors" t="Include">
+          <e p="SwapExpressionVisitor.cs" t="Include" />
+        </e>
+      </e>
+      <e p="NinjaNye.SearchExtensions.Levenshtein" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="EnumerableLevenshteinCompare.cs" t="Include" />
+        <e p="EnumerableLevenshteinSearch.cs" t="Include" />
+        <e p="FluentLevenshteinSearch.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="ExpressionBuilders" t="Include">
+            <e p="EnumerableExpressionHelper.cs" t="Include" />
+            <e p="ExpressionMethods.cs" t="Include" />
+          </e>
+        </e>
+        <e p="LevenshteinDistance.cs" t="Include" />
+        <e p="LevenshteinProcessor.cs" t="Include" />
+        <e p="NinjaNye.SearchExtensions.Levenshtein.csproj" t="IncludeRecursive" />
+        <e p="NinjaNye.SearchExtensions.Levenshtein.nuspec" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="net45" t="Include">
+              <e p="NinjaNye.SearchExtensions.Levenshtein.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netstandard1.0" t="Include">
+              <e p="NinjaNye.SearchExtensions.Levenshtein.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="NinjaNye.SearchExtensions.Performance" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="LevenshteinSearchTests.cs" t="Include" />
+        <e p="NinjaNye.SearchExtensions.Performance.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="NinjaNye.SearchExtensions.Performance.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="SoundexSearchTests.cs" t="Include" />
+        <e p="StringSearchTests.cs" t="Include" />
+      </e>
+      <e p="NinjaNye.SearchExtensions.Soundex" t="IncludeRecursive">
+        <e p="AssemblyInfo.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="EnumerableReverseSoundexSearch.cs" t="Include" />
+        <e p="EnumerableSoundexSearch.cs" t="Include" />
+        <e p="FluentSoundexSearch.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="ExpressionBuilders" t="Include">
+            <e p="ExpressionMethods.cs" t="Include" />
+            <e p="SoundexExpressionBuilder.cs" t="Include" />
+          </e>
+          <e p="StringExtensions.cs" t="Include" />
+        </e>
+        <e p="NinjaNye.SearchExtensions.Soundex.csproj" t="IncludeRecursive" />
+        <e p="NinjaNye.SearchExtensions.Soundex.nuspec" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="net45" t="Include">
+              <e p="NinjaNye.SearchExtensions.Soundex.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netstandard1.0" t="Include">
+              <e p="NinjaNye.SearchExtensions.Soundex.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="QueryableReverseSoundexSearch.cs" t="Include" />
+        <e p="QueryableSoundexSearch.cs" t="Include" />
+        <e p="SoundexProcessor.cs" t="Include" />
+      </e>
+      <e p="NinjaNye.SearchExtensions.Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BuildStringTestsBase.cs" t="Include" />
+        <e p="Fluent" t="Include">
+          <e p="AsExpressionTests.cs" t="Include" />
+          <e p="FluentRankedTests.cs" t="Include" />
+          <e p="FluentSearchTests.cs" t="Include" />
+          <e p="ReverseSoundexSearchTests.cs" t="Include" />
+          <e p="SoundexSearchTests.cs" t="Include" />
+        </e>
+        <e p="Helpers" t="Include">
+          <e p="StringExtensionTests_GetFirstCharacter.cs" t="Include" />
+          <e p="StringExtensionTests_GetLastCharacter.cs" t="Include" />
+        </e>
+        <e p="LevenshteinTests" t="Include">
+          <e p="LevenshteinDistancePerformanceTests.cs" t="Include" />
+          <e p="LevenshteinDistanceTests.cs" t="Include" />
+        </e>
+        <e p="NinjaNye.SearchExtensions.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="net461" t="Include">
+              <e p="NinjaNye.SearchExtensions.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netcoreapp1.1" t="Include">
+              <e p="NinjaNye.SearchExtensions.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netcoreapp2.0" t="Include">
+              <e p="NinjaNye.SearchExtensions.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="SearchExtensionTests" t="Include">
+          <e p="IEnumerableTests" t="Include">
+            <e p="ContainingAllTests.cs" t="Include" />
+            <e p="ContainingTests.cs" t="Include" />
+            <e p="ContainingWholeWordTests.cs" t="Include" />
+            <e p="DateTimeSearchTests.cs" t="Include" />
+            <e p="EndsWithTests.cs" t="Include" />
+            <e p="IntegerSearchTests.cs" t="Include" />
+            <e p="IsEqualTests.cs" t="Include" />
+            <e p="LevenshteinSearch.cs" t="Include" />
+            <e p="SearchChildrenChainingTests.cs" t="Include" />
+            <e p="SearchChildrenForStringTests.cs" t="Include" />
+            <e p="SearchChildrenTests.cs" t="Include" />
+            <e p="StartsWithTests.cs" t="Include" />
+            <e p="StringSearchTests.cs" t="Include" />
+          </e>
+          <e p="Parsing" t="Include">
+            <e p="ExpressionParserTests.cs" t="Include" />
+            <e p="TestObject.cs" t="Include" />
+            <e p="TestObjectChild.cs" t="Include" />
+          </e>
+          <e p="TestData.cs" t="Include" />
+        </e>
+        <e p="SoundexTests" t="Include">
+          <e p="ReverseSoundexPerformanceTests.cs" t="Include" />
+          <e p="ToReverseSoundexTests.cs" t="Include" />
+          <e p="ToSoundexPerformanceTests.cs" t="Include" />
+          <e p="ToSoundexTests.cs" t="Include" />
+        </e>
+      </e>
+      <e p="NinjaNye.SearchExtensions.Tests.Integration" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DatabaseIntegrationTests.cs" t="Include" />
+        <e p="Fluent" t="Include">
+          <e p="FluentLevenshteinTests.cs" t="Include" />
+          <e p="FluentPropertySearchTests.cs" t="Include" />
+          <e p="FluentRankedTests.cs" t="Include" />
+          <e p="FluentSearchTests.cs" t="Include" />
+          <e p="FluentSoundexTests.cs" t="Include" />
+          <e p="SearchTests" t="Include">
+            <e p="ContainingAllTests.cs" t="Include" />
+            <e p="ContainingTests.cs" t="Include" />
+            <e p="EndsWithTests.cs" t="Include" />
+            <e p="IsEqualTests.cs" t="Include" />
+            <e p="SearchChildren" t="Include">
+              <e p="BetweenTests.cs" t="Include" />
+              <e p="EqualToTests.cs" t="Include" />
+              <e p="GreaterThanTests.cs" t="Include" />
+              <e p="LessThanTests.cs" t="Include" />
+              <e p="SearchChildrenTests.cs" t="Include" />
+              <e p="SearchChildrenWithChainingTests.cs" t="Include" />
+              <e p="StringTests.cs" t="Include" />
+            </e>
+            <e p="StartsWithTests.cs" t="Include" />
+          </e>
+          <e p="StructSearchTests" t="Include">
+            <e p="BetweenTests.cs" t="Include" />
+            <e p="DateTimeSearchTests.cs" t="Include" />
+            <e p="GreaterThanOrEqualTests.cs" t="Include" />
+            <e p="GreaterThanTests.cs" t="Include" />
+            <e p="IsEqualTests.cs" t="Include" />
+            <e p="LessThanOrEqualTests.cs" t="Include" />
+            <e p="LessThanTests.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Migrations" t="Include">
+          <e p="TestContextExtensions.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="ChildTestModel.cs" t="Include" />
+          <e p="TestModel.cs" t="Include" />
+        </e>
+        <e p="NinjaNye.SearchExtensions.Tests.Integration.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="net461" t="Include">
+              <e p="NinjaNye.SearchExtensions.Tests.Integration.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netcoreapp2.0" t="Include">
+              <e p="NinjaNye.SearchExtensions.Tests.Integration.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="TestContext.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="SearchExtensions.sln" t="IncludeFlat" />
+    </e>
+    <e p="C:\Users\ninja\.nuget\packages\microsoft.diagnostics.tracing.traceevent\2.0.49\lib\native\amd64" t="Include">
+      <e p="KernelTraceControl.dll" t="Include" />
+      <e p="msdia140.dll" t="Include" />
+    </e>
+    <e p="C:\Users\ninja\.nuget\packages\microsoft.diagnostics.tracing.traceevent\2.0.49\lib\native\x86" t="Include">
+      <e p="KernelTraceControl.dll" t="Include" />
+      <e p="KernelTraceControl.Win61.dll" t="Include" />
+      <e p="msdia140.dll" t="Include" />
+    </e>
+    <e p="C:\Users\ninja\.nuget\packages\microsoft.diagnostics.tracing.traceevent\2.0.49\lib\netstandard1.6\Dia2Lib.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\microsoft.diagnostics.tracing.traceevent\2.0.49\lib\netstandard1.6\OSExtensions.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\microsoft.diagnostics.tracing.traceevent\2.0.49\lib\netstandard1.6\TraceReloggerLib.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\xunit.runner.visualstudio\2.4.3\build\net452\xunit.abstractions.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\xunit.runner.visualstudio\2.4.3\build\net452\xunit.runner.reporters.net452.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\xunit.runner.visualstudio\2.4.3\build\net452\xunit.runner.utility.net452.dll" t="Include" />
+    <e p="C:\Users\ninja\.nuget\packages\xunit.runner.visualstudio\2.4.3\build\net452\xunit.runner.visualstudio.testadapter.dll" t="Include" />
+    <e p="C:\Users\ninja\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\ninja\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_SearchExtensions.-609184557.00" t="ExcludeRecursive" />
+    <e p="C:\Users\ninja\AppData\Roaming\JetBrains\Rider2020.3\scratches" t="IncludeRecursive" />
+  </component>
   <component name="RiderRiderContentModelStore">
     <excludedPaths />
   </component>
