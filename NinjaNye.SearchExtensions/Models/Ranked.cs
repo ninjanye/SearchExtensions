@@ -6,7 +6,7 @@ namespace NinjaNye.SearchExtensions.Models
         T Item { get; }
     }
 
-    internal class Ranked<T> : IRanked<T>
+    public class Ranked<T> : IRanked<T>
     {
         public int Hits { get; set; }
         public T Item { get; set; }
