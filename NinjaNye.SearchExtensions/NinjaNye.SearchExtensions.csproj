@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;netstandard2.1;net481</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.1;net481;net8.0</TargetFrameworks>
     <Description>A collection of extension methods to IQueryable and IEnumerable that enable easy searching and ranking. Searches can be performed against multiple properties and support a wide range of types</Description>
     <Version>3.0.0.0</Version>
     <PackageProjectUrl>http://ninjanye.github.io/SearchExtensions/</PackageProjectUrl>
