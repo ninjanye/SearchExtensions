@@ -6,12 +6,13 @@ using BenchmarkDotNet.Jobs;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net80)]
+    [SimpleJob(RuntimeMoniker.Net50)]
+    [BenchmarkCategory("StringSearch")]
     public class StringSearchTests
     {
-        [Params(10000, 100000)] 
-        public static int _wordsToSearch;
+        [Params(10000)] 
+        public static int WordsToSearch;
         private static List<string> _data;
         private static string[] _searchTerms;
         private const StringComparison STRING_COMPARISON = StringComparison.CurrentCulture;
@@ -19,8 +20,8 @@ namespace NinjaNye.SearchExtensions.Performance
         [GlobalSetup]
         public static void BuildWords()
         {
-            Console.WriteLine("Building {0} records....", _wordsToSearch);
-            _data = BuildData(_wordsToSearch);
+            Console.WriteLine("Building {0} records....", WordsToSearch);
+            _data = BuildData(WordsToSearch);
             _searchTerms = new[] { "abc", "def", "ghi", "JKL", "mno", "pqr", "stu", "vwx" };
         }        
 

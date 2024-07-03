@@ -5,8 +5,9 @@ using NinjaNye.SearchExtensions.Soundex;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net80)]
+    [SimpleJob(RuntimeMoniker.Net50)]
+    [BenchmarkCategory("Soundex")]
     public class SoundexSearchTests
     {
         [Benchmark(OperationsPerInvoke = 1000)]

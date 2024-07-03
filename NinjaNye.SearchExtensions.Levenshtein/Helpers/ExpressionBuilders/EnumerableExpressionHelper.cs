@@ -32,7 +32,7 @@ namespace NinjaNye.SearchExtensions.Levenshtein.Helpers.ExpressionBuilders
         /// <summary>
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
-        /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
+        /// <returns>Expression equivalent to: LevenshteinProcessor.LevenshteinDistance([stringProperty], [searchTerm])</returns>
         public static IEnumerable<Expression> CalculateLevenshteinDistances<T>(Expression<Func<T, string>>[] stringProperties, params string[] searchTerms)
         {
             var searchTermExpressions = searchTerms.Select(Expression.Constant).ToList();
@@ -44,7 +44,7 @@ namespace NinjaNye.SearchExtensions.Levenshtein.Helpers.ExpressionBuilders
         /// <summary>
         /// Calculates the Levenshtein distance between a given property and a search term
         /// </summary>
-        /// <returns>Expression equivalent to: LevenshteinProcessor.LevensteinDistance([stringProperty], [searchTerm])</returns>
+        /// <returns>Expression equivalent to: LevenshteinProcessor.LevenshteinDistance([stringProperty], [searchTerm])</returns>
         public static IEnumerable<Expression> CalculateLevenshteinDistance<T>(
             Expression<Func<T, string>>[] sourceProperties, params Expression<Func<T, string>>[] targetProperties)
         {

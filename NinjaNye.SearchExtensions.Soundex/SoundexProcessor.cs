@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 using NinjaNye.SearchExtensions.Soundex.Helpers;
 
@@ -23,7 +24,7 @@ namespace NinjaNye.SearchExtensions.Soundex
             }
 
             var sb = BuildRawSoundex(value);
-            ValidateLength(sb);
+            sb.ValidateLength();
             return sb.ToString();
         }
 
@@ -47,16 +48,19 @@ namespace NinjaNye.SearchExtensions.Soundex
             return sb.ToString();
         }
 
+#if NETSTANDARD2_1
+        private static StringBuilder BuildRawSoundex(ReadOnlySpan<char> value)
+#else
         private static StringBuilder BuildRawSoundex(string value)
+#endif
         {
             char firstCharacter = CultureInfo.InvariantCulture.TextInfo.ToUpper(value[0]);
-            var sb = new StringBuilder(4);
-            sb.Append(firstCharacter);
-            string previousSoundex = firstCharacter.GetSoundex();
+            var sb = new StringBuilder(firstCharacter.ToString(), 4);
+            var previousSoundex = firstCharacter.GetSoundex();
             for (int i = 1; i < value.Length; i++)
             {
                 var character = value[i];
-                string soundex = character.GetSoundex();
+                var soundex = character.GetSoundex();
                 if (soundex != previousSoundex)
                 {
                     sb.Append(soundex);
@@ -81,28 +85,28 @@ namespace NinjaNye.SearchExtensions.Soundex
                 || character == 'H' || character == 'I';
         }
 
-        private static string GetSoundex(this char character)
+        private static char? GetSoundex(this char character)
         {
             switch (character)
             {
                 case 'b': case 'f': case 'p': case 'v':
                 case 'B': case 'F': case 'P': case 'V':
-                    return "1";
+                    return '1';
                 case 'c': case 'g': case 'j': case 'k':
                 case 'q': case 's': case 'x': case 'z':
                 case 'C': case 'G': case 'J': case 'K':
                 case 'Q': case 'S': case 'X': case 'Z':
-                    return "2";
+                    return '2';
                 case 'd': case 't': case 'D': case 'T':
-                    return "3";
+                    return '3';
                 case 'l': case 'L':
-                    return "4";
+                    return '4';
                 case 'm': case 'n': case 'M': case 'N':
-                    return "5";
+                    return '5';
                 case 'r': case 'R':
-                    return "6";
+                    return '6';
                 default:
-                    return string.Empty;
+                    return null;
             }
         }
 

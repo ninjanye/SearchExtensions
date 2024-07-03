@@ -59,19 +59,19 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
                     Id = new Guid("F672552D-2787-468D-8D2E-DE1E88F83E21"), StringOne = "parent test model", StringTwo = "parent",
                     Children = new List<ChildTestModel>
                     {
-                        new ChildTestModel {Id = new Guid("ADA68177-DE83-4462-B6F7-81827F9D8EA8"), StringOne = "child test", StringTwo = "child one"},
-                        new ChildTestModel {Id = new Guid("78AF04DC-A8AA-4293-9F9F-582A93C717BF"), StringOne = "test child", StringTwo = "child two"},
-                        new ChildTestModel {Id = new Guid("CCCF9D7B-631A-43D8-AC7A-58C6061890A8"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200, StringOne = "child test", StringTwo = "child one"},
-                        new ChildTestModel {Id = new Guid("EA2FEBC5-6689-4B15-8528-B8E86EA064F1"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301, StringOne = "child test", StringTwo = "child two"},
-                        new ChildTestModel {Id = new Guid("2191405A-6269-440F-8DD9-000882D742A3"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1, StringOne = "child test", StringTwo = "child three"}
+                        new() {Id = new Guid("ADA68177-DE83-4462-B6F7-81827F9D8EA8"), StringOne = "child test", StringTwo = "child one"},
+                        new() {Id = new Guid("78AF04DC-A8AA-4293-9F9F-582A93C717BF"), StringOne = "test child", StringTwo = "child two"},
+                        new() {Id = new Guid("CCCF9D7B-631A-43D8-AC7A-58C6061890A8"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200, StringOne = "child test", StringTwo = "child one"},
+                        new() {Id = new Guid("EA2FEBC5-6689-4B15-8528-B8E86EA064F1"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301, StringOne = "child test", StringTwo = "child two"},
+                        new() {Id = new Guid("2191405A-6269-440F-8DD9-000882D742A3"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1, StringOne = "child test", StringTwo = "child three"}
                     },
                     OtherChildren = new List<ChildTestModel>
                     {
-                        new ChildTestModel {Id = new Guid("801E3EA7-2714-44AB-AEBA-AD94BB7A79C9"), StringOne = "another child", StringTwo = "child three"},
-                        new ChildTestModel {Id = new Guid("FCF9D38B-A16D-4FF0-9491-972ED6A3FDDB"), StringOne = "more children", StringTwo = "child four"},
-                        new ChildTestModel {Id = new Guid("33039698-541B-4A34-A474-449356009D03"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3, StringOne = "another child", StringTwo = "child five"},
-                        new ChildTestModel {Id = new Guid("1AF72E86-194B-4B43-81BD-C902786F782B"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 200, StringOne = "another child", StringTwo = "child six"},
-                        new ChildTestModel {Id = new Guid("5D7E7F77-4459-4EE1-9863-E76D467254C2"), IntegerOne = 101, IntegerTwo = 0, IntegerThree = 200, StringOne = "another child", StringTwo = "child one"}
+                        new() {Id = new Guid("801E3EA7-2714-44AB-AEBA-AD94BB7A79C9"), StringOne = "another child", StringTwo = "child three"},
+                        new() {Id = new Guid("FCF9D38B-A16D-4FF0-9491-972ED6A3FDDB"), StringOne = "more children", StringTwo = "child four"},
+                        new() {Id = new Guid("33039698-541B-4A34-A474-449356009D03"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3, StringOne = "another child", StringTwo = "child five"},
+                        new() {Id = new Guid("1AF72E86-194B-4B43-81BD-C902786F782B"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 200, StringOne = "another child", StringTwo = "child six"},
+                        new() {Id = new Guid("5D7E7F77-4459-4EE1-9863-E76D467254C2"), IntegerOne = 101, IntegerTwo = 0, IntegerThree = 200, StringOne = "another child", StringTwo = "child one"}
                     }
                 },
                 new TestModel
@@ -79,19 +79,19 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Migrations
                     Id = new Guid("24726ECC-953E-4F95-88AA-91E0C0B52D00"), StringOne = "parent model test", StringTwo = "parent",
                     Children = new List<ChildTestModel>
                     {
-                        new ChildTestModel {Id = new Guid("BAD85289-DCC5-48FD-A054-58360A86F9FC"), StringOne = "another child", StringTwo = "child three"},
-                        new ChildTestModel {Id = new Guid("DA7B9641-D554-49A1-9F0F-3E6988733D1B"), StringOne = "more children", StringTwo = "child four"},
-                        new ChildTestModel {Id = new Guid("9FD0D2A9-BC71-42A3-9D72-8AA72619AA60"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3, StringOne = "another child", StringTwo = "child five"},
-                        new ChildTestModel {Id = new Guid("697AFA70-6544-4475-BB3F-A5FF4672B063"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 200, StringOne = "another child", StringTwo = "child six"},
-                        new ChildTestModel {Id = new Guid("2D546C94-BB00-45EA-9C9B-76837CC823EC"), IntegerOne = 101, IntegerTwo = 0, IntegerThree = 200, StringOne = "another child", StringTwo = "child one"}
+                        new() {Id = new Guid("BAD85289-DCC5-48FD-A054-58360A86F9FC"), StringOne = "another child", StringTwo = "child three"},
+                        new() {Id = new Guid("DA7B9641-D554-49A1-9F0F-3E6988733D1B"), StringOne = "more children", StringTwo = "child four"},
+                        new() {Id = new Guid("9FD0D2A9-BC71-42A3-9D72-8AA72619AA60"), IntegerOne = 1, IntegerTwo = 2, IntegerThree = 3, StringOne = "another child", StringTwo = "child five"},
+                        new() {Id = new Guid("697AFA70-6544-4475-BB3F-A5FF4672B063"), IntegerOne = 101, IntegerTwo = 102, IntegerThree = 200, StringOne = "another child", StringTwo = "child six"},
+                        new() {Id = new Guid("2D546C94-BB00-45EA-9C9B-76837CC823EC"), IntegerOne = 101, IntegerTwo = 0, IntegerThree = 200, StringOne = "another child", StringTwo = "child one"}
                     },
                     OtherChildren = new List<ChildTestModel>
                     {
-                        new ChildTestModel {Id = new Guid("619F6AA2-1A19-49A3-81E2-21ED228B4913"), StringOne = "child test", StringTwo = "child one"},
-                        new ChildTestModel {Id = new Guid("3D097152-38C4-4DE8-B020-C03FFCFC5090"), StringOne = "test child", StringTwo = "child two"},
-                        new ChildTestModel {Id = new Guid("3D8EEE31-28BB-446C-9F91-0E971327BD0A"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200, StringOne = "child test", StringTwo = "child one"},
-                        new ChildTestModel {Id = new Guid("09C25079-CCD8-41F4-BAC1-72BF84B59CBB"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301, StringOne = "child test", StringTwo = "child two"},
-                        new ChildTestModel {Id = new Guid("6312B038-1FCA-4746-A168-7DB45E45057A"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1, StringOne = "child test", StringTwo = "child three"}
+                        new() {Id = new Guid("619F6AA2-1A19-49A3-81E2-21ED228B4913"), StringOne = "child test", StringTwo = "child one"},
+                        new() {Id = new Guid("3D097152-38C4-4DE8-B020-C03FFCFC5090"), StringOne = "test child", StringTwo = "child two"},
+                        new() {Id = new Guid("3D8EEE31-28BB-446C-9F91-0E971327BD0A"), IntegerOne = 50, IntegerTwo = 0, IntegerThree = 200, StringOne = "child test", StringTwo = "child one"},
+                        new() {Id = new Guid("09C25079-CCD8-41F4-BAC1-72BF84B59CBB"), IntegerOne = 101, IntegerTwo = 201, IntegerThree = 301, StringOne = "child test", StringTwo = "child two"},
+                        new() {Id = new Guid("6312B038-1FCA-4746-A168-7DB45E45057A"), IntegerOne = 3, IntegerTwo = 2, IntegerThree = 1, StringOne = "child test", StringTwo = "child three"}
                     }
                 }
             });

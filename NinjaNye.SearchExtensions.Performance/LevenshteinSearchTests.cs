@@ -5,8 +5,9 @@ using NinjaNye.SearchExtensions.Levenshtein;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net80)]
+    [SimpleJob(RuntimeMoniker.Net50)]
+    [BenchmarkCategory("Levenshtein")]
     public class LevenshteinSearchTests
     {
         [Benchmark(OperationsPerInvoke = 1000)]

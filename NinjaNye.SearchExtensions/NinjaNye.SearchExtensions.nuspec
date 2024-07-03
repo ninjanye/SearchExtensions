@@ -6,7 +6,7 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <projectUrl>http://ninjanye.github.io/SearchExtensions/</projectUrl>
+    <projectUrl>https://ninjanye.github.io/SearchExtensions/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>NinjaNye.SearchExtensions library. Now built with dotnet core support</releaseNotes>

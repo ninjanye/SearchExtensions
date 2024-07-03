@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.1;net481</TargetFrameworks>
     <Description>A collection of extension methods to IQueryable and IEnumerable that enable easy and performance Soundex searches</Description>
     <Version>3.0.0.0</Version>
     <PackageProjectUrl>http://ninjanye.github.io/SearchExtensions/</PackageProjectUrl>

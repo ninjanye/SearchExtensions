@@ -14,7 +14,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // optionsBuilder.UseInMemoryDatabase($"SearchExtensions.Tests.Integration{Guid.NewGuid()}");
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;");
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;TrustServerCertificate=True");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(new []{new DebugLoggerProvider()}));
             base.OnConfiguring(optionsBuilder);
         }

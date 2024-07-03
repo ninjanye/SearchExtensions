@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
 
 namespace NinjaNye.SearchExtensions.Performance
 {
@@ -6,11 +7,10 @@ namespace NinjaNye.SearchExtensions.Performance
     {
         static void Main(string[] args)
         {
+            BenchmarkRunner.Run(typeof(Program).Assembly);
             // BenchmarkRunner.Run<StringSearchTests>();
-            BenchmarkRunner.Run<LevenshteinSearchTests>();
-//            BenchmarkRunner.Run<SoundexSearchTests>();
-
-            
+            // BenchmarkRunner.Run<LevenshteinSearchTests>();
+            // BenchmarkRunner.Run<SoundexSearchTests>();
         }
     }
 }
