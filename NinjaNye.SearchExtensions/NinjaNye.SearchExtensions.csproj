@@ -11,7 +11,7 @@
     <Authors>John Nye</Authors>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0' OR '$(TargetFramework)' == 'net481'">
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
 </Project>
