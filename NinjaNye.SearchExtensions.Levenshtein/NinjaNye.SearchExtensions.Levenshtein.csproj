@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard2.1;net481;net8.0</TargetFrameworks>
     <Description>A collection of extension methods to IQueryable and IEnumerable that enable easy and performance Levenshtein searches</Description>
-    <Version>4.0.0.2</Version>
+    <Version>4.0.0.3</Version>
     <PackageProjectUrl>https://ninjanye.github.io/SearchExtensions/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ninjanye/SearchExtensions/</RepositoryUrl>
     <PackageTags>search extension searchextensions ienumerable iqueryable linq entityframework levenshtein dotnetcore</PackageTags>
