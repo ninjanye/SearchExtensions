@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -47,7 +48,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Fact]
-        public async void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
+        public async Task Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
         {
             //Arrange
             var expected = _context.TestModels.FirstOrDefault(x => x.Id == new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"));
