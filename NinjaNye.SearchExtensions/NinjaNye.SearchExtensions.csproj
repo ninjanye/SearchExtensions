@@ -3,12 +3,13 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard2.1;net481;net8.0</TargetFrameworks>
     <Description>A collection of extension methods to IQueryable and IEnumerable that enable easy searching and ranking. Searches can be performed against multiple properties and support a wide range of types</Description>
-    <Version>3.0.0.0</Version>
-    <PackageProjectUrl>http://ninjanye.github.io/SearchExtensions/</PackageProjectUrl>
+    <Version>4.0.0.2</Version>
+    <PackageProjectUrl>https://ninjanye.github.io/SearchExtensions/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ninjanye/SearchExtensions/</RepositoryUrl>
     <PackageTags>search extension searchextensions methods linq ranked entityframework soundex levenshtein dotnetcore</PackageTags>
     <PackageReleaseNotes>NinjaNye.SearchExtensions library. Now built with dotnet core support (netstandard 1.0)</PackageReleaseNotes>
     <Authors>John Nye</Authors>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0' OR '$(TargetFramework)' == 'net481'">
