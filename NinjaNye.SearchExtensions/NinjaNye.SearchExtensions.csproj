@@ -10,9 +10,22 @@
     <PackageReleaseNotes>NinjaNye.SearchExtensions library. Now built with dotnet core support (netstandard 1.0)</PackageReleaseNotes>
     <Authors>John Nye</Authors>
     <LangVersion>latest</LangVersion>
+    <Copyright>Copyright 2024</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0' OR '$(TargetFramework)' == 'net481'">
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".github\README.md" Pack="true" PackagePath="\" />
+    <None Include=".package\images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include=".package\" />
   </ItemGroup>
 </Project>

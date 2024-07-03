@@ -10,10 +10,23 @@
     <PackageReleaseNotes>NinjaNye.SearchExtensions.Levenshtein library.</PackageReleaseNotes>
     <Authors>John Nye</Authors>
     <LangVersion>latest</LangVersion>
+    <Copyright>Copyright 2024</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".github\README.md" Pack="true" PackagePath="\" />
+    <None Include=".package\images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include=".package\" />
   </ItemGroup>
 
 </Project>
