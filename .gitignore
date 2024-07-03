@@ -90,6 +90,9 @@ csx
 # Windows Store app package directory
 AppPackages/
 
+# JetBrains Rider
+.idea/
+
 # Others
 [Bb]in
 [Oo]bj
