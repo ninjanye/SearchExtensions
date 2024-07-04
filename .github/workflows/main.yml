@@ -21,7 +21,7 @@ jobs:
       run: dotnet restore
     
     - name: Build
-      run:  dotnet build .\NinjaNye.SearchExtensions\ -c Release --no-restore --verbosity minimal
+      run:  dotnet build .\NinjaNye.SearchExtensions\NinjaNye.SearchExtensions.csproj -c Release --no-restore --verbosity minimal
     
     - name: Unit Tests
       run: dotnet test .\NinjaNye.SearchExtensions.Tests\ --no-restore --verbosity minimal
