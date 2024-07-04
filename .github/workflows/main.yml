@@ -3,7 +3,7 @@ name: Publish SearchExtensions package to NuGet
 on:
   push:
     branches:
-    - main
+    - gha-nuget-test
     tags:
     - "v[0-9]+.[0-9]+.[0-9]+"
 
@@ -13,6 +13,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+      
+    - name: Log version
+      run: echo "Building version ${{ github.ref }}"
         
     - name: Go to project directory
       run: cd NinjaNye.SearchExtensions
