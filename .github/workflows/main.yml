@@ -17,17 +17,17 @@ jobs:
     - name: Log version
       run: echo "Building version ${{ github.ref }}"
         
-    - name: Go to project directory
-      run: cd NinjaNye.SearchExtensions
-    
     - name: Restore dependencies
       run: dotnet restore
     
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run:  dotnet build .\NinjaNye.SearchExtensions\ -c Release --no-restore --verbosity minimal
     
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+    - name: Unit Tests
+      run: dotnet test .\NinjaNye.SearchExtensions.Tests\ --no-restore --verbosity minimal
+
+    - name: Integration Tests
+      run: dotnet test .\NinjaNye.SearchExtensions.Tests.Integration\ --no-restore --verbosity minimal
     
 #    - name: Pack
 #      run: dotnet pack --configuration Release --no-build --output ../../nupkgs
