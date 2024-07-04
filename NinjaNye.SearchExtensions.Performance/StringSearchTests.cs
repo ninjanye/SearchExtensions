@@ -11,7 +11,7 @@ namespace NinjaNye.SearchExtensions.Performance
     [BenchmarkCategory("StringSearch")]
     public class StringSearchTests
     {
-        [Params(10000)] 
+        [Params(1000)] 
         public static int WordsToSearch;
         private static List<string> _data;
         private static string[] _searchTerms;

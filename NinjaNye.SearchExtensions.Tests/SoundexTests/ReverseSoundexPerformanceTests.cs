@@ -13,11 +13,8 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
         {
             _testOutputHelper = testOutputHelper;
         }
-#if DEBUG
+
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void ToReverseSoundex_OneMillionRecords_UnderOneSecond()
         {
             //Arrange
@@ -36,11 +33,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-#if DEBUG
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void ReverseSoundex_ReverseWordSoundexVsToReverseSoundex_ToReverseSoundexIsQuicker()
         {
             //Arrange

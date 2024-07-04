@@ -16,6 +16,7 @@ namespace NinjaNye.SearchExtensions.Tests.Integration
             // optionsBuilder.UseInMemoryDatabase($"SearchExtensions.Tests.Integration{Guid.NewGuid()}");
             optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=SearchExtensions.Tests.Integration;Integrated Security=SSPI;TrustServerCertificate=True");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(new []{new DebugLoggerProvider()}));
+            optionsBuilder.LogTo(Console.WriteLine);
             base.OnConfiguring(optionsBuilder);
         }
 

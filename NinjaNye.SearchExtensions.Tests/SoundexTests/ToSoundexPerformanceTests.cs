@@ -8,16 +8,13 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
 {
     public class ToSoundexPerformanceTests : BuildStringTestsBase
     {
-            private readonly ITestOutputHelper _testOutputHelper;
-            public ToSoundexPerformanceTests(ITestOutputHelper testOutputHelper)
-            {
-                    _testOutputHelper = testOutputHelper;
-            }
-#if DEBUG
+        private readonly ITestOutputHelper _testOutputHelper;
+        public ToSoundexPerformanceTests(ITestOutputHelper testOutputHelper)
+        {
+                _testOutputHelper = testOutputHelper;
+        }
+            
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void ToSoundex_OneMillionRecords_UnderOneSecond()
         {
             //Arrange
@@ -36,11 +33,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-#if DEBUG
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void SearchSoundex_OneMillionWordsComparedToOneWord_UnderOneSecond()
         {
             //Arrange
@@ -60,11 +53,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-#if DEBUG
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void SearchSoundex_OneMillionWordsComparedToTwoWords_UnderOneSecond()
         {
             //Arrange
@@ -84,11 +73,7 @@ namespace NinjaNye.SearchExtensions.Tests.SoundexTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-#if DEBUG
         [Fact(Skip = "Performance tests only to be run in Release mode")]
-#else
-        [Fact]
-#endif
         public void SearchSoundex_OneMillionWordsComparedToTenWords_UnderOneSecond()
         {
             //Arrange

@@ -48,15 +48,15 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent
         }
 
         [Fact]
-        public async Task Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
+        public void Containing_SearchTwoProperties_ReturnsRecordWithMatchedDataInSecondProperty()
         {
             //Arrange
             var expected = _context.TestModels.FirstOrDefault(x => x.Id == new Guid("2F75BE28-CEC8-46D8-852E-E6DAE5C8F0A3"));
 
             //Act
-            var result = await _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
+            var result = _context.TestModels.Search(x => x.StringOne, x => x.StringTwo)
                 .Containing(x => x.StringThree)
-                .ToListAsync();
+                .ToList();
 
             //Assert
             Assert.Contains(expected, result);

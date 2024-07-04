@@ -6,14 +6,9 @@ using NinjaNye.SearchExtensions.Tests.Integration.Models;
 namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
 {
     [Collection("Database tests")]
-    public class StartsWithTests
+    public class StartsWithTests(DatabaseIntegrationTests @base)
     {
-        private readonly TestContext _context;
-
-        public StartsWithTests(DatabaseIntegrationTests @base)
-        {
-            _context = @base.Context;
-        }
+        private readonly TestContext _context = @base.Context;
 
         [Fact]
         public void StartsWith_SearchStartsWith_DoesNotThrowAnException()
@@ -104,8 +99,8 @@ namespace NinjaNye.SearchExtensions.Tests.Integration.Fluent.SearchTests
             //Act
             var result = _context.TestModels.Search(x => x.StringOne)
                 .Matching(SearchType.WholeWords)
-                .StartsWith(x => x.StringThree + " ");
-
+                .StartsWith(x => x.StringThree);
+            
             //Assert
             var guids = result.Select(x => x.Id).ToList();
             Assert.DoesNotContain(guids, x => x == new Guid("A8AD8A4F-853B-417A-9C0C-0A2802560B8C"));

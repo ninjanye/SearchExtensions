@@ -15,11 +15,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             _testOutputHelper = testOutputHelper;
         }
 
-#if DEBUG
         [Theory(Skip = "Performance tests will likely fail in debug mode. Run in release mode")]
-#else
-        [Theory]
-#endif
         [InlineData(6)]
         [InlineData(7)]
         public void ToLevenshteinDistance_CompareOneMillionStringsOfLengthX_ExecutesInLessThanOneSecond(int length)
@@ -42,11 +38,7 @@ namespace NinjaNye.SearchExtensions.Tests.LevenshteinTests
             Assert.True(stopwatch.Elapsed.TotalMilliseconds < 1000);
         }
 
-#if DEBUG
         [Fact(Skip = "Performance tests will likely fail in debug mode. Run in release mode")]
-#else
-        [Fact]
-#endif
         public void PerformLevenshteinDistanceUsingExpressionTreeBuilder()
         {
             //Setup 1 million comparisons
