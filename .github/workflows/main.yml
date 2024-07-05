@@ -44,13 +44,12 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Test
-        run: dotnet test --verbosity normal
+        run: dotnet test --verbosity minimal
         working-directory: NinjaNye.SearchExtensions.Tests
 
   deploy:
     needs: [build, test]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
     steps:
       - uses: actions/checkout@v4
 
