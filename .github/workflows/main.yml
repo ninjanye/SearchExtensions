@@ -16,6 +16,9 @@ jobs:
       
     - name: Log version
       run: echo "Building version ${{ github.ref }}"
+      
+    - name: Show current directory
+      run: ls
         
     - name: Restore dependencies
       run: dotnet restore
