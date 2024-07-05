@@ -54,7 +54,8 @@ jobs:
         run: ls -al .
 
       - name: Pack
-        run: dotnet pack -c Release --no-build --output nuget-packages
+        run: dotnet pack NinjaNye.SearchExtensions.csproj -c Release --no-build --output nuget-packages
+        working-directory: NinjaNye.SearchExtensions
 
       - name: Log
         run: ls -al ./nuget-packages
