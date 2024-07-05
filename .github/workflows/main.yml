@@ -10,6 +10,9 @@ on:
 jobs:  
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NinjaNye.SearchExtensions
     steps:
       - uses: actions/checkout@v4
 
@@ -20,20 +23,18 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: NinjaNye.SearchExtensions
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        working-directory: NinjaNye.SearchExtensions
 
       - name: Test
         run: dotnet test --verbosity minimal
-        working-directory: NinjaNye.SearchExtensions.Tests
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-output
+          path: .
 
   deploy:
     needs: [build-and-test]
@@ -54,8 +55,7 @@ jobs:
 
       - name: Pack
         run: dotnet pack -c Release --no-build --output nuget-packages
-        working-directory: NinjaNye.SearchExtensions
-        
+
       - name: Log
         run: ls -al ./nuget-packages
 
