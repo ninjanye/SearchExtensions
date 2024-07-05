@@ -16,12 +16,15 @@ jobs:
       
     - name: Log version
       run: echo "Building version ${{ github.ref }}"
+
+    - name: Show current directory
+      run: ls
       
     - name: Change directory
       run: cd NinjaNye.SearchExtensions
 
     - name: Show current directory
-      run: ls
+      run: ls -la
         
     - name: Restore dependencies
       run: dotnet restore
