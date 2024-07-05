@@ -3,6 +3,8 @@ name: Publish SearchExtensions package to NuGet
 on:
   release:
     types: [created]
+    branches:
+      - gha-nuget-test
 
 jobs:  
   build-and-test:
