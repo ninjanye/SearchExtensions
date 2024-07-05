@@ -1,8 +1,8 @@
-name: Publish SearchExtensions package to NuGet
+name: Publish to NuGet
 
 on:
   release:
-    types: [created]
+    types: [published]
     branches:
       - gha-nuget-test
 
@@ -53,8 +53,8 @@ jobs:
       - name: Log
         run: ls -al ./nuget-packages
 
-#      - name: Push to NuGet
-#        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
+      - name: Push to NuGet
+        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
 
   deploy_levenshtein:
     needs: [build-and-test]
@@ -83,8 +83,8 @@ jobs:
       - name: Log
         run: ls -al ./nuget-packages
 
-#      - name: Push to NuGet
-#        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
+      - name: Push to NuGet
+        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
 
   deploy_soundex:
     needs: [build-and-test]
@@ -110,5 +110,5 @@ jobs:
       - name: Log
         run: ls -al ./nuget-packages
 
-#      - name: Push to NuGet
-#        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
+      - name: Push to NuGet
+        run: dotnet nuget push ./nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
