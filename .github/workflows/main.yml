@@ -50,6 +50,9 @@ jobs:
         with:
           name: build-output
 
+      - name: Log
+        run: ls -al .
+
       - name: Pack
         run: dotnet pack -c Release --no-build --output nuget-packages
 
