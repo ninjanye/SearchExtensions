@@ -43,11 +43,12 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Log
-        run: ls -al .
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Pack
-        run: dotnet pack NinjaNye.SearchExtensions.csproj -c Release --output nuget-packages
+        run: dotnet pack NinjaNye.SearchExtensions.csproj -c Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output nuget-packages
 
       - name: Log
         run: ls -al ./nuget-packages
@@ -69,11 +70,15 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+
       - name: Log
         run: ls -al .
 
       - name: Pack
-        run: dotnet pack NinjaNye.SearchExtensions.Levenshtein.csproj -c Release --output nuget-packages
+        run: dotnet pack NinjaNye.SearchExtensions.Levenshtein.csproj -c Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output nuget-packages
 
       - name: Log
         run: ls -al ./nuget-packages
@@ -97,7 +102,7 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Pack
         run: dotnet pack NinjaNye.SearchExtensions.Soundex.csproj -c Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output nuget-packages
