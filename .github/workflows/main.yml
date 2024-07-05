@@ -22,15 +22,15 @@ jobs:
     
     - name: Build
       run:  dotnet build -c Release --no-restore --verbosity minimal
-      working-directory: .\NinjaNye.SearchExtensions
+      working-directory: NinjaNye.SearchExtensions
       
     - name: Unit Tests
       run: dotnet test --no-restore --verbosity minimal
-      working-directory: .\NinjaNye.SearchExtensions.Tests
+      working-directory: NinjaNye.SearchExtensions.Tests
 
     - name: Integration Tests
       run: dotnet test --no-restore --verbosity minimal
-      working-directory: .\NinjaNye.SearchExtensions.Tests.Integration
+      working-directory: NinjaNye.SearchExtensions.Tests.Integration
     
 #    - name: Pack
 #      run: dotnet pack --configuration Release --no-build --output ../../nupkgs
