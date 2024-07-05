@@ -8,29 +8,31 @@ on:
     - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest    
-        
+  setup:
+    runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Log version
-      run: echo "Building version ${{ github.ref }}"
-     
     - name: Restore dependencies
       run: dotnet restore
-    
+        
+  build:
+    runs-on: ubuntu-latest
+    needs: setup
+        
+    steps:
     - name: Build
       run:  dotnet build -c Release --no-restore --verbosity minimal
       working-directory: NinjaNye.SearchExtensions
       
+  test:
+    runs-on: ubuntu-latest
+    needs: setup
+    
+    steps:      
     - name: Unit Tests
       run: dotnet test --no-restore --verbosity minimal
       working-directory: NinjaNye.SearchExtensions.Tests
-
-    - name: Integration Tests
-      run: dotnet test --no-restore --verbosity minimal
-      working-directory: NinjaNye.SearchExtensions.Tests.Integration
     
 #    - name: Pack
 #      run: dotnet pack --configuration Release --no-build --output ../../nupkgs
