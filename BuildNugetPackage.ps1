@@ -6,3 +6,5 @@ dotnet pack -c Release -o .
 
 cd ..\NinjaNye.SearchExtensions.Soundex\
 dotnet pack -c Release -o .
+
+cd ../
